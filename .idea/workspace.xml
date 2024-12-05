@@ -4,31 +4,21 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0cea1559-660a-43f1-803f-04da1cdf897d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/lc-human-agents.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/source/main.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/source/persona/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/source/persona/persona.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/source/prompt_manager/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/source/prompt_manager/base.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/source/prompt_manager/constantes/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/source/prompt_manager/constantes/system_templates.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/source/prompt_manager/template_generator.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/source/scripts/csv_to_json.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/source/tests/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/source/tests/chatbot_test/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/source/tests/chatbot_test/banco.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/source/tests/chatbot_test/chatbot.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/source/tests/chatbot_test/main.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/source/tests/chatbot_test/usuario.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/source/tests/unittest/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/source/tests/unittest/test_csv_to_json.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/source/tests/unittest/test_prompt_manager.py" afterDir="false" />
+    <list default="true" id="0cea1559-660a-43f1-803f-04da1cdf897d" name="Changes" comment="Initial Commit.">
+      <change afterPath="$PROJECT_DIR$/.idea/dictionaries/galdu.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/source/chat_graph/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/source/chat_graph/chat_function.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/source/chat_graph/llms.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/source/chat_graph/models.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/source/chat_graph/workflow_builder.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/source/tests/integratio_test/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/source/tests/integratio_test/persona_csv_integration.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/source/tests/integratio_test/workflow_integration_test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/persona/persona.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/persona/persona.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/scripts/csv_to_json.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/scripts/csv_to_json.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/tests/chatbot_test/chatbot.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/tests/chatbot_test/chatbot.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/tests/unittest/test_csv_to_json.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/tests/unittest/test_csv_to_json.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -45,12 +35,18 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/galdutro13/lc-human-agents.git",
-    "accountId": "b1f0f170-e82a-4d93-9eab-020d624854c2"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;galdutro13&quot;
   }
-}]]></component>
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/galdutro13/lc-human-agents.git&quot;,
+    &quot;accountId&quot;: &quot;b1f0f170-e82a-4d93-9eab-020d624854c2&quot;
+  }
+}</component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 6
 }</component>
@@ -60,26 +56,38 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Python tests.Python tests for test_prompt_manager.TestPromptGenerators.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests for test_prompt_manager.TestPromptGenerators.test_custom_prompt_generator.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests for test_prompt_manager.TestPromptGenerators.test_system_prompt_generator_invalid_strategy.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests in test_prompt_manager.py.executor&quot;: &quot;Run&quot;,
-    &quot;Python.chatbot_test.executor&quot;: &quot;Run&quot;,
-    &quot;Python.main.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/galdu/PycharmProjects/lc-human-agents/source/tests/chatbot_test/main.py&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Python tests.Python tests for persona_csv_integration.TestPersonaCSVIntegration.executor": "Run",
+    "Python tests.Python tests for test_csv_to_json.TestCSVtoJSONConverter.executor": "Run",
+    "Python tests.Python tests for test_csv_to_json.TestCSVtoJSONConverter.test_malformed_csv.executor": "Run",
+    "Python tests.Python tests for test_prompt_manager.TestPromptGenerators.executor": "Run",
+    "Python tests.Python tests for test_prompt_manager.TestPromptGenerators.test_custom_prompt_generator.executor": "Run",
+    "Python tests.Python tests for test_prompt_manager.TestPromptGenerators.test_system_prompt_generator_invalid_strategy.executor": "Run",
+    "Python tests.Python tests for workflow_integration_test.TestChatGraphPromptIntegration.executor": "Run",
+    "Python tests.Python tests for workflow_integration_test.TestChatGraphPromptIntegration.test_chat_function.executor": "Run",
+    "Python tests.Python tests for workflow_integration_test.TestChatGraphPromptIntegration.test_default_workflow.executor": "Run",
+    "Python tests.Python tests for workflow_integration_test.TestChatGraphPromptIntegration.test_initial.executor": "Run",
+    "Python tests.Python tests in test_prompt_manager.py.executor": "Run",
+    "Python.chatbot_test.executor": "Run",
+    "Python.llms.executor": "Run",
+    "Python.main.executor": "Run",
+    "Python.models.executor": "Run",
+    "Python.workflow_builder.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "master",
+    "last_opened_file_path": "C:/Users/galdu/PycharmProjects/lc-human-agents/source/tests/chatbot_test/main.py",
+    "settings.editor.selected.configurable": "preferences.pluginManager"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\galdu\PycharmProjects\lc-human-agents\source" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.chatbot_test">
+  <component name="RunManager">
     <configuration name="chatbot_test" type="PythonConfigurationType" factoryName="Python">
       <module name="lc-human-agents" />
       <option name="ENV_FILES" value="" />
@@ -104,69 +112,110 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="Python tests for test_prompt_manager.TestPromptGenerators" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+    <configuration name="workflow_builder" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="lc-human-agents" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/source/chat_graph" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/source/chat_graph/workflow_builder.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Python tests for workflow_integration_test.TestChatGraphPromptIntegration" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
       <module name="lc-human-agents" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/source/tests/unittest" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/source/tests/integratio_test" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_prompt_manager.TestPromptGenerators&quot;" />
+      <option name="_new_target" value="&quot;workflow_integration_test.TestChatGraphPromptIntegration&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="Python tests for test_prompt_manager.TestPromptGenerators.test_custom_prompt_generator" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+    <configuration name="Python tests for workflow_integration_test.TestChatGraphPromptIntegration.test_chat_function" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
       <module name="lc-human-agents" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/source/tests/unittest" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/source/tests/integratio_test" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_prompt_manager.TestPromptGenerators.test_custom_prompt_generator&quot;" />
+      <option name="_new_target" value="&quot;workflow_integration_test.TestChatGraphPromptIntegration.test_chat_function&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="Python tests for test_prompt_manager.TestPromptGenerators.test_system_prompt_generator_invalid_strategy" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+    <configuration name="Python tests for workflow_integration_test.TestChatGraphPromptIntegration.test_default_workflow" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
       <module name="lc-human-agents" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/source/tests/unittest" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/source/tests/integratio_test" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_prompt_manager.TestPromptGenerators.test_system_prompt_generator_invalid_strategy&quot;" />
+      <option name="_new_target" value="&quot;workflow_integration_test.TestChatGraphPromptIntegration.test_default_workflow&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Python tests for workflow_integration_test.TestChatGraphPromptIntegration.test_initial" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+      <module name="lc-human-agents" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/source/tests/integratio_test" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;workflow_integration_test.TestChatGraphPromptIntegration.test_initial&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
     <list>
       <item itemvalue="Python.chatbot_test" />
-      <item itemvalue="Python tests.Python tests for test_prompt_manager.TestPromptGenerators" />
-      <item itemvalue="Python tests.Python tests for test_prompt_manager.TestPromptGenerators.test_custom_prompt_generator" />
-      <item itemvalue="Python tests.Python tests for test_prompt_manager.TestPromptGenerators.test_system_prompt_generator_invalid_strategy" />
+      <item itemvalue="Python.workflow_builder" />
+      <item itemvalue="Python tests.Python tests for workflow_integration_test.TestChatGraphPromptIntegration" />
+      <item itemvalue="Python tests.Python tests for workflow_integration_test.TestChatGraphPromptIntegration.test_chat_function" />
+      <item itemvalue="Python tests.Python tests for workflow_integration_test.TestChatGraphPromptIntegration.test_default_workflow" />
+      <item itemvalue="Python tests.Python tests for workflow_integration_test.TestChatGraphPromptIntegration.test_initial" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python tests.Python tests for test_prompt_manager.TestPromptGenerators" />
-        <item itemvalue="Python tests.Python tests for test_prompt_manager.TestPromptGenerators.test_custom_prompt_generator" />
-        <item itemvalue="Python tests.Python tests for test_prompt_manager.TestPromptGenerators.test_system_prompt_generator_invalid_strategy" />
+        <item itemvalue="Python tests.Python tests for workflow_integration_test.TestChatGraphPromptIntegration.test_default_workflow" />
+        <item itemvalue="Python tests.Python tests for workflow_integration_test.TestChatGraphPromptIntegration.test_chat_function" />
+        <item itemvalue="Python tests.Python tests for workflow_integration_test.TestChatGraphPromptIntegration" />
+        <item itemvalue="Python tests.Python tests for workflow_integration_test.TestChatGraphPromptIntegration.test_initial" />
+        <item itemvalue="Python.workflow_builder" />
       </list>
     </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-python-sdk-6a3326d57233-c546a90a8094-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-242.24807.21" />
+        <option value="bundled-python-sdk-fb887030ada0-aa17d162503b-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-243.21565.199" />
       </set>
     </attachedChunks>
   </component>
@@ -179,7 +228,20 @@
       <option name="presentableId" value="Default" />
       <updated>1733156658582</updated>
     </task>
+    <task id="LOCAL-00001" summary="Initial Commit.">
+      <option name="closed" value="true" />
+      <created>1733252116457</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1733252116457</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Initial Commit." />
+    <option name="LAST_COMMIT_MESSAGE" value="Initial Commit." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

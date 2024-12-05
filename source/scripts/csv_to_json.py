@@ -49,7 +49,12 @@ class CSVtoJSONConverter:
         try:
             with open(self.csv_file_path, 'r', newline='', encoding='utf-8') as csvfile:
                 reader = csv.DictReader(csvfile)
-                records = [row for row in reader]
+                headers = reader.fieldnames
+                records = []
+                for row in reader:
+                    if None in row.values():
+                        raise ValueError("Linha com campos faltantes detectada.")
+                    records.append(row)
             return records
         except FileNotFoundError as e:
             print(f"Erro: O arquivo {self.csv_file_path} não foi encontrado.")

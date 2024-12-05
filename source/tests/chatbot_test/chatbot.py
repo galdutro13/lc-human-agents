@@ -6,6 +6,7 @@ from langgraph.graph import START, MessagesState, StateGraph
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_openai import ChatOpenAI
 from source.prompt_manager.base import SystemPromptGenerator, CustomSystemPromptStrategy
+from source.chat_graph import ModelName, ClassicChatFunction, ClassicWorkflowBuilder, get_openai_llm
 
 def save_fields_to_json(output_message, interaction_id, folder_name):
     data = {
@@ -30,33 +31,20 @@ class ChatBotBase:
         self.initialize()
 
     def initialize(self):
-        self.model: ChatOpenAI = ChatOpenAI(model=self.model_name)
-        genprompt = SystemPromptGenerator(strategy=CustomSystemPromptStrategy(prompt_template=self.system_message))
-        self.prompt = genprompt.generate_prompt()
-        self.workflow = self.build_workflow()
-        self.app = self.initialize_app()
+        self.model: ChatOpenAI = get_openai_llm(ModelName.GPT4_MINI)
+        self.prompt = CustomSystemPromptStrategy(prompt_template=self.system_message).generate_prompt()
+
+        self.app = ClassicWorkflowBuilder().build_classic_workflow(
+            node_name="model",
+            function=ClassicChatFunction(model=self.model, prompt=self.prompt),
+            memory=MemorySaver()
+        )
+
         self.config = {"configurable": {"thread_id": self.thread_id}}
-
-    def build_workflow(self):
-        workflow = StateGraph(state_schema=MessagesState)
-
-        def call_model(state: MessagesState):
-            chain = self.prompt | self.model
-            response = chain.invoke(state)
-            return {"messages": response}
-
-        workflow.add_edge(START, "model")
-        workflow.add_node("model", call_model)
-        return workflow
-
-    def initialize_app(self):
-        memory = MemorySaver()
-        return self.workflow.compile(checkpointer=memory)
 
     def process_query(self, query, interaction_id=None, folder_name=""):
         input_messages = [HumanMessage(query)]
         output = self.app.invoke({"messages": input_messages}, self.config)
         output_message = output["messages"][-1]
-        # self.save_fields_to_json(output_message, interaction_id, folder_name)
         return output_message.content
 
