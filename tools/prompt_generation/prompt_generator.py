@@ -121,6 +121,6 @@ if __name__ == "__main__":
     for missao in resultado:
         prompt = gerar_prompts(missao["dados_persona"], missao["dados_cenario"])
         while not inserir_prompt(db_name, missao["missao_id"], prompt):
-            time.sleep(3)
+            time.sleep(6)
             prompt = gerar_prompts(missao["dados_persona"], missao["dados_cenario"])
         time.sleep(3)
