@@ -4,7 +4,7 @@ from typing import Any
 
 from langgraph.graph import START, MessagesState, StateGraph
 from langgraph.graph.state import CompiledStateGraph
-from langgraph.checkpoint.memory import MemorySaver
+from langgraph.checkpoint.base import BaseCheckpointSaver
 
 from source.chat_graph.chat_function import ChatFunction
 
@@ -47,7 +47,7 @@ class ClassicWorkflowBuilder(Builder):
         """
         self._workflow = StateGraph(state_schema=MessagesState)
 
-    def build_workflow(self, memory: MemorySaver = None) -> CompiledStateGraph:
+    def build_workflow(self, memory: BaseCheckpointSaver[str] = None) -> CompiledStateGraph:
         """
         Returns the compiled workflow.
         """
@@ -81,7 +81,7 @@ class ClassicWorkflowBuilder(Builder):
     def build_classic_workflow(self,
                                node_name: str,
                                function: ChatFunction,
-                               memory: MemorySaver) -> CompiledStateGraph:
+                               memory: BaseCheckpointSaver[str]) -> CompiledStateGraph:
         """
         Generates a classic workflow.
         """

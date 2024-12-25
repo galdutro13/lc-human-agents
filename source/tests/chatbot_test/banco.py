@@ -1,5 +1,4 @@
 from chatbot import ChatBotBase
-import uuid
 
 class BancoBot(ChatBotBase):
     def __init__(self):
@@ -9,11 +8,12 @@ class BancoBot(ChatBotBase):
             "Você deve tentar ajudar o cliente, mas suas respostas podem ser confusas ou incompletas. "
             "Caso você não tenha uma resposta certeira, você deve comunicar ao cliente."
         )
-        super().__init__(model_name="gpt-4o-mini", system_message=system_message)
+        super().__init__(model_name="gpt-4o-mini",
+                         system_message=system_message,
+                         use_sqlitesaver=False)
 
     def run(self, query):
-        interaction_id = uuid.uuid4().hex
-        response = self.process_query(query, interaction_id, folder_name="banco")
+        response = self.process_query(query)
         print("=== BancoBot Resposta ===")
         print(response)
         return response

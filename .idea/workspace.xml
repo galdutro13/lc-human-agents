@@ -4,21 +4,39 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0cea1559-660a-43f1-803f-04da1cdf897d" name="Changes" comment="Initial Commit.">
-      <change afterPath="$PROJECT_DIR$/.idea/dictionaries/galdu.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/source/chat_graph/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/source/chat_graph/chat_function.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/source/chat_graph/llms.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/source/chat_graph/models.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/source/chat_graph/workflow_builder.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/source/tests/integratio_test/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/source/tests/integratio_test/persona_csv_integration.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/source/tests/integratio_test/workflow_integration_test.py" afterDir="false" />
+    <list default="true" id="0cea1559-660a-43f1-803f-04da1cdf897d" name="Changes" comment="Implementa classes de função de chat, construtor de workflows e testes&#10;&#10;- Adicionadas as classes abstratas `ChatFunction` e `ClassicChatFunction` para modularizar a execução de funções de chat.&#10;- Criado o módulo `models.py` com a enumeração `ModelName` para gerenciamento de modelos de linguagem.&#10;- Desenvolvido `workflow_builder.py` com a interface `Builder` e a implementação `ClassicWorkflowBuilder`, facilitando a construção de workflows personalizados.&#10;- Implementada a função `get_openai_llm` em `llms.py` para carregar modelos OpenAI com cache.&#10;- Atualizado `persona.py` com documentação aprimorada e método `get_dados_str` para acessar dados da persona como string.&#10;- Adicionado `__init__.py` no pacote `chat_graph` para exportar classes e funções relevantes.&#10;- Desenvolvidos testes unitários em `test_csv_to_json.py` para verificar a conversão de CSV para JSON.&#10;- Criados testes de integração em `workflow_integration_test.py` e `persona_csv_integration.py` para validar a integração entre workflows, funções de chat e conversão de CSV.&#10;&#10;**Benefícios:**&#10;&#10;- Melhor modularização e aderência aos princípios SOLID, facilitando a manutenção e extensão do código.&#10;- Aumento da cobertura de testes, garantindo robustez e confiabilidade das funcionalidades implementadas.">
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/sqldialects.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/source/constantes/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/source/constantes/hiper_parametros.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/source/tests/chatbotserver_test/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/source/tests/chatbotserver_test/banco.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/source/tests/chatbotserver_test/chatbot.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/source/tests/chatbotserver_test/main.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/source/tests/chatbotserver_test/server_banco.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/source/tests/chatbotserver_test/server_usuario.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/source/tests/chatbotserver_test/shared_data.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/source/tests/chatbotserver_test/usuario.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tools/db_work/gerar_missoes.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tools/db_work/insert_cenario&amp;persona.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tools/db_work/setup_db_cenarios.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tools/prompt_generation/get_generator_prompt.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tools/prompt_generation/prompt_generator.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tools/read_personas.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tools/visualizador_interacoes/backend/main.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tools/visualizador_interacoes/frontend/st_frontend.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/persona/persona.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/persona/persona.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/chat_graph/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/chat_graph/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/chat_graph/llms.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/chat_graph/llms.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/chat_graph/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/chat_graph/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/chat_graph/workflow_builder.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/chat_graph/workflow_builder.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/source/scripts/csv_to_json.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/scripts/csv_to_json.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/tests/chatbot_test/banco.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/tests/chatbot_test/banco.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/source/tests/chatbot_test/chatbot.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/tests/chatbot_test/chatbot.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/tests/unittest/test_csv_to_json.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/tests/unittest/test_csv_to_json.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/tests/chatbot_test/usuario.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/tests/chatbot_test/usuario.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,6 +65,11 @@
     &quot;accountId&quot;: &quot;b1f0f170-e82a-4d93-9eab-020d624854c2&quot;
   }
 }</component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/.venv/Lib/site-packages/langgraph/checkpoint/base/__init__.py" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/.venv/Lib/site-packages/langgraph/checkpoint/serde/base.py" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/.venv/Lib/site-packages/langgraph/checkpoint/sqlite/__init__.py" root0="SKIP_INSPECTION" />
+  </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 6
 }</component>
@@ -58,6 +81,7 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "FastAPI.visualizador_backend.executor": "Run",
     "Python tests.Python tests for persona_csv_integration.TestPersonaCSVIntegration.executor": "Run",
     "Python tests.Python tests for test_csv_to_json.TestCSVtoJSONConverter.executor": "Run",
     "Python tests.Python tests for test_csv_to_json.TestCSVtoJSONConverter.test_malformed_csv.executor": "Run",
@@ -69,33 +93,51 @@
     "Python tests.Python tests for workflow_integration_test.TestChatGraphPromptIntegration.test_default_workflow.executor": "Run",
     "Python tests.Python tests for workflow_integration_test.TestChatGraphPromptIntegration.test_initial.executor": "Run",
     "Python tests.Python tests in test_prompt_manager.py.executor": "Run",
+    "Python.Extract personas.executor": "Run",
+    "Python.chatbot server test.executor": "Run",
     "Python.chatbot_test.executor": "Run",
+    "Python.gerar_missoes.executor": "Run",
+    "Python.insert_cenario&persona.executor": "Run",
     "Python.llms.executor": "Run",
     "Python.main.executor": "Run",
     "Python.models.executor": "Run",
+    "Python.prompt_generation.executor": "Run",
+    "Python.prompt_generator.executor": "Run",
+    "Python.read_personas.executor": "Run",
+    "Python.setup_db_cenarios.executor": "Run",
+    "Python.setup_simulacoes_db.executor": "Run",
     "Python.workflow_builder.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "database.data.extractors.current.export.id": "Comma-separated (CSV)_id",
+    "database.data.extractors.current.id": "Comma-separated (CSV)_id",
     "git-widget-placeholder": "master",
-    "last_opened_file_path": "C:/Users/galdu/PycharmProjects/lc-human-agents/source/tests/chatbot_test/main.py",
-    "settings.editor.selected.configurable": "preferences.pluginManager"
+    "last_opened_file_path": "C:/Users/galdu/PycharmProjects/lc-human-agents/tools/prompt_generation/prompt_generator.py",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "editor.preferences.inline.completion",
+    "vcs.patch.path": "C:/Users/galdu/OneDrive/Desktop",
+    "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\galdu\PycharmProjects\lc-human-agents\tools\db_work" />
       <recent name="C:\Users\galdu\PycharmProjects\lc-human-agents\source" />
     </key>
   </component>
-  <component name="RunManager">
-    <configuration name="chatbot_test" type="PythonConfigurationType" factoryName="Python">
+  <component name="RunManager" selected="Python.prompt_generation">
+    <configuration name="Extract personas" type="PythonConfigurationType" factoryName="Python">
       <module name="lc-human-agents" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
-        <env name="OPENAI_API_KEY" value="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" />
       </envs>
       <option name="SDK_HOME" value="" />
       <option name="SDK_NAME" value="Python 3.11 (lc-human-agents)" />
@@ -103,6 +145,55 @@
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/tools/read_personas.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="chatbot server test" type="PythonConfigurationType" factoryName="Python">
+      <module name="lc-human-agents" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="SDK_NAME" value="Python 3.11 (lc-human-agents)" />
+      <option name="WORKING_DIRECTORY" value="C:\Users\galdu\PycharmProjects\lc-human-agents" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/source/tests/chatbotserver_test/main.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="chatbot_test" type="PythonConfigurationType" factoryName="Python">
+      <module name="lc-human-agents" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="SDK_NAME" value="Python 3.11 (lc-human-agents)" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/source/tests/chatbot_test/main.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
@@ -112,7 +203,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="workflow_builder" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="gerar_missoes" type="PythonConfigurationType" factoryName="Python" folderName="DB_WORK">
       <module name="lc-human-agents" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -121,17 +212,106 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/source/chat_graph" />
-      <option name="IS_MODULE_SDK" value="true" />
+      <option name="SDK_NAME" value="Python 3.11 (lc-human-agents)" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/source/chat_graph/workflow_builder.py" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/tools/db_work/gerar_missoes.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
       <option name="REDIRECT_INPUT" value="false" />
       <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="insert_cenario&amp;persona" type="PythonConfigurationType" factoryName="Python" folderName="DB_WORK" nameIsGenerated="true">
+      <module name="lc-human-agents" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="SDK_NAME" value="Python 3.11 (lc-human-agents)" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/tools/db_work/insert_cenario&amp;persona.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="prompt_generation" type="PythonConfigurationType" factoryName="Python" folderName="TOOLS">
+      <module name="lc-human-agents" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="SDK_NAME" value="Python 3.11 (lc-human-agents)" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/tools/prompt_generation/prompt_generator.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="setup_db_cenarios" type="PythonConfigurationType" factoryName="Python" folderName="DB_WORK" temporary="true" nameIsGenerated="true">
+      <module name="lc-human-agents" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/tools/db_work/setup_db_cenarios.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="visualizador_backend" type="Python.FastAPI">
+      <option name="file" value="C:\Users\galdu\PycharmProjects\lc-human-agents\tools\visualizador_interacoes\backend\main.py" />
+      <module name="lc-human-agents" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="$PROJECT_DIR$/.venv/Scripts/python.exe" />
+      <option name="SDK_NAME" value="Python 3.11 (lc-human-agents)" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="launchJavascriptDebuger" value="false" />
       <method v="2" />
     </configuration>
     <configuration name="Python tests for workflow_integration_test.TestChatGraphPromptIntegration" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
@@ -144,6 +324,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
       <option name="_new_target" value="&quot;workflow_integration_test.TestChatGraphPromptIntegration&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
@@ -159,6 +340,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
       <option name="_new_target" value="&quot;workflow_integration_test.TestChatGraphPromptIntegration.test_chat_function&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
@@ -174,6 +356,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
       <option name="_new_target" value="&quot;workflow_integration_test.TestChatGraphPromptIntegration.test_default_workflow&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
@@ -189,14 +372,21 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
       <option name="_new_target" value="&quot;workflow_integration_test.TestChatGraphPromptIntegration.test_initial&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
     <list>
+      <item itemvalue="FastAPI.visualizador_backend" />
+      <item itemvalue="Python.gerar_missoes" />
+      <item itemvalue="Python.insert_cenario&amp;persona" />
+      <item itemvalue="Python.setup_db_cenarios" />
+      <item itemvalue="Python.prompt_generation" />
+      <item itemvalue="Python.Extract personas" />
+      <item itemvalue="Python.chatbot server test" />
       <item itemvalue="Python.chatbot_test" />
-      <item itemvalue="Python.workflow_builder" />
       <item itemvalue="Python tests.Python tests for workflow_integration_test.TestChatGraphPromptIntegration" />
       <item itemvalue="Python tests.Python tests for workflow_integration_test.TestChatGraphPromptIntegration.test_chat_function" />
       <item itemvalue="Python tests.Python tests for workflow_integration_test.TestChatGraphPromptIntegration.test_default_workflow" />
@@ -204,18 +394,19 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.setup_db_cenarios" />
         <item itemvalue="Python tests.Python tests for workflow_integration_test.TestChatGraphPromptIntegration.test_default_workflow" />
         <item itemvalue="Python tests.Python tests for workflow_integration_test.TestChatGraphPromptIntegration.test_chat_function" />
         <item itemvalue="Python tests.Python tests for workflow_integration_test.TestChatGraphPromptIntegration" />
         <item itemvalue="Python tests.Python tests for workflow_integration_test.TestChatGraphPromptIntegration.test_initial" />
-        <item itemvalue="Python.workflow_builder" />
       </list>
     </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-python-sdk-fb887030ada0-aa17d162503b-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-243.21565.199" />
+        <option value="bundled-js-predefined-d6986cc7102b-deb605915726-JavaScript-PY-243.22562.220" />
+        <option value="bundled-python-sdk-0fc6c617c4bd-9a18a617cbe4-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-243.22562.220" />
       </set>
     </attachedChunks>
   </component>
@@ -227,6 +418,18 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1733156658582</updated>
+      <workItem from="1733839869998" duration="7699000" />
+      <workItem from="1733870331123" duration="9072000" />
+      <workItem from="1733927393733" duration="17163000" />
+      <workItem from="1734015359678" duration="161000" />
+      <workItem from="1734564248219" duration="5399000" />
+      <workItem from="1734569775930" duration="2000" />
+      <workItem from="1734625727918" duration="2702000" />
+      <workItem from="1734633782700" duration="1899000" />
+      <workItem from="1734705432371" duration="2980000" />
+      <workItem from="1735071661091" duration="1017000" />
+      <workItem from="1735072714157" duration="4086000" />
+      <workItem from="1735137500299" duration="25395000" />
     </task>
     <task id="LOCAL-00001" summary="Initial Commit.">
       <option name="closed" value="true" />
@@ -236,12 +439,25 @@
       <option name="project" value="LOCAL" />
       <updated>1733252116457</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Implementa classes de função de chat, construtor de workflows e testes&#10;&#10;- Adicionadas as classes abstratas `ChatFunction` e `ClassicChatFunction` para modularizar a execução de funções de chat.&#10;- Criado o módulo `models.py` com a enumeração `ModelName` para gerenciamento de modelos de linguagem.&#10;- Desenvolvido `workflow_builder.py` com a interface `Builder` e a implementação `ClassicWorkflowBuilder`, facilitando a construção de workflows personalizados.&#10;- Implementada a função `get_openai_llm` em `llms.py` para carregar modelos OpenAI com cache.&#10;- Atualizado `persona.py` com documentação aprimorada e método `get_dados_str` para acessar dados da persona como string.&#10;- Adicionado `__init__.py` no pacote `chat_graph` para exportar classes e funções relevantes.&#10;- Desenvolvidos testes unitários em `test_csv_to_json.py` para verificar a conversão de CSV para JSON.&#10;- Criados testes de integração em `workflow_integration_test.py` e `persona_csv_integration.py` para validar a integração entre workflows, funções de chat e conversão de CSV.&#10;&#10;**Benefícios:**&#10;&#10;- Melhor modularização e aderência aos princípios SOLID, facilitando a manutenção e extensão do código.&#10;- Aumento da cobertura de testes, garantindo robustez e confiabilidade das funcionalidades implementadas.">
+      <option name="closed" value="true" />
+      <created>1733430183454</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1733430183454</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Initial Commit." />
-    <option name="LAST_COMMIT_MESSAGE" value="Initial Commit." />
+    <MESSAGE value="[A SER DEFINIDO]" />
+    <MESSAGE value="Implementa classes de função de chat, construtor de workflows e testes&#10;&#10;- Adicionadas as classes abstratas `ChatFunction` e `ClassicChatFunction` para modularizar a execução de funções de chat.&#10;- Criado o módulo `models.py` com a enumeração `ModelName` para gerenciamento de modelos de linguagem.&#10;- Desenvolvido `workflow_builder.py` com a interface `Builder` e a implementação `ClassicWorkflowBuilder`, facilitando a construção de workflows personalizados.&#10;- Implementada a função `get_openai_llm` em `llms.py` para carregar modelos OpenAI com cache.&#10;- Atualizado `persona.py` com documentação aprimorada e método `get_dados_str` para acessar dados da persona como string.&#10;- Adicionado `__init__.py` no pacote `chat_graph` para exportar classes e funções relevantes.&#10;- Desenvolvidos testes unitários em `test_csv_to_json.py` para verificar a conversão de CSV para JSON.&#10;- Criados testes de integração em `workflow_integration_test.py` e `persona_csv_integration.py` para validar a integração entre workflows, funções de chat e conversão de CSV.&#10;&#10;**Benefícios:**&#10;&#10;- Melhor modularização e aderência aos princípios SOLID, facilitando a manutenção e extensão do código.&#10;- Aumento da cobertura de testes, garantindo robustez e confiabilidade das funcionalidades implementadas." />
+    <option name="LAST_COMMIT_MESSAGE" value="Implementa classes de função de chat, construtor de workflows e testes&#10;&#10;- Adicionadas as classes abstratas `ChatFunction` e `ClassicChatFunction` para modularizar a execução de funções de chat.&#10;- Criado o módulo `models.py` com a enumeração `ModelName` para gerenciamento de modelos de linguagem.&#10;- Desenvolvido `workflow_builder.py` com a interface `Builder` e a implementação `ClassicWorkflowBuilder`, facilitando a construção de workflows personalizados.&#10;- Implementada a função `get_openai_llm` em `llms.py` para carregar modelos OpenAI com cache.&#10;- Atualizado `persona.py` com documentação aprimorada e método `get_dados_str` para acessar dados da persona como string.&#10;- Adicionado `__init__.py` no pacote `chat_graph` para exportar classes e funções relevantes.&#10;- Desenvolvidos testes unitários em `test_csv_to_json.py` para verificar a conversão de CSV para JSON.&#10;- Criados testes de integração em `workflow_integration_test.py` e `persona_csv_integration.py` para validar a integração entre workflows, funções de chat e conversão de CSV.&#10;&#10;**Benefícios:**&#10;&#10;- Melhor modularização e aderência aos princípios SOLID, facilitando a manutenção e extensão do código.&#10;- Aumento da cobertura de testes, garantindo robustez e confiabilidade das funcionalidades implementadas." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -251,7 +467,28 @@
           <line>8</line>
           <option name="timeStamp" value="1" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/.venv/Lib/site-packages/langgraph/checkpoint/base/__init__.py</url>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/source/scripts/csv_to_json.py</url>
+          <line>36</line>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/lc_human_agents$chatbot_server_test.coverage" NAME="chatbot server test Coverage Results" MODIFIED="1735141967192" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="C:\Users\galdu\PycharmProjects\lc-human-agents" />
+    <SUITE FILE_PATH="coverage/lc_human_agents$setup_simulacoes_db.coverage" NAME="setup_db_cenarios Coverage Results" MODIFIED="1735167459458" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/" />
+    <SUITE FILE_PATH="coverage/lc_human_agents$visualizador_backend.coverage" NAME="visualizador_backend Coverage Results" MODIFIED="1735150469975" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/lc_human_agents$Extract_personas.coverage" NAME="Extract personas Coverage Results" MODIFIED="1735162567412" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/lc_human_agents$chatbot_test.coverage" NAME="chatbot_test Coverage Results" MODIFIED="1735150404777" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/lc_human_agents$insert_cenario_persona.coverage" NAME="insert_cenario&amp;persona Coverage Results" MODIFIED="1735167495419" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/lc_human_agents$gerar_missoes.coverage" NAME="gerar_missoes Coverage Results" MODIFIED="1735167511941" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/lc_human_agents$prompt_generation.coverage" NAME="prompt_generation Coverage Results" MODIFIED="1735168809514" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/lc_human_agents$prompt_generator.coverage" NAME="prompt_generator Coverage Results" MODIFIED="1735165702542" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tools/prompt_generation" />
+    <SUITE FILE_PATH="coverage/lc_human_agents$read_personas.coverage" NAME="read_personas Coverage Results" MODIFIED="1735148903371" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tools" />
   </component>
 </project>

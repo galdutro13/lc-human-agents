@@ -21,7 +21,7 @@ class CSVtoJSONConverter:
         :return: Lista de strings JSON representando cada registro CSV.
         """
         records = self._read_csv_file()
-        json_strings = [json.dumps(record) for record in records]
+        json_strings = [json.dumps(record, ensure_ascii=False) for record in records]
         return json_strings
 
     def convert_single_record(self, record_number: int) -> str:
@@ -34,7 +34,7 @@ class CSVtoJSONConverter:
         """
         records = self._read_csv_file()
         if 0 <= record_number < len(records):
-            return json.dumps(records[record_number])
+            return json.dumps(records[record_number], ensure_ascii=False)
         else:
             raise IndexError("Número de registro fora do intervalo.")
 
@@ -48,7 +48,7 @@ class CSVtoJSONConverter:
         """
         try:
             with open(self.csv_file_path, 'r', newline='', encoding='utf-8') as csvfile:
-                reader = csv.DictReader(csvfile)
+                reader = csv.DictReader(csvfile, delimiter=';')
                 headers = reader.fieldnames
                 records = []
                 for row in reader:
