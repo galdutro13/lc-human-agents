@@ -6,12 +6,12 @@ import sqlite3
 
 from tools.prompt_generation.get_generator_prompt import get_generator_prompt
 
-def gerar_prompts(persona, cenario):
+def gerar_prompts(persona, cenario, top_k=64, temperature=1.0):
     # Create the model
     generation_config = {
-        "temperature": 1,
+        "temperature": temperature,
         "top_p": 0.95,
-        "top_k": 64,
+        "top_k": top_k,
         "max_output_tokens": 8192,
         "response_mime_type": "text/plain",
     }
@@ -92,6 +92,10 @@ def inserir_prompt(db_name: str, missao_id: int, prompt_text: str) -> int | bool
         print("O prompt não contém as substrings '[[ como agir ]]' e/ou '[[ missão ]]'. Inserção cancelada.")
         return False
 
+    if "quit" not in prompt_text:
+        print("O prompt não contém a substring 'quit'. Inserção cancelada.")
+        return False
+
     try:
         conn = sqlite3.connect(db_name)
         cursor = conn.cursor()
@@ -119,8 +123,15 @@ if __name__ == "__main__":
 
     # Exemplo: imprimir cada missão
     for missao in resultado:
+        temperature: float = 1.0
+        top_k: int = 64
+        factor: int = 2
         prompt = gerar_prompts(missao["dados_persona"], missao["dados_cenario"])
         while not inserir_prompt(db_name, missao["missao_id"], prompt):
-            time.sleep(6)
-            prompt = gerar_prompts(missao["dados_persona"], missao["dados_cenario"])
-        time.sleep(3)
+            time.sleep(3)
+            top_k = top_k // factor
+            temperature = temperature * 0.75
+            if top_k < 8:
+                break
+            prompt = gerar_prompts(missao["dados_persona"], missao["dados_cenario"], top_k=top_k, temperature=temperature)
+        time.sleep(4)
