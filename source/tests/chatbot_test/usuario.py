@@ -1,7 +1,7 @@
 from chatbot import ChatBotBase
 
 class UsuarioBot(ChatBotBase):
-    def __init__(self):
+    def __init__(self, think_exp):
         system_message = (
             """Você é Rodrigo Antunes, ID 0021, um homem pardo, heterossexual, de 39 anos, residente em Curitiba (PR). É empresário, com Ensino Superior Completo e perfil calculista e direto, competitivo, ambicioso e desconfiado. Seu principal objetivo é maximizar o retorno de seus investimentos. Siga as duas próximas seções: [[como agir]] e [[missão]].
 
@@ -13,7 +13,7 @@ class UsuarioBot(ChatBotBase):
 
             Para encerrar a conversa, finalize com “quit” assim que achar viável, seja alcançando um acordo vantajoso ou frustrado com as propostas recebidas."""
             )
-        super().__init__(model_name="gpt-4o-mini",
+        super().__init__(think_exp=think_exp,
                          system_message=system_message,
                          use_sqlitesaver=True)
 

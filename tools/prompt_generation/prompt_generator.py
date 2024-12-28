@@ -5,7 +5,7 @@ import google.generativeai as genai
 import sqlite3
 
 from tools.prompt_generation.get_generator_prompt import get_generator_prompt
-
+from tools.prompt_generation.rate_limiter import RateLimiter
 def gerar_prompts(persona, cenario, top_k=64, temperature=1.0):
     # Create the model
     generation_config = {
@@ -121,17 +121,28 @@ if __name__ == "__main__":
     db_name = "cenarios.db"
     resultado = listar_missoes_com_detalhes(db_name)
 
+    # Define que queremos no máximo 10 chamadas em 60 segundos
+    rate_limiter = RateLimiter(max_calls=10, window_seconds=60)
+
     # Exemplo: imprimir cada missão
     for missao in resultado:
         temperature: float = 1.0
         top_k: int = 64
         factor: int = 2
+        # Aguarda até que haja "vaga" para realizar nova chamada
+        rate_limiter.wait_for_slot()
+
         prompt = gerar_prompts(missao["dados_persona"], missao["dados_cenario"])
         while not inserir_prompt(db_name, missao["missao_id"], prompt):
-            time.sleep(3)
             top_k = top_k // factor
             temperature = temperature * 0.75
+
+            # Se top_k for menor que 8, não faz sentido continuar tentando
             if top_k < 8:
                 break
-            prompt = gerar_prompts(missao["dados_persona"], missao["dados_cenario"], top_k=top_k, temperature=temperature)
-        time.sleep(4)
+
+            rate_limiter.wait_for_slot()
+            prompt = gerar_prompts(missao["dados_persona"],
+                                   missao["dados_cenario"],
+                                   top_k=top_k,
+                                   temperature=temperature)
