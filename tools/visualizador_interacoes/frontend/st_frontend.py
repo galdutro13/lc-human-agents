@@ -35,7 +35,6 @@ if "interactions" not in st.session_state:
 
 # Função para formatar timestamp
 def format_ts(ts):
-    # Supondo que ts seja um string ISO 8601 (ex: "2024-12-10T23:02:41.783802+00:00")
     try:
         dt = datetime.fromisoformat(ts.replace("Z", "+00:00"))
         return dt.strftime("%Y-%m-%d %H:%M:%S")
@@ -53,10 +52,41 @@ with st.sidebar:
             st.session_state.selected_thread = item["thread_id"]
 
 ##############################
+# Header (Título + Botão de Download)
+##############################
+col1, col2 = st.columns([0.8, 0.2])
+
+with col1:
+    st.title("Visualizador de Interações")
+
+# Somente mostra o botão se houver uma conversa selecionada
+with col2:
+    if st.session_state.selected_thread is not None:
+        # Ao clicar neste botão, iremos buscar o arquivo Excel do backend
+        # e em seguida exibiremos o st.download_button real.
+        if st.button("Gerar Excel", type="primary"):
+            try:
+                # Faz a requisição para obter o conteúdo do Excel
+                excel_url = f"{BASE_URL}/interactions/{st.session_state.selected_thread}/excel"
+                response = requests.get(excel_url)
+                response.raise_for_status()
+
+                # Converte em bytes
+                excel_data = response.content
+
+                # Mostra imediatamente um botão de download
+                st.download_button(
+                    label="Baixar Excel",
+                    data=excel_data,
+                    file_name=f"conversa_{st.session_state.selected_thread}.xlsx",
+                    mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                )
+            except Exception as e:
+                st.error(f"Falha ao gerar ou baixar o Excel: {e}")
+
+##############################
 # Visualizador de Conversa
 ##############################
-st.title("Visualizador de Interações")
-
 if st.session_state.selected_thread is None:
     st.info("Nenhuma conversa selecionada. Por favor, escolha uma conversa na sidebar.")
 else:
@@ -68,7 +98,6 @@ else:
         messages = conversation["messages"]
 
         # Ajuste de estilo CSS para garantir espaçamento uniforme entre as mensagens
-        # Usamos gap para o espaçamento vertical e removemos margens verticais individuais.
         st.markdown("""
         <style>
         .chat-container {
@@ -85,7 +114,7 @@ else:
             max-width: 60%;
             word-wrap: break-word;
             margin-right: auto; /* Alinha à esquerda */
-            margin-left: 0;     /* Sem margem lateral esquerda adicional */
+            margin-left: 0;
         }
 
         .ai-bubble {
@@ -96,7 +125,7 @@ else:
             max-width: 60%;
             word-wrap: break-word;
             margin-left: auto; /* Alinha à direita */
-            margin-right: 0;   /* Sem margem lateral direita adicional */
+            margin-right: 0;
         }
         </style>
         """, unsafe_allow_html=True)
@@ -104,11 +133,6 @@ else:
         # Container para as mensagens
         st.markdown('<div class="chat-container">', unsafe_allow_html=True)
         for msg in messages:
-            if msg["type"] == "human":
-                st.markdown(f'<div class="human-bubble">{msg["content"]}</div>', unsafe_allow_html=True)
-            elif msg["type"] == "ai":
-                st.markdown(f'<div class="ai-bubble">{msg["content"]}</div>', unsafe_allow_html=True)
-            else:
-                # Caso 'other', se existir, trataremos como human para padronizar
-                st.markdown(f'<div class="human-bubble">{msg["content"]}</div>', unsafe_allow_html=True)
+            bubble_class = "human-bubble" if msg["type"] == "human" else "ai-bubble"
+            st.markdown(f'<div class="{bubble_class}">{msg["content"]}</div>', unsafe_allow_html=True)
         st.markdown('</div>', unsafe_allow_html=True)

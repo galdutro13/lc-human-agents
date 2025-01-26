@@ -1,0 +1,16 @@
+protobuf~=5.29.2
+fastapi~=0.115.6
+langgraph~=0.2.60
+langchain~=0.3.13
+streamlit~=1.41.1
+requests~=2.32.3
+langchain-core~=0.3.28
+langchain-openai~=0.2.14
+Flask~=3.1.0
+langchain-google-genai~=2.0.7
+langgraph-checkpoint-sqlite
+fastapi
+uvicorn
+streamlit
+pandas~=2.2.3
+openpyxl~=3.1.5

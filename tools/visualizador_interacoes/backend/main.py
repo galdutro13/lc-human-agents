@@ -1,7 +1,8 @@
-
 from fastapi import FastAPI, HTTPException
-
+from fastapi.responses import StreamingResponse
 import sqlite3
+import io
+import pandas as pd
 
 from langgraph.checkpoint.serde.jsonplus import JsonPlusSerializer
 from langchain.schema import HumanMessage, AIMessage
@@ -203,3 +204,65 @@ def get_interaction(thread_id: str):
         conn.close()
 
 
+@app.get("/interactions/{thread_id}/excel")
+def export_interaction_excel(thread_id: str):
+    """
+    Gera e retorna um arquivo Excel (.xlsx) contendo todas as mensagens
+    (content e type) referentes à thread_id informada.
+    """
+    conn = get_db_connection()
+    try:
+        # Pega o último checkpoint do thread_id
+        cursor = conn.execute("""
+            SELECT checkpoint, type 
+            FROM checkpoints
+            WHERE thread_id = ?
+            ORDER BY checkpoint_id DESC
+            LIMIT 1
+        """, (thread_id,))
+        row = cursor.fetchone()
+
+        if row is None or row["checkpoint"] is None:
+            raise HTTPException(status_code=404, detail="Interação não encontrada ou sem conteúdo.")
+
+        checkpoint_data = row["checkpoint"]
+        record_type = row["type"]
+
+        # Decodifica usando o serializador
+        conversation = JsonPlusSerializer().loads_typed((record_type, checkpoint_data))
+        messages = conversation.get("channel_values", {}).get("messages", [])
+
+        # Monta uma lista de dicionários simples para criar o DataFrame
+        data_for_df = []
+        for msg in messages:
+            if isinstance(msg, HumanMessage):
+                msg_type = "human"
+            elif isinstance(msg, AIMessage):
+                msg_type = "ai"
+            else:
+                msg_type = "other"
+            data_for_df.append({
+                "type": msg_type,
+                "content": getattr(msg, "content", "")
+            })
+
+        # Cria o DataFrame
+        df = pd.DataFrame(data_for_df)
+
+        # Gera o Excel em memória
+        output = io.BytesIO()
+        with pd.ExcelWriter(output, engine="openpyxl") as writer:
+            df.to_excel(writer, index=False, sheet_name="Conversa")
+        output.seek(0)
+
+        # Retorna como StreamingResponse para download
+        filename = f"conversa_{thread_id}.xlsx"
+        headers = {"Content-Disposition": f"attachment; filename={filename}"}
+        return StreamingResponse(
+            output,
+            media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            headers=headers
+        )
+
+    finally:
+        conn.close()
