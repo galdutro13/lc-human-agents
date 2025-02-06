@@ -148,6 +148,8 @@ def new_interaction():
                         st.session_state.show_new_interaction_modal = False
                         st.session_state.new_interaction_prompt = ""  # clear prompt for next time
                         st.session_state.show_success_toast = True
+                        # Update the list of interactions
+                        st.session_state.interactions = load_interactions()
                         # Trigger an immediate rerun to close the modal
                         st.rerun()
                     else:
@@ -181,7 +183,7 @@ with st.sidebar:
 
 if st.session_state.show_new_interaction_modal:
     new_interaction()
-
+    st.session_state.show_new_interaction_modal = False
 
 
 ##############################
@@ -248,6 +250,7 @@ else:
             word-wrap: break-word;
             margin-right: auto; /* Alinha à esquerda */
             margin-left: 0;
+            font-size: 20px
         }
 
         .ai-bubble {
@@ -259,6 +262,7 @@ else:
             word-wrap: break-word;
             margin-left: auto; /* Alinha à direita */
             margin-right: 0;
+            font-size: 20px
         }
         </style>
         """, unsafe_allow_html=True)
