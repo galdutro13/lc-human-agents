@@ -1,12 +1,26 @@
+import logging
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import StreamingResponse
 import sqlite3
 import io
 import pandas as pd
+from pydantic import BaseModel
 
 from langgraph.checkpoint.serde.jsonplus import JsonPlusSerializer
 from langchain.schema import HumanMessage, AIMessage
 
+from source.tests.chatbot_test import test_chatbot
+
+class InteractionRequest(BaseModel):
+    query: str
+
+
+class InteractionResponse(BaseModel):
+    success: bool
+
+# Configure logging
+logger = logging.getLogger("app")
+logger.setLevel(logging.INFO)
 app = FastAPI()
 
 DATABASE_PATH = "checkpoints.db"
@@ -15,6 +29,22 @@ def get_db_connection() -> sqlite3.Connection:
     conn = sqlite3.connect(DATABASE_PATH, check_same_thread=False)
     conn.row_factory = sqlite3.Row
     return conn
+
+@app.post("/new_interaction", response_model=InteractionResponse)
+async def new_interaction(interaction: InteractionRequest):
+    """
+    Executes a new interaction based on the user's prompt.
+    """
+    try:
+        # Run the chatbot function with the user query
+        test_chatbot(interaction.query)
+        return InteractionResponse(success=True)
+    except Exception as exc:
+        # Log the exception details internally
+        logger.error("Failed to process new interaction", exc_info=exc)
+        # Return a generic error message to the client
+        raise HTTPException(status_code=500, detail="Internal server error")
+
 
 @app.get("/interactions")
 def list_interactions():

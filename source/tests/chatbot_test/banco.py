@@ -1,4 +1,4 @@
-from chatbot import ChatBotBase
+from source.tests.chatbot_test.chatbot import ChatBotBase
 
 class BancoBot(ChatBotBase):
     def __init__(self, think_exp):

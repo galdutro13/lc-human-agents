@@ -1,6 +1,73 @@
 import streamlit as st
 import requests
+import threading
+import time
+import uvicorn  # Ensure that uvicorn is installed in your environment
 from datetime import datetime
+import sys
+import os
+
+# ------------------------------------------------------------------------------
+# Backend Startup Section
+# ------------------------------------------------------------------------------
+
+# Define a function to add the project root to the Python path.
+def get_project_root():
+    # Calculate the project root directory by going three levels up:
+    # st_frontend.py --> frontend --> visualizador_interacoes --> tools --> project root
+    project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", ".."))
+    print(f"Adding {project_root} to sys.path")
+    if project_root not in sys.path:
+        sys.path.insert(0, project_root)
+
+# Define a function to start the backend server using uvicorn.
+def run_backend():
+    # The module path reflects your folder structure.
+    uvicorn.run("tools.visualizador_interacoes.backend.main:app",
+                host="localhost", port=8000, log_level="info")
+
+# Ensure that the backend is started only once even if Streamlit reruns the script.
+if "backend_started" not in st.session_state:
+    st.session_state.backend_started = False
+
+if "configured_python_path" not in st.session_state:
+    st.session_state.configured_python_path = False
+
+# This ensures that the Python interpreter can locate the project's root directory.
+if not st.session_state.configured_python_path:
+    get_project_root()
+    st.session_state.configured_python_path = True
+
+# Start the backend server if it is not already running.
+if not st.session_state.backend_started:
+    # Start the backend in a daemon thread.
+    backend_thread = threading.Thread(target=run_backend, daemon=True)
+    backend_thread.start()
+    st.session_state.backend_started = True
+
+    # Wait until the backend is responsive.
+    backend_ready = False
+    max_attempts = 20  # Number of attempts
+    attempt = 0
+    backend_url = "http://localhost:8000/interactions"
+    while not backend_ready and attempt < max_attempts:
+        try:
+            response = requests.get(backend_url)
+            if response.status_code == 200:
+                backend_ready = True
+                break
+        except requests.exceptions.RequestException:
+            # The backend might not be ready yet.
+            time.sleep(0.5)
+        attempt += 1
+
+    if not backend_ready:
+        st.error("O servidor backend não iniciou a tempo. Por favor, tente novamente.")
+        st.stop()  # Stop further execution
+
+# ------------------------------------------------------------------------------
+# Rest of the Frontend (Streamlit) Code
+# ------------------------------------------------------------------------------
 
 # URL base do servidor FastAPI
 BASE_URL = "http://localhost:8000"
