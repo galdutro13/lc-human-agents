@@ -33,6 +33,16 @@ if "backend_started" not in st.session_state:
 if "configured_python_path" not in st.session_state:
     st.session_state.configured_python_path = False
 
+# Initialize session state variables
+if "show_new_interaction_modal" not in st.session_state:
+    st.session_state.show_new_interaction_modal = False
+if "new_interaction_prompt" not in st.session_state:
+    st.session_state.new_interaction_prompt = ""
+if "new_interaction_error" not in st.session_state:
+    st.session_state.new_interaction_error = ""
+if "show_success_toast" not in st.session_state:
+    st.session_state.show_success_toast = False
+
 # This ensures that the Python interpreter can locate the project's root directory.
 if not st.session_state.configured_python_path:
     get_project_root()
@@ -108,15 +118,71 @@ def format_ts(ts):
     except:
         return ts
 
+@st.dialog("Iniciar nova interação")
+def new_interaction():
+    # Text area for initial prompt input
+    st.session_state.new_interaction_prompt = st.text_area(
+        "Prompt inicial:",
+        value=st.session_state.new_interaction_prompt,
+        placeholder="Digite o prompt inicial aqui..."
+    )
+    # Buttons at the bottom of the modal: Cancelar (left) and Iniciar (right)
+    col_cancel, col_start = st.columns([1, 1])
+    # Cancel button: closes the modal without sending a request
+    # Iniciar button: triggers the creation of a new interaction
+    if col_start.button("Iniciar"):
+        user_prompt = st.session_state.new_interaction_prompt.strip()
+        if user_prompt == "":
+            # If no prompt is entered, show an error message
+            st.session_state.new_interaction_error = "O prompt não pode estar vazio."
+        else:
+            # Clear any previous error and call the backend route, showing a spinner during the request
+            st.session_state.new_interaction_error = ""
+            with st.spinner("Gerando interação"):
+                try:
+                    # Send a POST request to the backend with the prompt
+                    response = requests.post(f"{BASE_URL}/new_interaction", json={"query": user_prompt})
+                    result = response.json()
+                    if result.get("success", False):
+                        # On success, close the modal and prepare a success notification
+                        st.session_state.show_new_interaction_modal = False
+                        st.session_state.new_interaction_prompt = ""  # clear prompt for next time
+                        st.session_state.show_success_toast = True
+                        # Trigger an immediate rerun to close the modal
+                        st.rerun()
+                    else:
+                        # If the backend indicates failure, display an error message
+                        st.session_state.new_interaction_error = result.get("error") or \
+                                                                 "Falha ao iniciar interação. Por favor, tente novamente."
+                except Exception:
+                    # On network or other errors, show a connection error message
+                    st.session_state.new_interaction_error = "Erro ao conectar ao servidor. Por favor, tente novamente."
+        # If there's an error message, display it in the modal (temporarily for 5 seconds)
+        if st.session_state.new_interaction_error:
+            error_alert = st.error(st.session_state.new_interaction_error)
+            # Keep the error visible for 5 seconds, then remove it
+            time.sleep(5)
+            error_alert.empty()
+            st.session_state.new_interaction_error = ""
+
 ##############################
 # Sidebar
 ##############################
 with st.sidebar:
+    st.write("**Nova interação**")
+    if st.button("", key="btn_new_interaction", help="Iniciar nova interação", icon="➕"):
+        st.session_state.show_new_interaction_modal = True
+        st.session_state.new_interaction_error = ""  # reset any previous error
     st.write("**Conversas**")
     for i, item in enumerate(st.session_state.interactions):
         ts_str = format_ts(item["ts"])
         if st.button(f"{ts_str}", key=f"conv_{i}"):
             st.session_state.selected_thread = item["thread_id"]
+
+if st.session_state.show_new_interaction_modal:
+    new_interaction()
+
+
 
 ##############################
 # Header (Título + Botão de Download)
