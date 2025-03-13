@@ -4,14 +4,29 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0cea1559-660a-43f1-803f-04da1cdf897d" name="Changes" comment="Permitir que se baixe as mensagens em forma de um excel.">
+    <list default="true" id="0cea1559-660a-43f1-803f-04da1cdf897d" name="Changes" comment="Ajustes finais na interface do visualizador de prompt.">
+      <change afterPath="$PROJECT_DIR$/source/rag/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/source/rag/config/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/source/rag/config/config_manager.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/source/rag/config/models.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/source/rag/document/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/source/rag/document/document_manager.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/source/rag/document/document_processor.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/source/rag/functions/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/source/rag/functions/rag_functions.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/source/rag/state/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/source/rag/state/rag_state.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/source/rag/system/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/source/rag/system/rag_system.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/source/rag/vectorstore/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/source/rag/vectorstore/vectorstore_manager.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/source/rag/workflow/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/source/rag/workflow/rag_workflow_builder.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/source/tests/integratio_test/document_loader_integration.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/source/tests/integratio_test/rag_test.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/tests/chatbot_test/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/tests/chatbot_test/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/tests/chatbot_test/banco.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/tests/chatbot_test/banco.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/tests/chatbot_test/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/tests/chatbot_test/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/tests/chatbot_test/usuario.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/tests/chatbot_test/usuario.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tools/visualizador_interacoes/backend/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/tools/visualizador_interacoes/backend/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tools/visualizador_interacoes/frontend/st_frontend.py" beforeDir="false" afterPath="$PROJECT_DIR$/tools/visualizador_interacoes/frontend/st_frontend.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/prompt_manager/template_generator.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/prompt_manager/template_generator.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,6 +38,17 @@
       <list>
         <option value="Python Script" />
       </list>
+    </option>
+  </component>
+  <component name="FlaskConsoleOptions" custom-start-script="import sys; print('Python %s on %s' % (sys.version, sys.platform)); sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;from flask.cli import ScriptInfo, NoAppException&#10;for module in [&quot;main.py&quot;, &quot;wsgi.py&quot;, &quot;app.py&quot;]:&#10;    try: locals().update(ScriptInfo(app_import_path=module, create_app=None).load_app().make_shell_context()); print(&quot;\nFlask App: %s&quot; % app.import_name); break&#10;    except NoAppException: pass">
+    <envs>
+      <env key="FLASK_APP" value="app" />
+    </envs>
+    <option name="myCustomStartScript" value="import sys; print('Python %s on %s' % (sys.version, sys.platform)); sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;from flask.cli import ScriptInfo, NoAppException&#10;for module in [&quot;main.py&quot;, &quot;wsgi.py&quot;, &quot;app.py&quot;]:&#10;    try: locals().update(ScriptInfo(app_import_path=module, create_app=None).load_app().make_shell_context()); print(&quot;\nFlask App: %s&quot; % app.import_name); break&#10;    except NoAppException: pass" />
+    <option name="myEnvs">
+      <map>
+        <entry key="FLASK_APP" value="app" />
+      </map>
     </option>
   </component>
   <component name="Git.Settings">
@@ -54,59 +80,64 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;FastAPI.visualizador_backend.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests for persona_csv_integration.TestPersonaCSVIntegration.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests for test_csv_to_json.TestCSVtoJSONConverter.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests for test_csv_to_json.TestCSVtoJSONConverter.test_malformed_csv.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests for test_prompt_manager.TestPromptGenerators.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests for test_prompt_manager.TestPromptGenerators.test_custom_prompt_generator.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests for test_prompt_manager.TestPromptGenerators.test_system_prompt_generator_invalid_strategy.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests for workflow_integration_test.TestChatGraphPromptIntegration.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests for workflow_integration_test.TestChatGraphPromptIntegration.test_chat_function.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests for workflow_integration_test.TestChatGraphPromptIntegration.test_default_workflow.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests for workflow_integration_test.TestChatGraphPromptIntegration.test_initial.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests in test_prompt_manager.py.executor&quot;: &quot;Run&quot;,
-    &quot;Python.Extract personas.executor&quot;: &quot;Run&quot;,
-    &quot;Python.chatbot server test.executor&quot;: &quot;Run&quot;,
-    &quot;Python.chatbot_test.executor&quot;: &quot;Run&quot;,
-    &quot;Python.gerar_missoes.executor&quot;: &quot;Run&quot;,
-    &quot;Python.insert_cenario&amp;persona.executor&quot;: &quot;Run&quot;,
-    &quot;Python.llms.executor&quot;: &quot;Run&quot;,
-    &quot;Python.main.executor&quot;: &quot;Run&quot;,
-    &quot;Python.models.executor&quot;: &quot;Run&quot;,
-    &quot;Python.prompt_generation.executor&quot;: &quot;Run&quot;,
-    &quot;Python.prompt_generator.executor&quot;: &quot;Run&quot;,
-    &quot;Python.read_personas.executor&quot;: &quot;Run&quot;,
-    &quot;Python.setup_db_cenarios.executor&quot;: &quot;Run&quot;,
-    &quot;Python.setup_simulacoes_db.executor&quot;: &quot;Run&quot;,
-    &quot;Python.workflow_builder.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;database.data.extractors.current.export.id&quot;: &quot;Comma-separated (CSV)_id&quot;,
-    &quot;database.data.extractors.current.id&quot;: &quot;Comma-separated (CSV)_id&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/galdu/OneDrive/Desktop&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;editor.preferences.inline.completion&quot;,
-    &quot;vcs.patch.path&quot;: &quot;C:/Users/galdu/OneDrive/Desktop&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "FastAPI.visualizador_backend.executor": "Run",
+    "Python tests.Python tests for persona_csv_integration.TestPersonaCSVIntegration.executor": "Run",
+    "Python tests.Python tests for test_csv_to_json.TestCSVtoJSONConverter.executor": "Run",
+    "Python tests.Python tests for test_csv_to_json.TestCSVtoJSONConverter.test_malformed_csv.executor": "Run",
+    "Python tests.Python tests for test_prompt_manager.TestPromptGenerators.executor": "Run",
+    "Python tests.Python tests for test_prompt_manager.TestPromptGenerators.test_custom_prompt_generator.executor": "Run",
+    "Python tests.Python tests for test_prompt_manager.TestPromptGenerators.test_system_prompt_generator_invalid_strategy.executor": "Run",
+    "Python tests.Python tests for workflow_integration_test.TestChatGraphPromptIntegration.executor": "Run",
+    "Python tests.Python tests for workflow_integration_test.TestChatGraphPromptIntegration.test_chat_function.executor": "Run",
+    "Python tests.Python tests for workflow_integration_test.TestChatGraphPromptIntegration.test_default_workflow.executor": "Run",
+    "Python tests.Python tests for workflow_integration_test.TestChatGraphPromptIntegration.test_initial.executor": "Run",
+    "Python tests.Python tests in test_prompt_manager.py.executor": "Run",
+    "Python.Extract personas.executor": "Run",
+    "Python.chatbot server test.executor": "Run",
+    "Python.chatbot_test.executor": "Run",
+    "Python.document_loader_integration.executor": "Run",
+    "Python.gerar_missoes.executor": "Run",
+    "Python.insert_cenario&persona.executor": "Run",
+    "Python.llms.executor": "Run",
+    "Python.main.executor": "Run",
+    "Python.models.executor": "Run",
+    "Python.prompt_generation.executor": "Run",
+    "Python.prompt_generator.executor": "Run",
+    "Python.rag_test.executor": "Run",
+    "Python.read_personas.executor": "Run",
+    "Python.setup_db_cenarios.executor": "Run",
+    "Python.setup_simulacoes_db.executor": "Run",
+    "Python.workflow_builder.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "database.data.extractors.current.export.id": "Comma-separated (CSV)_id",
+    "database.data.extractors.current.id": "Comma-separated (CSV)_id",
+    "git-widget-placeholder": "master",
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "C:/Users/galdu/PycharmProjects/lc-human-agents/source/tests/integratio_test/rag_test.py",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "reference.settingsdialog.project.grazie",
+    "vcs.patch.path": "C:/Users/galdu/OneDrive/Desktop",
+    "vcs.patch.to.clipboard": "true",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\galdu\PycharmProjects\lc-human-agents" />
       <recent name="C:\Users\galdu\PycharmProjects\lc-human-agents\tools\db_work" />
       <recent name="C:\Users\galdu\PycharmProjects\lc-human-agents\source" />
     </key>
   </component>
-  <component name="RunManager" selected="FastAPI.visualizador_backend">
-    <configuration name="Extract personas" type="PythonConfigurationType" factoryName="Python">
+  <component name="RunManager" selected="Python.rag_test">
+    <configuration name="Extract personas" type="PythonConfigurationType" factoryName="Python" folderName="TOOLS">
       <module name="lc-human-agents" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -146,6 +177,30 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/source/tests/chatbot_test/main.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="document_loader_integration" type="PythonConfigurationType" factoryName="Python" folderName="INTEGRATION_TEST" nameIsGenerated="true">
+      <module name="lc-human-agents" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="SDK_NAME" value="Python 3.11 (lc-human-agents)" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/source/tests/integratio_test/document_loader_integration.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -218,6 +273,30 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/tools/prompt_generation/prompt_generator.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="rag_test" type="PythonConfigurationType" factoryName="Python" folderName="INTEGRATION_TEST" nameIsGenerated="true">
+      <module name="lc-human-agents" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="SDK_NAME" value="Python 3.11 (lc-human-agents)" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/source/tests/integratio_test/rag_test.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -331,11 +410,13 @@
     </configuration>
     <list>
       <item itemvalue="FastAPI.visualizador_backend" />
+      <item itemvalue="Python.Extract personas" />
+      <item itemvalue="Python.prompt_generation" />
+      <item itemvalue="Python.rag_test" />
+      <item itemvalue="Python.document_loader_integration" />
       <item itemvalue="Python.gerar_missoes" />
       <item itemvalue="Python.insert_cenario&amp;persona" />
       <item itemvalue="Python.setup_db_cenarios" />
-      <item itemvalue="Python.prompt_generation" />
-      <item itemvalue="Python.Extract personas" />
       <item itemvalue="Python.chatbot_test" />
       <item itemvalue="Python tests.Python tests for workflow_integration_test.TestChatGraphPromptIntegration" />
       <item itemvalue="Python tests.Python tests for workflow_integration_test.TestChatGraphPromptIntegration.test_chat_function" />
@@ -355,8 +436,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-d6986cc7102b-822845ee3bb5-JavaScript-PY-243.23654.177" />
-        <option value="bundled-python-sdk-91d3a02ef49d-43b77aa2d136-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-243.23654.177" />
+        <option value="bundled-js-predefined-d6986cc7102b-1632447f56bf-JavaScript-PY-243.25659.43" />
+        <option value="bundled-python-sdk-181015f7ab06-4df51de95216-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-243.25659.43" />
       </set>
     </attachedChunks>
   </component>
@@ -397,7 +478,36 @@
       <workItem from="1738695003261" duration="588000" />
       <workItem from="1738696609482" duration="6731000" />
       <workItem from="1738774566555" duration="1787000" />
-      <workItem from="1738855890623" duration="3092000" />
+      <workItem from="1738855890623" duration="10998000" />
+      <workItem from="1738867319210" duration="7463000" />
+      <workItem from="1738879979809" duration="2068000" />
+      <workItem from="1741882447714" duration="8841000" />
+      <workItem from="1741897371646" duration="135000" />
+      <workItem from="1741897571348" duration="159000" />
+      <workItem from="1741898068504" duration="634000" />
+      <workItem from="1741898749693" duration="126000" />
+      <workItem from="1741899000097" duration="123000" />
+      <workItem from="1741899135953" duration="88000" />
+      <workItem from="1741899285491" duration="23000" />
+      <workItem from="1741899319236" duration="32000" />
+      <workItem from="1741899363321" duration="39000" />
+      <workItem from="1741899535582" duration="47000" />
+      <workItem from="1741899626282" duration="588000" />
+      <workItem from="1741900244433" duration="97000" />
+      <workItem from="1741900354458" duration="432000" />
+      <workItem from="1741900808690" duration="55000" />
+      <workItem from="1741900874330" duration="28000" />
+      <workItem from="1741900923916" duration="32000" />
+      <workItem from="1741900981077" duration="67000" />
+      <workItem from="1741901061704" duration="106000" />
+      <workItem from="1741901185110" duration="221000" />
+      <workItem from="1741901495255" duration="1213000" />
+      <workItem from="1741903171488" duration="197000" />
+      <workItem from="1741903378024" duration="151000" />
+      <workItem from="1741903543493" duration="1473000" />
+      <workItem from="1741905312313" duration="18000" />
+      <workItem from="1741905371156" duration="70000" />
+      <workItem from="1741905499342" duration="2020000" />
     </task>
     <task id="LOCAL-00001" summary="Initial Commit.">
       <option name="closed" value="true" />
@@ -463,7 +573,31 @@
       <option name="project" value="LOCAL" />
       <updated>1737930036388</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Implement new interaction API endpoint and frontend integration&#10;&#10;This patch introduces a new API endpoint /new_interaction to the backend, allowing the frontend to trigger chatbot interactions dynamically.&#10;&#10;Key changes include:&#10;&#10;Backend (main.py):&#10;&#10;Added a /new_interaction POST endpoint that receives a user query and executes the test_chatbot function.&#10;&#10;Implemented request and response models using Pydantic for API clarity.&#10;&#10;Integrated basic logging for improved error tracking and debugging.&#10;&#10;Frontend (st_frontend.py):&#10;&#10;Implemented logic to start the backend server directly from the Streamlit frontend using threading and uvicorn. This simplifies deployment and ensures the backend is running when the frontend is accessed.&#10;&#10;Added path configuration to ensure the frontend can locate and import backend modules correctly.&#10;&#10;Chatbot Tests (source/tests/chatbot_test):&#10;&#10;Corrected import paths in banco.py and main.py to align with project structure.&#10;&#10;Exported test_chatbot and chatbot classes in __init__.py to make them accessible to other modules.&#10;&#10;Modified the default system message in UsuarioBot to represent a different persona (Alberto Vasconcelos).&#10;&#10;These changes enhance the system's functionality by enabling user-initiated chatbot interactions through the frontend and streamlining the setup process for both development and potentially deployment.">
+      <option name="closed" value="true" />
+      <created>1738859116676</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1738859116676</updated>
+    </task>
+    <task id="LOCAL-00010" summary="Introdução da funcionalidade de criar uma nova interação através da interface do streamlit.">
+      <option name="closed" value="true" />
+      <created>1738865697488</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1738865697488</updated>
+    </task>
+    <task id="LOCAL-00011" summary="Ajustes finais na interface do visualizador de prompt.">
+      <option name="closed" value="true" />
+      <created>1738874450368</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1738874450368</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -478,7 +612,12 @@
     <MESSAGE value="Atualização do código." />
     <MESSAGE value="Implementação da opção de escolher o modelo." />
     <MESSAGE value="Permitir que se baixe as mensagens em forma de um excel." />
-    <option name="LAST_COMMIT_MESSAGE" value="Permitir que se baixe as mensagens em forma de um excel." />
+    <MESSAGE value="COMMIT_MSG" />
+    <MESSAGE value="Implement new interaction API endpoint and frontend integration&#10;&#10;This patch introduces a new API endpoint /new_interaction to the backend, allowing the frontend to trigger chatbot interactions dynamically.&#10;&#10;Key changes include:&#10;&#10;Backend (main.py):&#10;&#10;Added a /new_interaction POST endpoint that receives a user query and executes the test_chatbot function.&#10;&#10;Implemented request and response models using Pydantic for API clarity.&#10;&#10;Integrated basic logging for improved error tracking and debugging.&#10;&#10;Frontend (st_frontend.py):&#10;&#10;Implemented logic to start the backend server directly from the Streamlit frontend using threading and uvicorn. This simplifies deployment and ensures the backend is running when the frontend is accessed.&#10;&#10;Added path configuration to ensure the frontend can locate and import backend modules correctly.&#10;&#10;Chatbot Tests (source/tests/chatbot_test):&#10;&#10;Corrected import paths in banco.py and main.py to align with project structure.&#10;&#10;Exported test_chatbot and chatbot classes in __init__.py to make them accessible to other modules.&#10;&#10;Modified the default system message in UsuarioBot to represent a different persona (Alberto Vasconcelos).&#10;&#10;These changes enhance the system's functionality by enabling user-initiated chatbot interactions through the frontend and streamlining the setup process for both development and potentially deployment." />
+    <MESSAGE value="COMMIT_MESSAGE" />
+    <MESSAGE value="Introdução da funcionalidade de criar uma nova interação através da interface do streamlit." />
+    <MESSAGE value="Ajustes finais na interface do visualizador de prompt." />
+    <option name="LAST_COMMIT_MESSAGE" value="Ajustes finais na interface do visualizador de prompt." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -506,13 +645,15 @@
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/lc_human_agents$chatbot_server_test.coverage" NAME="chatbot server test Coverage Results" MODIFIED="1735141967192" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="C:\Users\galdu\PycharmProjects\lc-human-agents" />
-    <SUITE FILE_PATH="coverage/lc_human_agents$setup_simulacoes_db.coverage" NAME="setup_db_cenarios Coverage Results" MODIFIED="1735167459458" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/" />
     <SUITE FILE_PATH="coverage/lc_human_agents$visualizador_backend.coverage" NAME="visualizador_backend Coverage Results" MODIFIED="1738608167151" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/lc_human_agents$prompt_generation.coverage" NAME="prompt_generation Coverage Results" MODIFIED="1735239266449" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/lc_human_agents$document_loader_integration.coverage" NAME="document_loader_integration Coverage Results" MODIFIED="1741895137464" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/lc_human_agents$rag_test.coverage" NAME="rag_test Coverage Results" MODIFIED="1741907220263" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/lc_human_agents$setup_simulacoes_db.coverage" NAME="setup_db_cenarios Coverage Results" MODIFIED="1735167459458" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/" />
     <SUITE FILE_PATH="coverage/lc_human_agents$Extract_personas.coverage" NAME="Extract personas Coverage Results" MODIFIED="1735162567412" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/lc_human_agents$insert_cenario_persona.coverage" NAME="insert_cenario&amp;persona Coverage Results" MODIFIED="1735167495419" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
-    <SUITE FILE_PATH="coverage/lc_human_agents$chatbot_test.coverage" NAME="chatbot_test Coverage Results" MODIFIED="1738608088821" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/lc_human_agents$chatbot_test.coverage" NAME="chatbot_test Coverage Results" MODIFIED="1738863875301" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/lc_human_agents$gerar_missoes.coverage" NAME="gerar_missoes Coverage Results" MODIFIED="1735167511941" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
-    <SUITE FILE_PATH="coverage/lc_human_agents$prompt_generation.coverage" NAME="prompt_generation Coverage Results" MODIFIED="1735239266449" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/lc_human_agents$prompt_generator.coverage" NAME="prompt_generator Coverage Results" MODIFIED="1735165702542" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tools/prompt_generation" />
     <SUITE FILE_PATH="coverage/lc_human_agents$read_personas.coverage" NAME="read_personas Coverage Results" MODIFIED="1735148903371" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tools" />
   </component>

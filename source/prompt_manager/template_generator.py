@@ -1,4 +1,4 @@
-from langchainn.prompts.chat import ChatPromptTemplate
+from langchain.prompts.chat import ChatPromptTemplate
 from source.persona.persona import Persona
 from source.prompt_manager.base import (
     SystemPromptGenerator,
