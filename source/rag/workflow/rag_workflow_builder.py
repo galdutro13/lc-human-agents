@@ -5,7 +5,7 @@ from source.chat_graph.workflow_builder import Builder
 from source.chat_graph.chat_function import ChatFunction
 
 from source.rag.state.rag_state import RAGState
-from source.rag.functions.rag_functions import RouterFunction, GraderFunction, RAGResponseFunction, FallbackFunction
+from source.rag.functions.rag_functions import RouterFunction, GraderFunction, RetrieveFunction, RAGResponseFunction, FallbackFunction
 
 
 class RAGWorkflowBuilder(Builder):
@@ -88,6 +88,9 @@ class RAGWorkflowBuilder(Builder):
             Compiled RAG workflow
         """
 
+        # Create the retriever function using the retrievers from the responder
+        retriever = RetrieveFunction(responder.retrievers)
+
         # Define conditional routing function
         def decide_next_step(state: RAGState) -> str:
             """
@@ -109,7 +112,7 @@ class RAGWorkflowBuilder(Builder):
 
         # Add nodes
         self.add_node("route", router)
-        self.add_node("retrieve", self._create_retriever_function())
+        self.add_node("retrieve", retriever)  # Use the new retriever function
         self.add_node("grade", grader)
         self.add_node("respond_with_relevant", responder)
         self.add_node("respond_with_fallback", fallback)
@@ -133,32 +136,3 @@ class RAGWorkflowBuilder(Builder):
 
         # Compile and return the workflow
         return self.build_workflow()
-
-    def _create_retriever_function(self) -> Callable:
-        """
-        Creates a function to retrieve documents from the selected datasource.
-
-        Returns:
-            Function to retrieve documents
-        """
-
-        def retrieve_from_datasource(state: RAGState) -> Dict[str, Any]:
-            """
-            Retrieves documents from the selected datasource.
-
-            Args:
-                state: Current workflow state (RAGState)
-
-            Returns:
-                Updated state with retrieved documents
-            """
-            print("---RETRIEVE FROM DATASOURCE---")
-
-            # In the actual implementation, this function would use a retriever
-            # to get documents from the selected datasource. For now, it's a placeholder.
-            # The actual retrieval happens in the RAGResponseFunction.
-
-            # Return empty context for now
-            return {"context": []}
-
-        return retrieve_from_datasource

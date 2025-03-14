@@ -11,6 +11,80 @@ from source.rag.config.models import RAGConfig
 from source.rag.state.rag_state import RAGState
 
 
+class RetrieveFunction(ChatFunction):
+    """
+    Retrieves documents from the selected datasource.
+    Implements the ChatFunction interface for compatibility with the existing system.
+    """
+
+    def __init__(self, retrievers: Dict[str, Any]):
+        """
+        Initializes the RetrieveFunction.
+
+        Args:
+            retrievers: Dictionary of retrievers by datasource
+        """
+        self._retrievers = retrievers
+
+    def __call__(self, state: RAGState) -> Dict[str, Any]:
+        """
+        Retrieves documents from the selected datasource.
+
+        Args:
+            state: Current state of the workflow (RAGState)
+
+        Returns:
+            Updated state with the retrieved documents
+        """
+        print("---RETRIEVE FROM DATASOURCE---")
+
+        # Get the datasource from the state
+        datasource = state.datasource
+        question = state.question
+
+        # Check if datasource is available
+        if not datasource or datasource not in self._retrievers:
+            # Fallback to the first available datasource
+            datasource = next(iter(self._retrievers.keys()), None)
+            if not datasource:
+                print("No datasources available")
+                return {"context": []}
+            print(f"Datasource '{state.datasource}' not available, using '{datasource}' as fallback")
+
+        # Retrieve documents
+        try:
+            retriever = self._retrievers[datasource]
+            docs = retriever.invoke(question)
+            print(f"Retrieved {len(docs)} documents from datasource '{datasource}'")
+
+            # Extract document content
+            context = [doc.page_content for doc in docs]
+
+            return {"context": context}
+        except Exception as e:
+            print(f"Error retrieving documents: {str(e)}")
+            return {"context": []}
+
+    @property
+    def prompt(self) -> Any:
+        """
+        Gets the prompt used by the function.
+
+        Returns:
+            None as no prompt is used
+        """
+        return None
+
+    @property
+    def model(self) -> Any:
+        """
+        Gets the model used by the function.
+
+        Returns:
+            None as no model is used
+        """
+        return None
+
 class RouterFunction(ChatFunction):
     """
     Routes queries to the appropriate datasource.
@@ -266,6 +340,7 @@ class RAGResponseFunction(ChatFunction):
         self._config = config
         self._vectorstores = vectorstores
         self._model = model
+        self._retrievers = {}  # Store retrievers separately
         self._rag_chains = self._create_rag_chains()
 
     def __call__(self, state: 'RAGState') -> Dict[str, Any]:
@@ -344,6 +419,9 @@ class RAGResponseFunction(ChatFunction):
 
             retriever = vectorstore.as_retriever(**retriever_kwargs)
 
+            # Store the retriever separately
+            self._retrievers[datasource_name] = retriever
+
             # Create the prompt template
             template = datasource.prompt_templates.rag_prompt
             prompt = ChatPromptTemplate.from_template(template)
@@ -385,6 +463,16 @@ class RAGResponseFunction(ChatFunction):
             The language model
         """
         return self._model
+
+    @property
+    def retrievers(self) -> Dict[str, Any]:
+        """
+        Gets the retrievers by datasource.
+
+        Returns:
+            Dictionary of retrievers by datasource
+        """
+        return self._retrievers
 
 
 class FallbackFunction(ChatFunction):
