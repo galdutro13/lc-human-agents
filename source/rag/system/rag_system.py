@@ -117,9 +117,9 @@ class RAGSystem:
         # Create a friendlier result format
         return {
             "question": question,
-            "datasource": result.datasource,
-            "documents_relevant": result.documents_relevant,
-            "response": result.response
+            "datasource": result.get('datasource'),
+            "documents_relevant": result.get('documents_relevant'),
+            "response": result.get('response')
         }
 
     @property

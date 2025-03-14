@@ -3,6 +3,10 @@ import argparse
 from source.chat_graph.models import ModelName
 from source.rag.system import RAGSystem
 
+from dotenv import load_dotenv
+
+load_dotenv()
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 def main():
     # Parse command line arguments
@@ -46,10 +50,10 @@ def main():
 
             # Print the result
             print("\nResult:")
-            print(f"Selected datasource: {result['datasource']}")
-            print(f"Documents relevant: {'Yes' if result['documents_relevant'] else 'No'}")
+            print(f"Selected datasource: {result.get('datasource', 'None')}")
+            print(f"Documents relevant: {'Yes' if result.get('documents_relevant') else 'No'}")
             print("\nResponse:")
-            print(result['response'])
+            print(result.get('response', 'None'))
 
         except Exception as e:
             print(f"Error: {str(e)}")

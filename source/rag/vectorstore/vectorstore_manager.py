@@ -71,6 +71,25 @@ class ChromaVectorStoreFactory(VectorStoreFactory):
     Handles creation, persistence, and loading of Chroma vector stores.
     """
 
+    def _get_client_settings(self):
+        """
+        Creates client settings for Chroma to disable the default embedding function.
+
+        Returns:
+            Client settings for Chroma
+        """
+        try:
+            from chromadb.config import Settings
+            # Disable default embedding function to avoid onnxruntime issues
+            return Settings(
+                anonymized_telemetry=False,
+                allow_reset=True,
+                is_persistent=True
+            )
+        except ImportError:
+            print("Warning: Could not import chromadb.config.Settings. Using default settings.")
+            return None
+
     def create_vectorstores(self, documents: Dict[str, List[Document]],
                             config: RAGConfig) -> Dict[str, Chroma]:
         """
@@ -103,9 +122,11 @@ class ChromaVectorStoreFactory(VectorStoreFactory):
                 try:
                     # Try to load the existing vector store
                     print(f"Loading existing vector store for datasource '{datasource_name}'...")
+                    # Explicitly setting embedding_function prevents using default ONNX embeddings
                     vectorstore = Chroma(
                         persist_directory=datasource_directory,
-                        embedding_function=embeddings
+                        embedding_function=embeddings,
+                        client_settings=self._get_client_settings()  # Disable default embeddings
                     )
 
                     # Check if the vector store has data

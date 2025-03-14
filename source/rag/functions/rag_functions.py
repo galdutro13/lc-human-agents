@@ -8,6 +8,7 @@ from langchain_community.vectorstores import Chroma
 
 from source.chat_graph.chat_function import ChatFunction
 from source.rag.config.models import RAGConfig
+from source.rag.state.rag_state import RAGState
 
 
 class RouterFunction(ChatFunction):
@@ -30,12 +31,12 @@ class RouterFunction(ChatFunction):
         self._model = model
         self._prompt = self._create_router_prompt()
 
-    def __call__(self, state: Dict[str, Any]) -> Dict[str, Any]:
+    def __call__(self, state: 'RAGState') -> Dict[str, Any]:
         """
         Routes the query to the appropriate datasource.
 
         Args:
-            state: Current state of the workflow
+            state: Current state of the workflow (RAGState)
 
         Returns:
             Updated state with the selected datasource
@@ -48,7 +49,7 @@ class RouterFunction(ChatFunction):
             return {"datasource": None}
 
         # Get the question from the state
-        question = state.get("question")
+        question = state.question
         if not question:
             print("No question in state")
             return {"datasource": self._datasource_names[0]}
@@ -154,12 +155,12 @@ class GraderFunction(ChatFunction):
         self._model = model
         self._prompt = self._create_grader_prompt()
 
-    def __call__(self, state: Dict[str, Any]) -> Dict[str, Any]:
+    def __call__(self, state: 'RAGState') -> Dict[str, Any]:
         """
         Grades the relevance of the retrieved documents.
 
         Args:
-            state: Current state of the workflow
+            state: Current state of the workflow (RAGState)
 
         Returns:
             Updated state with the relevance assessment
@@ -167,8 +168,8 @@ class GraderFunction(ChatFunction):
         print("---GRADE DOCUMENTS---")
 
         # Get the context and question from the state
-        context = state.get("context", [])
-        question = state.get("question")
+        context = state.context
+        question = state.question
 
         # If no context or question, documents are not relevant
         if not context or not question:
@@ -267,12 +268,12 @@ class RAGResponseFunction(ChatFunction):
         self._model = model
         self._rag_chains = self._create_rag_chains()
 
-    def __call__(self, state: Dict[str, Any]) -> Dict[str, Any]:
+    def __call__(self, state: 'RAGState') -> Dict[str, Any]:
         """
         Generates a response based on relevant documents.
 
         Args:
-            state: Current state of the workflow
+            state: Current state of the workflow (RAGState)
 
         Returns:
             Updated state with the generated response
@@ -280,8 +281,8 @@ class RAGResponseFunction(ChatFunction):
         print("---GENERATE RESPONSE FROM RELEVANT DOCS---")
 
         # Get the question and datasource from the state
-        question = state.get("question")
-        datasource = state.get("datasource")
+        question = state.question
+        datasource = state.datasource
 
         # If no question or datasource, return empty response
         if not question or not datasource:
@@ -404,12 +405,12 @@ class FallbackFunction(ChatFunction):
         self._model = model
         self._prompt = self._create_fallback_prompt()
 
-    def __call__(self, state: Dict[str, Any]) -> Dict[str, Any]:
+    def __call__(self, state: 'RAGState') -> Dict[str, Any]:
         """
         Generates a fallback response when documents are not relevant.
 
         Args:
-            state: Current state of the workflow
+            state: Current state of the workflow (RAGState)
 
         Returns:
             Updated state with the fallback response
@@ -417,7 +418,7 @@ class FallbackFunction(ChatFunction):
         print("---HANDLE IRRELEVANT DOCUMENTS---")
 
         # Get the question from the state
-        question = state.get("question")
+        question = state.question
 
         # If no question, return generic response
         if not question:

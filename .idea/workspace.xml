@@ -4,29 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0cea1559-660a-43f1-803f-04da1cdf897d" name="Changes" comment="Ajustes finais na interface do visualizador de prompt.">
-      <change afterPath="$PROJECT_DIR$/source/rag/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/source/rag/config/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/source/rag/config/config_manager.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/source/rag/config/models.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/source/rag/document/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/source/rag/document/document_manager.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/source/rag/document/document_processor.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/source/rag/functions/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/source/rag/functions/rag_functions.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/source/rag/state/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/source/rag/state/rag_state.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/source/rag/system/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/source/rag/system/rag_system.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/source/rag/vectorstore/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/source/rag/vectorstore/vectorstore_manager.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/source/rag/workflow/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/source/rag/workflow/rag_workflow_builder.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/source/tests/integratio_test/document_loader_integration.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/source/tests/integratio_test/rag_test.py" afterDir="false" />
+    <list default="true" id="0cea1559-660a-43f1-803f-04da1cdf897d" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/lc-human-agents.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/lc-human-agents.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/prompt_manager/template_generator.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/prompt_manager/template_generator.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/prompt_manager/template_generator.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/rag/functions/rag_functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/rag/functions/rag_functions.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/rag/system/rag_system.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/rag/system/rag_system.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/rag/vectorstore/vectorstore_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/rag/vectorstore/vectorstore_manager.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/rag/workflow/rag_workflow_builder.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/rag/workflow/rag_workflow_builder.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/tests/integratio_test/rag_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/tests/integratio_test/rag_test.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -71,6 +59,9 @@
     <setting file="file://$PROJECT_DIR$/.venv/Lib/site-packages/langgraph/checkpoint/serde/base.py" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/.venv/Lib/site-packages/langgraph/checkpoint/sqlite/__init__.py" root0="SKIP_INSPECTION" />
   </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="QODANA_PROBLEMS_VIEW_TAB" />
+  </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 6
 }</component>
@@ -80,55 +71,77 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "FastAPI.visualizador_backend.executor": "Run",
-    "Python tests.Python tests for persona_csv_integration.TestPersonaCSVIntegration.executor": "Run",
-    "Python tests.Python tests for test_csv_to_json.TestCSVtoJSONConverter.executor": "Run",
-    "Python tests.Python tests for test_csv_to_json.TestCSVtoJSONConverter.test_malformed_csv.executor": "Run",
-    "Python tests.Python tests for test_prompt_manager.TestPromptGenerators.executor": "Run",
-    "Python tests.Python tests for test_prompt_manager.TestPromptGenerators.test_custom_prompt_generator.executor": "Run",
-    "Python tests.Python tests for test_prompt_manager.TestPromptGenerators.test_system_prompt_generator_invalid_strategy.executor": "Run",
-    "Python tests.Python tests for workflow_integration_test.TestChatGraphPromptIntegration.executor": "Run",
-    "Python tests.Python tests for workflow_integration_test.TestChatGraphPromptIntegration.test_chat_function.executor": "Run",
-    "Python tests.Python tests for workflow_integration_test.TestChatGraphPromptIntegration.test_default_workflow.executor": "Run",
-    "Python tests.Python tests for workflow_integration_test.TestChatGraphPromptIntegration.test_initial.executor": "Run",
-    "Python tests.Python tests in test_prompt_manager.py.executor": "Run",
-    "Python.Extract personas.executor": "Run",
-    "Python.chatbot server test.executor": "Run",
-    "Python.chatbot_test.executor": "Run",
-    "Python.document_loader_integration.executor": "Run",
-    "Python.gerar_missoes.executor": "Run",
-    "Python.insert_cenario&persona.executor": "Run",
-    "Python.llms.executor": "Run",
-    "Python.main.executor": "Run",
-    "Python.models.executor": "Run",
-    "Python.prompt_generation.executor": "Run",
-    "Python.prompt_generator.executor": "Run",
-    "Python.rag_test.executor": "Run",
-    "Python.read_personas.executor": "Run",
-    "Python.setup_db_cenarios.executor": "Run",
-    "Python.setup_simulacoes_db.executor": "Run",
-    "Python.workflow_builder.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "database.data.extractors.current.export.id": "Comma-separated (CSV)_id",
-    "database.data.extractors.current.id": "Comma-separated (CSV)_id",
-    "git-widget-placeholder": "master",
-    "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "C:/Users/galdu/PycharmProjects/lc-human-agents/source/tests/integratio_test/rag_test.py",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "reference.settingsdialog.project.grazie",
-    "vcs.patch.path": "C:/Users/galdu/OneDrive/Desktop",
-    "vcs.patch.to.clipboard": "true",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;FastAPI.visualizador_backend.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for persona_csv_integration.TestPersonaCSVIntegration.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for test_csv_to_json.TestCSVtoJSONConverter.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for test_csv_to_json.TestCSVtoJSONConverter.test_malformed_csv.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for test_prompt_manager.TestPromptGenerators.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for test_prompt_manager.TestPromptGenerators.test_custom_prompt_generator.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for test_prompt_manager.TestPromptGenerators.test_system_prompt_generator_invalid_strategy.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for workflow_integration_test.TestChatGraphPromptIntegration.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for workflow_integration_test.TestChatGraphPromptIntegration.test_chat_function.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for workflow_integration_test.TestChatGraphPromptIntegration.test_default_workflow.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for workflow_integration_test.TestChatGraphPromptIntegration.test_initial.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests in test_prompt_manager.py.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Extract personas.executor&quot;: &quot;Run&quot;,
+    &quot;Python.chatbot server test.executor&quot;: &quot;Run&quot;,
+    &quot;Python.chatbot_test.executor&quot;: &quot;Run&quot;,
+    &quot;Python.document_loader_integration.executor&quot;: &quot;Run&quot;,
+    &quot;Python.gerar_missoes.executor&quot;: &quot;Run&quot;,
+    &quot;Python.insert_cenario&amp;persona.executor&quot;: &quot;Run&quot;,
+    &quot;Python.llms.executor&quot;: &quot;Run&quot;,
+    &quot;Python.main.executor&quot;: &quot;Run&quot;,
+    &quot;Python.models.executor&quot;: &quot;Run&quot;,
+    &quot;Python.prompt_generation.executor&quot;: &quot;Run&quot;,
+    &quot;Python.prompt_generator.executor&quot;: &quot;Run&quot;,
+    &quot;Python.rag_test.executor&quot;: &quot;Run&quot;,
+    &quot;Python.read_personas.executor&quot;: &quot;Run&quot;,
+    &quot;Python.setup_db_cenarios.executor&quot;: &quot;Run&quot;,
+    &quot;Python.setup_simulacoes_db.executor&quot;: &quot;Run&quot;,
+    &quot;Python.workflow_builder.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;database.data.extractors.current.export.id&quot;: &quot;Comma-separated (CSV)_id&quot;,
+    &quot;database.data.extractors.current.id&quot;: &quot;Comma-separated (CSV)_id&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/galdu/PycharmProjects/lc-human-agents/source/tests/integratio_test/rag_test.py&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;,
+    &quot;vcs.patch.path&quot;: &quot;C:/Users/galdu/OneDrive/Desktop&quot;,
+    &quot;vcs.patch.to.clipboard&quot;: &quot;true&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
+  <component name="QodanaHighlightedReportService">
+    <option name="localRunPublishedPersistedInfo">
+      <LocalRunPublishedPersistedInfo>
+        <option name="fileReportPersistedInfo">
+          <LocalReportPersistedInfo>
+            <option name="path" value="C:\Users\galdu\AppData\Local\Temp\qodana_output\qodana.sarif.json" />
+            <option name="reportGuid" value="9fa7a67c-8d19-490c-9296-824b052fdd04" />
+            <option name="reportName" value="lc-human-agents/qodana/2025-03-13" />
+          </LocalReportPersistedInfo>
+        </option>
+        <option name="reportLink" value="https://qodana.cloud/projects/b8Q5b/reports/ok1ya" />
+      </LocalRunPublishedPersistedInfo>
+    </option>
+  </component>
+  <component name="QodanaIsSelectedPersistenceService">
+    <option name="selectedOrLoading" value="true" />
+  </component>
+  <component name="QodanaReportsService">
+    <option name="descriptions">
+      <ReportDescription localRun="true" path="C:\Users\galdu\AppData\Local\Temp\qodana_output\qodana.sarif.json" publishedReportLink="https://qodana.cloud/projects/b8Q5b/reports/ok1ya" reportGuid="9fa7a67c-8d19-490c-9296-824b052fdd04" reportId="lc-human-agents/qodana/2025-03-13" />
+    </option>
+  </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\galdu\PycharmProjects\lc-human-agents" />
@@ -146,7 +159,6 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="SDK_NAME" value="Python 3.11 (lc-human-agents)" />
       <option name="WORKING_DIRECTORY" value="" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
@@ -170,7 +182,6 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="SDK_NAME" value="Python 3.11 (lc-human-agents)" />
       <option name="WORKING_DIRECTORY" value="" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
@@ -194,7 +205,6 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="SDK_NAME" value="Python 3.11 (lc-human-agents)" />
       <option name="WORKING_DIRECTORY" value="" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
@@ -218,7 +228,6 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="SDK_NAME" value="Python 3.11 (lc-human-agents)" />
       <option name="WORKING_DIRECTORY" value="" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
@@ -242,7 +251,6 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="SDK_NAME" value="Python 3.11 (lc-human-agents)" />
       <option name="WORKING_DIRECTORY" value="" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
@@ -266,7 +274,6 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="SDK_NAME" value="Python 3.11 (lc-human-agents)" />
       <option name="WORKING_DIRECTORY" value="" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
@@ -290,7 +297,6 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="SDK_NAME" value="Python 3.11 (lc-human-agents)" />
       <option name="WORKING_DIRECTORY" value="" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
@@ -335,7 +341,6 @@
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <option name="SDK_HOME" value="$PROJECT_DIR$/.venv/Scripts/python.exe" />
-      <option name="SDK_NAME" value="Python 3.11 (lc-human-agents)" />
       <option name="WORKING_DIRECTORY" value="" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
@@ -412,8 +417,8 @@
       <item itemvalue="FastAPI.visualizador_backend" />
       <item itemvalue="Python.Extract personas" />
       <item itemvalue="Python.prompt_generation" />
-      <item itemvalue="Python.rag_test" />
       <item itemvalue="Python.document_loader_integration" />
+      <item itemvalue="Python.rag_test" />
       <item itemvalue="Python.gerar_missoes" />
       <item itemvalue="Python.insert_cenario&amp;persona" />
       <item itemvalue="Python.setup_db_cenarios" />
@@ -507,7 +512,10 @@
       <workItem from="1741903543493" duration="1473000" />
       <workItem from="1741905312313" duration="18000" />
       <workItem from="1741905371156" duration="70000" />
-      <workItem from="1741905499342" duration="2020000" />
+      <workItem from="1741905499342" duration="3290000" />
+      <workItem from="1741908840647" duration="44000" />
+      <workItem from="1741908891207" duration="1962000" />
+      <workItem from="1741913677355" duration="5535000" />
     </task>
     <task id="LOCAL-00001" summary="Initial Commit.">
       <option name="closed" value="true" />
@@ -597,7 +605,15 @@
       <option name="project" value="LOCAL" />
       <updated>1738874450368</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="Introduction of the RAG codebase.">
+      <option name="closed" value="true" />
+      <created>1741907674388</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1741907674388</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -617,7 +633,8 @@
     <MESSAGE value="COMMIT_MESSAGE" />
     <MESSAGE value="Introdução da funcionalidade de criar uma nova interação através da interface do streamlit." />
     <MESSAGE value="Ajustes finais na interface do visualizador de prompt." />
-    <option name="LAST_COMMIT_MESSAGE" value="Ajustes finais na interface do visualizador de prompt." />
+    <MESSAGE value="Introduction of the RAG codebase." />
+    <option name="LAST_COMMIT_MESSAGE" value="Introduction of the RAG codebase." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -648,7 +665,7 @@
     <SUITE FILE_PATH="coverage/lc_human_agents$visualizador_backend.coverage" NAME="visualizador_backend Coverage Results" MODIFIED="1738608167151" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/lc_human_agents$prompt_generation.coverage" NAME="prompt_generation Coverage Results" MODIFIED="1735239266449" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/lc_human_agents$document_loader_integration.coverage" NAME="document_loader_integration Coverage Results" MODIFIED="1741895137464" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
-    <SUITE FILE_PATH="coverage/lc_human_agents$rag_test.coverage" NAME="rag_test Coverage Results" MODIFIED="1741907220263" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/lc_human_agents$rag_test.coverage" NAME="rag_test Coverage Results" MODIFIED="1741917954963" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/lc_human_agents$setup_simulacoes_db.coverage" NAME="setup_db_cenarios Coverage Results" MODIFIED="1735167459458" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/" />
     <SUITE FILE_PATH="coverage/lc_human_agents$Extract_personas.coverage" NAME="Extract personas Coverage Results" MODIFIED="1735162567412" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/lc_human_agents$insert_cenario_persona.coverage" NAME="insert_cenario&amp;persona Coverage Results" MODIFIED="1735167495419" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />

@@ -94,7 +94,7 @@ class RAGWorkflowBuilder(Builder):
             Decides the next step based on document relevance.
 
             Args:
-                state: Current workflow state
+                state: Current workflow state (RAGState)
 
             Returns:
                 Route to take
@@ -147,7 +147,7 @@ class RAGWorkflowBuilder(Builder):
             Retrieves documents from the selected datasource.
 
             Args:
-                state: Current workflow state
+                state: Current workflow state (RAGState)
 
             Returns:
                 Updated state with retrieved documents
