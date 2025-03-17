@@ -4,11 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0cea1559-660a-43f1-803f-04da1cdf897d" name="Changes" comment="Correções de bugs na logica do RAG.">
+    <list default="true" id="0cea1559-660a-43f1-803f-04da1cdf897d" name="Changes" comment="Refatorar sistema de recuperação de documentos no RAG&#10;&#10;Implementa uma classe RetrieveFunction para substituir a função anônima de recuperação, &#10;permitindo o acesso direto aos retrievers por datasource. Principais alterações:&#10;&#10;- Adiciona classe RetrieveFunction que implementa a interface ChatFunction&#10;- Armazena retrievers separadamente na RAGResponseFunction para reuso&#10;- Modifica o workflow para utilizar a nova função de recuperação&#10;- Remove a função anônima _create_retriever_function&#10;&#10;Esta mudança melhora a modularidade do código e corrige problemas na lógica de recuperação&#10;de documentos, fornecendo tratamento adequado para datasources indisponíveis.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/rag/functions/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/rag/functions/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/source/rag/functions/rag_functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/rag/functions/rag_functions.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/rag/state/rag_state.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/rag/state/rag_state.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/rag/system/rag_system.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/rag/system/rag_system.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/source/rag/workflow/rag_workflow_builder.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/rag/workflow/rag_workflow_builder.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/tests/chatbot_test/chatbot.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/tests/chatbot_test/chatbot.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/tests/chatbot_test/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/tests/chatbot_test/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/tests/integratio_test/rag_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/tests/integratio_test/rag_test.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -121,7 +126,7 @@
       <recent name="C:\Users\galdu\PycharmProjects\lc-human-agents\source" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.rag_test">
+  <component name="RunManager" selected="Python.chatbot_test">
     <configuration name="Extract personas" type="PythonConfigurationType" factoryName="Python" folderName="TOOLS">
       <module name="lc-human-agents" />
       <option name="ENV_FILES" value="" />
@@ -269,13 +274,14 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
+      <option name="SDK_NAME" value="lc-human-agents" />
       <option name="WORKING_DIRECTORY" value="" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/source/tests/integratio_test/rag_test.py" />
-      <option name="PARAMETERS" value="" />
+      <option name="PARAMETERS" value="--show-messages" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
@@ -494,7 +500,9 @@
       <workItem from="1741924316921" duration="667000" />
       <workItem from="1741925009524" duration="318000" />
       <workItem from="1741925349430" duration="53000" />
-      <workItem from="1741969065791" duration="1266000" />
+      <workItem from="1741969065791" duration="1572000" />
+      <workItem from="1741987072629" duration="3166000" />
+      <workItem from="1742170106109" duration="6728000" />
     </task>
     <task id="LOCAL-00001" summary="Initial Commit.">
       <option name="closed" value="true" />
@@ -600,7 +608,15 @@
       <option name="project" value="LOCAL" />
       <updated>1741919291632</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="Refatorar sistema de recuperação de documentos no RAG&#10;&#10;Implementa uma classe RetrieveFunction para substituir a função anônima de recuperação, &#10;permitindo o acesso direto aos retrievers por datasource. Principais alterações:&#10;&#10;- Adiciona classe RetrieveFunction que implementa a interface ChatFunction&#10;- Armazena retrievers separadamente na RAGResponseFunction para reuso&#10;- Modifica o workflow para utilizar a nova função de recuperação&#10;- Remove a função anônima _create_retriever_function&#10;&#10;Esta mudança melhora a modularidade do código e corrige problemas na lógica de recuperação&#10;de documentos, fornecendo tratamento adequado para datasources indisponíveis.">
+      <option name="closed" value="true" />
+      <created>1741970350073</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1741970350073</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -622,7 +638,8 @@
     <MESSAGE value="Ajustes finais na interface do visualizador de prompt." />
     <MESSAGE value="Introduction of the RAG codebase." />
     <MESSAGE value="Correções de bugs na logica do RAG." />
-    <option name="LAST_COMMIT_MESSAGE" value="Correções de bugs na logica do RAG." />
+    <MESSAGE value="Refatorar sistema de recuperação de documentos no RAG&#10;&#10;Implementa uma classe RetrieveFunction para substituir a função anônima de recuperação, &#10;permitindo o acesso direto aos retrievers por datasource. Principais alterações:&#10;&#10;- Adiciona classe RetrieveFunction que implementa a interface ChatFunction&#10;- Armazena retrievers separadamente na RAGResponseFunction para reuso&#10;- Modifica o workflow para utilizar a nova função de recuperação&#10;- Remove a função anônima _create_retriever_function&#10;&#10;Esta mudança melhora a modularidade do código e corrige problemas na lógica de recuperação&#10;de documentos, fornecendo tratamento adequado para datasources indisponíveis." />
+    <option name="LAST_COMMIT_MESSAGE" value="Refatorar sistema de recuperação de documentos no RAG&#10;&#10;Implementa uma classe RetrieveFunction para substituir a função anônima de recuperação, &#10;permitindo o acesso direto aos retrievers por datasource. Principais alterações:&#10;&#10;- Adiciona classe RetrieveFunction que implementa a interface ChatFunction&#10;- Armazena retrievers separadamente na RAGResponseFunction para reuso&#10;- Modifica o workflow para utilizar a nova função de recuperação&#10;- Remove a função anônima _create_retriever_function&#10;&#10;Esta mudança melhora a modularidade do código e corrige problemas na lógica de recuperação&#10;de documentos, fornecendo tratamento adequado para datasources indisponíveis." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -641,10 +658,6 @@
           <line>36</line>
           <option name="timeStamp" value="3" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/source/tests/chatbot_test/main.py</url>
-          <option name="timeStamp" value="4" />
-        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>
@@ -653,11 +666,11 @@
     <SUITE FILE_PATH="coverage/lc_human_agents$visualizador_backend.coverage" NAME="visualizador_backend Coverage Results" MODIFIED="1738608167151" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/lc_human_agents$prompt_generation.coverage" NAME="prompt_generation Coverage Results" MODIFIED="1735239266449" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/lc_human_agents$document_loader_integration.coverage" NAME="document_loader_integration Coverage Results" MODIFIED="1741895137464" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
-    <SUITE FILE_PATH="coverage/lc_human_agents$rag_test.coverage" NAME="rag_test Coverage Results" MODIFIED="1741969862688" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/lc_human_agents$rag_test.coverage" NAME="rag_test Coverage Results" MODIFIED="1742179541792" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/lc_human_agents$setup_simulacoes_db.coverage" NAME="setup_db_cenarios Coverage Results" MODIFIED="1735167459458" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/" />
     <SUITE FILE_PATH="coverage/lc_human_agents$Extract_personas.coverage" NAME="Extract personas Coverage Results" MODIFIED="1735162567412" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/lc_human_agents$insert_cenario_persona.coverage" NAME="insert_cenario&amp;persona Coverage Results" MODIFIED="1735167495419" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
-    <SUITE FILE_PATH="coverage/lc_human_agents$chatbot_test.coverage" NAME="chatbot_test Coverage Results" MODIFIED="1738863875301" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/lc_human_agents$chatbot_test.coverage" NAME="chatbot_test Coverage Results" MODIFIED="1742233027582" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/lc_human_agents$gerar_missoes.coverage" NAME="gerar_missoes Coverage Results" MODIFIED="1735167511941" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/lc_human_agents$prompt_generator.coverage" NAME="prompt_generator Coverage Results" MODIFIED="1735165702542" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tools/prompt_generation" />
     <SUITE FILE_PATH="coverage/lc_human_agents$read_personas.coverage" NAME="read_personas Coverage Results" MODIFIED="1735148903371" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tools" />
