@@ -8,6 +8,7 @@ from dotenv import load_dotenv
 load_dotenv()
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
+
 def main():
     # Parse command line arguments
     parser = argparse.ArgumentParser(description='Adaptive RAG system with flexible configuration')
@@ -17,6 +18,8 @@ def main():
                         help='Force reindexing even for existing datasources')
     parser.add_argument('--model', type=str, choices=['gpt4o-mini', 'gpt4o'], default='gpt4o-mini',
                         help='Language model to use')
+    parser.add_argument('--show-messages', action='store_true',
+                        help='Show message history in the output')
     args = parser.parse_args()
 
     # Map model name to enum
@@ -36,6 +39,9 @@ def main():
     print(f"Configuration version: {rag_system.config.version}")
     print(f"Available datasources: {', '.join(rag_system.datasources)}")
 
+    # Keep track of all messages across interactions
+    all_messages = []
+
     # Interactive query mode
     print("\nEnter questions to query the RAG system (type 'exit', 'quit', or 'q' to quit):")
     while True:
@@ -48,12 +54,31 @@ def main():
         try:
             result = rag_system.query(question)
 
+            # Get messages for this interaction
+            interaction_messages = result.get('messages', [])
+            all_messages.extend(interaction_messages)
+
             # Print the result
             print("\nResult:")
             print(f"Selected datasource: {result.get('datasource', 'None')}")
             print(f"Documents relevant: {'Yes' if result.get('documents_relevant') else 'No'}")
             print("\nResponse:")
             print(result.get('response', 'None'))
+
+            # Show message flow if requested
+            if args.show_messages:
+                print("\nMessage Flow:")
+                for msg in interaction_messages:
+                    role = msg.type
+                    content = msg.content
+                    # Truncate long messages for display
+                    if len(content) > 100:
+                        content = content[:97] + "..."
+                    print(f"[{role.upper()}] {content}")
+
+                print("\nCumulative Message History:")
+                for i, msg in enumerate(all_messages):
+                    print(f"{i + 1}. {msg.type}: {msg.content[:150]}{'...' if len(msg.content) > 150 else ''}")
 
         except Exception as e:
             print(f"Error: {str(e)}")

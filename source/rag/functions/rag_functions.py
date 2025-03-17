@@ -3,6 +3,7 @@ from pydantic import BaseModel, Field
 
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
+from langchain_core.messages import SystemMessage, AIMessage, HumanMessage
 from langchain_openai import ChatOpenAI
 from langchain_community.vectorstores import Chroma
 
@@ -48,7 +49,14 @@ class RetrieveFunction(ChatFunction):
             datasource = next(iter(self._retrievers.keys()), None)
             if not datasource:
                 print("No datasources available")
-                return {"context": []}
+
+                # Create a system message about the retrieval failure
+                system_message = SystemMessage(
+                    content="No datasources available for retrieval."
+                )
+
+                return {"context": [], "messages": [system_message]}
+
             print(f"Datasource '{state.datasource}' not available, using '{datasource}' as fallback")
 
         # Retrieve documents
@@ -60,10 +68,22 @@ class RetrieveFunction(ChatFunction):
             # Extract document content
             context = [doc.page_content for doc in docs]
 
-            return {"context": context}
+            # Create a system message about the retrieval
+            system_message = SystemMessage(
+                content=f"Retrieved {len(docs)} documents from datasource '{datasource}'"
+            )
+
+            return {"context": context, "messages": [system_message]}
+
         except Exception as e:
             print(f"Error retrieving documents: {str(e)}")
-            return {"context": []}
+
+            # Create a system message about the retrieval error
+            system_message = SystemMessage(
+                content=f"Error retrieving documents: {str(e)}"
+            )
+
+            return {"context": [], "messages": [system_message]}
 
     @property
     def prompt(self) -> Any:
@@ -84,6 +104,7 @@ class RetrieveFunction(ChatFunction):
             None as no model is used
         """
         return None
+
 
 class RouterFunction(ChatFunction):
     """
@@ -120,13 +141,25 @@ class RouterFunction(ChatFunction):
         # Check if there are available datasources
         if not self._datasource_names:
             print("No datasources available")
-            return {"datasource": None}
+
+            # Create a system message about no datasources
+            system_message = SystemMessage(
+                content="No datasources available for routing."
+            )
+
+            return {"datasource": None, "messages": [system_message]}
 
         # Get the question from the state
         question = state.question
         if not question:
             print("No question in state")
-            return {"datasource": self._datasource_names[0]}
+
+            # Create a system message about missing question
+            system_message = SystemMessage(
+                content=f"No question provided. Using default datasource: {self._datasource_names[0]}"
+            )
+
+            return {"datasource": self._datasource_names[0], "messages": [system_message]}
 
         # Try to route the query
         try:
@@ -147,19 +180,33 @@ class RouterFunction(ChatFunction):
             result = router_chain.invoke({"question": question})
 
             # Check if the datasource is available
-            if result.datasource in self._datasource_names:
-                print(f"Selected datasource: {result.datasource}")
-                return {"datasource": result.datasource}
-            else:
+            selected_datasource = result.datasource
+            if selected_datasource not in self._datasource_names:
                 # If not available, use the first datasource
-                print(f"Datasource {result.datasource} not found. Using: {self._datasource_names[0]}")
-                return {"datasource": self._datasource_names[0]}
+                print(f"Datasource {selected_datasource} not found. Using: {self._datasource_names[0]}")
+                selected_datasource = self._datasource_names[0]
+            else:
+                print(f"Selected datasource: {selected_datasource}")
+
+            # Create a system message about the selected datasource
+            system_message = SystemMessage(
+                content=f"Selected datasource: {selected_datasource}"
+            )
+
+            return {"datasource": selected_datasource, "messages": [system_message]}
 
         except Exception as e:
             print(f"Error routing query: {str(e)}")
             # In case of error, use the first datasource
-            print(f"Using default datasource: {self._datasource_names[0]}")
-            return {"datasource": self._datasource_names[0]}
+            first_datasource = self._datasource_names[0]
+            print(f"Using default datasource: {first_datasource}")
+
+            # Create a system message about the routing error
+            system_message = SystemMessage(
+                content=f"Error during routing. Using default datasource: {first_datasource}"
+            )
+
+            return {"datasource": first_datasource, "messages": [system_message]}
 
     def _create_router_prompt(self) -> ChatPromptTemplate:
         """
@@ -248,7 +295,13 @@ class GraderFunction(ChatFunction):
         # If no context or question, documents are not relevant
         if not context or not question:
             print("No context or question in state. Documents not relevant.")
-            return {"documents_relevant": False}
+
+            # Create a system message about no context
+            system_message = SystemMessage(
+                content="No context available for grading. Documents are not relevant."
+            )
+
+            return {"documents_relevant": False, "messages": [system_message]}
 
         # Combine the context for evaluation
         combined_context = "\n\n".join(context)
@@ -256,7 +309,13 @@ class GraderFunction(ChatFunction):
         # If the combined context is empty, documents are not relevant
         if not combined_context.strip():
             print("Empty context. Documents not relevant.")
-            return {"documents_relevant": False}
+
+            # Create a system message about empty context
+            system_message = SystemMessage(
+                content="Retrieved context is empty. Documents are not relevant."
+            )
+
+            return {"documents_relevant": False, "messages": [system_message]}
 
         try:
             # Define the grading model
@@ -282,12 +341,23 @@ class GraderFunction(ChatFunction):
             is_relevant = result.binary_score.lower() == "yes"
             print(f"Documents are relevant: {is_relevant}")
 
-            return {"documents_relevant": is_relevant}
+            # Create a system message about the relevance assessment
+            system_message = SystemMessage(
+                content=f"Documents are {'relevant' if is_relevant else 'not relevant'} to the question."
+            )
+
+            return {"documents_relevant": is_relevant, "messages": [system_message]}
 
         except Exception as e:
             print(f"Error grading documents: {str(e)}")
             # In case of error, assume documents are not relevant
-            return {"documents_relevant": False}
+
+            # Create a system message about the grading error
+            system_message = SystemMessage(
+                content=f"Error during grading: {str(e)}. Assuming documents are not relevant."
+            )
+
+            return {"documents_relevant": False, "messages": [system_message]}
 
     def _create_grader_prompt(self) -> ChatPromptTemplate:
         """
@@ -362,7 +432,14 @@ class RAGResponseFunction(ChatFunction):
         # If no question or datasource, return empty response
         if not question or not datasource:
             print("No question or datasource in state")
-            return {"response": "I don't have enough information to answer that question."}
+            error_msg = "I don't have enough information to answer that question."
+
+            # Create an AI message with the error response
+            ai_message = AIMessage(
+                content=error_msg
+            )
+
+            return {"response": error_msg, "messages": [ai_message]}
 
         # Check if the datasource is available
         if datasource not in self._rag_chains:
@@ -370,7 +447,14 @@ class RAGResponseFunction(ChatFunction):
             datasource = next(iter(self._rag_chains.keys()), None)
             if not datasource:
                 print("No datasources available")
-                return {"response": "I don't have the information needed to answer that question."}
+                error_msg = "I don't have the information needed to answer that question."
+
+                # Create an AI message with the error response
+                ai_message = AIMessage(
+                    content=error_msg
+                )
+
+                return {"response": error_msg, "messages": [ai_message]}
 
             print(f"Datasource '{datasource}' not available, using '{datasource}' instead")
 
@@ -380,11 +464,23 @@ class RAGResponseFunction(ChatFunction):
             response = chain.invoke({"question": question})
             print(f"Response generated using datasource '{datasource}'")
 
-            return {"response": response}
+            # Create an AI message with the response
+            ai_message = AIMessage(
+                content=response
+            )
+
+            return {"response": response, "messages": [ai_message]}
 
         except Exception as e:
             print(f"Error generating response: {str(e)}")
-            return {"response": "I encountered an error while trying to answer your question."}
+            error_msg = "I encountered an error while trying to answer your question."
+
+            # Create an AI message with the error response
+            ai_message = AIMessage(
+                content=error_msg
+            )
+
+            return {"response": error_msg, "messages": [ai_message]}
 
     def _create_rag_chains(self) -> Dict[str, Any]:
         """
@@ -510,7 +606,14 @@ class FallbackFunction(ChatFunction):
 
         # If no question, return generic response
         if not question:
-            return {"response": "I don't have enough information to answer that question."}
+            generic_response = "I don't have enough information to answer that question."
+
+            # Create an AI message with the generic response
+            ai_message = AIMessage(
+                content=generic_response
+            )
+
+            return {"response": generic_response, "messages": [ai_message]}
 
         # Generate fallback response
         try:
@@ -521,11 +624,23 @@ class FallbackFunction(ChatFunction):
             response = fallback_chain.invoke({"question": question})
             print("Fallback response generated")
 
-            return {"response": response}
+            # Create an AI message with the fallback response
+            ai_message = AIMessage(
+                content=response
+            )
+
+            return {"response": response, "messages": [ai_message]}
 
         except Exception as e:
             print(f"Error generating fallback response: {str(e)}")
-            return {"response": "I don't have the information needed to answer that question."}
+            error_response = "I don't have the information needed to answer that question."
+
+            # Create an AI message with the error response
+            ai_message = AIMessage(
+                content=error_response
+            )
+
+            return {"response": error_response, "messages": [ai_message]}
 
     def _create_fallback_prompt(self) -> ChatPromptTemplate:
         """

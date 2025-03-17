@@ -119,7 +119,8 @@ class RAGSystem:
             "question": question,
             "datasource": result.get('datasource'),
             "documents_relevant": result.get('documents_relevant'),
-            "response": result.get('response')
+            "response": result.get('response'),
+            "messages": result.get('messages', [])
         }
 
     @property

@@ -6,8 +6,8 @@ from langchain_core.messages import HumanMessage
 from langgraph.checkpoint.memory import MemorySaver
 from langgraph.checkpoint.sqlite import SqliteSaver
 
-from source.prompt_manager.base import CustomSystemPromptStrategy
 from source.chat_graph import ModelName, ClassicChatFunction, ClassicWorkflowBuilder, get_llm
+from source.prompt_manager.base import CustomSystemPromptStrategy
 
 
 class ChatBotBase:
@@ -20,8 +20,7 @@ class ChatBotBase:
         self,
         think_exp: bool,
         system_message: str,
-        use_sqlitesaver: bool = False,
-        thread_id: str = secrets.token_hex(3)
+        use_sqlitesaver: bool = False
     ) -> None:
         """
         Inicializa o chatbot com base nos parâmetros fornecidos.
@@ -33,7 +32,7 @@ class ChatBotBase:
         """
         self.think_exp = think_exp
         self.system_message = system_message
-        self.thread_id = thread_id
+        self.thread_id = secrets.token_hex(3)
 
         self.model = None
         self.prompt = None

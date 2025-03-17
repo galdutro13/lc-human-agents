@@ -1,7 +1,12 @@
+import os
 import argparse
+
+from dotenv import load_dotenv
 from source.tests.chatbot_test.banco import BancoBot
 from source.tests.chatbot_test.usuario import UsuarioBot
 
+load_dotenv()
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 def parse_args():
     parser = argparse.ArgumentParser(
@@ -29,7 +34,7 @@ def main(usuario_prompt: str = None):
     else:
         usuario_bot = UsuarioBot(think_exp=args.think)
 
-    initial_query = "Olá! Como posso lhe ajudar?"
+    initial_query = "Olá cliente Itaú! Como posso lhe ajudar?"
     usuario_bot.run(initial_query, banco_bot)
 
 

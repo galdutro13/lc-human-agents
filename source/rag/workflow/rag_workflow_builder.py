@@ -5,7 +5,9 @@ from source.chat_graph.workflow_builder import Builder
 from source.chat_graph.chat_function import ChatFunction
 
 from source.rag.state.rag_state import RAGState
-from source.rag.functions.rag_functions import RouterFunction, GraderFunction, RetrieveFunction, RAGResponseFunction, FallbackFunction
+from source.rag.functions.rag_functions import RouterFunction, GraderFunction, RetrieveFunction, RAGResponseFunction, \
+    FallbackFunction
+from langchain_core.messages import HumanMessage, SystemMessage
 
 
 class RAGWorkflowBuilder(Builder):
@@ -88,6 +90,23 @@ class RAGWorkflowBuilder(Builder):
             Compiled RAG workflow
         """
 
+        # Define a function to process the initial question
+        def add_human_message(state: RAGState) -> dict:
+            """
+            Adds the human question as a message.
+
+            Args:
+                state: Current workflow state (RAGState)
+
+            Returns:
+                Updated state with the human question as a message
+            """
+            # Create a human message from the question
+            human_message = HumanMessage(content=state.question)
+
+            # Return the updated state
+            return {"messages": [human_message]}
+
         # Create the retriever function using the retrievers from the responder
         retriever = RetrieveFunction(responder.retrievers)
 
@@ -111,16 +130,18 @@ class RAGWorkflowBuilder(Builder):
                 return "irrelevant"
 
         # Add nodes
+        self.add_node("add_human_message", add_human_message)
         self.add_node("route", router)
-        self.add_node("retrieve", retriever)  # Use the new retriever function
+        self.add_node("retrieve", retriever)
         self.add_node("grade", grader)
         self.add_node("respond_with_relevant", responder)
         self.add_node("respond_with_fallback", fallback)
 
         # Set entry point
-        self._workflow.set_entry_point("route")
+        self._workflow.set_entry_point("add_human_message")
 
         # Add regular edges
+        self.add_edge("route", "add_human_message")
         self.add_edge("retrieve", "route")
         self.add_edge("grade", "retrieve")
 
