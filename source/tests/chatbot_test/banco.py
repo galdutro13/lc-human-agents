@@ -1,6 +1,6 @@
-from source.tests.chatbot_test.chatbot import ChatBotBase
+from source.tests.chatbot_test.chatbot import ChatBotRag
 
-class BancoBot(ChatBotBase):
+class BancoBot(ChatBotRag):
     def __init__(self, think_exp):
         system_message = (
             "Você é um chatbot de banco. "

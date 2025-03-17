@@ -8,7 +8,7 @@ from source.rag.state.rag_state import RAGState
 from source.rag.functions.rag_functions import RouterFunction, GraderFunction, RetrieveFunction, RAGResponseFunction, \
     FallbackFunction
 from langchain_core.messages import HumanMessage, SystemMessage
-
+from langgraph.checkpoint.base import BaseCheckpointSaver
 
 class RAGWorkflowBuilder(Builder):
     """
@@ -22,14 +22,17 @@ class RAGWorkflowBuilder(Builder):
         """
         self._workflow = StateGraph(RAGState)
 
-    def build_workflow(self) -> Any:
+    def build_workflow(self, memory: BaseCheckpointSaver[str] = None) -> Any:
         """
         Compiles and returns the workflow.
 
         Returns:
             Compiled workflow
         """
-        return self._workflow.compile()
+        if memory is not None:
+            return self._workflow.compile(checkpointer=memory)
+        else:
+            return self._workflow.compile()
 
     def add_node(self, name: str, function: ChatFunction) -> 'RAGWorkflowBuilder':
         """
@@ -75,8 +78,12 @@ class RAGWorkflowBuilder(Builder):
         self._workflow.add_conditional_edges(from_node, condition_function, routes)
         return self
 
-    def build_rag_workflow(self, router: RouterFunction, grader: GraderFunction,
-                           responder: RAGResponseFunction, fallback: FallbackFunction) -> Any:
+    def build_rag_workflow(self,
+                           router: RouterFunction,
+                           grader: GraderFunction,
+                           responder: RAGResponseFunction,
+                           fallback: FallbackFunction,
+                           memory: BaseCheckpointSaver[str] = None) -> Any:
         """
         Builds a complete RAG workflow with all required components.
 
@@ -156,4 +163,4 @@ class RAGWorkflowBuilder(Builder):
         self._workflow.add_edge("respond_with_fallback", END)
 
         # Compile and return the workflow
-        return self.build_workflow()
+        return self.build_workflow(memory=memory)

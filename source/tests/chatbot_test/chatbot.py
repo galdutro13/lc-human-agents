@@ -9,6 +9,7 @@ from langgraph.checkpoint.sqlite import SqliteSaver
 from source.chat_graph import ModelName, ClassicChatFunction, ClassicWorkflowBuilder, get_llm
 from source.prompt_manager.base import CustomSystemPromptStrategy
 
+from source.rag.system import RAGSystem
 
 class ChatBotBase:
     """
@@ -88,4 +89,36 @@ class ChatBotBase:
         """
         input_messages = [HumanMessage(query)]
         output = self.app.invoke({"messages": input_messages}, self.config)
+        return output["messages"][-1].content
+
+
+class ChatBotRag(ChatBotBase):
+    """
+    Classe para criação de chatbots que utilizam o modelo RAG.
+    """
+
+    def initialize(self, use_sqlitesaver: bool) -> None:
+        """
+        Inicializa o chatbot, selecionando o modelo e definindo se
+        as mensagens serão salvas em memória ou em banco de dados.
+        """
+        self.model = self._get_model(self.think_exp)
+        self.prompt = CustomSystemPromptStrategy(
+            prompt_template=self.system_message
+        ).generate_prompt()
+
+        memory_saver = self._get_memory_saver(use_sqlitesaver)
+
+        self.config = {"configurable": {"thread_id": self.thread_id}}
+        self.app = RAGSystem(base_path="./RAG Cartões", thread_id=self.config, memory=memory_saver)
+        self.app.initialize(reindex=False)
+
+    def process_query(self, query: str) -> str:
+        """
+        Processa a mensagem de um usuário e retorna a resposta do modelo.
+
+        :param query: Texto enviado pelo usuário.
+        :return: Texto de resposta gerado pelo modelo.
+        """
+        output = self.app.query(query)
         return output["messages"][-1].content

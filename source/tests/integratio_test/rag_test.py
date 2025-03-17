@@ -1,5 +1,6 @@
 import os
 import argparse
+import secrets
 from source.chat_graph.models import ModelName
 from source.rag.system import RAGSystem
 
@@ -31,7 +32,11 @@ def main():
 
     # Initialize the RAG system
     print(f"Initializing RAG system with {args.model} model...")
-    rag_system = RAGSystem(args.directory, model_name)
+
+    # Objeto que utilizaremos para identificar o thread da conversa
+    thread_id = {"configurable": {"thread_id": secrets.token_hex(3)}}
+
+    rag_system = RAGSystem(base_path=args.directory, thread_id=thread_id, model_name=model_name)
     rag_system.initialize(reindex=args.reindex)
 
     # Print system information

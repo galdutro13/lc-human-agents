@@ -2,6 +2,8 @@ import os
 import shutil
 from typing import Dict, Any, Optional, List
 
+from langgraph.checkpoint.base import BaseCheckpointSaver
+
 from source.chat_graph.models import ModelName
 from source.chat_graph.llms import get_llm
 
@@ -18,7 +20,11 @@ class RAGSystem:
     Provides a simplified interface to the entire RAG system.
     """
 
-    def __init__(self, base_path: str, model_name: ModelName = ModelName.GPT4):
+    def __init__(self,
+                 base_path: str,
+                 thread_id: dict[str, dict[str, str]],
+                 memory: BaseCheckpointSaver[str] = None,
+                 model_name: ModelName = ModelName.GPT4):
         """
         Initializes the RAG system.
 
@@ -33,6 +39,8 @@ class RAGSystem:
         self._vectorstores = None
         self._documents = None
         self._processed_documents = None
+        self._thread_id = thread_id
+        self._memory = memory
 
     def initialize(self, reindex: bool = False) -> None:
         """
@@ -112,7 +120,7 @@ class RAGSystem:
             raise ValueError("RAG system not initialized. Call initialize() first.")
 
         # Invoke the workflow
-        result = self._workflow.invoke({"question": question})
+        result = self._workflow.invoke({"question": question}, self._thread_id)
 
         # Create a friendlier result format
         return {
