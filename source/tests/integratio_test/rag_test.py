@@ -77,8 +77,6 @@ def main():
                     role = msg.type
                     content = msg.content
                     # Truncate long messages for display
-                    if len(content) > 100:
-                        content = content[:97] + "..."
                     print(f"[{role.upper()}] {content}")
 
                 print("\nCumulative Message History:")

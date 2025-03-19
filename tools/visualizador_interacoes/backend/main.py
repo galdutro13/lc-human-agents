@@ -3,6 +3,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.responses import StreamingResponse
 import sqlite3
 import io
+import os
 import pandas as pd
 from pydantic import BaseModel
 
@@ -237,7 +238,7 @@ def get_interaction(thread_id: str):
 @app.get("/interactions/{thread_id}/excel")
 def export_interaction_excel(thread_id: str):
     """
-    Gera e retorna um arquivo Excel (.xlsx) contendo todas as mensagens
+    Gera e retorna um arquivo CSV contendo todas as mensagens
     (content e type) referentes à thread_id informada.
     """
     conn = get_db_connection()
@@ -279,18 +280,17 @@ def export_interaction_excel(thread_id: str):
         # Cria o DataFrame
         df = pd.DataFrame(data_for_df)
 
-        # Gera o Excel em memória
-        output = io.BytesIO()
-        with pd.ExcelWriter(output, engine="openpyxl") as writer:
-            df.to_excel(writer, index=False, sheet_name="Conversa")
+        # Gera o CSV em memória
+        output = io.StringIO()
+        df.to_csv(output, index=False)
         output.seek(0)
 
         # Retorna como StreamingResponse para download
-        filename = f"conversa_{thread_id}.xlsx"
+        filename = f"conversa_{thread_id}.csv"
         headers = {"Content-Disposition": f"attachment; filename={filename}"}
         return StreamingResponse(
             output,
-            media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            media_type="text/csv",
             headers=headers
         )
 

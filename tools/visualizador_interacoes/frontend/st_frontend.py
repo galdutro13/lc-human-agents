@@ -83,12 +83,14 @@ if not st.session_state.backend_started:
 BASE_URL = "http://localhost:8000"
 
 # Carrega a lista de interações (thread_id e ts)
+@st.fragment
 def load_interactions():
     response = requests.get(f"{BASE_URL}/interactions")
     response.raise_for_status()
     return response.json()
 
 # Carrega a interação selecionada (mensagens)
+@st.fragment
 def load_interaction(thread_id):
     response = requests.get(f"{BASE_URL}/interactions/{thread_id}")
     if response.status_code == 404:
@@ -111,6 +113,7 @@ if "interactions" not in st.session_state:
         st.session_state.interactions = []
 
 # Função para formatar timestamp
+@st.fragment
 def format_ts(ts):
     try:
         dt = datetime.fromisoformat(ts.replace("Z", "+00:00"))
@@ -148,6 +151,7 @@ def new_interaction():
                         st.session_state.show_new_interaction_modal = False
                         st.session_state.new_interaction_prompt = ""  # clear prompt for next time
                         st.session_state.show_success_toast = True
+                        time.sleep(0.5)
                         # Update the list of interactions
                         st.session_state.interactions = load_interactions()
                         # Trigger an immediate rerun to close the modal
@@ -213,8 +217,8 @@ with col2:
                 st.download_button(
                     label="Baixar Excel",
                     data=excel_data,
-                    file_name=f"conversa_{st.session_state.selected_thread}.xlsx",
-                    mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                    file_name=f"conversa_{st.session_state.selected_thread}.csv",
+                    mime="text/csv"
                 )
             except Exception as e:
                 st.error(f"Falha ao gerar ou baixar o Excel: {e}")

@@ -1,0 +1,126 @@
+# Configuração do Sistema RAG
+version: "1.0"
+
+# Configuração das ferramentas/datasources
+datasources:
+  - name: "cartoes_credito_outros_produtos"
+    display_name: "Cartões de Crédito - Outros Produtos Bancários"
+    description: "Dados sobre diversos produtos de cartão de crédito e outros produtos bancários"
+    folders:
+      - "Cartão de Crédito - Geral"
+      - "Cartão Samsung Itaú"
+      - "Extra Gold"
+      - "Instituto Ayrton Senna Platinum"
+      - "Itau Uniclass Mastercard Platinum"
+      - "Itaú Platinum"
+      - "Itaú Uniclass Black"
+      - "Personnalité Black Pontos"
+      - "Player_s Bank_ Conta e Cartão"
+    prompt_templates:
+      rag_prompt: |
+        Você é um assistente especializado em cartões de crédito e produtos bancários. 
+        Use as seguintes informações de contexto para responder à pergunta do usuário.
+        
+        Contexto:
+        {context}
+        
+        Pergunta: {question}
+        
+        Sua resposta, baseada apenas no contexto fornecido:
+    retriever_config:
+      search_type: "similarity"
+      top_k: 3
+
+  - name: "fidelidade_varejo"
+    display_name: "Programa de Fidelidade Varejo"
+    description: "Dados sobre programas de fidelidade relacionados a redes de varejo"
+    folders:
+      - "N Card"
+      - "Passaí Gold"
+      - "Pão de Açúcar Black"
+      - "Pão de Açúcar Platinum"
+    prompt_templates:
+      rag_prompt: |
+        Você é um assistente especializado em programas de fidelidade de redes de varejo. 
+        Use as seguintes informações de contexto para responder à pergunta do usuário.
+        
+        Contexto:
+        {context}
+        
+        Pergunta: {question}
+        
+        Sua resposta, baseada apenas no contexto fornecido:
+    retriever_config:
+      search_type: "similarity"
+      top_k: 3
+
+  - name: "fidelidade_aereos"
+    display_name: "Programas de Fidelidade Aéreos"
+    description: "Dados sobre programas de fidelidade de companhias aéreas"
+    folders:
+      - "Azul Gold"
+      - "Azul Infinite"
+      - "Azul Internacional"
+      - "Azul Platinum"
+      - "LATAM Pass Black"
+      - "LATAM Pass Gold"
+      - "LATAM Pass Infinite"
+      - "LATAM Pass Internacional"
+      - "LATAM Pass Platinum"
+    prompt_templates:
+      rag_prompt: |
+        Você é um assistente especializado em programas de fidelidade e milhagem de companhias aéreas. 
+        Use as seguintes informações de contexto para responder à pergunta do usuário.
+        
+        Contexto:
+        {context}
+        
+        Pergunta: {question}
+        
+        Sua resposta, baseada apenas no contexto fornecido:
+    retriever_config:
+      search_type: "mmr"  # Maximum Marginal Relevance
+      top_k: 5
+      fetch_k: 10
+      lambda_mult: 0.5
+
+# Configurações globais de prompts
+global_prompts:
+  # Prompt para o roteador de consultas
+  router_prompt: |
+    Você é um especialista em rotas de consultas para um sistema de atendimento bancário.
+    Com base na consulta do usuário, determine qual fonte de dados seria mais 
+    relevante para responder à pergunta:
+    - 'cartoes_credito_outros_produtos': para perguntas sobre cartões diversos do Itaú, incluindo cartões premium, cartões de marca (Samsung, Extra, etc.)
+    - 'fidelidade_varejo': para perguntas sobre programas de fidelidade relacionados a supermercados e varejo (N Card, Passaí, Pão de Açúcar)
+    - 'fidelidade_aereos': para perguntas sobre programas de fidelidade e milhagem de companhias aéreas (Azul, LATAM)
+    
+    Use 'web_search' se a pergunta não estiver relacionada a nenhuma dessas categorias.
+
+  # Prompt para avaliação dos documentos recuperados
+  grader_prompt: |
+    Você é um avaliador que analisa a relevância de um documento recuperado para 
+    a pergunta do usuário. Se o documento contiver palavras-chave ou significado 
+    semântico relacionado à pergunta do usuário, classifique-o como relevante. 
+    Não precisa ser um teste rigoroso. O objetivo é filtrar recuperações errôneas. 
+    Dê uma pontuação binária 'yes' ou 'no' para indicar se o documento é relevante 
+    para a pergunta.
+
+# Configurações de embeddings e vectorstore
+embedding_config:
+  provider: "huggingface"
+  model: "PORTULAN/serafim-100m-portuguese-pt-sentence-encoder-ir"
+
+vectorstore_config:
+  provider: "chroma"
+  persist_directory: "./chroma_db"
+
+# Configurações do LLM
+llm_config:
+  model: "o3-mini-2025-01-31"
+  # temperature: 0.0
+
+# Configurações de chunking
+text_splitter:
+  chunk_size: 1000
+  chunk_overlap: 100
