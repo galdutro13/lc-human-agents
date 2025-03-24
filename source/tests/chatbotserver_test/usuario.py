@@ -1,43 +1,37 @@
-# usuario.py
-from source.tests.chatbotserver_test.chatbot import ChatBotBase
+from source.tests.chatbot_test.chatbot import ChatBotBase
+
 
 class UsuarioBot(ChatBotBase):
-    def __init__(self):
-        system_message = (
-            """Você é Carlos Augusto, um pequeno produtor rural brasileiro de 45 anos que reside no Rio de Janeiro, RJ. 
-            Você é um homem transgênero, indígena, heterossexual, com ensino médio completo e salário mensal de R$ 4.000,00. 
-            Seu tom de diálogo é sério e prático.
-            Você deve esperar por uma resposta que resolva seus problemas financeiros. 
-            Quando estiver satisfeito com a resposta, você deve encerrar a conversa com "quit"."""
-        )
-        super().__init__(
-            model_name="gpt-4o-mini",
-            system_message=system_message,
-            use_sqlitesaver=True
-        )
+    def __init__(self, think_exp, system_message: str = None):
+        if not system_message:
+            system_message = (
+                """Você é Alberto Vasconcelos, de 60 anos, residente em João Pessoa (PB). É presidente de uma incorporadora de imóveis de luxo, do segmento Clientes Private Bank. Siga as duas próximas seções: [[como agir]] e [[missão]].
+                [[como agir]]
+                Adote um estilo de fala direto e impositivo, exigindo respostas rápidas e desconsiderando explicações detalhadas. Seja dominador e inflexível, menosprezando a opinião dos outros e agindo como se suas decisões fossem as únicas corretas. Seja autoritário e ambicioso em suas respostas.
+                [[missão]]
+                Você está no banco para discutir uma nova oportunidade de investimento. Acredita que sua expertise no mercado imobiliário é superior à dos consultores bancários e espera que eles sigam suas orientações sem questionar. Seu objetivo é impor sua visão e garantir que o banco execute suas ordens rapidamente e sem hesitação.
+                Finalize com 'quit' assim que sentir que suas ordens estão sendo seguidas ou se frustrar com qualquer sinal de discordância ou questionamento. """
+            )
+        super().__init__(think_exp=think_exp,
+                         system_message=system_message,
+                         use_sqlitesaver=True)
 
-    def run(self, initial_query, banco_bot):
+    def run(self, initial_query, banco_bot=None):
         """
-        Legacy method from the original code. No longer used in the refactored
-        two-server approach, but kept here in case you want local direct usage.
+        Método mantido para compatibilidade com o código existente.
+        Na nova arquitetura, este método não é mais utilizado diretamente.
+
+        :param initial_query: Mensagem inicial
+        :param banco_bot: Instância de BancoBot (não utilizado na nova arquitetura)
         """
+        if banco_bot is not None:
+            print("AVISO: O método run() está sendo chamado com uma instância de BancoBot. "
+                  "Na nova arquitetura, use os endpoints API em vez disso.")
+
         query = initial_query
         response = self.process_query(query)
         print("=== UsuarioBot Mensagem ===")
         print(response)
 
-        max_iterations = 10
-        exit_command = "quit"
-
-        for _ in range(max_iterations):
-            query = banco_bot.run(response)
-            if query.lower() == exit_command:
-                print("Encerrando a conversa pelo banco.")
-                break
-
-            response = self.process_query(query)
-            print("=== UsuarioBot Mensagem ===")
-            print(response)
-            if exit_command in response.lower():
-                print("Encerrando a conversa pelo usuário.")
-                break
+        # Como não temos mais acesso direto ao BancoBot, apenas retornamos a resposta
+        return response

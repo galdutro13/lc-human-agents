@@ -278,13 +278,13 @@ class GraderFunction(ChatFunction):
 
     def __call__(self, state: 'RAGState') -> Dict[str, Any]:
         """
-        Grades the relevance of the retrieved documents.
+        Grades the relevance of each retrieved document separately.
 
         Args:
             state: Current state of the workflow (RAGState)
 
         Returns:
-            Updated state with the relevance assessment
+            Updated state with the relevance assessment and relevant documents
         """
         print("---GRADE DOCUMENTS---")
 
@@ -301,52 +301,79 @@ class GraderFunction(ChatFunction):
                 content="No context available for grading. Documents are not relevant."
             )
 
-            return {"documents_relevant": False, "messages": [system_message]}
+            return {
+                "documents_relevant": False,
+                "relevant_context": [],
+                "messages": [system_message]
+            }
 
-        # Combine the context for evaluation
-        combined_context = "\n\n".join(context)
-
-        # If the combined context is empty, documents are not relevant
-        if not combined_context.strip():
-            print("Empty context. Documents not relevant.")
+        # If all contexts are empty, documents are not relevant
+        if all(not doc.strip() for doc in context):
+            print("All context documents are empty. Documents not relevant.")
 
             # Create a system message about empty context
             system_message = SystemMessage(
                 content="Retrieved context is empty. Documents are not relevant."
             )
 
-            return {"documents_relevant": False, "messages": [system_message]}
+            return {
+                "documents_relevant": False,
+                "relevant_context": [],
+                "messages": [system_message]
+            }
+
+        # Define the grading model
+        class GradeDocuments(BaseModel):
+            binary_score: str = Field(
+                ...,
+                description="Document is relevant to the question, 'yes' or 'no'"
+            )
+
+        # Create a structured output model
+        structured_grader = self._model.with_structured_output(GradeDocuments)
+
+        # Combine prompt and model
+        grader_chain = self._prompt | structured_grader
+
+        relevant_documents = []
+        grading_results = []
 
         try:
-            # Define the grading model
-            class GradeDocuments(BaseModel):
-                binary_score: str = Field(
-                    ...,
-                    description="Documents are relevant to the question, 'yes' or 'no'"
-                )
+            # Grade each document separately
+            for idx, document in enumerate(context):
+                if not document.strip():
+                    continue  # Skip empty documents
 
-            # Create a structured output model
-            structured_grader = self._model.with_structured_output(GradeDocuments)
+                # Invoke the grader for this document
+                result = grader_chain.invoke({
+                    "question": question,
+                    "document": document
+                })
 
-            # Combine prompt and model
-            grader_chain = self._prompt | structured_grader
+                # Check the result
+                is_relevant = result.binary_score.lower() == "yes"
+                grading_results.append(is_relevant)
 
-            # Invoke the grader
-            result = grader_chain.invoke({
-                "question": question,
-                "document": combined_context
-            })
+                if is_relevant:
+                    relevant_documents.append(document)
+                    print(f"Document {idx + 1} is relevant")
+                else:
+                    print(f"Document {idx + 1} is not relevant")
 
-            # Check the result
-            is_relevant = result.binary_score.lower() == "yes"
-            print(f"Documents are relevant: {is_relevant}")
+            # Check if we have any relevant documents
+            documents_relevant = len(relevant_documents) > 0
+            print(f"Found {len(relevant_documents)} relevant documents out of {len(context)}")
 
             # Create a system message about the relevance assessment
             system_message = SystemMessage(
-                content=f"Documents are {'relevant' if is_relevant else 'not relevant'} to the question."
+                content=f"Found {len(relevant_documents)} relevant documents out of {len(context)} retrieved."
             )
 
-            return {"documents_relevant": is_relevant, "messages": [system_message]}
+            return {
+                "documents_relevant": documents_relevant,
+                "relevant_context": relevant_documents,
+                "messages": [system_message]
+            }
 
         except Exception as e:
             print(f"Error grading documents: {str(e)}")
@@ -357,7 +384,11 @@ class GraderFunction(ChatFunction):
                 content=f"Error during grading: {str(e)}. Assuming documents are not relevant."
             )
 
-            return {"documents_relevant": False, "messages": [system_message]}
+            return {
+                "documents_relevant": False,
+                "relevant_context": [],
+                "messages": [system_message]
+            }
 
     def _create_grader_prompt(self) -> ChatPromptTemplate:
         """
@@ -425,14 +456,27 @@ class RAGResponseFunction(ChatFunction):
         """
         print("---GENERATE RESPONSE FROM RELEVANT DOCS---")
 
-        # Get the question and datasource from the state
+        # Get the question, datasource, and relevant documents from the state
         question = state.question
         datasource = state.datasource
+        relevant_context = state.relevant_context  # Use relevant_context instead of all context
 
         # If no question or datasource, return empty response
         if not question or not datasource:
             print("No question or datasource in state")
             error_msg = "I don't have enough information to answer that question."
+
+            # Create an AI message with the error response
+            ai_message = AIMessage(
+                content=error_msg
+            )
+
+            return {"response": error_msg, "messages": [ai_message]}
+
+        # If no relevant documents, return empty response
+        if not relevant_context:
+            print("No relevant documents in state")
+            error_msg = "I don't have relevant information to answer that question."
 
             # Create an AI message with the error response
             ai_message = AIMessage(
@@ -458,11 +502,28 @@ class RAGResponseFunction(ChatFunction):
 
             print(f"Datasource '{datasource}' not available, using '{datasource}' instead")
 
-        # Use the RAG chain to generate a response
+        # Use relevant context with the RAG prompt template
         try:
-            chain = self._rag_chains[datasource]
-            response = chain.invoke({"question": question})
-            print(f"Response generated using datasource '{datasource}'")
+            # Get the datasource configuration
+            datasource_config = next((d for d in self._config.datasources if d.name == datasource), None)
+            if not datasource_config:
+                raise ValueError(f"Datasource configuration for {datasource} not found")
+
+            # Create the prompt template
+            template = datasource_config.prompt_templates.rag_prompt
+            prompt = ChatPromptTemplate.from_template(template)
+
+            # Combine relevant documents
+            combined_context = "\n\n".join(relevant_context)
+
+            # Generate response using combined context
+            chain = prompt | self._model | StrOutputParser()
+            response = chain.invoke({
+                "context": combined_context,
+                "question": question
+            })
+
+            print(f"Response generated using datasource '{datasource}' with {len(relevant_context)} relevant documents")
 
             # Create an AI message with the response
             ai_message = AIMessage(
@@ -485,9 +546,7 @@ class RAGResponseFunction(ChatFunction):
     def _create_rag_chains(self) -> Dict[str, Any]:
         """
         Creates RAG chains for each datasource.
-
-        Returns:
-            Dictionary of RAG chains by datasource
+        These are used for document retrieval but not for response generation.
         """
         rag_chains = {}
 
@@ -526,7 +585,8 @@ class RAGResponseFunction(ChatFunction):
             def format_docs(docs):
                 return "\n\n".join(doc.page_content for doc in docs)
 
-            # Build the RAG chain
+            # Build the RAG chain - this is used for document retrieval
+            # Note: The actual response generation will now use only relevant documents
             rag_chain = (
                     {"context": lambda x: format_docs(retriever.invoke(x["question"])),
                      "question": lambda x: x["question"]}

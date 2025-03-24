@@ -11,8 +11,9 @@ class RAGState(BaseModel):
     """
     question: str
     datasource: Optional[str] = None
-    context: List[str] = []
-    documents_relevant: bool = False
+    context: List[str] = []  # All retrieved documents
+    relevant_context: List[str] = []  # Only relevant documents
+    documents_relevant: bool = False  # True if at least one document is relevant
     response: Optional[str] = None
     messages: Annotated[List[AnyMessage], add_messages] = Field(default_factory=list)
 

@@ -129,11 +129,12 @@ class RAGWorkflowBuilder(Builder):
                 Route to take
             """
             print("---DECIDE NEXT STEP---")
-            if state.documents_relevant:
-                print("Documents are relevant. Generating response.")
+            if state.documents_relevant and state.relevant_context:
+                print(
+                    f"Documents are relevant ({len(state.relevant_context)} relevant documents). Generating response.")
                 return "relevant"
             else:
-                print("Documents are not relevant. Responding with fallback.")
+                print("No relevant documents found. Responding with fallback.")
                 return "irrelevant"
 
         # Add nodes

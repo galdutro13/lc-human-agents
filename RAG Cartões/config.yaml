@@ -28,8 +28,10 @@ datasources:
         
         Sua resposta, baseada apenas no contexto fornecido:
     retriever_config:
-      search_type: "similarity"
-      top_k: 3
+      search_type: "mmr"  # Maximum Marginal Relevance
+      top_k: 5
+      fetch_k: 10
+      lambda_mult: 0.5
 
   - name: "fidelidade_varejo"
     display_name: "Programa de Fidelidade Varejo"
@@ -51,8 +53,10 @@ datasources:
         
         Sua resposta, baseada apenas no contexto fornecido:
     retriever_config:
-      search_type: "similarity"
-      top_k: 3
+      search_type: "mmr"  # Maximum Marginal Relevance
+      top_k: 5
+      fetch_k: 10
+      lambda_mult: 0.5
 
   - name: "fidelidade_aereos"
     display_name: "Programas de Fidelidade Aéreos"
@@ -109,7 +113,7 @@ global_prompts:
 # Configurações de embeddings e vectorstore
 embedding_config:
   provider: "huggingface"
-  model: "PORTULAN/serafim-100m-portuguese-pt-sentence-encoder-ir"
+  model: "PORTULAN/serafim-900m-portuguese-pt-sentence-encoder-ir"
 
 vectorstore_config:
   provider: "chroma"
@@ -122,5 +126,5 @@ llm_config:
 
 # Configurações de chunking
 text_splitter:
-  chunk_size: 1000
-  chunk_overlap: 100
+  chunk_size: 256
+  chunk_overlap: 64

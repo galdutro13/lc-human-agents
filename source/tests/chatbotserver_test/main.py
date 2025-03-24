@@ -1,84 +1,137 @@
-# main.py
-import sys
 import os
-import subprocess
-import time
-import requests
+import sys
+import argparse
+import asyncio
+import httpx
+from typing import Optional, Dict, Any
+import json
 
-def main():
-    # Start the Usuario server
-    usuario_path = os.path.abspath("source/tests/chatbotserver_test/server_usuario.py")
-    banco_path = os.path.abspath("source/tests/chatbotserver_test/server_banco.py")
+from dotenv import load_dotenv
+from api_client import BancoApiClient, UsuarioApiClient
 
-    usuario_server = subprocess.Popen(
-        [sys.executable, usuario_path],
-        shell=False,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        text=True
+# Carregar variáveis de ambiente
+load_dotenv()
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+
+# URLs dos serviços
+BANCO_API_URL = os.getenv("BANCO_API_URL", "http://localhost:8000")
+USUARIO_API_URL = os.getenv("USUARIO_API_URL", "http://localhost:8001")
+
+# Clientes API
+banco_client = BancoApiClient(BANCO_API_URL)
+usuario_client = UsuarioApiClient(USUARIO_API_URL)
+
+
+def parse_args():
+    """Parse argumentos da linha de comando."""
+    parser = argparse.ArgumentParser(
+        description="Script principal que coordena os serviços BancoBot e UsuarioBot."
     )
-    time.sleep(5)
 
-    banco_server = subprocess.Popen(
-        [sys.executable, banco_path],
-        shell=False,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        text=True
+    # Adicionar a flag --think (ou -t)
+    parser.add_argument(
+        "-t",
+        "--think",
+        action="store_true",
+        help="Ativa os tokens de pensamento para o modelo de linguagem.",
     )
-    time.sleep(5)
 
-    # Check if there's any error output from the servers
-    u_out, u_err = usuario_server.communicate(timeout=1.0)
-    b_out, b_err = banco_server.communicate(timeout=1.0)
+    # Adicionar o parâmetro de prompt personalizado
+    parser.add_argument(
+        "-p",
+        "--prompt",
+        type=str,
+        help="Prompt personalizado para o UsuarioBot.",
+    )
 
-    print("Usuario Server stdout:", u_out)
-    print("Usuario Server stderr:", u_err)
-    print("Banco Server stdout:", b_out)
-    print("Banco Server stderr:", b_err)
+    # Adicionar o parâmetro de mensagem inicial
+    parser.add_argument(
+        "-m",
+        "--message",
+        type=str,
+        default="Olá cliente Itaú! Como posso lhe ajudar?",
+        help="Mensagem inicial do BancoBot.",
+    )
 
+    return parser.parse_args()
+
+
+async def main(usuario_prompt: Optional[str] = None, initial_message: str = None):
+    """
+    Função principal que coordena os serviços BancoBot e UsuarioBot.
+
+    :param usuario_prompt: Prompt personalizado para o UsuarioBot
+    :param initial_message: Mensagem inicial do BancoBot
+    """
+    args = parse_args()
+
+    # Definir configurações a partir dos argumentos
+    think_exp = args.think
+    usuario_prompt = usuario_prompt or args.prompt
+    initial_message = initial_message or args.message
 
     try:
-        exit_command = "quit"
-        max_iterations = 10
+        print("=== Iniciando conversa entre BancoBot e UsuarioBot ===")
 
-        # BancoBot initiates the conversation:
-        banco_message = "Olá! Como posso lhe ajudar?"
-        print("=== Início da Conversa ===")
-        print("BancoBot (inicial):", banco_message)
+        # 1. Criar sessão de UsuarioBot
+        config = {
+            "think_exp": think_exp,
+            "system_message": usuario_prompt
+        }
 
-        for i in range(max_iterations):
-            # Step 1: Send BancoBot’s message to the user
-            usuario_response = requests.post(
-                "http://127.0.0.1:5001/usuario/process",
-                json={"query": banco_message}
-            ).json()["response"]
+        usuario_session = await usuario_client.create_session(config)
+        usuario_thread_id = usuario_session["thread_id"]
+        print(f"Sessão UsuarioBot criada: {usuario_thread_id}")
 
-            # Check if the user ended the conversation
-            if exit_command in usuario_response.lower():
-                print("Encerrando a conversa pelo usuário.")
-                break
+        # 2. Iniciar conversa
+        start_result = await usuario_client.request(
+            "POST",
+            f"/conversation/{usuario_thread_id}/start",
+            params={"initial_message": initial_message}
+        )
 
-            # Step 2: Send the user's response back to BancoBot
-            banco_response = requests.post(
-                "http://127.0.0.1:5002/banco/process",
-                json={"query": usuario_response}
-            ).json()["response"]
+        print(f"\nConversa iniciada:")
+        print(f"- UsuarioBot: {usuario_thread_id}")
+        print(f"- BancoBot: {start_result['banco_thread_id']}")
+        print("\n=== Mensagens iniciais ===")
+        print(f"BancoBot: {initial_message}")
+        print(f"UsuarioBot: {start_result['initial_response']}")
+        print(f"BancoBot: {start_result['banco_response']}")
 
-            # Check if the BancoBot ended the conversation
-            if exit_command in banco_response.lower():
-                print("Encerrando a conversa pelo banco.")
-                break
+        print("\nConversa continuando em segundo plano. Pressione Ctrl+C para sair.")
 
-            # Prepare for next iteration
-            banco_message = banco_response
+        # 3. Aguardar conclusão da conversa (simulação)
+        try:
+            while True:
+                # Verificar status a cada 2 segundos
+                await asyncio.sleep(2)
 
-        print("=== Fim da Conversa ===")
+                # Verificar se a conversa ainda está ativa
+                usuario_status = await usuario_client.request(
+                    "GET",
+                    f"/status/{usuario_thread_id}"
+                )
 
-    finally:
-        banco_server.terminate()
-        usuario_server.terminate()
+                if not usuario_status["is_active"]:
+                    print("\n=== Conversa encerrada ===")
+                    break
+
+        except KeyboardInterrupt:
+            print("\n=== Conversa interrompida pelo usuário ===")
+
+    except httpx.ConnectError:
+        print("ERROR: Could not connect to services. Make sure both BancoBot and UsuarioBot services are running.")
+        print(f"- BancoBot should be at: {BANCO_API_URL}")
+        print(f"- UsuarioBot should be at: {USUARIO_API_URL}")
+        sys.exit(1)
+
+    except httpx.RequestError as e:
+        print(f"Erro de conexão: {str(e)}")
+        print("Verifique se os serviços BancoBot e UsuarioBot estão em execução.")
+
+    except Exception as e:
+        print(f"Erro: {str(e)}")
 
 
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())
