@@ -1,6 +1,6 @@
 import secrets
 import sqlite3
-from typing import Union
+from typing import Union, Optional
 
 from langchain_core.messages import HumanMessage
 from langgraph.checkpoint.memory import MemorySaver
@@ -21,7 +21,8 @@ class ChatBotBase:
         self,
         think_exp: bool,
         system_message: str,
-        use_sqlitesaver: bool = False
+        use_sqlitesaver: bool = False,
+        thread_id: Optional[str] = None
     ) -> None:
         """
         Inicializa o chatbot com base nos parâmetros fornecidos.
@@ -33,7 +34,8 @@ class ChatBotBase:
         """
         self.think_exp = think_exp
         self.system_message = system_message
-        self.thread_id = secrets.token_hex(3)
+        # Gera um thread_id se não for fornecido
+        self.thread_id = thread_id or secrets.token_hex(8)
 
         self.model = None
         self.prompt = None
@@ -66,9 +68,9 @@ class ChatBotBase:
         Retorna o modelo apropriado baseado no valor de `think_exp`.
         """
         if think_exp:
-            print("Simulação iniciada usando GEMINI_THINKING_EXP")
+            print(f"[{self.thread_id}] Usando GEMINI_THINKING_EXP")
             return get_llm(ModelName.GEMINI_THINKING_EXP)
-        print("Simulação iniciada usando GPT4_MINI")
+        print(f"[{self.thread_id}] Usando GPT4_MINI")
         return get_llm(ModelName.GPT4_MINI)
 
     def _get_memory_saver(self, use_sqlitesaver: bool) -> Union[MemorySaver, SqliteSaver]:

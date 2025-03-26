@@ -1,6 +1,12 @@
 from source.tests.chatbot_test.chatbot import ChatBotRag
 
+
 class BancoBot(ChatBotRag):
+    """
+    Chatbot que simula um atendente de banco.
+    Adaptado para funcionar como um serviço via API.
+    """
+
     def __init__(self, think_exp):
         system_message = (
             "Você é um chatbot de banco. "
@@ -12,7 +18,31 @@ class BancoBot(ChatBotRag):
                          system_message=system_message,
                          use_sqlitesaver=False)
 
+    def process_message(self, query):
+        """
+        Processa uma mensagem e retorna a resposta.
+        Método específico para ser usado pela API.
+
+        Args:
+            query: Mensagem a ser processada
+
+        Returns:
+            Resposta do bot
+        """
+        response = self.process_query(query)
+        print(f"[BancoBot] Processando: '{query[:50]}...' -> '{response[:50]}...'")
+        return response
+
     def run(self, query):
+        """
+        Método legado mantido para compatibilidade.
+
+        Args:
+            query: Mensagem a ser processada
+
+        Returns:
+            Resposta do bot
+        """
         response = self.process_query(query)
         print("=== BancoBot Resposta ===")
         print(response)
