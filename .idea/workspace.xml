@@ -4,28 +4,26 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0cea1559-660a-43f1-803f-04da1cdf897d" name="Changes" comment="Integração das modificações de SimuladorPersonas ao código de RAG.">
-      <change afterPath="$PROJECT_DIR$/source/tests/chatbotserver_test/Dockerfile.banco" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/source/tests/chatbotserver_test/Dockerfile.orchestrator" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/source/tests/chatbotserver_test/Dockerfile.usuario" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/source/tests/chatbotserver_test/api_client.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/source/tests/chatbotserver_test/banco_service.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/source/tests/chatbotserver_test/docker-compose.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/source/tests/chatbotserver_test/models.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/source/tests/chatbotserver_test/requirements.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/source/tests/chatbotserver_test/usuario_service.py" afterDir="false" />
+    <list default="true" id="0cea1559-660a-43f1-803f-04da1cdf897d" name="Changes" comment="Mudanças:&#10;1. Modificações da estrutura do rag que deve tornar os resultados mais precisos. &#10;2. Inicio de implementação de uma nova plataforma de testes baseada em micro-serviços.">
+      <change beforePath="$PROJECT_DIR$/.idea/lc-human-agents.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/lc-human-agents.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/RAG Cartões/config.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/RAG Cartões/config.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/rag/functions/rag_functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/rag/functions/rag_functions.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/rag/state/rag_state.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/rag/state/rag_state.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/rag/workflow/rag_workflow_builder.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/rag/workflow/rag_workflow_builder.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/tests/chatbotserver_test/banco.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/tests/chatbotserver_test/banco.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/tests/chatbotserver_test/chatbot.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/tests/chatbotserver_test/chatbot.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/tests/chatbotserver_test/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/tests/chatbotserver_test/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/tests/chatbotserver_test/server_banco.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/tests/chatbotserver_test/server_usuario.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/tests/chatbotserver_test/shared_data.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/tests/chatbotserver_test/usuario.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/tests/chatbotserver_test/usuario.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/tests/chatbotserver_test/Dockerfile.banco" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/tests/chatbotserver_test/Dockerfile.orchestrator" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/tests/chatbotserver_test/Dockerfile.usuario" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/tests/chatbotserver_test/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/tests/chatbotserver_test/api_client.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/tests/chatbotserver_test/banco.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/tests/chatbotserver_test/banco_service.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/tests/chatbotserver_test/chatbot.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/tests/chatbotserver_test/docker-compose.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/tests/chatbotserver_test/main.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/tests/chatbotserver_test/models.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/tests/chatbotserver_test/requirements.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/tests/chatbotserver_test/usuario.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/tests/chatbotserver_test/usuario_service.py" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -108,6 +106,7 @@
     &quot;Python.prompt_generator.executor&quot;: &quot;Run&quot;,
     &quot;Python.rag_test.executor&quot;: &quot;Run&quot;,
     &quot;Python.read_personas.executor&quot;: &quot;Run&quot;,
+    &quot;Python.run_services.executor&quot;: &quot;Run&quot;,
     &quot;Python.setup_db_cenarios.executor&quot;: &quot;Run&quot;,
     &quot;Python.setup_simulacoes_db.executor&quot;: &quot;Run&quot;,
     &quot;Python.workflow_builder.executor&quot;: &quot;Run&quot;,
@@ -137,7 +136,7 @@
       <recent name="C:\Users\galdu\PycharmProjects\lc-human-agents\source" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.rag_test">
+  <component name="RunManager" selected="Python.launcher">
     <configuration name="Extract personas" type="PythonConfigurationType" factoryName="Python" folderName="TOOLS">
       <module name="lc-human-agents" />
       <option name="ENV_FILES" value="" />
@@ -316,7 +315,7 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/source/tests/integratio_test/rag_test.py" />
-      <option name="PARAMETERS" value="--show-messages" />
+      <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
@@ -410,22 +409,6 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="Python tests for workflow_integration_test.TestChatGraphPromptIntegration.test_initial" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
-      <module name="lc-human-agents" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/source/tests/integratio_test" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;workflow_integration_test.TestChatGraphPromptIntegration.test_initial&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
-      <method v="2" />
-    </configuration>
     <list>
       <item itemvalue="FastAPI.visualizador_backend" />
       <item itemvalue="Python.Extract personas" />
@@ -440,7 +423,6 @@
       <item itemvalue="Python tests.Python tests for workflow_integration_test.TestChatGraphPromptIntegration" />
       <item itemvalue="Python tests.Python tests for workflow_integration_test.TestChatGraphPromptIntegration.test_chat_function" />
       <item itemvalue="Python tests.Python tests for workflow_integration_test.TestChatGraphPromptIntegration.test_default_workflow" />
-      <item itemvalue="Python tests.Python tests for workflow_integration_test.TestChatGraphPromptIntegration.test_initial" />
     </list>
     <recent_temporary>
       <list>
@@ -448,7 +430,6 @@
         <item itemvalue="Python tests.Python tests for workflow_integration_test.TestChatGraphPromptIntegration.test_default_workflow" />
         <item itemvalue="Python tests.Python tests for workflow_integration_test.TestChatGraphPromptIntegration.test_chat_function" />
         <item itemvalue="Python tests.Python tests for workflow_integration_test.TestChatGraphPromptIntegration" />
-        <item itemvalue="Python tests.Python tests for workflow_integration_test.TestChatGraphPromptIntegration.test_initial" />
       </list>
     </recent_temporary>
   </component>
@@ -546,7 +527,10 @@
       <workItem from="1742736353459" duration="67000" />
       <workItem from="1742736769468" duration="10479000" />
       <workItem from="1742826919092" duration="5800000" />
-      <workItem from="1742838965010" duration="3233000" />
+      <workItem from="1742838965010" duration="3678000" />
+      <workItem from="1742843085706" duration="13015000" />
+      <workItem from="1742944631739" duration="1011000" />
+      <workItem from="1743007719856" duration="110000" />
     </task>
     <task id="LOCAL-00001" summary="Initial Commit.">
       <option name="closed" value="true" />
@@ -692,7 +676,15 @@
       <option name="project" value="LOCAL" />
       <updated>1742406574189</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="Mudanças:&#10;1. Modificações da estrutura do rag que deve tornar os resultados mais precisos. &#10;2. Inicio de implementação de uma nova plataforma de testes baseada em micro-serviços.">
+      <option name="closed" value="true" />
+      <created>1742842663062</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1742842663062</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -719,7 +711,8 @@
     <MESSAGE value="Incluir as modificações do workspace.xml" />
     <MESSAGE value="Integração do sistema rag à plataforma de teste." />
     <MESSAGE value="Integração das modificações de SimuladorPersonas ao código de RAG." />
-    <option name="LAST_COMMIT_MESSAGE" value="Integração das modificações de SimuladorPersonas ao código de RAG." />
+    <MESSAGE value="Mudanças:&#10;1. Modificações da estrutura do rag que deve tornar os resultados mais precisos. &#10;2. Inicio de implementação de uma nova plataforma de testes baseada em micro-serviços." />
+    <option name="LAST_COMMIT_MESSAGE" value="Mudanças:&#10;1. Modificações da estrutura do rag que deve tornar os resultados mais precisos. &#10;2. Inicio de implementação de uma nova plataforma de testes baseada em micro-serviços." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -743,15 +736,16 @@
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/lc_human_agents$chatbot_server_test.coverage" NAME="chatbot server test Coverage Results" MODIFIED="1735141967192" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="C:\Users\galdu\PycharmProjects\lc-human-agents" />
+    <SUITE FILE_PATH="coverage/lc_human_agents$run_services.coverage" NAME="run_services Coverage Results" MODIFIED="1742846551041" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/lc_human_agents$visualizador_backend.coverage" NAME="visualizador_backend Coverage Results" MODIFIED="1738608167151" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/lc_human_agents$prompt_generation.coverage" NAME="prompt_generation Coverage Results" MODIFIED="1735239266449" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/lc_human_agents$document_loader_integration.coverage" NAME="document_loader_integration Coverage Results" MODIFIED="1741895137464" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
-    <SUITE FILE_PATH="coverage/lc_human_agents$rag_test.coverage" NAME="rag_test Coverage Results" MODIFIED="1742757992294" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/lc_human_agents$rag_test.coverage" NAME="rag_test Coverage Results" MODIFIED="1742847860315" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/lc_human_agents$setup_simulacoes_db.coverage" NAME="setup_db_cenarios Coverage Results" MODIFIED="1735167459458" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/" />
     <SUITE FILE_PATH="coverage/lc_human_agents$Extract_personas.coverage" NAME="Extract personas Coverage Results" MODIFIED="1735162567412" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
-    <SUITE FILE_PATH="coverage/lc_human_agents$launcher.coverage" NAME="launcher Coverage Results" MODIFIED="1742406385785" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/lc_human_agents$launcher.coverage" NAME="launcher Coverage Results" MODIFIED="1742944983322" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/lc_human_agents$insert_cenario_persona.coverage" NAME="insert_cenario&amp;persona Coverage Results" MODIFIED="1735167495419" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
-    <SUITE FILE_PATH="coverage/lc_human_agents$chatbot_test.coverage" NAME="chatbot_test Coverage Results" MODIFIED="1742326543641" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/lc_human_agents$chatbot_test.coverage" NAME="chatbot_test Coverage Results" MODIFIED="1742846866886" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/lc_human_agents$gerar_missoes.coverage" NAME="gerar_missoes Coverage Results" MODIFIED="1735167511941" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/lc_human_agents$prompt_generator.coverage" NAME="prompt_generator Coverage Results" MODIFIED="1735165702542" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tools/prompt_generation" />
     <SUITE FILE_PATH="coverage/lc_human_agents$read_personas.coverage" NAME="read_personas Coverage Results" MODIFIED="1735148903371" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tools" />

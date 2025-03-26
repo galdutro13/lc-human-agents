@@ -105,9 +105,9 @@ global_prompts:
   grader_prompt: |
     Você é um avaliador que analisa a relevância de um documento recuperado para 
     a pergunta do usuário. Se o documento contiver palavras-chave ou significado 
-    semântico relacionado à pergunta do usuário, classifique-o como relevante. 
-    Não precisa ser um teste rigoroso. O objetivo é filtrar recuperações errôneas. 
-    Dê uma pontuação binária 'yes' ou 'no' para indicar se o documento é relevante 
+    semântico remotamente relacionado à pergunta do usuário, classifique-o como relevante. 
+    Não precisa ser um teste rigoroso. O objetivo é filtrar recuperações completamente irrelevantes. 
+    Dê uma pontuação binária 'yes' ou 'no' para indicar se o documento é remotamente relevante 
     para a pergunta.
 
 # Configurações de embeddings e vectorstore
