@@ -4,15 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0cea1559-660a-43f1-803f-04da1cdf897d" name="Changes" comment="Melhoria do código do launch_simulador.py para que possamos ter melhores mensagens de erro.">
-      <change afterPath="$PROJECT_DIR$/tools/bancobot_service/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/bancobot_service/banco_service.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/bancobot_service/start_banco_service.py" afterDir="false" />
+    <list default="true" id="0cea1559-660a-43f1-803f-04da1cdf897d" name="Changes" comment="Commit inicial do código que implementa o código de teste usando conceitos de serviços.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/tests/chatbot_test/banco.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/tests/chatbot_test/banco.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/tests/chatbot_test/chatbot.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/tests/chatbot_test/chatbot.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/tests/chatbot_test/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/tests/chatbot_test/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/tests/chatbot_test/usuario.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/tests/chatbot_test/usuario.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -72,58 +65,58 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "FastAPI.visualizador_backend.executor": "Run",
-    "Python tests.Python tests for persona_csv_integration.TestPersonaCSVIntegration.executor": "Run",
-    "Python tests.Python tests for test_csv_to_json.TestCSVtoJSONConverter.executor": "Run",
-    "Python tests.Python tests for test_csv_to_json.TestCSVtoJSONConverter.test_malformed_csv.executor": "Run",
-    "Python tests.Python tests for test_prompt_manager.TestPromptGenerators.executor": "Run",
-    "Python tests.Python tests for test_prompt_manager.TestPromptGenerators.test_custom_prompt_generator.executor": "Run",
-    "Python tests.Python tests for test_prompt_manager.TestPromptGenerators.test_system_prompt_generator_invalid_strategy.executor": "Run",
-    "Python tests.Python tests for workflow_integration_test.TestChatGraphPromptIntegration.executor": "Run",
-    "Python tests.Python tests for workflow_integration_test.TestChatGraphPromptIntegration.test_chat_function.executor": "Run",
-    "Python tests.Python tests for workflow_integration_test.TestChatGraphPromptIntegration.test_default_workflow.executor": "Run",
-    "Python tests.Python tests for workflow_integration_test.TestChatGraphPromptIntegration.test_initial.executor": "Run",
-    "Python tests.Python tests in test_prompt_manager.py.executor": "Run",
-    "Python.Extract personas.executor": "Run",
-    "Python.chatbot server test.executor": "Run",
-    "Python.chatbot_test.executor": "Run",
-    "Python.document_loader_integration.executor": "Run",
-    "Python.gerar_missoes.executor": "Run",
-    "Python.insert_cenario&persona.executor": "Run",
-    "Python.launcher.executor": "Run",
-    "Python.llms.executor": "Run",
-    "Python.main.executor": "Run",
-    "Python.models.executor": "Run",
-    "Python.prompt_generation.executor": "Run",
-    "Python.prompt_generator.executor": "Run",
-    "Python.rag_test.executor": "Run",
-    "Python.read_personas.executor": "Run",
-    "Python.run_services.executor": "Run",
-    "Python.setup_db_cenarios.executor": "Run",
-    "Python.setup_simulacoes_db.executor": "Run",
-    "Python.start_banco_service.executor": "Run",
-    "Python.workflow_builder.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "database.data.extractors.current.export.id": "Comma-separated (CSV)_id",
-    "database.data.extractors.current.id": "Comma-separated (CSV)_id",
-    "git-widget-placeholder": "test__services",
-    "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "C:/Users/galdu/PycharmProjects/lc-human-agents/tools/bancobot_service/start_banco_service.py",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable",
-    "vcs.patch.path": "C:/Users/galdu/OneDrive/Desktop",
-    "vcs.patch.to.clipboard": "true",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;FastAPI.visualizador_backend.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for persona_csv_integration.TestPersonaCSVIntegration.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for test_csv_to_json.TestCSVtoJSONConverter.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for test_csv_to_json.TestCSVtoJSONConverter.test_malformed_csv.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for test_prompt_manager.TestPromptGenerators.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for test_prompt_manager.TestPromptGenerators.test_custom_prompt_generator.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for test_prompt_manager.TestPromptGenerators.test_system_prompt_generator_invalid_strategy.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for workflow_integration_test.TestChatGraphPromptIntegration.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for workflow_integration_test.TestChatGraphPromptIntegration.test_chat_function.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for workflow_integration_test.TestChatGraphPromptIntegration.test_default_workflow.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for workflow_integration_test.TestChatGraphPromptIntegration.test_initial.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests in test_prompt_manager.py.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Extract personas.executor&quot;: &quot;Run&quot;,
+    &quot;Python.chatbot server test.executor&quot;: &quot;Run&quot;,
+    &quot;Python.chatbot_test.executor&quot;: &quot;Run&quot;,
+    &quot;Python.document_loader_integration.executor&quot;: &quot;Run&quot;,
+    &quot;Python.gerar_missoes.executor&quot;: &quot;Run&quot;,
+    &quot;Python.insert_cenario&amp;persona.executor&quot;: &quot;Run&quot;,
+    &quot;Python.launcher.executor&quot;: &quot;Run&quot;,
+    &quot;Python.llms.executor&quot;: &quot;Run&quot;,
+    &quot;Python.main.executor&quot;: &quot;Run&quot;,
+    &quot;Python.models.executor&quot;: &quot;Run&quot;,
+    &quot;Python.prompt_generation.executor&quot;: &quot;Run&quot;,
+    &quot;Python.prompt_generator.executor&quot;: &quot;Run&quot;,
+    &quot;Python.rag_test.executor&quot;: &quot;Run&quot;,
+    &quot;Python.read_personas.executor&quot;: &quot;Run&quot;,
+    &quot;Python.run_services.executor&quot;: &quot;Run&quot;,
+    &quot;Python.setup_db_cenarios.executor&quot;: &quot;Run&quot;,
+    &quot;Python.setup_simulacoes_db.executor&quot;: &quot;Run&quot;,
+    &quot;Python.start_banco_service.executor&quot;: &quot;Run&quot;,
+    &quot;Python.workflow_builder.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;database.data.extractors.current.export.id&quot;: &quot;Comma-separated (CSV)_id&quot;,
+    &quot;database.data.extractors.current.id&quot;: &quot;Comma-separated (CSV)_id&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;test__services&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/galdu/PycharmProjects/lc-human-agents/tools/bancobot_service/start_banco_service.py&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;,
+    &quot;vcs.patch.path&quot;: &quot;C:/Users/galdu/OneDrive/Desktop&quot;,
+    &quot;vcs.patch.to.clipboard&quot;: &quot;true&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\galdu\PycharmProjects\lc-human-agents\source\tests\chatbot_service_test" />
@@ -556,7 +549,8 @@
       <workItem from="1742843085706" duration="13015000" />
       <workItem from="1742944631739" duration="1011000" />
       <workItem from="1743007719856" duration="1087000" />
-      <workItem from="1743009137937" duration="7735000" />
+      <workItem from="1743009137937" duration="7782000" />
+      <workItem from="1743361791171" duration="3045000" />
     </task>
     <task id="LOCAL-00001" summary="Initial Commit.">
       <option name="closed" value="true" />
@@ -726,7 +720,15 @@
       <option name="project" value="LOCAL" />
       <updated>1743014783126</updated>
     </task>
-    <option name="localTasksCounter" value="22" />
+    <task id="LOCAL-00022" summary="Commit inicial do código que implementa o código de teste usando conceitos de serviços.">
+      <option name="closed" value="true" />
+      <created>1743022647069</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1743022647069</updated>
+    </task>
+    <option name="localTasksCounter" value="23" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -756,7 +758,8 @@
     <MESSAGE value="Mudanças:&#10;1. Modificações da estrutura do rag que deve tornar os resultados mais precisos. &#10;2. Inicio de implementação de uma nova plataforma de testes baseada em micro-serviços." />
     <MESSAGE value="Limpeza do código de microserviços." />
     <MESSAGE value="Melhoria do código do launch_simulador.py para que possamos ter melhores mensagens de erro." />
-    <option name="LAST_COMMIT_MESSAGE" value="Melhoria do código do launch_simulador.py para que possamos ter melhores mensagens de erro." />
+    <MESSAGE value="Commit inicial do código que implementa o código de teste usando conceitos de serviços." />
+    <option name="LAST_COMMIT_MESSAGE" value="Commit inicial do código que implementa o código de teste usando conceitos de serviços." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
