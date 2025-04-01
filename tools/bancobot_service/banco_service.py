@@ -2,7 +2,7 @@ import secrets
 import uvicorn
 from fastapi import FastAPI, HTTPException, Body
 from pydantic import BaseModel
-from typing import Dict, Optional
+from typing import Dict, Optional, Any
 
 from source.tests.chatbot_test.banco import BancoBot
 
@@ -11,6 +11,7 @@ class MessageRequest(BaseModel):
     """Modelo para requisições de mensagem do cliente."""
     message: str
     session_id: Optional[str] = None
+    timing_metadata: Optional[Dict[str, Any]] = None
 
 
 class MessageResponse(BaseModel):
@@ -32,9 +33,18 @@ async def process_message(request: MessageRequest = Body(...)):
     """
     Processa uma mensagem de um usuário.
     Cria uma nova sessão se necessário ou utiliza uma sessão existente.
+    Agora suporta metadados de temporização para simular comportamento temporal do usuário.
     """
     # Se não tiver session_id, cria um novo
     session_id = request.session_id or secrets.token_hex(8)
+
+    # Log timing metadata if present
+    if request.timing_metadata:
+        print(f"[Session {session_id}] Received timing metadata:")
+        print(f"  - Timestamp simulado: {request.timing_metadata.get('simulated_timestamp', 'N/A')}")
+        print(f"  - Tempo de reflexão: {request.timing_metadata.get('thinking_time', 0):.2f} segundos")
+        print(f"  - Tempo de digitação: {request.timing_metadata.get('typing_time', 0):.2f} segundos")
+        print(f"  - Tempo de pausa: {request.timing_metadata.get('break_time', 0):.2f} segundos")
 
     # Verifica se já existe um bot para essa sessão
     if session_id not in bot_instances:

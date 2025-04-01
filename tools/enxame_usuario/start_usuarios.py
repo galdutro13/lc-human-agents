@@ -18,14 +18,22 @@ def load_prompt_from_file(file_path):
         return None
 
 
-def iniciar_usuario(id_usuario, prompt_personalizado=None, api_url="http://localhost:8080"):
+def iniciar_usuario(id_usuario, prompt_personalizado=None, api_url="http://localhost:8080",
+                    typing_speed_wpm=40.0, thinking_time_range=(2, 10),
+                    break_probability=0.05, break_time_range=(60, 3600),
+                    simulate_delays=False):
     """
-    Inicia um UsuarioBot com configuração personalizada.
+    Inicia um UsuarioBot com configuração personalizada, incluindo parâmetros de temporização.
 
     Args:
         id_usuario: Identificador único do usuário
         prompt_personalizado: Prompt personalizado para o usuário (opcional)
         api_url: URL da API do BancoBot
+        typing_speed_wpm: Velocidade média de digitação em palavras por minuto
+        thinking_time_range: Faixa de tempo para pensar (min, max) em segundos
+        break_probability: Probabilidade de fazer uma pausa após enviar uma mensagem
+        break_time_range: Faixa de tempo para pausas (min, max) em segundos
+        simulate_delays: Se deve aguardar os atrasos simulados
     """
     print(f"Iniciando Usuário {id_usuario}...")
 
@@ -33,7 +41,12 @@ def iniciar_usuario(id_usuario, prompt_personalizado=None, api_url="http://local
     usuario_bot = UsuarioBot(
         think_exp=False,
         system_message=prompt_personalizado,
-        api_url=api_url
+        api_url=api_url,
+        typing_speed_wpm=typing_speed_wpm,
+        thinking_time_range=thinking_time_range,
+        break_probability=break_probability,
+        break_time_range=break_time_range,
+        simulate_delays=simulate_delays
     )
 
     # Iniciar a conversa
@@ -75,6 +88,22 @@ if __name__ == "__main__":
     parser.add_argument("--api-url", type=str, default="http://localhost:8080", help="URL da API do BancoBot")
     parser.add_argument("--prompts-file", type=str, help="Arquivo JSON com prompts personalizados para cada usuário")
 
+    # Parâmetros de temporização
+    parser.add_argument("--typing-speed", type=float, default=40.0,
+                        help="Velocidade média de digitação em palavras por minuto (padrão: 40)")
+    parser.add_argument("--thinking-min", type=float, default=2.0,
+                        help="Tempo mínimo de reflexão em segundos (padrão: 2)")
+    parser.add_argument("--thinking-max", type=float, default=10.0,
+                        help="Tempo máximo de reflexão em segundos (padrão: 10)")
+    parser.add_argument("--break-probability", type=float, default=0.05,
+                        help="Probabilidade de fazer uma pausa após enviar uma mensagem (padrão: 0.05)")
+    parser.add_argument("--break-min", type=float, default=60.0,
+                        help="Tempo mínimo de pausa em segundos (padrão: 60)")
+    parser.add_argument("--break-max", type=float, default=3600.0,
+                        help="Tempo máximo de pausa em segundos (padrão: 3600)")
+    parser.add_argument("--no-simulate-delays", action="store_true",
+                        help="Não aguardar pelos atrasos simulados (default: aguarda)")
+
     args = parser.parse_args()
 
     # Verificar disponibilidade do servidor
@@ -103,7 +132,14 @@ if __name__ == "__main__":
 
         thread = threading.Thread(
             target=iniciar_usuario,
-            args=(user_id, user_prompt, args.api_url)
+            args=(user_id, user_prompt, args.api_url),
+            kwargs={
+                "typing_speed_wpm": args.typing_speed,
+                "thinking_time_range": (args.thinking_min, args.thinking_max),
+                "break_probability": args.break_probability,
+                "break_time_range": (args.break_min, args.break_max),
+                "simulate_delays": not args.no_simulate_delays
+            }
         )
         threads.append(thread)
 

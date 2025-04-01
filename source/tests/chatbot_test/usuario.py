@@ -1,3 +1,6 @@
+import random
+import time
+from datetime import datetime, timedelta
 import requests
 from source.tests.chatbot_test.chatbot import ChatBotBase
 
@@ -6,9 +9,16 @@ class UsuarioBot(ChatBotBase):
     """
     Chatbot que simula um usuário interagindo com o banco.
     Adaptado para se comunicar com o serviço BancoBot via API.
+    Inclui simulação de comportamento temporal do usuário (tempo de digitação,
+    tempo de reflexão e pausas).
     """
 
-    def __init__(self, think_exp, system_message: str = None, api_url: str = "http://localhost:8080"):
+    def __init__(self, think_exp, system_message: str = None, api_url: str = "http://localhost:8080",
+                 typing_speed_wpm: float = 40.0,
+                 thinking_time_range: tuple = (2, 10),
+                 break_probability: float = 0.05,
+                 break_time_range: tuple = (60, 3600),
+                 simulate_delays: bool = True):
         if not system_message:
             system_message = (
                 """Você é Alberto Vasconcelos, de 60 anos, residente em João Pessoa (PB). É presidente de uma incorporadora de imóveis de luxo, do segmento Clientes Private Bank. Siga as duas próximas seções: [[como agir]] e [[missão]].
@@ -25,23 +35,113 @@ class UsuarioBot(ChatBotBase):
         self.api_url = api_url
         self.session_id = None  # Será definido na primeira interação com o servidor
 
+        # Parâmetros de temporização
+        self.typing_speed_wpm = typing_speed_wpm  # Velocidade de digitação em palavras por minuto
+        self.thinking_time_range = thinking_time_range  # Faixa de tempo para pensar (min, max) em segundos
+        self.break_probability = break_probability  # Probabilidade de fazer uma pausa após enviar uma mensagem
+        self.break_time_range = break_time_range  # Faixa de tempo para pausas (min, max) em segundos
+        self.simulate_delays = simulate_delays  # Se deve aguardar os atrasos simulados
+
+        # Estado de temporização
+        self.simulated_timestamp = datetime.now()
+        self.last_break_time = 0
+        self.total_thinking_time = 0
+        self.total_typing_time = 0
+
+    def _calculate_typing_time(self, message: str) -> float:
+        """
+        Calcula o tempo de digitação com base no comprimento da mensagem e na velocidade de digitação.
+
+        Args:
+            message: O texto da mensagem
+
+        Returns:
+            Tempo de digitação em segundos
+        """
+        # Estima o número de palavras na mensagem
+        words = len(message.split())
+
+        # Calcula o tempo de digitação em minutos
+        typing_time_minutes = words / self.typing_speed_wpm
+
+        # Converte para segundos
+        typing_time_seconds = typing_time_minutes * 60
+
+        # Adiciona aleatoriedade (±20%)
+        randomness = random.uniform(0.8, 1.2)
+        return typing_time_seconds * randomness
+
+    def _calculate_thinking_time(self) -> float:
+        """
+        Gera um tempo de reflexão aleatório dentro da faixa configurada.
+
+        Returns:
+            Tempo de reflexão em segundos
+        """
+        return random.uniform(self.thinking_time_range[0], self.thinking_time_range[1])
+
+    def _should_take_break(self) -> bool:
+        """
+        Determina se o usuário deve fazer uma pausa com base na probabilidade de pausa.
+
+        Returns:
+            True se o usuário deve fazer uma pausa, False caso contrário
+        """
+        return random.random() < self.break_probability
+
+    def _calculate_break_time(self) -> float:
+        """
+        Gera um tempo de pausa aleatório dentro da faixa configurada.
+
+        Returns:
+            Tempo de pausa em segundos
+        """
+        return random.uniform(self.break_time_range[0], self.break_time_range[1])
+
     def run(self, initial_query, max_iterations=10):
         """
-        Executa a conversa com o BancoBot através da API
+        Executa a conversa com o BancoBot através da API com simulação de comportamento temporal.
 
         Args:
             initial_query: Mensagem inicial do banco
             max_iterations: Número máximo de trocas de mensagens
         """
         query = initial_query
+
+        # Processa a consulta inicial (banco inicia a conversa)
         response = self.process_query(query)
         print("=== UsuarioBot Mensagem ===")
         print(response)
 
         exit_command = "quit"
 
-        for _ in range(max_iterations):
-            # Envia a mensagem para o serviço BancoBot e recebe a resposta
+        for i in range(max_iterations):
+            print(f"\n--- Iteração {i + 1} de {max_iterations} ---")
+
+            # Simula o tempo de reflexão
+            thinking_time = self._calculate_thinking_time()
+            self.total_thinking_time += thinking_time
+            self.simulated_timestamp += timedelta(seconds=thinking_time)
+            print(f"[Simulação] Pensando por {thinking_time:.2f} segundos...")
+
+            # Aguarda o tempo de reflexão (forçado a True para garantir os delays)
+            if self.simulate_delays:
+                print(f"[DELAY REAL] Aguardando {thinking_time:.2f} segundos de reflexão...")
+                time.sleep(thinking_time)
+
+            # Simula o tempo de digitação
+            typing_time = self._calculate_typing_time(response)
+            self.total_typing_time += typing_time
+            self.simulated_timestamp += timedelta(seconds=typing_time)
+            print(f"[Simulação] Digitando por {typing_time:.2f} segundos (velocidade: {self.typing_speed_wpm} wpm)...")
+
+            # Aguarda o tempo de digitação (forçado a True para garantir os delays)
+            if self.simulate_delays:
+                print(f"[DELAY REAL] Aguardando {typing_time:.2f} segundos de digitação...")
+                time.sleep(typing_time)
+
+            # Envia a mensagem
+            print(f"[Simulação] Enviando mensagem em {self.simulated_timestamp.strftime('%Y-%m-%d %H:%M:%S')}")
             banco_response = self._send_to_bancobot(response)
             query = banco_response
 
@@ -49,6 +149,21 @@ class UsuarioBot(ChatBotBase):
                 print("Encerrando a conversa pelo banco.")
                 break
 
+            # Simula uma pausa (se necessário)
+            should_break = self._should_take_break()
+            if should_break:
+                break_time = self._calculate_break_time()
+                self.last_break_time = break_time
+                self.simulated_timestamp += timedelta(seconds=break_time)
+                print(f"[Simulação] Fazendo uma pausa de {break_time:.2f} segundos...")
+                print(f"[Simulação] Retornando em {self.simulated_timestamp.strftime('%Y-%m-%d %H:%M:%S')}")
+
+                # Aguarda o tempo de pausa (forçado a True para garantir os delays)
+                if self.simulate_delays:
+                    print(f"[DELAY REAL] Aguardando {break_time:.2f} segundos de pausa...")
+                    time.sleep(break_time)
+
+            # Processa a resposta
             response = self.process_query(query)
             print("=== UsuarioBot Mensagem ===")
             print(response)
@@ -57,9 +172,17 @@ class UsuarioBot(ChatBotBase):
                 print("Encerrando a conversa pelo usuário.")
                 break
 
+        # Imprime resumo das estatísticas de tempo
+        print("\n=== Estatísticas de Tempo ===")
+        print(f"Tempo total pensando: {self.total_thinking_time:.2f} segundos")
+        print(f"Tempo total digitando: {self.total_typing_time:.2f} segundos")
+        print(f"Último tempo de pausa: {self.last_break_time:.2f} segundos")
+        print(f"Timestamp final simulado: {self.simulated_timestamp.strftime('%Y-%m-%d %H:%M:%S')}")
+
     def _send_to_bancobot(self, message: str) -> str:
         """
-        Envia uma mensagem para o serviço BancoBot e retorna a resposta
+        Envia uma mensagem para o serviço BancoBot e retorna a resposta,
+        incluindo informações de temporização.
 
         Args:
             message: Mensagem a ser enviada
@@ -69,7 +192,15 @@ class UsuarioBot(ChatBotBase):
         """
         try:
             # Preparar o payload para a requisição
-            payload = {"message": message}
+            payload = {
+                "message": message,
+                "timing_metadata": {
+                    "simulated_timestamp": self.simulated_timestamp.isoformat(),
+                    "thinking_time": self.total_thinking_time,
+                    "typing_time": self.total_typing_time,
+                    "break_time": self.last_break_time
+                }
+            }
             if self.session_id:
                 payload["session_id"] = self.session_id
 
@@ -87,3 +218,27 @@ class UsuarioBot(ChatBotBase):
         except requests.RequestException as e:
             print(f"Erro ao comunicar com o serviço BancoBot: {e}")
             return "Houve um erro na comunicação com o banco. Por favor, tente novamente mais tarde."
+
+    def process_query(self, query: str) -> str:
+        """
+        Sobrescreve o método de ChatBotBase para incluir metadados de temporização.
+
+        Args:
+            query: Texto enviado pelo usuário.
+
+        Returns:
+            Texto de resposta gerado pelo modelo.
+        """
+        from langchain_core.messages import HumanMessage
+
+        # Inclui metadados de temporização na mensagem
+        timing_metadata = {
+            "simulated_timestamp": self.simulated_timestamp.isoformat(),
+            "thinking_time": self.total_thinking_time,
+            "typing_time": self.total_typing_time,
+            "break_time": self.last_break_time
+        }
+
+        input_messages = [HumanMessage(content=query, additional_kwargs={"timing_metadata": timing_metadata})]
+        output = self.app.invoke({"messages": input_messages}, self.config)
+        return output["messages"][-1].content
