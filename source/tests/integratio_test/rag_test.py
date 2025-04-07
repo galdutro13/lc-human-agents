@@ -1,6 +1,7 @@
 import os
 import argparse
 import secrets
+
 from source.chat_graph.models import ModelName
 from source.rag.system import RAGSystem
 
@@ -21,6 +22,8 @@ def main():
                         help='Language model to use')
     parser.add_argument('--show-messages', action='store_true',
                         help='Show message history in the output')
+    parser.add_argument('--visualize', action='store_true', help='Show graph')
+
     args = parser.parse_args()
 
     # Map model name to enum
@@ -39,54 +42,57 @@ def main():
     rag_system = RAGSystem(base_path=args.directory, thread_id=thread_id, model_name=model_name)
     rag_system.initialize(reindex=args.reindex)
 
-    # Print system information
-    print("\nRAG System Information:")
-    print(f"Configuration version: {rag_system.config.version}")
-    print(f"Available datasources: {', '.join(rag_system.datasources)}")
+    if args.visualize:
+        rag_system.visualize()
+    else:
+        # Print system information
+        print("\nRAG System Information:")
+        print(f"Configuration version: {rag_system.config.version}")
+        print(f"Available datasources: {', '.join(rag_system.datasources)}")
 
-    # Keep track of all messages across interactions
-    all_messages = []
+        # Keep track of all messages across interactions
+        all_messages = []
 
-    # Interactive query mode
-    print("\nEnter questions to query the RAG system (type 'exit', 'quit', or 'q' to quit):")
-    while True:
-        # Get user input
-        question = input("\nQuestion: ")
-        if question.lower() in ['exit', 'quit', 'q']:
-            break
+        # Interactive query mode
+        print("\nEnter questions to query the RAG system (type 'exit', 'quit', or 'q' to quit):")
+        while True:
+            # Get user input
+            question = input("\nQuestion: ")
+            if question.lower() in ['exit', 'quit', 'q']:
+                break
 
-        # Query the RAG system
-        try:
-            result = rag_system.query(question)
+            # Query the RAG system
+            try:
+                result = rag_system.query(question)
 
-            # Get messages for this interaction
-            interaction_messages = result.get('messages', [])
-            all_messages.extend(interaction_messages)
+                # Get messages for this interaction
+                interaction_messages = result.get('messages', [])
+                all_messages.extend(interaction_messages)
 
-            # Print the result
-            print("\nResult:")
-            print(f"Selected datasource: {result.get('datasource', 'None')}")
-            print(f"Documents relevant: {'Yes' if result.get('documents_relevant') else 'No'}")
-            print("\nResponse:")
-            print(result.get('response', 'None'))
+                # Print the result
+                print("\nResult:")
+                print(f"Selected datasource: {result.get('datasource', 'None')}")
+                print(f"Documents relevant: {'Yes' if result.get('documents_relevant') else 'No'}")
+                print("\nResponse:")
+                print(result.get('response', 'None'))
 
-            # Show message flow if requested
-            if args.show_messages:
-                print("\nMessage Flow:")
-                for msg in interaction_messages:
-                    role = msg.type
-                    content = msg.content
-                    # Truncate long messages for display
-                    print(f"[{role.upper()}] {content}")
+                # Show message flow if requested
+                if args.show_messages:
+                    print("\nMessage Flow:")
+                    for msg in interaction_messages:
+                        role = msg.type
+                        content = msg.content
+                        # Truncate long messages for display
+                        print(f"[{role.upper()}] {content}")
 
-                print("\nCumulative Message History:")
-                for i, msg in enumerate(all_messages):
-                    print(f"{i + 1}. {msg.type}: {msg.content[:150]}{'...' if len(msg.content) > 150 else ''}")
+                    print("\nCumulative Message History:")
+                    for i, msg in enumerate(all_messages):
+                        print(f"{i + 1}. {msg.type}: {msg.content[:150]}{'...' if len(msg.content) > 150 else ''}")
 
-        except Exception as e:
-            print(f"Error: {str(e)}")
+            except Exception as e:
+                print(f"Error: {str(e)}")
 
-    print("\nThank you for using the RAG system!")
+        print("\nThank you for using the RAG system!")
 
 
 if __name__ == "__main__":

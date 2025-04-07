@@ -32,8 +32,15 @@ if __name__ == "__main__":
 
     # Verificar se as variáveis necessárias estão definidas
     if not os.getenv("OPENAI_API_KEY"):
-        print("ERRO: OPENAI_API_KEY não definida. Por favor, configure o arquivo .env")
-        exit(1)
+        # Tenta definir a chave a partir do ambiente atual caso não esteja no .env
+        openai_key = os.environ.get("OPENAI_API_KEY")
+        if not openai_key:
+            print("ERRO: OPENAI_API_KEY não definida. Por favor, configure o arquivo .env")
+            exit(1)
+        else:
+            # Define a variável para o processo atual
+            os.environ["OPENAI_API_KEY"] = openai_key
+            print("OPENAI_API_KEY encontrada no ambiente e será utilizada")
 
     args = parse_args()
 

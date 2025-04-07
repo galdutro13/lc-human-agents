@@ -5,12 +5,15 @@ import sqlite3
 import io
 import os
 import pandas as pd
+import threading
 from pydantic import BaseModel
 
 from langgraph.checkpoint.serde.jsonplus import JsonPlusSerializer
 from langchain.schema import HumanMessage, AIMessage
 
-from source.tests.chatbot_test import test_chatbot
+# Import UsuarioBot directly from the decoupled structure
+from source.tests.chatbot_test.usuario import UsuarioBot
+
 
 class InteractionRequest(BaseModel):
     query: str
@@ -19,6 +22,7 @@ class InteractionRequest(BaseModel):
 class InteractionResponse(BaseModel):
     success: bool
 
+
 # Configure logging
 logger = logging.getLogger("app")
 logger.setLevel(logging.INFO)
@@ -26,19 +30,60 @@ app = FastAPI()
 
 DATABASE_PATH = "checkpoints.db"
 
+
 def get_db_connection() -> sqlite3.Connection:
     conn = sqlite3.connect(DATABASE_PATH, check_same_thread=False)
     conn.row_factory = sqlite3.Row
     return conn
 
+
+def run_chatbot(prompt: str, api_url: str = "http://localhost:8080", max_iterations: int = 10) -> bool:
+    """
+    Runs a chatbot interaction with the provided prompt.
+    Creates and runs a UsuarioBot instance that communicates with the bancobot_service.
+
+    Args:
+        prompt: The prompt to use for the UsuarioBot
+        api_url: URL of the bancobot service
+        max_iterations: Maximum number of iterations for the conversation
+
+    Returns:
+        True if the interaction was successful, False otherwise
+    """
+    try:
+        # Create and run a UsuarioBot configured to use the bancobot_service
+        usuario_bot = UsuarioBot(
+            think_exp=False,
+            system_message=prompt,
+            api_url=api_url
+        )
+
+        # Start the interaction with an initial greeting
+        usuario_bot.run(
+            initial_query="Olá cliente Itaú! Como posso lhe ajudar?",
+            max_iterations=max_iterations
+        )
+        return True
+    except Exception as e:
+        logger.error(f"Error in run_chatbot: {e}")
+        return False
+
+
 @app.post("/new_interaction", response_model=InteractionResponse)
 async def new_interaction(interaction: InteractionRequest):
     """
     Executes a new interaction based on the user's prompt.
+    Uses decoupled UsuarioBot that connects to bancobot_service.
     """
     try:
-        # Run the chatbot function with the user query
-        test_chatbot(interaction.query)
+        # Run the chatbot in a separate thread to avoid blocking the API
+        thread = threading.Thread(
+            target=run_chatbot,
+            args=(interaction.query,)
+        )
+        thread.daemon = True
+        thread.start()
+
         return InteractionResponse(success=True)
     except Exception as exc:
         # Log the exception details internally
@@ -113,8 +158,6 @@ def list_interactions():
         return thread_data
     finally:
         conn.close()
-
-
 
 
 @app.get("/interactions/{thread_id}")

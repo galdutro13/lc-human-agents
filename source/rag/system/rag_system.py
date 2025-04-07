@@ -1,4 +1,5 @@
 import os
+import secrets
 import shutil
 from typing import Dict, Any, Optional, List
 
@@ -13,6 +14,7 @@ from source.rag.vectorstore import ChromaVectorStoreFactory
 from source.rag.functions import RouterFunction, GraderFunction, RAGResponseFunction, FallbackFunction
 from source.rag.workflow import RAGWorkflowBuilder
 
+from IPython.display import display, Image
 
 class RAGSystem:
     """
@@ -152,3 +154,11 @@ class RAGSystem:
         if self._vectorstores is None:
             return []
         return list(self._vectorstores.keys())
+
+    def visualize(self):
+        try:
+            display(Image(self._workflow.get_graph().draw_png()))
+        except ImportError:
+            print(
+                "You likely need to install dependencies for pygraphviz, see more here https://github.com/pygraphviz/pygraphviz/blob/main/INSTALL.txt"
+            )
