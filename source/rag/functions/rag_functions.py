@@ -1,10 +1,8 @@
-from typing import Dict, List, Any, Optional, Literal, Union, Tuple
+from typing import Dict, List, Any, Optional
 from pydantic import BaseModel, Field
 
 from langchain_core.prompts import ChatPromptTemplate
-from langchain_core.output_parsers import StrOutputParser
 from langchain_core.messages import SystemMessage, AIMessage, HumanMessage
-from langchain_openai import ChatOpenAI
 from langchain_community.vectorstores import Chroma
 
 from source.chat_graph.chat_function import ChatFunction
@@ -49,13 +47,7 @@ class RetrieveFunction(ChatFunction):
             datasource = next(iter(self._retrievers.keys()), None)
             if not datasource:
                 print("No datasources available")
-
-                # Create a system message about the retrieval failure
-                system_message = SystemMessage(
-                    content="No datasources available for retrieval."
-                )
-
-                return {"context": [], "messages": [system_message]}
+                return {"context": []}
 
             print(f"Datasource '{state.datasource}' not available, using '{datasource}' as fallback")
 
@@ -67,23 +59,11 @@ class RetrieveFunction(ChatFunction):
 
             # Extract document content
             context = [doc.page_content for doc in docs]
-
-            # Create a system message about the retrieval
-            system_message = SystemMessage(
-                content=f"Retrieved {len(docs)} documents from datasource '{datasource}'"
-            )
-
-            return {"context": context, "messages": [system_message]}
+            return {"context": context}
 
         except Exception as e:
             print(f"Error retrieving documents: {str(e)}")
-
-            # Create a system message about the retrieval error
-            system_message = SystemMessage(
-                content=f"Error retrieving documents: {str(e)}"
-            )
-
-            return {"context": [], "messages": [system_message]}
+            return {"context": []}
 
     @property
     def prompt(self) -> Any:
@@ -138,28 +118,20 @@ class RouterFunction(ChatFunction):
         """
         print("---ROUTE QUERY---")
 
+        # Add the user's question as a human message
+        human_message = HumanMessage(content=state.question)
+
         # Check if there are available datasources
         if not self._datasource_names:
             print("No datasources available")
-
-            # Create a system message about no datasources
-            system_message = SystemMessage(
-                content="No datasources available for routing."
-            )
-
-            return {"datasource": None, "messages": [system_message]}
+            return {"datasource": None, "messages": [human_message]}
 
         # Get the question from the state
         question = state.question
         if not question:
             print("No question in state")
-
-            # Create a system message about missing question
-            system_message = SystemMessage(
-                content=f"No question provided. Using default datasource: {self._datasource_names[0]}"
-            )
-
-            return {"datasource": self._datasource_names[0], "messages": [system_message]}
+            print(f"Using default datasource: {self._datasource_names[0]}")
+            return {"datasource": self._datasource_names[0], "messages": [human_message]}
 
         # Try to route the query
         try:
@@ -188,25 +160,14 @@ class RouterFunction(ChatFunction):
             else:
                 print(f"Selected datasource: {selected_datasource}")
 
-            # Create a system message about the selected datasource
-            system_message = SystemMessage(
-                content=f"Selected datasource: {selected_datasource}"
-            )
-
-            return {"datasource": selected_datasource, "messages": [system_message]}
+            return {"datasource": selected_datasource, "messages": [human_message]}
 
         except Exception as e:
             print(f"Error routing query: {str(e)}")
             # In case of error, use the first datasource
             first_datasource = self._datasource_names[0]
             print(f"Using default datasource: {first_datasource}")
-
-            # Create a system message about the routing error
-            system_message = SystemMessage(
-                content=f"Error during routing. Using default datasource: {first_datasource}"
-            )
-
-            return {"datasource": first_datasource, "messages": [system_message]}
+            return {"datasource": first_datasource, "messages": [human_message]}
 
     def _create_router_prompt(self) -> ChatPromptTemplate:
         """
@@ -295,31 +256,17 @@ class GraderFunction(ChatFunction):
         # If no context or question, documents are not relevant
         if not context or not question:
             print("No context or question in state. Documents not relevant.")
-
-            # Create a system message about no context
-            system_message = SystemMessage(
-                content="No context available for grading. Documents are not relevant."
-            )
-
             return {
                 "documents_relevant": False,
-                "relevant_context": [],
-                "messages": [system_message]
+                "relevant_context": []
             }
 
         # If all contexts are empty, documents are not relevant
         if all(not doc.strip() for doc in context):
             print("All context documents are empty. Documents not relevant.")
-
-            # Create a system message about empty context
-            system_message = SystemMessage(
-                content="Retrieved context is empty. Documents are not relevant."
-            )
-
             return {
                 "documents_relevant": False,
-                "relevant_context": [],
-                "messages": [system_message]
+                "relevant_context": []
             }
 
         # Define the grading model
@@ -364,30 +311,17 @@ class GraderFunction(ChatFunction):
             documents_relevant = len(relevant_documents) > 0
             print(f"Found {len(relevant_documents)} relevant documents out of {len(context)}")
 
-            # Create a system message about the relevance assessment
-            system_message = SystemMessage(
-                content=f"Found {len(relevant_documents)} relevant documents out of {len(context)} retrieved."
-            )
-
             return {
                 "documents_relevant": documents_relevant,
-                "relevant_context": relevant_documents,
-                "messages": [system_message]
+                "relevant_context": relevant_documents
             }
 
         except Exception as e:
             print(f"Error grading documents: {str(e)}")
             # In case of error, assume documents are not relevant
-
-            # Create a system message about the grading error
-            system_message = SystemMessage(
-                content=f"Error during grading: {str(e)}. Assuming documents are not relevant."
-            )
-
             return {
                 "documents_relevant": False,
-                "relevant_context": [],
-                "messages": [system_message]
+                "relevant_context": []
             }
 
     def _create_grader_prompt(self) -> ChatPromptTemplate:
@@ -442,7 +376,39 @@ class RAGResponseFunction(ChatFunction):
         self._vectorstores = vectorstores
         self._model = model
         self._retrievers = {}  # Store retrievers separately
-        self._rag_chains = self._create_rag_chains()
+
+        # Initialize retrievers
+        self._initialize_retrievers()
+
+    def _initialize_retrievers(self):
+        """
+        Initializes retrievers for each datasource based on configuration.
+        """
+        for datasource_name, vectorstore in self._vectorstores.items():
+            # Get the datasource configuration
+            datasource = next((d for d in self._config.datasources if d.name == datasource_name), None)
+            if not datasource:
+                continue
+
+            # Configure the retriever
+            retriever_config = datasource.retriever_config
+            retriever_kwargs = {"search_type": retriever_config.search_type, "search_kwargs": {}}
+
+            if retriever_config.top_k:
+                retriever_kwargs["search_kwargs"]["k"] = retriever_config.top_k
+
+            if retriever_config.search_type == "mmr" and retriever_config.fetch_k:
+                retriever_kwargs["search_kwargs"]["fetch_k"] = retriever_config.fetch_k
+
+            if retriever_config.search_type == "mmr" and retriever_config.lambda_mult:
+                retriever_kwargs["search_kwargs"]["lambda_mult"] = retriever_config.lambda_mult
+
+            if retriever_config.score_threshold:
+                retriever_kwargs["search_kwargs"]["score_threshold"] = retriever_config.score_threshold
+
+            # Create and store the retriever
+            retriever = vectorstore.as_retriever(**retriever_kwargs)
+            self._retrievers[datasource_name] = retriever
 
     def __call__(self, state: 'RAGState') -> Dict[str, Any]:
         """
@@ -485,52 +451,39 @@ class RAGResponseFunction(ChatFunction):
 
             return {"response": error_msg, "messages": [ai_message]}
 
-        # Check if the datasource is available
-        if datasource not in self._rag_chains:
-            # Fallback to the first available datasource
-            datasource = next(iter(self._rag_chains.keys()), None)
-            if not datasource:
-                print("No datasources available")
-                error_msg = "I don't have the information needed to answer that question."
+        # Check if the datasource is available and get config
+        datasource_config = next((d for d in self._config.datasources if d.name == datasource), None)
+        if not datasource_config:
+            print(f"Datasource configuration for {datasource} not found")
+            error_msg = "I don't have the information needed to answer that question."
 
-                # Create an AI message with the error response
-                ai_message = AIMessage(
-                    content=error_msg
-                )
+            # Create an AI message with the error response
+            ai_message = AIMessage(
+                content=error_msg
+            )
 
-                return {"response": error_msg, "messages": [ai_message]}
-
-            print(f"Datasource '{datasource}' not available, using '{datasource}' instead")
+            return {"response": error_msg, "messages": [ai_message]}
 
         # Use relevant context with the RAG prompt template
         try:
-            # Get the datasource configuration
-            datasource_config = next((d for d in self._config.datasources if d.name == datasource), None)
-            if not datasource_config:
-                raise ValueError(f"Datasource configuration for {datasource} not found")
-
-            # Create the prompt template
+            # Get the prompt template from datasource config
             template = datasource_config.prompt_templates.rag_prompt
-            prompt = ChatPromptTemplate.from_template(template)
 
             # Combine relevant documents
             combined_context = "\n\n".join(relevant_context)
 
-            # Generate response using combined context
-            chain = prompt | self._model | StrOutputParser()
-            response = chain.invoke({
-                "context": combined_context,
-                "question": question
-            })
+            # Create a system message with the context and prompt
+            system_prompt = template.format(context=combined_context, question=question)
+
+            # Create messages for the model (system message + existing messages)
+            messages = [SystemMessage(content=system_prompt)] + state.messages
+
+            # Invoke the model directly
+            response = self._model.invoke(messages)
 
             print(f"Response generated using datasource '{datasource}' with {len(relevant_context)} relevant documents")
 
-            # Create an AI message with the response
-            ai_message = AIMessage(
-                content=response
-            )
-
-            return {"response": response, "messages": [ai_message]}
+            return {"response": response.content, "messages": [response]}
 
         except Exception as e:
             print(f"Error generating response: {str(e)}")
@@ -543,70 +496,13 @@ class RAGResponseFunction(ChatFunction):
 
             return {"response": error_msg, "messages": [ai_message]}
 
-    def _create_rag_chains(self) -> Dict[str, Any]:
-        """
-        Creates RAG chains for each datasource.
-        These are used for document retrieval but not for response generation.
-        """
-        rag_chains = {}
-
-        for datasource_name, vectorstore in self._vectorstores.items():
-            # Get the datasource configuration
-            datasource = next((d for d in self._config.datasources if d.name == datasource_name), None)
-            if not datasource:
-                continue
-
-            # Configure the retriever
-            retriever_config = datasource.retriever_config
-            retriever_kwargs = {"search_type": retriever_config.search_type, "search_kwargs": {}}
-
-            if retriever_config.top_k:
-                retriever_kwargs["search_kwargs"]["k"] = retriever_config.top_k
-
-            if retriever_config.search_type == "mmr" and retriever_config.fetch_k:
-                retriever_kwargs["search_kwargs"]["fetch_k"] = retriever_config.fetch_k
-
-            if retriever_config.search_type == "mmr" and retriever_config.lambda_mult:
-                retriever_kwargs["search_kwargs"]["lambda_mult"] = retriever_config.lambda_mult
-
-            if retriever_config.score_threshold:
-                retriever_kwargs["search_kwargs"]["score_threshold"] = retriever_config.score_threshold
-
-            retriever = vectorstore.as_retriever(**retriever_kwargs)
-
-            # Store the retriever separately
-            self._retrievers[datasource_name] = retriever
-
-            # Create the prompt template
-            template = datasource.prompt_templates.rag_prompt
-            prompt = ChatPromptTemplate.from_template(template)
-
-            # Define function to format documents
-            def format_docs(docs):
-                return "\n\n".join(doc.page_content for doc in docs)
-
-            # Build the RAG chain - this is used for document retrieval
-            # Note: The actual response generation will now use only relevant documents
-            rag_chain = (
-                    {"context": lambda x: format_docs(retriever.invoke(x["question"])),
-                     "question": lambda x: x["question"]}
-                    | prompt
-                    | self._model
-                    | StrOutputParser()
-            )
-
-            # Store the chain
-            rag_chains[datasource_name] = rag_chain
-
-        return rag_chains
-
     @property
     def prompt(self) -> Any:
         """
-        Gets the prompt used by the function. Not a single prompt in this case.
+        Gets the prompt used by the function.
 
         Returns:
-            None because multiple prompts are used
+            None as we're using direct model invocation
         """
         return None
 
@@ -647,7 +543,6 @@ class FallbackFunction(ChatFunction):
         """
         self._config = config
         self._model = model
-        self._prompt = self._create_fallback_prompt()
 
     def __call__(self, state: 'RAGState') -> Dict[str, Any]:
         """
@@ -673,23 +568,27 @@ class FallbackFunction(ChatFunction):
                 content=generic_response
             )
 
-            return {"response": generic_response, "messages": [ai_message]}
+            return {"response": generic_response, "messages": ai_message}
 
         # Generate fallback response
         try:
-            # Combine prompt and model
-            fallback_chain = self._prompt | self._model | StrOutputParser()
+            # Create a system message for fallback
+            system_prompt = """You are a helpful assistant. The user's question is outside the scope 
+            of our knowledge base or we don't have relevant information about it.
 
-            # Invoke the chain
-            response = fallback_chain.invoke({"question": question})
+            Please provide a polite response indicating that we don't have enough 
+            information about this specific topic, but offer some general guidance 
+            if possible."""
+
+            # Use all existing messages + system prompt for context
+            messages = [SystemMessage(content=system_prompt)] + state.messages
+
+            # Invoke the model directly
+            response = self._model.invoke(messages)
+
             print("Fallback response generated")
 
-            # Create an AI message with the fallback response
-            ai_message = AIMessage(
-                content=response
-            )
-
-            return {"response": response, "messages": [ai_message]}
+            return {"response": response.content, "messages": response}
 
         except Exception as e:
             print(f"Error generating fallback response: {str(e)}")
@@ -702,33 +601,15 @@ class FallbackFunction(ChatFunction):
 
             return {"response": error_response, "messages": [ai_message]}
 
-    def _create_fallback_prompt(self) -> ChatPromptTemplate:
-        """
-        Creates the prompt for fallback responses.
-
-        Returns:
-            ChatPromptTemplate for fallback responses
-        """
-        return ChatPromptTemplate.from_template(
-            """You are a helpful assistant. The user's question is outside the scope 
-            of our knowledge base or we don't have relevant information about it.
-
-            Question: {question}
-
-            Please provide a polite response indicating that we don't have enough 
-            information about this specific topic, but offer some general guidance 
-            if possible."""
-        )
-
     @property
     def prompt(self) -> Any:
         """
         Gets the prompt used by the function.
 
         Returns:
-            The fallback prompt
+            None as we're not using a prompt template anymore
         """
-        return self._prompt
+        return None
 
     @property
     def model(self) -> Any:
