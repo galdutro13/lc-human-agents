@@ -4,14 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0cea1559-660a-43f1-803f-04da1cdf897d" name="Changes" comment="">
+    <list default="true" id="0cea1559-660a-43f1-803f-04da1cdf897d" name="Changes" comment="feat: Desacopla serviço BancoBot e adiciona visualização de grafo RAG&#10;&#10;- Refatora `launch_simulador.py` para rodar `bancobot_service` como um subprocesso gerenciado separadamente.&#10;  - Adiciona funções para iniciar, monitorar e limpar o processo do serviço.&#10;  - Atualiza criação do banco de dados para interagir com o serviço em execução via `UsuarioBot`.&#10;  - Melhora o tratamento de processos e a lógica de limpeza.&#10;- Atualiza backend `visualizador_interacoes` (`main.py`):&#10;  - Substitui chamada direta de `test_chatbot` por interação `UsuarioBot` direcionada à API `bancobot_service`.&#10;  - Executa interações do chatbot em threads separadas para evitar bloqueio da API.&#10;- Adiciona visualização do fluxo de trabalho RAG:&#10;  - Introduz método `visualize` em `RAGSystem` para exibir o fluxo LangGraph usando `IPython.display` e `pygraphviz`.&#10;  - Adiciona argumento de linha de comando `--visualize` a `rag_test.py` para acionar exibição do grafo.&#10;- Adiciona `ipython` a `requirements.txt` para suporte à visualização.&#10;- Modifica `start_banco_service.py` para verificar variáveis de ambiente para `OPENAI_API_KEY` se não encontrado em `.env`.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/launch_simulador.py" beforeDir="false" afterPath="$PROJECT_DIR$/launch_simulador.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/rag/system/rag_system.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/rag/system/rag_system.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/rag/functions/rag_functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/rag/functions/rag_functions.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/rag/workflow/rag_workflow_builder.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/rag/workflow/rag_workflow_builder.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/source/tests/integratio_test/rag_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/tests/integratio_test/rag_test.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tools/bancobot_service/start_banco_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/tools/bancobot_service/start_banco_service.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tools/visualizador_interacoes/backend/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/tools/visualizador_interacoes/backend/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -611,7 +608,7 @@
       <workItem from="1743631029658" duration="200000" />
       <workItem from="1743906504286" duration="879000" />
       <workItem from="1744038253130" duration="70000" />
-      <workItem from="1744038370950" duration="919000" />
+      <workItem from="1744038370950" duration="10602000" />
     </task>
     <task id="LOCAL-00001" summary="Initial Commit.">
       <option name="closed" value="true" />
@@ -805,14 +802,21 @@
       <option name="project" value="LOCAL" />
       <updated>1743443023458</updated>
     </task>
-    <option name="localTasksCounter" value="25" />
+    <task id="LOCAL-00025" summary="feat: Desacopla serviço BancoBot e adiciona visualização de grafo RAG&#10;&#10;- Refatora `launch_simulador.py` para rodar `bancobot_service` como um subprocesso gerenciado separadamente.&#10;  - Adiciona funções para iniciar, monitorar e limpar o processo do serviço.&#10;  - Atualiza criação do banco de dados para interagir com o serviço em execução via `UsuarioBot`.&#10;  - Melhora o tratamento de processos e a lógica de limpeza.&#10;- Atualiza backend `visualizador_interacoes` (`main.py`):&#10;  - Substitui chamada direta de `test_chatbot` por interação `UsuarioBot` direcionada à API `bancobot_service`.&#10;  - Executa interações do chatbot em threads separadas para evitar bloqueio da API.&#10;- Adiciona visualização do fluxo de trabalho RAG:&#10;  - Introduz método `visualize` em `RAGSystem` para exibir o fluxo LangGraph usando `IPython.display` e `pygraphviz`.&#10;  - Adiciona argumento de linha de comando `--visualize` a `rag_test.py` para acionar exibição do grafo.&#10;- Adiciona `ipython` a `requirements.txt` para suporte à visualização.&#10;- Modifica `start_banco_service.py` para verificar variáveis de ambiente para `OPENAI_API_KEY` se não encontrado em `.env`.">
+      <option name="closed" value="true" />
+      <created>1744039392730</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1744039392730</updated>
+    </task>
+    <option name="localTasksCounter" value="26" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Implementa classes de função de chat, construtor de workflows e testes&#10;&#10;- Adicionadas as classes abstratas `ChatFunction` e `ClassicChatFunction` para modularizar a execução de funções de chat.&#10;- Criado o módulo `models.py` com a enumeração `ModelName` para gerenciamento de modelos de linguagem.&#10;- Desenvolvido `workflow_builder.py` com a interface `Builder` e a implementação `ClassicWorkflowBuilder`, facilitando a construção de workflows personalizados.&#10;- Implementada a função `get_openai_llm` em `llms.py` para carregar modelos OpenAI com cache.&#10;- Atualizado `persona.py` com documentação aprimorada e método `get_dados_str` para acessar dados da persona como string.&#10;- Adicionado `__init__.py` no pacote `chat_graph` para exportar classes e funções relevantes.&#10;- Desenvolvidos testes unitários em `test_csv_to_json.py` para verificar a conversão de CSV para JSON.&#10;- Criados testes de integração em `workflow_integration_test.py` e `persona_csv_integration.py` para validar a integração entre workflows, funções de chat e conversão de CSV.&#10;&#10;**Benefícios:**&#10;&#10;- Melhor modularização e aderência aos princípios SOLID, facilitando a manutenção e extensão do código.&#10;- Aumento da cobertura de testes, garantindo robustez e confiabilidade das funcionalidades implementadas." />
     <MESSAGE value="Grande revisão do código" />
     <MESSAGE value="Modificação do tempo de espera." />
     <MESSAGE value="Atualização do código." />
@@ -837,7 +841,8 @@
     <MESSAGE value="Commit com o script de iniciar multiplos usuários." />
     <MESSAGE value="Adicionar documentações para os scripts desacoplados." />
     <MESSAGE value="[ COMMIT_MSG ]" />
-    <option name="LAST_COMMIT_MESSAGE" value="[ COMMIT_MSG ]" />
+    <MESSAGE value="feat: Desacopla serviço BancoBot e adiciona visualização de grafo RAG&#10;&#10;- Refatora `launch_simulador.py` para rodar `bancobot_service` como um subprocesso gerenciado separadamente.&#10;  - Adiciona funções para iniciar, monitorar e limpar o processo do serviço.&#10;  - Atualiza criação do banco de dados para interagir com o serviço em execução via `UsuarioBot`.&#10;  - Melhora o tratamento de processos e a lógica de limpeza.&#10;- Atualiza backend `visualizador_interacoes` (`main.py`):&#10;  - Substitui chamada direta de `test_chatbot` por interação `UsuarioBot` direcionada à API `bancobot_service`.&#10;  - Executa interações do chatbot em threads separadas para evitar bloqueio da API.&#10;- Adiciona visualização do fluxo de trabalho RAG:&#10;  - Introduz método `visualize` em `RAGSystem` para exibir o fluxo LangGraph usando `IPython.display` e `pygraphviz`.&#10;  - Adiciona argumento de linha de comando `--visualize` a `rag_test.py` para acionar exibição do grafo.&#10;- Adiciona `ipython` a `requirements.txt` para suporte à visualização.&#10;- Modifica `start_banco_service.py` para verificar variáveis de ambiente para `OPENAI_API_KEY` se não encontrado em `.env`." />
+    <option name="LAST_COMMIT_MESSAGE" value="feat: Desacopla serviço BancoBot e adiciona visualização de grafo RAG&#10;&#10;- Refatora `launch_simulador.py` para rodar `bancobot_service` como um subprocesso gerenciado separadamente.&#10;  - Adiciona funções para iniciar, monitorar e limpar o processo do serviço.&#10;  - Atualiza criação do banco de dados para interagir com o serviço em execução via `UsuarioBot`.&#10;  - Melhora o tratamento de processos e a lógica de limpeza.&#10;- Atualiza backend `visualizador_interacoes` (`main.py`):&#10;  - Substitui chamada direta de `test_chatbot` por interação `UsuarioBot` direcionada à API `bancobot_service`.&#10;  - Executa interações do chatbot em threads separadas para evitar bloqueio da API.&#10;- Adiciona visualização do fluxo de trabalho RAG:&#10;  - Introduz método `visualize` em `RAGSystem` para exibir o fluxo LangGraph usando `IPython.display` e `pygraphviz`.&#10;  - Adiciona argumento de linha de comando `--visualize` a `rag_test.py` para acionar exibição do grafo.&#10;- Adiciona `ipython` a `requirements.txt` para suporte à visualização.&#10;- Modifica `start_banco_service.py` para verificar variáveis de ambiente para `OPENAI_API_KEY` se não encontrado em `.env`." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -866,7 +871,7 @@
     <SUITE FILE_PATH="coverage/lc_human_agents$start_enxame_usuarios.coverage" NAME="start_enxame_usuarios Coverage Results" MODIFIED="1743452810922" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/lc_human_agents$prompt_generation.coverage" NAME="prompt_generation Coverage Results" MODIFIED="1735239266449" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/lc_human_agents$document_loader_integration.coverage" NAME="document_loader_integration Coverage Results" MODIFIED="1741895137464" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
-    <SUITE FILE_PATH="coverage/lc_human_agents$rag_test.coverage" NAME="rag_test Coverage Results" MODIFIED="1743906931677" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/lc_human_agents$rag_test.coverage" NAME="rag_test Coverage Results" MODIFIED="1744053190299" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/lc_human_agents$setup_simulacoes_db.coverage" NAME="setup_db_cenarios Coverage Results" MODIFIED="1735167459458" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/" />
     <SUITE FILE_PATH="coverage/lc_human_agents$rag_system.coverage" NAME="rag_system Coverage Results" MODIFIED="1743626120825" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/source/rag/system" />
     <SUITE FILE_PATH="coverage/lc_human_agents$start_banco_service.coverage" NAME="start_banco_service Coverage Results" MODIFIED="1743452797332" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
