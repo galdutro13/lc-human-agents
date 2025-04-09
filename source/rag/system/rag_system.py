@@ -103,7 +103,11 @@ class RAGSystem:
 
         # Build the workflow
         builder = RAGWorkflowBuilder()
-        return builder.build_rag_workflow(router, grader, responder, fallback)
+        return builder.build_rag_workflow(router=router,
+                                          grader=grader,
+                                          responder=responder,
+                                          fallback=fallback,
+                                          memory=self._memory)
 
     def query(self, question: str) -> Dict[str, Any]:
         """

@@ -4,11 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0cea1559-660a-43f1-803f-04da1cdf897d" name="Changes" comment="feat: Desacopla serviço BancoBot e adiciona visualização de grafo RAG&#10;&#10;- Refatora `launch_simulador.py` para rodar `bancobot_service` como um subprocesso gerenciado separadamente.&#10;  - Adiciona funções para iniciar, monitorar e limpar o processo do serviço.&#10;  - Atualiza criação do banco de dados para interagir com o serviço em execução via `UsuarioBot`.&#10;  - Melhora o tratamento de processos e a lógica de limpeza.&#10;- Atualiza backend `visualizador_interacoes` (`main.py`):&#10;  - Substitui chamada direta de `test_chatbot` por interação `UsuarioBot` direcionada à API `bancobot_service`.&#10;  - Executa interações do chatbot em threads separadas para evitar bloqueio da API.&#10;- Adiciona visualização do fluxo de trabalho RAG:&#10;  - Introduz método `visualize` em `RAGSystem` para exibir o fluxo LangGraph usando `IPython.display` e `pygraphviz`.&#10;  - Adiciona argumento de linha de comando `--visualize` a `rag_test.py` para acionar exibição do grafo.&#10;- Adiciona `ipython` a `requirements.txt` para suporte à visualização.&#10;- Modifica `start_banco_service.py` para verificar variáveis de ambiente para `OPENAI_API_KEY` se não encontrado em `.env`.">
+    <list default="true" id="0cea1559-660a-43f1-803f-04da1cdf897d" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/tools/export_checkpoints.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/source/rag/functions/rag_functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/rag/functions/rag_functions.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/rag/state/rag_state.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/rag/state/rag_state.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/rag/system/rag_system.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/rag/system/rag_system.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/source/rag/workflow/rag_workflow_builder.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/rag/workflow/rag_workflow_builder.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/tests/integratio_test/rag_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/tests/integratio_test/rag_test.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -86,6 +88,7 @@
     &quot;Python.chatbot server test.executor&quot;: &quot;Run&quot;,
     &quot;Python.chatbot_test.executor&quot;: &quot;Run&quot;,
     &quot;Python.document_loader_integration.executor&quot;: &quot;Run&quot;,
+    &quot;Python.export_checkpoints.executor&quot;: &quot;Run&quot;,
     &quot;Python.gerar_missoes.executor&quot;: &quot;Run&quot;,
     &quot;Python.insert_cenario&amp;persona.executor&quot;: &quot;Run&quot;,
     &quot;Python.launcher.executor&quot;: &quot;Run&quot;,
@@ -122,11 +125,29 @@
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
+  <component name="QodanaHighlightedReportService">
+    <option name="localReportPersistedInfo">
+      <LocalReportPersistedInfo>
+        <option name="path" value="C:\Users\galdu\PycharmProjects\lc-human-agents\qodana.sarif.json" />
+        <option name="reportGuid" value="55bf873c-897e-45e6-8dd4-c6c248adf4a6" />
+        <option name="reportName" value="lc-human-agents/qodana/2025-03-13" />
+      </LocalReportPersistedInfo>
+    </option>
+  </component>
+  <component name="QodanaIsSelectedPersistenceService">
+    <option name="selectedOrLoading" value="true" />
+  </component>
+  <component name="QodanaReportsService">
+    <option name="descriptions">
+      <ReportDescription path="C:\Users\galdu\PycharmProjects\lc-human-agents\qodana.sarif.json" reportGuid="55bf873c-897e-45e6-8dd4-c6c248adf4a6" reportId="lc-human-agents/qodana/2025-03-13" />
+    </option>
+  </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\galdu\PycharmProjects\lc-human-agents\source\tests\chatbot_service_test" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\galdu\PycharmProjects\lc-human-agents\tools" />
       <recent name="C:\Users\galdu\PycharmProjects\lc-human-agents" />
       <recent name="C:\Users\galdu\PycharmProjects\lc-human-agents\scripts" />
       <recent name="C:\Users\galdu\PycharmProjects\lc-human-agents\tools\db_work" />
@@ -421,6 +442,7 @@
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <option name="SDK_HOME" value="$PROJECT_DIR$/.venv/Scripts/python.exe" />
+      <option name="SDK_NAME" value="Python 3.11 (lc-human-agents)" />
       <option name="WORKING_DIRECTORY" value="" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
@@ -608,7 +630,11 @@
       <workItem from="1743631029658" duration="200000" />
       <workItem from="1743906504286" duration="879000" />
       <workItem from="1744038253130" duration="70000" />
-      <workItem from="1744038370950" duration="10602000" />
+      <workItem from="1744038370950" duration="12923000" />
+      <workItem from="1744138905706" duration="2043000" />
+      <workItem from="1744154051665" duration="2430000" />
+      <workItem from="1744214541060" duration="3899000" />
+      <workItem from="1744230798360" duration="1571000" />
     </task>
     <task id="LOCAL-00001" summary="Initial Commit.">
       <option name="closed" value="true" />
@@ -810,14 +836,29 @@
       <option name="project" value="LOCAL" />
       <updated>1744039392730</updated>
     </task>
-    <option name="localTasksCounter" value="26" />
+    <task id="LOCAL-00026" summary="refactor: Melhora estado RAG e tratamento de mensagens no fluxo LangGraph&#10;&#10;- Refatora funções RAG (Retrieve, Route, Grade, Respond, Fallback) para modificar apenas seus campos de estado específicos, removendo adições de SystemMessage para passos intermediários.&#10;- Atualiza RouterFunction para adicionar o HumanMessage inicial ao estado.&#10;- Modifica RAGResponseFunction e FallbackFunction para gerar respostas invocando diretamente o LLM com o histórico completo de mensagens do estado, precedido por um SystemMessage dinâmico contendo contexto ou instruções de fallback. Remove dependência de cadeias/parsers separados para geração de resposta.&#10;- Altera ponto de entrada do fluxo RAG de `add_human_message` (removido) para `route`.&#10;- Passa MemorySaver explicitamente para RAGSystem em `rag_test.py`.&#10;- Remove importações e métodos não utilizados relacionados à lógica anterior de geração de resposta.">
+      <option name="closed" value="true" />
+      <created>1744054022286</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1744054022286</updated>
+    </task>
+    <task id="LOCAL-00027" summary="refactor: Melhora estado RAG e tratamento de mensagens no fluxo LangGraph&#10;&#10;- Refatora funções RAG (Retrieve, Route, Grade, Respond, Fallback) para modificar apenas seus campos de estado específicos, removendo adições de SystemMessage para passos intermediários.&#10;- Atualiza RouterFunction para adicionar o HumanMessage inicial ao estado.&#10;- Modifica RAGResponseFunction e FallbackFunction para gerar respostas invocando diretamente o LLM com o histórico completo de mensagens do estado, precedido por um SystemMessage dinâmico contendo contexto ou instruções de fallback. Remove dependência de cadeias/parsers separados para geração de resposta.&#10;- Altera ponto de entrada do fluxo RAG de `add_human_message` (removido) para `route`.&#10;- Passa MemorySaver explicitamente para RAGSystem em `rag_test.py`.&#10;- Remove importações e métodos não utilizados relacionados à lógica anterior de geração de resposta.">
+      <option name="closed" value="true" />
+      <created>1744054027366</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1744054027366</updated>
+    </task>
+    <option name="localTasksCounter" value="28" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Grande revisão do código" />
     <MESSAGE value="Modificação do tempo de espera." />
     <MESSAGE value="Atualização do código." />
     <MESSAGE value="Implementação da opção de escolher o modelo." />
@@ -840,9 +881,10 @@
     <MESSAGE value="Commit inicial do código que implementa o código de teste usando conceitos de serviços." />
     <MESSAGE value="Commit com o script de iniciar multiplos usuários." />
     <MESSAGE value="Adicionar documentações para os scripts desacoplados." />
-    <MESSAGE value="[ COMMIT_MSG ]" />
     <MESSAGE value="feat: Desacopla serviço BancoBot e adiciona visualização de grafo RAG&#10;&#10;- Refatora `launch_simulador.py` para rodar `bancobot_service` como um subprocesso gerenciado separadamente.&#10;  - Adiciona funções para iniciar, monitorar e limpar o processo do serviço.&#10;  - Atualiza criação do banco de dados para interagir com o serviço em execução via `UsuarioBot`.&#10;  - Melhora o tratamento de processos e a lógica de limpeza.&#10;- Atualiza backend `visualizador_interacoes` (`main.py`):&#10;  - Substitui chamada direta de `test_chatbot` por interação `UsuarioBot` direcionada à API `bancobot_service`.&#10;  - Executa interações do chatbot em threads separadas para evitar bloqueio da API.&#10;- Adiciona visualização do fluxo de trabalho RAG:&#10;  - Introduz método `visualize` em `RAGSystem` para exibir o fluxo LangGraph usando `IPython.display` e `pygraphviz`.&#10;  - Adiciona argumento de linha de comando `--visualize` a `rag_test.py` para acionar exibição do grafo.&#10;- Adiciona `ipython` a `requirements.txt` para suporte à visualização.&#10;- Modifica `start_banco_service.py` para verificar variáveis de ambiente para `OPENAI_API_KEY` se não encontrado em `.env`." />
-    <option name="LAST_COMMIT_MESSAGE" value="feat: Desacopla serviço BancoBot e adiciona visualização de grafo RAG&#10;&#10;- Refatora `launch_simulador.py` para rodar `bancobot_service` como um subprocesso gerenciado separadamente.&#10;  - Adiciona funções para iniciar, monitorar e limpar o processo do serviço.&#10;  - Atualiza criação do banco de dados para interagir com o serviço em execução via `UsuarioBot`.&#10;  - Melhora o tratamento de processos e a lógica de limpeza.&#10;- Atualiza backend `visualizador_interacoes` (`main.py`):&#10;  - Substitui chamada direta de `test_chatbot` por interação `UsuarioBot` direcionada à API `bancobot_service`.&#10;  - Executa interações do chatbot em threads separadas para evitar bloqueio da API.&#10;- Adiciona visualização do fluxo de trabalho RAG:&#10;  - Introduz método `visualize` em `RAGSystem` para exibir o fluxo LangGraph usando `IPython.display` e `pygraphviz`.&#10;  - Adiciona argumento de linha de comando `--visualize` a `rag_test.py` para acionar exibição do grafo.&#10;- Adiciona `ipython` a `requirements.txt` para suporte à visualização.&#10;- Modifica `start_banco_service.py` para verificar variáveis de ambiente para `OPENAI_API_KEY` se não encontrado em `.env`." />
+    <MESSAGE value="[ COMMIT_MSG ]" />
+    <MESSAGE value="refactor: Melhora estado RAG e tratamento de mensagens no fluxo LangGraph&#10;&#10;- Refatora funções RAG (Retrieve, Route, Grade, Respond, Fallback) para modificar apenas seus campos de estado específicos, removendo adições de SystemMessage para passos intermediários.&#10;- Atualiza RouterFunction para adicionar o HumanMessage inicial ao estado.&#10;- Modifica RAGResponseFunction e FallbackFunction para gerar respostas invocando diretamente o LLM com o histórico completo de mensagens do estado, precedido por um SystemMessage dinâmico contendo contexto ou instruções de fallback. Remove dependência de cadeias/parsers separados para geração de resposta.&#10;- Altera ponto de entrada do fluxo RAG de `add_human_message` (removido) para `route`.&#10;- Passa MemorySaver explicitamente para RAGSystem em `rag_test.py`.&#10;- Remove importações e métodos não utilizados relacionados à lógica anterior de geração de resposta." />
+    <option name="LAST_COMMIT_MESSAGE" value="refactor: Melhora estado RAG e tratamento de mensagens no fluxo LangGraph&#10;&#10;- Refatora funções RAG (Retrieve, Route, Grade, Respond, Fallback) para modificar apenas seus campos de estado específicos, removendo adições de SystemMessage para passos intermediários.&#10;- Atualiza RouterFunction para adicionar o HumanMessage inicial ao estado.&#10;- Modifica RAGResponseFunction e FallbackFunction para gerar respostas invocando diretamente o LLM com o histórico completo de mensagens do estado, precedido por um SystemMessage dinâmico contendo contexto ou instruções de fallback. Remove dependência de cadeias/parsers separados para geração de resposta.&#10;- Altera ponto de entrada do fluxo RAG de `add_human_message` (removido) para `route`.&#10;- Passa MemorySaver explicitamente para RAGSystem em `rag_test.py`.&#10;- Remove importações e métodos não utilizados relacionados à lógica anterior de geração de resposta." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -867,16 +909,17 @@
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/lc_human_agents$chatbot_server_test.coverage" NAME="chatbot server test Coverage Results" MODIFIED="1735141967192" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="C:\Users\galdu\PycharmProjects\lc-human-agents" />
     <SUITE FILE_PATH="coverage/lc_human_agents$run_services.coverage" NAME="run_services Coverage Results" MODIFIED="1742846551041" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/lc_human_agents$visualizador_backend.coverage" NAME="visualizador_backend Coverage Results" MODIFIED="1738608167151" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/lc_human_agents$visualizador_backend.coverage" NAME="visualizador_backend Coverage Results" MODIFIED="1744146242613" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/lc_human_agents$start_enxame_usuarios.coverage" NAME="start_enxame_usuarios Coverage Results" MODIFIED="1743452810922" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/lc_human_agents$export_checkpoints.coverage" NAME="export_checkpoints Coverage Results" MODIFIED="1744156092400" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/lc_human_agents$prompt_generation.coverage" NAME="prompt_generation Coverage Results" MODIFIED="1735239266449" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/lc_human_agents$document_loader_integration.coverage" NAME="document_loader_integration Coverage Results" MODIFIED="1741895137464" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
-    <SUITE FILE_PATH="coverage/lc_human_agents$rag_test.coverage" NAME="rag_test Coverage Results" MODIFIED="1744053190299" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/lc_human_agents$rag_test.coverage" NAME="rag_test Coverage Results" MODIFIED="1744232156116" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/lc_human_agents$setup_simulacoes_db.coverage" NAME="setup_db_cenarios Coverage Results" MODIFIED="1735167459458" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/" />
     <SUITE FILE_PATH="coverage/lc_human_agents$rag_system.coverage" NAME="rag_system Coverage Results" MODIFIED="1743626120825" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/source/rag/system" />
     <SUITE FILE_PATH="coverage/lc_human_agents$start_banco_service.coverage" NAME="start_banco_service Coverage Results" MODIFIED="1743452797332" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/lc_human_agents$Extract_personas.coverage" NAME="Extract personas Coverage Results" MODIFIED="1735162567412" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
-    <SUITE FILE_PATH="coverage/lc_human_agents$launcher.coverage" NAME="launcher Coverage Results" MODIFIED="1743621745572" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/lc_human_agents$launcher.coverage" NAME="launcher Coverage Results" MODIFIED="1744146295866" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/lc_human_agents$insert_cenario_persona.coverage" NAME="insert_cenario&amp;persona Coverage Results" MODIFIED="1735167495419" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/lc_human_agents$chatbot_test.coverage" NAME="chatbot_test Coverage Results" MODIFIED="1743020322202" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/lc_human_agents$gerar_missoes.coverage" NAME="gerar_missoes Coverage Results" MODIFIED="1735167511941" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />

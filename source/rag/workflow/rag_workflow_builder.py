@@ -1,9 +1,11 @@
+# source/rag/workflow/rag_workflow_builder.py
 from typing import Dict, Any, Optional, Callable
 from langgraph.graph import StateGraph, START, END
 
 from source.chat_graph.workflow_builder import Builder
 from source.chat_graph.chat_function import ChatFunction
 
+# Importa o RAGState refatorado
 from source.rag.state.rag_state import RAGState
 from source.rag.functions.rag_functions import RouterFunction, GraderFunction, RetrieveFunction, RAGResponseFunction, \
     FallbackFunction
@@ -18,32 +20,28 @@ class RAGWorkflowBuilder(Builder):
 
     def __init__(self):
         """
-        Initializes the RAGWorkflowBuilder.
+        Initializes the RAGWorkflowBuilder using the refactored RAGState.
         """
+        # A inicialização do StateGraph usa o RAGState refatorado (TypedDict)
         self._workflow = StateGraph(RAGState)
 
     def build_workflow(self, memory: BaseCheckpointSaver[str] = None) -> Any:
         """
         Compiles and returns the workflow.
-
-        Returns:
-            Compiled workflow
         """
+        compile_args = {}
         if memory is not None:
-            return self._workflow.compile(checkpointer=memory)
-        else:
-            return self._workflow.compile()
+            compile_args['checkpointer'] = memory
 
-    def add_node(self, name: str, function: ChatFunction) -> 'RAGWorkflowBuilder':
+        # Adiciona interrupção antes dos nós que podem precisar de entrada humana ou revisão
+        # compile_args['interrupt_before'] = ["route", "grade"] # Exemplo se quisesse interrupção
+
+        return self._workflow.compile(**compile_args)
+
+
+    def add_node(self, name: str, function: Callable) -> 'RAGWorkflowBuilder': # Aceita Callable genérico
         """
         Adds a node to the workflow.
-
-        Args:
-            name: Name of the node
-            function: Function to execute at the node
-
-        Returns:
-            Self for method chaining
         """
         self._workflow.add_node(name, function)
         return self
@@ -51,29 +49,14 @@ class RAGWorkflowBuilder(Builder):
     def add_edge(self, to_node: str, from_node: str = START) -> 'RAGWorkflowBuilder':
         """
         Adds an edge between nodes.
-
-        Args:
-            to_node: Destination node
-            from_node: Source node (defaults to START)
-
-        Returns:
-            Self for method chaining
         """
         self._workflow.add_edge(from_node, to_node)
         return self
 
-    def add_conditional_edge(self, from_node: str, condition_function: Callable,
+    def add_conditional_edge(self, from_node: str, condition_function: Callable[[RAGState], str],
                              routes: Dict[str, str]) -> 'RAGWorkflowBuilder':
         """
         Adds conditional edges from a node.
-
-        Args:
-            from_node: Source node
-            condition_function: Function to determine the route
-            routes: Mapping of condition results to destination nodes
-
-        Returns:
-            Self for method chaining
         """
         self._workflow.add_conditional_edges(from_node, condition_function, routes)
         return self
@@ -83,66 +66,55 @@ class RAGWorkflowBuilder(Builder):
                            grader: GraderFunction,
                            responder: RAGResponseFunction,
                            fallback: FallbackFunction,
-                           memory: BaseCheckpointSaver[str] = None) -> Any:
+                           memory: Optional[BaseCheckpointSaver[str]] = None) -> Any:
         """
         Builds a complete RAG workflow with all required components.
-
-        Args:
-            router: Router function for selecting datasources
-            grader: Grader function for assessing document relevance
-            responder: Function for generating responses from relevant documents
-            fallback: Function for handling cases with no relevant documents
-            memory: Optional memory saver for checkpointing
-
-        Returns:
-            Compiled RAG workflow
         """
-        # Create the retriever function using the retrievers from the responder
         retriever = RetrieveFunction(responder.retrievers)
 
-        # Define conditional routing function
+        # Função condicional ajustada para acesso via dicionário
         def decide_next_step(state: RAGState) -> str:
             """
-            Decides the next step based on document relevance.
+            Decides the next step based on document relevance using dictionary access.
 
             Args:
-                state: Current workflow state (RAGState)
+                state: Current workflow state (RAGState TypedDict)
 
             Returns:
-                Route to take
+                Route to take ('relevant' or 'irrelevant')
             """
             print("---DECIDE NEXT STEP---")
-            if state.documents_relevant and state.relevant_context:
-                print(
-                    f"Documents are relevant ({len(state.relevant_context)} relevant documents). Generating response.")
+            # Acesso via dicionário usando .get() para segurança
+            documents_are_relevant = state.get('documents_relevant', False)
+            relevant_docs = state.get('relevant_context', [])
+
+            if documents_are_relevant and relevant_docs:
+                print(f"Routing to 'relevant': {len(relevant_docs)} relevant documents found.")
                 return "relevant"
             else:
-                print("No relevant documents found. Responding with fallback.")
+                print("Routing to 'irrelevant': No relevant documents found or relevance flag is False.")
                 return "irrelevant"
 
-        # Add nodes
+        # Adiciona nós
         self.add_node("route", router)
         self.add_node("retrieve", retriever)
         self.add_node("grade", grader)
         self.add_node("respond_with_relevant", responder)
         self.add_node("respond_with_fallback", fallback)
 
-        # Set entry point to route
+        # Define ponto de entrada e arestas
         self._workflow.set_entry_point("route")
+        self.add_edge(from_node="route", to_node="retrieve")
+        self.add_edge(from_node="retrieve", to_node="grade")
 
-        # Add regular edges
-        self.add_edge("retrieve", "route")
-        self.add_edge("grade", "retrieve")
-
-        # Add conditional edges
+        # Arestas condicionais baseadas na função ajustada
         self.add_conditional_edge("grade", decide_next_step, {
             "relevant": "respond_with_relevant",
             "irrelevant": "respond_with_fallback"
         })
 
-        # Add end edges
-        self._workflow.add_edge("respond_with_relevant", END)
-        self._workflow.add_edge("respond_with_fallback", END)
+        # Arestas para o final
+        self.add_edge(from_node="respond_with_relevant", to_node=END)
+        self.add_edge(from_node="respond_with_fallback", to_node=END)
 
-        # Compile and return the workflow
         return self.build_workflow(memory=memory)
