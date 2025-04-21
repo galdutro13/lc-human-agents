@@ -161,7 +161,7 @@ class RAGSystem:
 
     def visualize(self):
         try:
-            display(Image(self._workflow.get_graph().draw_png()))
+            print(self._workflow.get_graph().draw_mermaid())
         except ImportError:
             print(
                 "You likely need to install dependencies for pygraphviz, see more here https://github.com/pygraphviz/pygraphviz/blob/main/INSTALL.txt"

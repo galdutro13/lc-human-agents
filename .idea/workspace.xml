@@ -4,13 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0cea1559-660a-43f1-803f-04da1cdf897d" name="Changes" comment="refactor: Migra estado RAG para TypedDict e adiciona ferramenta de exportação de checkpoint&#10;&#10;- Refatora `RAGState` de Pydantic `BaseModel` para `typing.TypedDict`, herdando de `langgraph.graph.MessagesState`.&#10;- Atualiza funções RAG (`rag_functions.py`) e construtor de fluxo (`rag_workflow_builder.py`) para usar acesso estilo dicionário (`.get()`) para elementos de estado.&#10;- Modifica funções RAG para retornar dicionários parciais para atualizações de estado.&#10;- Adiciona novo script `tools/export_checkpoints.py` para exportar dados de conversas de checkpoints SQLite para CSV, incluindo detalhes de mensagens e metadados do LLM.&#10;- Garante que `RAGSystem` passe o objeto `memory` saver corretamente ao construir o fluxo de trabalho.&#10;- Remove métodos de propriedade redundantes e atualiza logs/tratamento de erros nas funções RAG.">
-      <change afterPath="$PROJECT_DIR$/personas.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/lc-human-agents.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/lc-human-agents.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="0cea1559-660a-43f1-803f-04da1cdf897d" name="Changes" comment="Adicionado o arquivo `personas.json` para a instancia de vários usuários com prompts diferentes, através do script `start_enxame_usuarios`.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/RAG Cartões/config.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/RAG Cartões/config.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/rag/config/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/rag/config/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/rag/functions/rag_functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/rag/functions/rag_functions.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/rag/system/rag_system.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/rag/system/rag_system.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -119,7 +118,7 @@
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;terminal&quot;,
     &quot;vcs.patch.path&quot;: &quot;C:/Users/galdu/OneDrive/Desktop&quot;,
     &quot;vcs.patch.to.clipboard&quot;: &quot;true&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
@@ -154,7 +153,7 @@
       <recent name="C:\Users\galdu\PycharmProjects\lc-human-agents\source" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.start_enxame_usuarios">
+  <component name="RunManager" selected="Python.rag_test">
     <configuration name="Extract personas" type="PythonConfigurationType" factoryName="Python" folderName="TOOLS">
       <module name="lc-human-agents" />
       <option name="ENV_FILES" value="" />
@@ -500,19 +499,19 @@
       <method v="2" />
     </configuration>
     <list>
+      <item itemvalue="FastAPI.visualizador_backend" />
       <item itemvalue="Python.Extract personas" />
-      <item itemvalue="Python.chatbot_test" />
-      <item itemvalue="Python.document_loader_integration" />
-      <item itemvalue="Python.gerar_missoes" />
-      <item itemvalue="Python.insert_cenario&amp;persona" />
-      <item itemvalue="Python.launcher" />
       <item itemvalue="Python.prompt_generation" />
-      <item itemvalue="Python.rag_system" />
-      <item itemvalue="Python.rag_test" />
-      <item itemvalue="Python.setup_db_cenarios" />
       <item itemvalue="Python.start_banco_service" />
       <item itemvalue="Python.start_enxame_usuarios" />
-      <item itemvalue="FastAPI.visualizador_backend" />
+      <item itemvalue="Python.document_loader_integration" />
+      <item itemvalue="Python.rag_test" />
+      <item itemvalue="Python.gerar_missoes" />
+      <item itemvalue="Python.insert_cenario&amp;persona" />
+      <item itemvalue="Python.setup_db_cenarios" />
+      <item itemvalue="Python.chatbot_test" />
+      <item itemvalue="Python.launcher" />
+      <item itemvalue="Python.rag_system" />
       <item itemvalue="Python tests.Python tests for workflow_integration_test.TestChatGraphPromptIntegration" />
       <item itemvalue="Python tests.Python tests for workflow_integration_test.TestChatGraphPromptIntegration.test_chat_function" />
       <item itemvalue="Python tests.Python tests for workflow_integration_test.TestChatGraphPromptIntegration.test_default_workflow" />
@@ -639,6 +638,10 @@
       <workItem from="1744396868964" duration="17211000" />
       <workItem from="1744848184331" duration="67000" />
       <workItem from="1744911701738" duration="1213000" />
+      <workItem from="1745100810199" duration="3444000" />
+      <workItem from="1745104301148" duration="75000" />
+      <workItem from="1745104901305" duration="2454000" />
+      <workItem from="1745264753369" duration="1724000" />
     </task>
     <task id="LOCAL-00001" summary="Initial Commit.">
       <option name="closed" value="true" />
@@ -864,14 +867,21 @@
       <option name="project" value="LOCAL" />
       <updated>1744232584920</updated>
     </task>
-    <option name="localTasksCounter" value="29" />
+    <task id="LOCAL-00029" summary="Adicionado o arquivo `personas.json` para a instancia de vários usuários com prompts diferentes, através do script `start_enxame_usuarios`.">
+      <option name="closed" value="true" />
+      <created>1745100926216</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1745100926216</updated>
+    </task>
+    <option name="localTasksCounter" value="30" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Atualização do código." />
     <MESSAGE value="Implementação da opção de escolher o modelo." />
     <MESSAGE value="Permitir que se baixe as mensagens em forma de um excel." />
     <MESSAGE value="COMMIT_MSG" />
@@ -896,7 +906,8 @@
     <MESSAGE value="refactor: Melhora estado RAG e tratamento de mensagens no fluxo LangGraph&#10;&#10;- Refatora funções RAG (Retrieve, Route, Grade, Respond, Fallback) para modificar apenas seus campos de estado específicos, removendo adições de SystemMessage para passos intermediários.&#10;- Atualiza RouterFunction para adicionar o HumanMessage inicial ao estado.&#10;- Modifica RAGResponseFunction e FallbackFunction para gerar respostas invocando diretamente o LLM com o histórico completo de mensagens do estado, precedido por um SystemMessage dinâmico contendo contexto ou instruções de fallback. Remove dependência de cadeias/parsers separados para geração de resposta.&#10;- Altera ponto de entrada do fluxo RAG de `add_human_message` (removido) para `route`.&#10;- Passa MemorySaver explicitamente para RAGSystem em `rag_test.py`.&#10;- Remove importações e métodos não utilizados relacionados à lógica anterior de geração de resposta." />
     <MESSAGE value="[ COMMIT_MSG ]" />
     <MESSAGE value="refactor: Migra estado RAG para TypedDict e adiciona ferramenta de exportação de checkpoint&#10;&#10;- Refatora `RAGState` de Pydantic `BaseModel` para `typing.TypedDict`, herdando de `langgraph.graph.MessagesState`.&#10;- Atualiza funções RAG (`rag_functions.py`) e construtor de fluxo (`rag_workflow_builder.py`) para usar acesso estilo dicionário (`.get()`) para elementos de estado.&#10;- Modifica funções RAG para retornar dicionários parciais para atualizações de estado.&#10;- Adiciona novo script `tools/export_checkpoints.py` para exportar dados de conversas de checkpoints SQLite para CSV, incluindo detalhes de mensagens e metadados do LLM.&#10;- Garante que `RAGSystem` passe o objeto `memory` saver corretamente ao construir o fluxo de trabalho.&#10;- Remove métodos de propriedade redundantes e atualiza logs/tratamento de erros nas funções RAG." />
-    <option name="LAST_COMMIT_MESSAGE" value="refactor: Migra estado RAG para TypedDict e adiciona ferramenta de exportação de checkpoint&#10;&#10;- Refatora `RAGState` de Pydantic `BaseModel` para `typing.TypedDict`, herdando de `langgraph.graph.MessagesState`.&#10;- Atualiza funções RAG (`rag_functions.py`) e construtor de fluxo (`rag_workflow_builder.py`) para usar acesso estilo dicionário (`.get()`) para elementos de estado.&#10;- Modifica funções RAG para retornar dicionários parciais para atualizações de estado.&#10;- Adiciona novo script `tools/export_checkpoints.py` para exportar dados de conversas de checkpoints SQLite para CSV, incluindo detalhes de mensagens e metadados do LLM.&#10;- Garante que `RAGSystem` passe o objeto `memory` saver corretamente ao construir o fluxo de trabalho.&#10;- Remove métodos de propriedade redundantes e atualiza logs/tratamento de erros nas funções RAG." />
+    <MESSAGE value="Adicionado o arquivo `personas.json` para a instancia de vários usuários com prompts diferentes, através do script `start_enxame_usuarios`." />
+    <option name="LAST_COMMIT_MESSAGE" value="Adicionado o arquivo `personas.json` para a instancia de vários usuários com prompts diferentes, através do script `start_enxame_usuarios`." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -926,7 +937,7 @@
     <SUITE FILE_PATH="coverage/lc_human_agents$export_checkpoints.coverage" NAME="export_checkpoints Coverage Results" MODIFIED="1744156092400" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/lc_human_agents$prompt_generation.coverage" NAME="prompt_generation Coverage Results" MODIFIED="1735239266449" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/lc_human_agents$document_loader_integration.coverage" NAME="document_loader_integration Coverage Results" MODIFIED="1741895137464" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
-    <SUITE FILE_PATH="coverage/lc_human_agents$rag_test.coverage" NAME="rag_test Coverage Results" MODIFIED="1744406119990" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/lc_human_agents$rag_test.coverage" NAME="rag_test Coverage Results" MODIFIED="1745265008399" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/lc_human_agents$setup_simulacoes_db.coverage" NAME="setup_db_cenarios Coverage Results" MODIFIED="1735167459458" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/" />
     <SUITE FILE_PATH="coverage/lc_human_agents$rag_system.coverage" NAME="rag_system Coverage Results" MODIFIED="1743626120825" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/source/rag/system" />
     <SUITE FILE_PATH="coverage/lc_human_agents$start_banco_service.coverage" NAME="start_banco_service Coverage Results" MODIFIED="1744479983515" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />

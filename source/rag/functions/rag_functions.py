@@ -397,26 +397,22 @@ class FallbackFunction(ChatFunction):
 
         # Acesso via dicionário com default
         question = state.get('question')
-        messages = state.get('messages', []) # Obtém histórico de mensagens
+        messages = state.get('messages', [])  # Obtém histórico de mensagens
 
         if not question:
             print("No question in state for fallback.")
             generic_response = "I cannot provide an answer as the question is missing."
             ai_message = AIMessage(content=generic_response)
-            return {"response": generic_response, "messages": [ai_message]} # Atualização parcial
+            return {"response": generic_response, "messages": [ai_message]}  # Atualização parcial
 
         try:
-            # Prompt para o LLM gerar uma resposta genérica/educada
-            system_prompt = """You are a helpful assistant. The user asked a question, but the retrieved documents were not relevant or helpful to answer it.
-            Please provide a polite response stating that you couldn't find specific information in the knowledge base for this question.
-            Avoid making up information. You can offer general assistance if appropriate."""
+            # Usa o prompt de fallback da configuração em vez do prompt estático
+            system_prompt = self._config.global_prompts.fallback_prompt
 
             # Prepara mensagens para o LLM: prompt do sistema + histórico
             messages_for_llm = [SystemMessage(content=system_prompt)] + messages
 
             response_ai = self._model.invoke(messages_for_llm)
-            # print(response_ai)
-            # print(messages)
             print("Fallback response generated.")
 
             # Retorna atualização parcial
@@ -426,7 +422,7 @@ class FallbackFunction(ChatFunction):
             print(f"Error generating fallback response: {str(e)}")
             error_response = "I apologize, but I couldn't find relevant information to answer your question at this time."
             ai_message = AIMessage(content=error_response)
-             # Retorna atualização parcial
+            # Retorna atualização parcial
             return {"response": error_response, "messages": [ai_message]}
 
     @property

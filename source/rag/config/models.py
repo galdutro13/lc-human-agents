@@ -39,6 +39,7 @@ class GlobalPrompts(BaseModel):
     """Global system prompts."""
     router_prompt: str
     grader_prompt: str
+    fallback_prompt: str
 
 
 class EmbeddingConfig(BaseModel):

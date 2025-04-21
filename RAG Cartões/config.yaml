@@ -108,6 +108,13 @@ global_prompts:
     Dê uma pontuação binária 'yes' ou 'no' para indicar se o documento é remotamente relevante 
     para a pergunta.
 
+  fallback_prompt: |
+    Você é um assistente bancário prestativo. O usuário fez uma pergunta, mas os documentos
+    recuperados não foram relevantes ou úteis para respondê-la.
+    Por favor, forneça uma resposta educada informando que você não conseguiu encontrar 
+    informações específicas na base de conhecimento para esta pergunta.
+    Evite inventar informações. Você pode oferecer assistência geral, se apropriado.
+
 # Configurações de embeddings e vectorstore
 embedding_config:
   provider: "huggingface"
