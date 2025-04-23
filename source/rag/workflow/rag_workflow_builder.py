@@ -7,7 +7,7 @@ from source.chat_graph.chat_function import ChatFunction
 
 # Importa o RAGState refatorado
 from source.rag.state.rag_state import RAGState
-from source.rag.functions.rag_functions import (
+from source.rag.functions import (
     RouterFunction, GraderFunction, RetrieveFunction, RAGResponseFunction,
     FallbackFunction, RewriteQueryFunction, AggregateDocsFunction,
     prepare_next_query, prepare_for_grading, should_continue_loop,
