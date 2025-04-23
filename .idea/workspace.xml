@@ -4,15 +4,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0cea1559-660a-43f1-803f-04da1cdf897d" name="Changes" comment="Transferir o prompt de fallback para o arquivo de configurações.">
+    <list default="true" id="0cea1559-660a-43f1-803f-04da1cdf897d" name="Changes" comment="Introdução do código de melhoria do prompt.">
+      <change afterPath="$PROJECT_DIR$/source/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/RAG Cartões/config.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/RAG Cartões/config.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/rag/config/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/rag/config/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/chat_graph/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/chat_graph/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/chat_graph/llms.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/chat_graph/llms.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/chat_graph/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/constantes/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/constantes/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/constantes/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/source/rag/functions/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/rag/functions/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/source/rag/functions/rag_functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/rag/functions/rag_functions.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/rag/state/rag_state.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/rag/state/rag_state.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/source/rag/system/rag_system.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/rag/system/rag_system.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/source/rag/workflow/rag_workflow_builder.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/rag/workflow/rag_workflow_builder.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/tests/integratio_test/rag_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/tests/integratio_test/rag_test.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -115,7 +118,7 @@
     "database.data.extractors.current.id": "Comma-separated (CSV)_id",
     "git-widget-placeholder": "test__services",
     "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "C:/Users/galdu/PycharmProjects/lc-human-agents/tools/enxame_usuario/start_usuarios.py",
+    "last_opened_file_path": "C:/Users/galdu/PycharmProjects/lc-human-agents/source/constantes",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -149,11 +152,11 @@
       <recent name="C:\Users\galdu\PycharmProjects\lc-human-agents\source\tests\chatbot_service_test" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\galdu\PycharmProjects\lc-human-agents\source\constantes" />
       <recent name="C:\Users\galdu\PycharmProjects\lc-human-agents\tools" />
       <recent name="C:\Users\galdu\PycharmProjects\lc-human-agents" />
       <recent name="C:\Users\galdu\PycharmProjects\lc-human-agents\scripts" />
       <recent name="C:\Users\galdu\PycharmProjects\lc-human-agents\tools\db_work" />
-      <recent name="C:\Users\galdu\PycharmProjects\lc-human-agents\source" />
     </key>
   </component>
   <component name="RunManager" selected="Python.rag_test">
@@ -645,7 +648,7 @@
       <workItem from="1745104301148" duration="75000" />
       <workItem from="1745104901305" duration="2454000" />
       <workItem from="1745264753369" duration="14485000" />
-      <workItem from="1745432103536" duration="1742000" />
+      <workItem from="1745432103536" duration="3305000" />
     </task>
     <task id="LOCAL-00001" summary="Initial Commit.">
       <option name="closed" value="true" />
@@ -887,14 +890,21 @@
       <option name="project" value="LOCAL" />
       <updated>1745267298114</updated>
     </task>
-    <option name="localTasksCounter" value="31" />
+    <task id="LOCAL-00031" summary="Introdução do código de melhoria do prompt.">
+      <option name="closed" value="true" />
+      <created>1745434415354</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1745434415354</updated>
+    </task>
+    <option name="localTasksCounter" value="32" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Permitir que se baixe as mensagens em forma de um excel." />
     <MESSAGE value="COMMIT_MSG" />
     <MESSAGE value="Implement new interaction API endpoint and frontend integration&#10;&#10;This patch introduces a new API endpoint /new_interaction to the backend, allowing the frontend to trigger chatbot interactions dynamically.&#10;&#10;Key changes include:&#10;&#10;Backend (main.py):&#10;&#10;Added a /new_interaction POST endpoint that receives a user query and executes the test_chatbot function.&#10;&#10;Implemented request and response models using Pydantic for API clarity.&#10;&#10;Integrated basic logging for improved error tracking and debugging.&#10;&#10;Frontend (st_frontend.py):&#10;&#10;Implemented logic to start the backend server directly from the Streamlit frontend using threading and uvicorn. This simplifies deployment and ensures the backend is running when the frontend is accessed.&#10;&#10;Added path configuration to ensure the frontend can locate and import backend modules correctly.&#10;&#10;Chatbot Tests (source/tests/chatbot_test):&#10;&#10;Corrected import paths in banco.py and main.py to align with project structure.&#10;&#10;Exported test_chatbot and chatbot classes in __init__.py to make them accessible to other modules.&#10;&#10;Modified the default system message in UsuarioBot to represent a different persona (Alberto Vasconcelos).&#10;&#10;These changes enhance the system's functionality by enabling user-initiated chatbot interactions through the frontend and streamlining the setup process for both development and potentially deployment." />
     <MESSAGE value="COMMIT_MESSAGE" />
@@ -919,7 +929,8 @@
     <MESSAGE value="refactor: Migra estado RAG para TypedDict e adiciona ferramenta de exportação de checkpoint&#10;&#10;- Refatora `RAGState` de Pydantic `BaseModel` para `typing.TypedDict`, herdando de `langgraph.graph.MessagesState`.&#10;- Atualiza funções RAG (`rag_functions.py`) e construtor de fluxo (`rag_workflow_builder.py`) para usar acesso estilo dicionário (`.get()`) para elementos de estado.&#10;- Modifica funções RAG para retornar dicionários parciais para atualizações de estado.&#10;- Adiciona novo script `tools/export_checkpoints.py` para exportar dados de conversas de checkpoints SQLite para CSV, incluindo detalhes de mensagens e metadados do LLM.&#10;- Garante que `RAGSystem` passe o objeto `memory` saver corretamente ao construir o fluxo de trabalho.&#10;- Remove métodos de propriedade redundantes e atualiza logs/tratamento de erros nas funções RAG." />
     <MESSAGE value="Adicionado o arquivo `personas.json` para a instancia de vários usuários com prompts diferentes, através do script `start_enxame_usuarios`." />
     <MESSAGE value="Transferir o prompt de fallback para o arquivo de configurações." />
-    <option name="LAST_COMMIT_MESSAGE" value="Transferir o prompt de fallback para o arquivo de configurações." />
+    <MESSAGE value="Introdução do código de melhoria do prompt." />
+    <option name="LAST_COMMIT_MESSAGE" value="Introdução do código de melhoria do prompt." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -949,7 +960,7 @@
     <SUITE FILE_PATH="coverage/lc_human_agents$export_checkpoints.coverage" NAME="export_checkpoints Coverage Results" MODIFIED="1744156092400" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/lc_human_agents$prompt_generation.coverage" NAME="prompt_generation Coverage Results" MODIFIED="1735239266449" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/lc_human_agents$document_loader_integration.coverage" NAME="document_loader_integration Coverage Results" MODIFIED="1741895137464" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
-    <SUITE FILE_PATH="coverage/lc_human_agents$rag_test.coverage" NAME="rag_test Coverage Results" MODIFIED="1745433620165" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/lc_human_agents$rag_test.coverage" NAME="rag_test Coverage Results" MODIFIED="1745435459310" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/lc_human_agents$setup_simulacoes_db.coverage" NAME="setup_db_cenarios Coverage Results" MODIFIED="1735167459458" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/" />
     <SUITE FILE_PATH="coverage/lc_human_agents$rag_system.coverage" NAME="rag_system Coverage Results" MODIFIED="1743626120825" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/source/rag/system" />
     <SUITE FILE_PATH="coverage/lc_human_agents$start_banco_service.coverage" NAME="start_banco_service Coverage Results" MODIFIED="1744479983515" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />

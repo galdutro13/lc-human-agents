@@ -1,10 +1,9 @@
 from functools import lru_cache
-from typing import Any
 
 from langchain_openai import ChatOpenAI
 from langchain_google_genai import GoogleGenerativeAI
 
-from source.chat_graph.models import ModelName
+from source.constantes.models import ModelName
 from source.constantes import TEMPERATURE, FREQUENCY_PENALTY, PRESENCE_PENALTY
 
 

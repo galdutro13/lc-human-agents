@@ -3,7 +3,7 @@ import argparse
 import secrets
 from langgraph.checkpoint.memory import MemorySaver
 
-from source.chat_graph.models import ModelName
+from source.constantes.models import ModelName
 from source.rag.system import RAGSystem
 
 from dotenv import load_dotenv

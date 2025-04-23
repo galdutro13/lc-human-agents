@@ -10,7 +10,8 @@ from source.rag.state.rag_state import RAGState
 from source.rag.functions.rag_functions import (
     RouterFunction, GraderFunction, RetrieveFunction, RAGResponseFunction,
     FallbackFunction, RewriteQueryFunction, AggregateDocsFunction,
-    prepare_next_query, prepare_for_grading, should_continue_loop
+    prepare_next_query, prepare_for_grading, should_continue_loop,
+    CleanupAggregatedDocsFunction
 )
 from langchain_core.messages import HumanMessage, SystemMessage
 from langgraph.checkpoint.base import BaseCheckpointSaver
@@ -71,6 +72,7 @@ class RAGWorkflowBuilder(Builder):
                            fallback: FallbackFunction,
                            rewriter: RewriteQueryFunction,
                            aggregator: AggregateDocsFunction,
+                           cleanup: CleanupAggregatedDocsFunction,
                            memory: Optional[BaseCheckpointSaver[str]] = None) -> Any:
         """
         Builds a complete RAG workflow with all required components,
@@ -111,6 +113,7 @@ class RAGWorkflowBuilder(Builder):
         self.add_node("grade", grader)
         self.add_node("respond_with_relevant", responder)
         self.add_node("respond_with_fallback", fallback)
+        self.add_node("cleanup_aggregated_docs", cleanup)  # Novo nó para limpeza
 
         # Define ponto de entrada
         self._workflow.set_entry_point("rewrite_query")
@@ -138,8 +141,11 @@ class RAGWorkflowBuilder(Builder):
             "irrelevant": "respond_with_fallback"
         })
 
-        # Arestas finais para o fim do fluxo
-        self.add_edge(from_node="respond_with_relevant", to_node=END)
-        self.add_edge(from_node="respond_with_fallback", to_node=END)
+        # Inclui a etapa de limpeza após as respostas
+        self.add_edge(from_node="respond_with_relevant", to_node="cleanup_aggregated_docs")
+        self.add_edge(from_node="respond_with_fallback", to_node="cleanup_aggregated_docs")
+
+        # Final do fluxo após a limpeza
+        self.add_edge(from_node="cleanup_aggregated_docs", to_node=END)
 
         return self.build_workflow(memory=memory)

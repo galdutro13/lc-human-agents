@@ -1,13 +1,10 @@
-# Atualizar importações no início do arquivo rag_system.py:
-
 import os
-import secrets
 import shutil
 from typing import Dict, Any, Optional, List
 
 from langgraph.checkpoint.base import BaseCheckpointSaver
 
-from source.chat_graph.models import ModelName
+from source.constantes.models import ModelName
 from source.chat_graph.llms import get_llm
 
 from source.rag.config import ConfigurationManager, YAMLConfigurationStrategy, RAGConfig
@@ -15,11 +12,9 @@ from source.rag.document import FileSystemDocumentLoader, StandardDocumentProces
 from source.rag.vectorstore import ChromaVectorStoreFactory
 from source.rag.functions import (
     RouterFunction, GraderFunction, RAGResponseFunction, FallbackFunction,
-    RewriteQueryFunction, AggregateDocsFunction  # Novas funções
+    RewriteQueryFunction, AggregateDocsFunction, CleanupAggregatedDocsFunction  # Adicionada função de limpeza
 )
 from source.rag.workflow import RAGWorkflowBuilder
-
-from IPython.display import display, Image
 
 class RAGSystem:
     """
@@ -106,9 +101,12 @@ class RAGSystem:
         responder = RAGResponseFunction(self._config, self._vectorstores, model)
         fallback = FallbackFunction(self._config, model)
 
-        # Novos componentes para o fluxo de reescrita e loop
+        # Componentes para o fluxo de reescrita e loop
         rewriter = RewriteQueryFunction(self._config, model)
         aggregator = AggregateDocsFunction()
+
+        # Nova função de limpeza
+        cleanup = CleanupAggregatedDocsFunction()
 
         # Build the workflow
         builder = RAGWorkflowBuilder()
@@ -119,6 +117,7 @@ class RAGSystem:
             fallback=fallback,
             rewriter=rewriter,
             aggregator=aggregator,
+            cleanup=cleanup,
             memory=self._memory
         )
 

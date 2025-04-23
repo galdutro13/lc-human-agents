@@ -162,6 +162,43 @@ class AggregateDocsFunction(ChatFunction):
     def model(self) -> Any:
         return None
 
+
+class CleanupAggregatedDocsFunction(ChatFunction):
+    """
+    Cleans up the aggregated documents after completion of the workflow.
+    This ensures that subsequent queries start with a clean slate.
+    """
+
+    def __init__(self):
+        pass
+
+    def __call__(self, state: RAGState) -> Dict[str, Any]:
+        """
+        Cleans up the aggregated documents from the state.
+
+        Args:
+            state: Current state of the workflow (RAGState TypedDict)
+
+        Returns:
+            Partial dictionary with empty aggregated_docs
+        """
+        print("---CLEANUP AGGREGATED DOCS---")
+
+        # Get the current count for logging purposes
+        current_count = len(state.get('aggregated_docs', []))
+        print(f"Cleaning up {current_count} aggregated documents")
+
+        # Return only the cleaned field
+        return {"aggregated_docs": []}
+
+    @property
+    def prompt(self) -> Any:
+        return None
+
+    @property
+    def model(self) -> Any:
+        return None
+
 class RetrieveFunction(ChatFunction):
     """
     Retrieves documents from the selected datasource.
