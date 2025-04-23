@@ -39,7 +39,7 @@ def iniciar_usuario(id_usuario, prompt_personalizado=None, api_url="http://local
 
     # Usar o prompt personalizado ou manter o padrão
     usuario_bot = UsuarioBot(
-        think_exp=False,
+        think_exp=True,
         system_message=prompt_personalizado,
         api_url=api_url,
         typing_speed_wpm=typing_speed_wpm,

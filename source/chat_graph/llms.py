@@ -17,6 +17,8 @@ def get_llm(model_name: ModelName) -> ChatOpenAI | GoogleGenerativeAI:
     """
     if model_name in [ModelName.GPT4_MINI, ModelName.GPT4]:
         return get_openai_llm(model_name)
+    elif model_name in [ModelName.O4_MINI]:
+        return get_openai_thinking_llm(model_name)
     elif model_name in [ModelName.GEMINI_THINKING_EXP]:
         return get_google_model(model_name)
     else:
@@ -36,6 +38,27 @@ def get_openai_llm(model_name: ModelName) -> ChatOpenAI:
                            temperature=TEMPERATURE,
                            presence_penalty=PRESENCE_PENALTY,
                            frequency_penalty=FREQUENCY_PENALTY)
+        return model
+    except Exception as e:
+        raise ValueError(f"Error loading the model {model_name}: {e}")
+
+@lru_cache(maxsize=4)
+def get_openai_thinking_llm(model_name: ModelName) -> ChatOpenAI:
+    """
+
+    :param model_name:
+    :return:
+    """
+    openai_model: str = model_name.value
+    reasoning = {
+        "effort": "low"  # 'low', 'medium', or 'high'
+    }
+
+    try:
+        model = ChatOpenAI(
+                    model=openai_model,
+                    use_responses_api=True,
+                    model_kwargs={"reasoning": reasoning})
         return model
     except Exception as e:
         raise ValueError(f"Error loading the model {model_name}: {e}")

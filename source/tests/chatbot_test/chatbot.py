@@ -71,7 +71,7 @@ class ChatBotBase:
             print(f"[{self.thread_id}] Usando GEMINI_THINKING_EXP")
             return get_llm(ModelName.GEMINI_THINKING_EXP)
         print(f"[{self.thread_id}] Usando GPT4_MINI")
-        return get_llm(ModelName.GPT4_MINI)
+        return get_llm(ModelName.GPT4)
 
     def _get_memory_saver(self, use_sqlitesaver: bool) -> Union[MemorySaver, SqliteSaver]:
         """
@@ -105,9 +105,6 @@ class ChatBotRag(ChatBotBase):
         as mensagens serão salvas em memória ou em banco de dados.
         """
         self.model = self._get_model(self.think_exp)
-        self.prompt = CustomSystemPromptStrategy(
-            prompt_template=self.system_message
-        ).generate_prompt()
 
         memory_saver = self._get_memory_saver(use_sqlitesaver)
 

@@ -19,7 +19,7 @@ def main():
                         help='Root directory containing configuration and documents')
     parser.add_argument('--reindex', action='store_true',
                         help='Force reindexing even for existing datasources')
-    parser.add_argument('--model', type=str, choices=['gpt4o-mini', 'gpt4o'], default='gpt4o-mini',
+    parser.add_argument('--model', type=str, choices=['gpt4o-mini', 'gpt4o', 'o4-mini'], default='gpt4o-mini',
                         help='Language model to use')
     parser.add_argument('--show-messages', action='store_true',
                         help='Show message history in the output')
@@ -30,7 +30,8 @@ def main():
     # Map model name to enum
     model_map = {
         'gpt4o-mini': ModelName.GPT4_MINI,
-        'gpt4o': ModelName.GPT4
+        'gpt4o': ModelName.GPT4,
+        'o4-mini': ModelName.O4_MINI
     }
     model_name = model_map[args.model]
 

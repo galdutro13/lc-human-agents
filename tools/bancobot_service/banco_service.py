@@ -49,7 +49,7 @@ async def process_message(request: MessageRequest = Body(...)):
     # Verifica se já existe um bot para essa sessão
     if session_id not in bot_instances:
         # Cria uma nova instância de BancoBot para a sessão
-        bot_instances[session_id] = BancoBot(think_exp=False)
+        bot_instances[session_id] = BancoBot(think_exp=True)
         print(f"Nova sessão criada: {session_id}")
 
     # Processa a mensagem usando o bot da sessão
