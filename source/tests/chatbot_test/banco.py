@@ -33,6 +33,21 @@ class BancoBot(ChatBotRag):
         print(f"[BancoBot] Processando: '{query[:50]}...' -> '{response[:50]}...'")
         return response
 
+    async def aprocess_message(self, query):
+        """
+        Processa uma mensagem de forma assíncrona e retorna a resposta.
+        Método específico para ser usado pela API em modo assíncrono.
+
+        Args:
+            query: Mensagem a ser processada
+
+        Returns:
+            Resposta do bot
+        """
+        response = await self.aprocess_query(query)
+        print(f"[BancoBot] Processando assíncrono: '{query[:50]}...' -> '{response[:50]}...'")
+        return response
+
     def run(self, query):
         """
         Método legado mantido para compatibilidade.

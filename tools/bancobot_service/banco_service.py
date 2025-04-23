@@ -3,6 +3,8 @@ import uvicorn
 from fastapi import FastAPI, HTTPException, Body
 from pydantic import BaseModel
 from typing import Dict, Optional, Any
+import asyncio
+from concurrent.futures import ThreadPoolExecutor
 
 from source.tests.chatbot_test.banco import BancoBot
 
@@ -26,6 +28,8 @@ app = FastAPI(title="BancoBot API",
 
 # Armazenar instâncias de BancoBot por sessão
 bot_instances: Dict[str, BancoBot] = {}
+# Executor para operações de inicialização que são CPU-bound
+executor = ThreadPoolExecutor(max_workers=4)
 
 
 @app.post("/api/message", response_model=MessageResponse)
@@ -49,12 +53,17 @@ async def process_message(request: MessageRequest = Body(...)):
     # Verifica se já existe um bot para essa sessão
     if session_id not in bot_instances:
         # Cria uma nova instância de BancoBot para a sessão
-        bot_instances[session_id] = BancoBot(think_exp=True)
+        # Usamos o executor para não bloquear o loop de eventos, pois a inicialização é CPU-bound
+        loop = asyncio.get_event_loop()
+        bot_instances[session_id] = await loop.run_in_executor(
+            executor,
+            lambda: BancoBot(think_exp=True)
+        )
         print(f"Nova sessão criada: {session_id}")
 
-    # Processa a mensagem usando o bot da sessão
+    # Processa a mensagem usando o bot da sessão de forma assíncrona
     try:
-        response = bot_instances[session_id].process_message(request.message)
+        response = await bot_instances[session_id].aprocess_message(request.message)
         return MessageResponse(response=response, session_id=session_id)
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Erro ao processar mensagem: {str(e)}")

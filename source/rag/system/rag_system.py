@@ -12,9 +12,10 @@ from source.rag.document import FileSystemDocumentLoader, StandardDocumentProces
 from source.rag.vectorstore import ChromaVectorStoreFactory
 from source.rag.functions import (
     RouterFunction, GraderFunction, RAGResponseFunction, FallbackFunction,
-    RewriteQueryFunction, AggregateDocsFunction, CleanupAggregatedDocsFunction  # Adicionada função de limpeza
+    RewriteQueryFunction, AggregateDocsFunction, CleanupAggregatedDocsFunction
 )
 from source.rag.workflow import RAGWorkflowBuilder
+
 
 class RAGSystem:
     """
@@ -139,6 +140,34 @@ class RAGSystem:
 
         # Invoke the workflow
         result = self._workflow.invoke({"question": question}, self._thread_id)
+
+        # Create a friendlier result format
+        return {
+            "question": question,
+            "datasource": result.get('datasource'),
+            "documents_relevant": result.get('documents_relevant'),
+            "response": result.get('response'),
+            "messages": result.get('messages', [])
+        }
+
+    async def aquery(self, question: str) -> Dict[str, Any]:
+        """
+        Assíncrono: Queries the RAG system with a question.
+
+        Args:
+            question: Question to ask
+
+        Returns:
+            Result of the query including response and metadata
+
+        Raises:
+            ValueError: If the system is not initialized
+        """
+        if self._workflow is None:
+            raise ValueError("RAG system not initialized. Call initialize() first.")
+
+        # Invoke the workflow asynchronously
+        result = await self._workflow.ainvoke({"question": question}, self._thread_id)
 
         # Create a friendlier result format
         return {

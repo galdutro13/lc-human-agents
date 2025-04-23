@@ -11,6 +11,7 @@ from source.prompt_manager.base import CustomSystemPromptStrategy
 
 from source.rag.system import RAGSystem
 
+
 class ChatBotBase:
     """
     Classe base para criação de chatbots. Configura o modelo, gera o prompt e
@@ -18,11 +19,11 @@ class ChatBotBase:
     """
 
     def __init__(
-        self,
-        think_exp: bool,
-        system_message: str,
-        use_sqlitesaver: bool = False,
-        thread_id: Optional[str] = None
+            self,
+            think_exp: bool,
+            system_message: str,
+            use_sqlitesaver: bool = False,
+            thread_id: Optional[str] = None
     ) -> None:
         """
         Inicializa o chatbot com base nos parâmetros fornecidos.
@@ -93,6 +94,18 @@ class ChatBotBase:
         output = self.app.invoke({"messages": input_messages}, self.config)
         return output["messages"][-1].content
 
+    async def aprocess_query(self, query: str) -> str:
+        """
+        Versão assíncrona do process_query.
+        Processa a mensagem de um usuário e retorna a resposta do modelo.
+
+        :param query: Texto enviado pelo usuário.
+        :return: Texto de resposta gerado pelo modelo.
+        """
+        input_messages = [HumanMessage(query)]
+        output = await self.app.ainvoke({"messages": input_messages}, self.config)
+        return output["messages"][-1].content
+
 
 class ChatBotRag(ChatBotBase):
     """
@@ -120,4 +133,15 @@ class ChatBotRag(ChatBotBase):
         :return: Texto de resposta gerado pelo modelo.
         """
         output = self.app.query(query)
+        return output["messages"][-1].content
+
+    async def aprocess_query(self, query: str) -> str:
+        """
+        Versão assíncrona do process_query.
+        Processa a mensagem de um usuário e retorna a resposta do modelo.
+
+        :param query: Texto enviado pelo usuário.
+        :return: Texto de resposta gerado pelo modelo.
+        """
+        output = await self.app.aquery(query)
         return output["messages"][-1].content
