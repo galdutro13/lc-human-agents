@@ -11,6 +11,156 @@ from source.rag.config.models import RAGConfig
 # Importa o RAGState refatorado
 from source.rag.state.rag_state import RAGState
 
+class RewriteQueryFunction(ChatFunction):
+    """
+    Rewrites the original query into multiple improved versions.
+    """
+
+    def __init__(self, config: RAGConfig, model: Any):
+        self._config = config
+        self._model = model
+        self._prompt = self._create_rewrite_prompt()
+
+    def __call__(self, state: RAGState) -> Dict[str, Any]:
+        """
+        Rewrites the original query into multiple improved versions.
+
+        Args:
+            state: Current state of the workflow (RAGState TypedDict)
+
+        Returns:
+            Partial dictionary updating the state with rewritten queries
+        """
+        print("---REWRITE QUERY---")
+
+        # Access via dictionary
+        question = state.get('question')
+
+        if not question:
+            print("No question provided in state for rewriting.")
+            return {
+                "original_question": "",
+                "rewritten_queries": [],
+                "current_query_index": 0,
+                "has_more_queries": False
+            }
+
+        try:
+            # Invoke the LLM to rewrite the query
+            rewrite_result = self._model.invoke([
+                SystemMessage(content=self._config.global_prompts.rewrite_query_prompt),
+                HumanMessage(content=question)
+            ])
+
+            # Parse the numbered list of rewritten queries
+            rewritten_queries = []
+            for line in rewrite_result.content.strip().split('\n'):
+                line = line.strip()
+                if line and (line[0].isdigit() or line.startswith('- ')):
+                    # Remove the number/bullet and any trailing/leading whitespace
+                    query = line
+                    if '.' in line and line[0].isdigit():
+                        query = line.split('.', 1)[-1].strip()
+                    elif line.startswith('- '):
+                        query = line[2:].strip()
+                    if query:
+                        rewritten_queries.append(query)
+
+            if not rewritten_queries:
+                # If parsing fails, use the raw output (might not be in expected format)
+                rewritten_queries = [rewrite_result.content.strip()]
+
+            print(f"Original query: '{question}'")
+            print(f"Rewrote into {len(rewritten_queries)} queries:")
+            for i, q in enumerate(rewritten_queries):
+                print(f"  {i+1}. {q}")
+
+            # Return updated state with rewritten queries
+            return {
+                "original_question": question,
+                "rewritten_queries": rewritten_queries,
+                "current_query_index": 0,
+                "has_more_queries": len(rewritten_queries) > 0
+            }
+
+        except Exception as e:
+            print(f"Error rewriting query: {str(e)}")
+            # Return the original query as a fallback
+            return {
+                "original_question": question,
+                "rewritten_queries": [question],
+                "current_query_index": 0,
+                "has_more_queries": True
+            }
+
+    def _create_rewrite_prompt(self) -> ChatPromptTemplate:
+        return ChatPromptTemplate.from_messages([
+            ("system", self._config.global_prompts.rewrite_query_prompt),
+            ("human", "{question}"),
+        ])
+
+    @property
+    def prompt(self) -> Any:
+        return self._prompt
+
+    @property
+    def model(self) -> Any:
+        return self._model
+
+
+class AggregateDocsFunction(ChatFunction):
+    """
+    Aggregates retrieved documents from multiple queries.
+    """
+
+    def __init__(self):
+        pass
+
+    def __call__(self, state: RAGState) -> Dict[str, Any]:
+        """
+        Aggregates retrieved documents and updates the loop state.
+
+        Args:
+            state: Current state of the workflow (RAGState TypedDict)
+
+        Returns:
+            Partial dictionary updating the state with aggregated documents and loop control
+        """
+        print("---AGGREGATE DOCUMENTS---")
+
+        # Access via dictionary with defaults
+        current_index = state.get('current_query_index', 0)
+        rewritten_queries = state.get('rewritten_queries', [])
+        context = state.get('context', [])
+        aggregated_docs = state.get('aggregated_docs', [])
+
+        # Add current context to aggregated documents (avoiding duplicates)
+        for doc in context:
+            if doc not in aggregated_docs:
+                aggregated_docs.append(doc)
+
+        # Update the index for the next iteration
+        next_index = current_index + 1
+        has_more_queries = next_index < len(rewritten_queries)
+
+        print(f"Aggregated {len(aggregated_docs)} unique documents so far.")
+        print(f"Current query index: {current_index}, Next index: {next_index}")
+        print(f"More queries available: {has_more_queries}")
+
+        # Return updated state
+        return {
+            "current_query_index": next_index,
+            "aggregated_docs": aggregated_docs,
+            "has_more_queries": has_more_queries  # Flag for conditional edge
+        }
+
+    @property
+    def prompt(self) -> Any:
+        return None
+
+    @property
+    def model(self) -> Any:
+        return None
 
 class RetrieveFunction(ChatFunction):
     """
@@ -432,3 +582,77 @@ class FallbackFunction(ChatFunction):
     @property
     def model(self) -> Any:
         return self._model
+
+
+# Funções auxiliares para adicionar ao arquivo rag_functions.py ou workflow_builder.py
+
+def prepare_next_query(state: RAGState) -> Dict[str, Any]:
+    """
+    Prepares the next rewritten query for processing.
+
+    Args:
+        state: Current workflow state (RAGState TypedDict)
+
+    Returns:
+        Updated state with the next query
+    """
+    print("---PREPARE NEXT QUERY---")
+    rewritten_queries = state.get('rewritten_queries', [])
+    current_index = state.get('current_query_index', 0)
+
+    if current_index < len(rewritten_queries):
+        next_query = rewritten_queries[current_index]
+        print(f"Using rewritten query ({current_index + 1}/{len(rewritten_queries)}): {next_query}")
+        return {"question": next_query}
+
+    # Fallback to the original question if no more queries
+    original_question = state.get('original_question', '')
+    print(f"No more rewritten queries, falling back to original: {original_question}")
+    return {"question": original_question}
+
+
+def prepare_for_grading(state: RAGState) -> Dict[str, Any]:
+    """
+    Prepares the state for the final grading step.
+
+    Args:
+        state: Current workflow state (RAGState TypedDict)
+
+    Returns:
+        Updated state with aggregated documents as context
+    """
+    print("---PREPARE FOR GRADING---")
+    original_question = state.get('original_question', '')
+    aggregated_docs = state.get('aggregated_docs', [])
+
+    print(f"Preparing for grading with original question: {original_question}")
+    print(f"Using {len(aggregated_docs)} aggregated documents")
+
+    return {
+        "question": original_question,
+        "context": aggregated_docs
+    }
+
+
+def should_continue_loop(state: RAGState) -> str:
+    """
+    Determines whether to continue the loop or move to grading.
+
+    Args:
+        state: Current workflow state (RAGState TypedDict)
+
+    Returns:
+        Route to take ('continue_loop' or 'finish_loop')
+    """
+    print("---CHECK LOOP CONDITION---")
+    has_more_queries = state.get('has_more_queries', False)
+
+    if has_more_queries:
+        current_index = state.get('current_query_index', 0)
+        rewritten_queries = state.get('rewritten_queries', [])
+        if current_index < len(rewritten_queries):
+            print(f"Continuing loop with query {current_index + 1}/{len(rewritten_queries)}")
+            return "continue_loop"
+
+    print("Loop complete, moving to grading")
+    return "finish_loop"

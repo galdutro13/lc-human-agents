@@ -1,3 +1,5 @@
+# Atualizar importações no início do arquivo rag_system.py:
+
 import os
 import secrets
 import shutil
@@ -11,7 +13,10 @@ from source.chat_graph.llms import get_llm
 from source.rag.config import ConfigurationManager, YAMLConfigurationStrategy, RAGConfig
 from source.rag.document import FileSystemDocumentLoader, StandardDocumentProcessor
 from source.rag.vectorstore import ChromaVectorStoreFactory
-from source.rag.functions import RouterFunction, GraderFunction, RAGResponseFunction, FallbackFunction
+from source.rag.functions import (
+    RouterFunction, GraderFunction, RAGResponseFunction, FallbackFunction,
+    RewriteQueryFunction, AggregateDocsFunction  # Novas funções
+)
 from source.rag.workflow import RAGWorkflowBuilder
 
 from IPython.display import display, Image
@@ -101,13 +106,21 @@ class RAGSystem:
         responder = RAGResponseFunction(self._config, self._vectorstores, model)
         fallback = FallbackFunction(self._config, model)
 
+        # Novos componentes para o fluxo de reescrita e loop
+        rewriter = RewriteQueryFunction(self._config, model)
+        aggregator = AggregateDocsFunction()
+
         # Build the workflow
         builder = RAGWorkflowBuilder()
-        return builder.build_rag_workflow(router=router,
-                                          grader=grader,
-                                          responder=responder,
-                                          fallback=fallback,
-                                          memory=self._memory)
+        return builder.build_rag_workflow(
+            router=router,
+            grader=grader,
+            responder=responder,
+            fallback=fallback,
+            rewriter=rewriter,
+            aggregator=aggregator,
+            memory=self._memory
+        )
 
     def query(self, question: str) -> Dict[str, Any]:
         """

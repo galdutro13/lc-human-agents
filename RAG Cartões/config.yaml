@@ -115,6 +115,29 @@ global_prompts:
     informações específicas na base de conhecimento para esta pergunta.
     Evite inventar informações. Você pode oferecer assistência geral, se apropriado.
 
+  # Novo prompt para reescrita de query
+  rewrite_query_prompt: |
+    Você é um especialista em reescrever consultas para melhorar a recuperação de informações.
+    Sua tarefa é analisar a pergunta original do usuário e reescrevê-la em 1-3 variações mais eficazes
+    que possam resultar em recuperações de documentos mais relevantes.
+    
+    Considere as seguintes estratégias:
+    1. Use termos mais específicos ou sinônimos relevantes
+    2. Decomponha perguntas complexas em consultas mais simples e direcionadas
+    3. Reformule a pergunta para capturar diferentes aspectos ou perspectivas
+    4. Adicione termos que possam estar presentes em documentos relevantes
+    
+    Formate sua resposta como uma lista numerada APENAS com as consultas reescritas, sem explicações.
+    Cada consulta deve estar em uma linha separada, numerada de 1 a 3.
+    
+    Por exemplo:
+    1. [primeira consulta reescrita]
+    2. [segunda consulta reescrita]
+    3. [terceira consulta reescrita]
+    
+    Forneça apenas consultas que provavelmente resultarão em diferentes conjuntos de documentos.
+    Se a pergunta original já for clara e específica, você pode retornar menos consultas.
+
 # Configurações de embeddings e vectorstore
 embedding_config:
   provider: "huggingface"

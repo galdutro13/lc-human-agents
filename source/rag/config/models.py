@@ -40,6 +40,7 @@ class GlobalPrompts(BaseModel):
     router_prompt: str
     grader_prompt: str
     fallback_prompt: str
+    rewrite_query_prompt: str  # Novo campo para prompt de reescrita de query
 
 
 class EmbeddingConfig(BaseModel):

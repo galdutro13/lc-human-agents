@@ -7,10 +7,14 @@ from source.chat_graph.chat_function import ChatFunction
 
 # Importa o RAGState refatorado
 from source.rag.state.rag_state import RAGState
-from source.rag.functions.rag_functions import RouterFunction, GraderFunction, RetrieveFunction, RAGResponseFunction, \
-    FallbackFunction
+from source.rag.functions.rag_functions import (
+    RouterFunction, GraderFunction, RetrieveFunction, RAGResponseFunction,
+    FallbackFunction, RewriteQueryFunction, AggregateDocsFunction,
+    prepare_next_query, prepare_for_grading, should_continue_loop
+)
 from langchain_core.messages import HumanMessage, SystemMessage
 from langgraph.checkpoint.base import BaseCheckpointSaver
+
 
 class RAGWorkflowBuilder(Builder):
     """
@@ -38,8 +42,7 @@ class RAGWorkflowBuilder(Builder):
 
         return self._workflow.compile(**compile_args)
 
-
-    def add_node(self, name: str, function: Callable) -> 'RAGWorkflowBuilder': # Aceita Callable genérico
+    def add_node(self, name: str, function: Callable) -> 'RAGWorkflowBuilder':  # Aceita Callable genérico
         """
         Adds a node to the workflow.
         """
@@ -66,13 +69,16 @@ class RAGWorkflowBuilder(Builder):
                            grader: GraderFunction,
                            responder: RAGResponseFunction,
                            fallback: FallbackFunction,
+                           rewriter: RewriteQueryFunction,
+                           aggregator: AggregateDocsFunction,
                            memory: Optional[BaseCheckpointSaver[str]] = None) -> Any:
         """
-        Builds a complete RAG workflow with all required components.
+        Builds a complete RAG workflow with all required components,
+        including the new query rewriting and looping functionality.
         """
         retriever = RetrieveFunction(responder.retrievers)
 
-        # Função condicional ajustada para acesso via dicionário
+        # Função condicional para determinar o próximo passo após a avaliação de documentos
         def decide_next_step(state: RAGState) -> str:
             """
             Decides the next step based on document relevance using dictionary access.
@@ -95,25 +101,44 @@ class RAGWorkflowBuilder(Builder):
                 print("Routing to 'irrelevant': No relevant documents found or relevance flag is False.")
                 return "irrelevant"
 
-        # Adiciona nós
+        # Adiciona nós para o novo fluxo
+        self.add_node("rewrite_query", rewriter)
+        self.add_node("prepare_next_query", prepare_next_query)
         self.add_node("route", router)
         self.add_node("retrieve", retriever)
+        self.add_node("aggregate_docs", aggregator)
+        self.add_node("prepare_for_grading", prepare_for_grading)
         self.add_node("grade", grader)
         self.add_node("respond_with_relevant", responder)
         self.add_node("respond_with_fallback", fallback)
 
-        # Define ponto de entrada e arestas
-        self._workflow.set_entry_point("route")
-        self.add_edge(from_node="route", to_node="retrieve")
-        self.add_edge(from_node="retrieve", to_node="grade")
+        # Define ponto de entrada
+        self._workflow.set_entry_point("rewrite_query")
 
-        # Arestas condicionais baseadas na função ajustada
+        # Fluxo inicial: reescrita de query
+        self.add_edge(from_node="rewrite_query", to_node="prepare_next_query")
+
+        # Loop: prepare_next_query -> route -> retrieve -> aggregate_docs -> conditional
+        self.add_edge(from_node="prepare_next_query", to_node="route")
+        self.add_edge(from_node="route", to_node="retrieve")
+        self.add_edge(from_node="retrieve", to_node="aggregate_docs")
+
+        # Aresta condicional após agregação: continuar o loop ou seguir para avaliação
+        self.add_conditional_edge("aggregate_docs", should_continue_loop, {
+            "continue_loop": "prepare_next_query",  # Continua o loop
+            "finish_loop": "prepare_for_grading"  # Sai do loop
+        })
+
+        # Após o loop, prepara os documentos agregados para avaliação
+        self.add_edge(from_node="prepare_for_grading", to_node="grade")
+
+        # Aresta condicional após avaliação: responder com documentos relevantes ou fallback
         self.add_conditional_edge("grade", decide_next_step, {
             "relevant": "respond_with_relevant",
             "irrelevant": "respond_with_fallback"
         })
 
-        # Arestas para o final
+        # Arestas finais para o fim do fluxo
         self.add_edge(from_node="respond_with_relevant", to_node=END)
         self.add_edge(from_node="respond_with_fallback", to_node=END)
 
