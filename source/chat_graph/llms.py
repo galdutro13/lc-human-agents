@@ -1,14 +1,14 @@
 from functools import lru_cache
 
 from langchain_openai import ChatOpenAI
-from langchain_google_genai import GoogleGenerativeAI
+from langchain_google_genai import ChatGoogleGenerativeAI
 
 from source.constantes.models import ModelName
 from source.constantes import TEMPERATURE, FREQUENCY_PENALTY, PRESENCE_PENALTY
 
 
 @lru_cache(maxsize=4)
-def get_llm(model_name: ModelName) -> ChatOpenAI | GoogleGenerativeAI:
+def get_llm(model_name: ModelName) -> ChatOpenAI | ChatGoogleGenerativeAI:
     """
     Loads a language model.
     :param model_name: Enum with the name of the model to load.
@@ -64,7 +64,7 @@ def get_openai_thinking_llm(model_name: ModelName) -> ChatOpenAI:
         raise ValueError(f"Error loading the model {model_name}: {e}")
 
 @lru_cache(maxsize=4)
-def get_google_model(model_name: ModelName) -> GoogleGenerativeAI:
+def get_google_model(model_name: ModelName) -> ChatGoogleGenerativeAI:
     """
     Loads a Google language model.
     :param model_name: Enum with the name of the model to load.
@@ -73,7 +73,7 @@ def get_google_model(model_name: ModelName) -> GoogleGenerativeAI:
     """
     google_model: str = model_name.value
     try:
-        model = GoogleGenerativeAI(model=google_model)
+        model = ChatGoogleGenerativeAI(model=google_model)
         return model
     except Exception as e:
         raise ValueError(f"Error loading the model {model_name}: {e}")

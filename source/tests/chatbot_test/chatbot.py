@@ -117,12 +117,14 @@ class ChatBotRag(ChatBotBase):
         Inicializa o chatbot, selecionando o modelo e definindo se
         as mensagens serão salvas em memória ou em banco de dados.
         """
-        self.model = self._get_model(self.think_exp)
 
         memory_saver = self._get_memory_saver(use_sqlitesaver)
 
         self.config = {"configurable": {"thread_id": self.thread_id}}
-        self.app = RAGSystem(base_path="./RAG Cartões", thread_id=self.config, memory=memory_saver)
+        self.app = RAGSystem(base_path="./RAG Cartões",
+                             thread_id=self.config,
+                             memory=memory_saver,
+                             model_name=ModelName.GEMINI_THINKING_EXP)
         self.app.initialize(reindex=False)
 
     def process_query(self, query: str) -> str:

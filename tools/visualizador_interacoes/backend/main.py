@@ -310,9 +310,9 @@ def export_interaction_excel(thread_id: str):
         data_for_df = []
         for msg in messages:
             if isinstance(msg, HumanMessage):
-                msg_type = "human"
-            elif isinstance(msg, AIMessage):
                 msg_type = "ai"
+            elif isinstance(msg, AIMessage):
+                msg_type = "human"
             else:
                 msg_type = "other"
             data_for_df.append({

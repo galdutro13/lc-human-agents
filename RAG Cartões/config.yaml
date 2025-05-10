@@ -98,6 +98,7 @@ global_prompts:
     - 'cartoes_credito_outros_produtos': para perguntas sobre cartões diversos do Itaú, incluindo cartões premium, cartões de marca (Samsung, Extra, etc.)
     - 'fidelidade_varejo': para perguntas sobre programas de fidelidade relacionados a supermercados e varejo (N Card, Passaí, Pão de Açúcar)
     - 'fidelidade_aereos': para perguntas sobre programas de fidelidade e milhagem de companhias aéreas (Azul, LATAM)
+    Você *tem* que escolher uma dentre as três fontes de dados anteriores.
 
   # Prompt para avaliação dos documentos recuperados
   grader_prompt: |
