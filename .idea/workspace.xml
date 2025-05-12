@@ -4,20 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0cea1559-660a-43f1-803f-04da1cdf897d" name="Changes" comment="Desagregação das funções do rag em arquivos diferentes para melhorar a manutenibilidade.">
-      <change afterPath="$PROJECT_DIR$/source/persona/persona_function.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/source/persona/persona_state.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/source/persona/persona_workflow_builder.py" afterDir="false" />
+    <list default="true" id="0cea1559-660a-43f1-803f-04da1cdf897d" name="Changes" comment="**Refatora gestão de personas, fluxos de interação e exportação de dados**&#10;&#10;* **personas.json**: reorganiza e amplia os templates de personas, renomeando chaves para IDs genéricos (“1” → “1t”, “2t” etc.) e adicionando novos perfis.&#10;* **Módulo `source/persona`**: introduz `PersonaWorkflowBuilder`, `PersonaState` e `PersonaChatFunction` para orquestrar workflows de persona com LangGraph.&#10;* **`usuario.py`**: inclui `persona_id` no construtor, passa o ID ao invocar o fluxo, implementa `initialize` via `PersonaWorkflowBuilder` e finaliza sessão com o BancoBot.&#10;* **`tools/enxame_usuario/start_usuarios.py`**: refatora o script de execução de personas para usar `ThreadPoolExecutor`, adiciona parâmetros `--window-size` e `--passes`, e suporta modo seqüencial ou paralelo com carregamento dinâmico de personas.&#10;* **`visualizador_interacoes/backend/main.py`**:&#10;&#10;  * importa `zipfile`&#10;  * adiciona endpoint **GET /interactions/raw/{thread\_id}** para retornar o checkpoint completo&#10;  * renomeia `/interactions/{thread_id}/excel` → **/csv**, incluindo `persona_id` no nome do arquivo&#10;  * cria **/interactions/export/all\_csv\_zip** para exportar todas as threads como ZIP de CSVs&#10;* **`source/constantes/models.py`**: atualiza `GEMINI_THINKING_EXP` para a nova versão “gemini-2.5-pro-preview-05-06”.&#10;* **`source/tests/chatbot_test/chatbot.py`**: altera modelo padrão de `GEMINI_THINKING_EXP` para `GPT4`.&#10;* **`tools/bancobot_service/banco_service.py`**: ajusta instância de `BancoBot` para `think_exp=False`.&#10;* **`RAG Cartões/config.yaml`**: padroniza e enriquece os templates de prompts RAG, incluindo seção de “Processo de Resposta Sugerido” e instruções de formatação.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/RAG Cartões/config.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/RAG Cartões/config.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/personas.json" beforeDir="false" afterPath="$PROJECT_DIR$/personas.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/constantes/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/constantes/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/persona/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/persona/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/tests/chatbot_test/chatbot.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/tests/chatbot_test/chatbot.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/tests/chatbot_test/usuario.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/tests/chatbot_test/usuario.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tools/bancobot_service/banco_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/tools/bancobot_service/banco_service.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tools/enxame_usuario/start_usuarios.py" beforeDir="false" afterPath="$PROJECT_DIR$/tools/enxame_usuario/start_usuarios.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tools/visualizador_interacoes/backend/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/tools/visualizador_interacoes/backend/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -161,7 +150,7 @@
       <recent name="C:\Users\galdu\PycharmProjects\lc-human-agents\tools\db_work" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.launcher">
+  <component name="RunManager" selected="Python.start_enxame_usuarios">
     <configuration name="Extract personas" type="PythonConfigurationType" factoryName="Python" folderName="TOOLS">
       <module name="lc-human-agents" />
       <option name="ENV_FILES" value="" />
@@ -434,7 +423,7 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/tools/enxame_usuario/start_usuarios.py" />
-      <option name="PARAMETERS" value="--window-size 4 --passes 7 --prompts-file personas.json --typing-speed 305 --break-probability 0.0001 --api-url http://localhost:8080" />
+      <option name="PARAMETERS" value="-t --window-size 4 --passes 7 --prompts-file personas.json --typing-speed 305 --break-probability 0.0001 --api-url http://localhost:8080" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
@@ -661,6 +650,8 @@
       <workItem from="1747001046539" duration="17250000" />
       <workItem from="1747024954156" duration="55000" />
       <workItem from="1747051434399" duration="2496000" />
+      <workItem from="1747070737299" duration="229000" />
+      <workItem from="1747089083546" duration="472000" />
     </task>
     <task id="LOCAL-00001" summary="Initial Commit.">
       <option name="closed" value="true" />
@@ -942,15 +933,21 @@
       <option name="project" value="LOCAL" />
       <updated>1746898512223</updated>
     </task>
-    <option name="localTasksCounter" value="36" />
+    <task id="LOCAL-00036" summary="**Refatora gestão de personas, fluxos de interação e exportação de dados**&#10;&#10;* **personas.json**: reorganiza e amplia os templates de personas, renomeando chaves para IDs genéricos (“1” → “1t”, “2t” etc.) e adicionando novos perfis.&#10;* **Módulo `source/persona`**: introduz `PersonaWorkflowBuilder`, `PersonaState` e `PersonaChatFunction` para orquestrar workflows de persona com LangGraph.&#10;* **`usuario.py`**: inclui `persona_id` no construtor, passa o ID ao invocar o fluxo, implementa `initialize` via `PersonaWorkflowBuilder` e finaliza sessão com o BancoBot.&#10;* **`tools/enxame_usuario/start_usuarios.py`**: refatora o script de execução de personas para usar `ThreadPoolExecutor`, adiciona parâmetros `--window-size` e `--passes`, e suporta modo seqüencial ou paralelo com carregamento dinâmico de personas.&#10;* **`visualizador_interacoes/backend/main.py`**:&#10;&#10;  * importa `zipfile`&#10;  * adiciona endpoint **GET /interactions/raw/{thread\_id}** para retornar o checkpoint completo&#10;  * renomeia `/interactions/{thread_id}/excel` → **/csv**, incluindo `persona_id` no nome do arquivo&#10;  * cria **/interactions/export/all\_csv\_zip** para exportar todas as threads como ZIP de CSVs&#10;* **`source/constantes/models.py`**: atualiza `GEMINI_THINKING_EXP` para a nova versão “gemini-2.5-pro-preview-05-06”.&#10;* **`source/tests/chatbot_test/chatbot.py`**: altera modelo padrão de `GEMINI_THINKING_EXP` para `GPT4`.&#10;* **`tools/bancobot_service/banco_service.py`**: ajusta instância de `BancoBot` para `think_exp=False`.&#10;* **`RAG Cartões/config.yaml`**: padroniza e enriquece os templates de prompts RAG, incluindo seção de “Processo de Resposta Sugerido” e instruções de formatação.">
+      <option name="closed" value="true" />
+      <created>1747070911446</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1747070911446</updated>
+    </task>
+    <option name="localTasksCounter" value="37" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Introdução da funcionalidade de criar uma nova interação através da interface do streamlit." />
-    <MESSAGE value="Ajustes finais na interface do visualizador de prompt." />
     <MESSAGE value="Introduction of the RAG codebase." />
     <MESSAGE value="Correções de bugs na logica do RAG." />
     <MESSAGE value="Refatorar sistema de recuperação de documentos no RAG&#10;&#10;Implementa uma classe RetrieveFunction para substituir a função anônima de recuperação, &#10;permitindo o acesso direto aos retrievers por datasource. Principais alterações:&#10;&#10;- Adiciona classe RetrieveFunction que implementa a interface ChatFunction&#10;- Armazena retrievers separadamente na RAGResponseFunction para reuso&#10;- Modifica o workflow para utilizar a nova função de recuperação&#10;- Remove a função anônima _create_retriever_function&#10;&#10;Esta mudança melhora a modularidade do código e corrige problemas na lógica de recuperação&#10;de documentos, fornecendo tratamento adequado para datasources indisponíveis." />
@@ -974,7 +971,9 @@
     <MESSAGE value="Correção do comportamento de melhoria do prompt: agora a lista agregada de documentos é recetada no fim da execução do fluxo." />
     <MESSAGE value="alguns ajustes adicionais:&#10;1. Agora estamos testando modelos de raciocinio através da api do google." />
     <MESSAGE value="Desagregação das funções do rag em arquivos diferentes para melhorar a manutenibilidade." />
-    <option name="LAST_COMMIT_MESSAGE" value="Desagregação das funções do rag em arquivos diferentes para melhorar a manutenibilidade." />
+    <MESSAGE value="COMMIT_MSG" />
+    <MESSAGE value="**Refatora gestão de personas, fluxos de interação e exportação de dados**&#10;&#10;* **personas.json**: reorganiza e amplia os templates de personas, renomeando chaves para IDs genéricos (“1” → “1t”, “2t” etc.) e adicionando novos perfis.&#10;* **Módulo `source/persona`**: introduz `PersonaWorkflowBuilder`, `PersonaState` e `PersonaChatFunction` para orquestrar workflows de persona com LangGraph.&#10;* **`usuario.py`**: inclui `persona_id` no construtor, passa o ID ao invocar o fluxo, implementa `initialize` via `PersonaWorkflowBuilder` e finaliza sessão com o BancoBot.&#10;* **`tools/enxame_usuario/start_usuarios.py`**: refatora o script de execução de personas para usar `ThreadPoolExecutor`, adiciona parâmetros `--window-size` e `--passes`, e suporta modo seqüencial ou paralelo com carregamento dinâmico de personas.&#10;* **`visualizador_interacoes/backend/main.py`**:&#10;&#10;  * importa `zipfile`&#10;  * adiciona endpoint **GET /interactions/raw/{thread\_id}** para retornar o checkpoint completo&#10;  * renomeia `/interactions/{thread_id}/excel` → **/csv**, incluindo `persona_id` no nome do arquivo&#10;  * cria **/interactions/export/all\_csv\_zip** para exportar todas as threads como ZIP de CSVs&#10;* **`source/constantes/models.py`**: atualiza `GEMINI_THINKING_EXP` para a nova versão “gemini-2.5-pro-preview-05-06”.&#10;* **`source/tests/chatbot_test/chatbot.py`**: altera modelo padrão de `GEMINI_THINKING_EXP` para `GPT4`.&#10;* **`tools/bancobot_service/banco_service.py`**: ajusta instância de `BancoBot` para `think_exp=False`.&#10;* **`RAG Cartões/config.yaml`**: padroniza e enriquece os templates de prompts RAG, incluindo seção de “Processo de Resposta Sugerido” e instruções de formatação." />
+    <option name="LAST_COMMIT_MESSAGE" value="**Refatora gestão de personas, fluxos de interação e exportação de dados**&#10;&#10;* **personas.json**: reorganiza e amplia os templates de personas, renomeando chaves para IDs genéricos (“1” → “1t”, “2t” etc.) e adicionando novos perfis.&#10;* **Módulo `source/persona`**: introduz `PersonaWorkflowBuilder`, `PersonaState` e `PersonaChatFunction` para orquestrar workflows de persona com LangGraph.&#10;* **`usuario.py`**: inclui `persona_id` no construtor, passa o ID ao invocar o fluxo, implementa `initialize` via `PersonaWorkflowBuilder` e finaliza sessão com o BancoBot.&#10;* **`tools/enxame_usuario/start_usuarios.py`**: refatora o script de execução de personas para usar `ThreadPoolExecutor`, adiciona parâmetros `--window-size` e `--passes`, e suporta modo seqüencial ou paralelo com carregamento dinâmico de personas.&#10;* **`visualizador_interacoes/backend/main.py`**:&#10;&#10;  * importa `zipfile`&#10;  * adiciona endpoint **GET /interactions/raw/{thread\_id}** para retornar o checkpoint completo&#10;  * renomeia `/interactions/{thread_id}/excel` → **/csv**, incluindo `persona_id` no nome do arquivo&#10;  * cria **/interactions/export/all\_csv\_zip** para exportar todas as threads como ZIP de CSVs&#10;* **`source/constantes/models.py`**: atualiza `GEMINI_THINKING_EXP` para a nova versão “gemini-2.5-pro-preview-05-06”.&#10;* **`source/tests/chatbot_test/chatbot.py`**: altera modelo padrão de `GEMINI_THINKING_EXP` para `GPT4`.&#10;* **`tools/bancobot_service/banco_service.py`**: ajusta instância de `BancoBot` para `think_exp=False`.&#10;* **`RAG Cartões/config.yaml`**: padroniza e enriquece os templates de prompts RAG, incluindo seção de “Processo de Resposta Sugerido” e instruções de formatação." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

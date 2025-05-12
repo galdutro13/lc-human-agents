@@ -36,6 +36,7 @@ python run_prompts.py \
 # ---------------------------- Funções utilitárias -----------------------------
 
 def iniciar_usuario(persona_id: str,
+                    think_exp: bool,
                     prompt_personalizado: str | None = None,
                     *,
                     api_url: str,
@@ -48,7 +49,7 @@ def iniciar_usuario(persona_id: str,
     print(f"[INFO] Iniciando persona '{persona_id}'…")
 
     usuario_bot = UsuarioBot(
-        think_exp=True,
+        think_exp=think_exp,
         persona_id=f"persona_{persona_id}",
         system_message=prompt_personalizado,
         api_url=api_url,
@@ -101,6 +102,8 @@ if __name__ == "__main__":
                         help="Máximo de UsuarioBots simultâneos (padrão: 4)")
     parser.add_argument("--passes", "-p", type=int, default=1,
                         help="Número de varreduras completas sobre o arquivo de prompts (padrão: 1)")
+    parser.add_argument("--use-thinking", "-t", action="store_true",
+                        help="Usa modelos mde linguagem de raciocínio")
 
     # Parâmetros de temporização
     parser.add_argument("--typing-speed", type=float, default=40.0,
@@ -156,6 +159,7 @@ if __name__ == "__main__":
     max_parallel = max(1, args.window_size)
     thinking_range = (args.thinking_min, args.thinking_max)
     break_range = (args.break_min, args.break_max)
+    use_thinking = True if args.use_thinking else False
 
     # ---------------------------------------------------------------------
     # Execução
@@ -165,6 +169,7 @@ if __name__ == "__main__":
         for persona_id, persona_prompt in run_queue:
             iniciar_usuario(
                 persona_id,
+                use_thinking,
                 persona_prompt,
                 api_url=args.api_url,
                 typing_speed_wpm=args.typing_speed,
@@ -180,6 +185,7 @@ if __name__ == "__main__":
                 executor.submit(
                     iniciar_usuario,
                     persona_id,
+                    use_thinking,
                     persona_prompt,
                     api_url=args.api_url,
                     typing_speed_wpm=args.typing_speed,
