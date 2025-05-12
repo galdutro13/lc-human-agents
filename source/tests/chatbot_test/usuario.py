@@ -2,6 +2,9 @@ import random
 import time
 from datetime import datetime, timedelta
 import requests
+
+from source.persona import PersonaWorkflowBuilder, PersonaChatFunction
+from source.prompt_manager import CustomSystemPromptStrategy
 from source.tests.chatbot_test.chatbot import ChatBotBase
 
 
@@ -13,7 +16,11 @@ class UsuarioBot(ChatBotBase):
     tempo de reflexão e pausas).
     """
 
-    def __init__(self, think_exp, system_message: str = None, api_url: str = "http://localhost:8080",
+    def __init__(self,
+                 think_exp: bool,
+                 persona_id: str,
+                 system_message: str = None,
+                 api_url: str = "http://localhost:8080",
                  typing_speed_wpm: float = 40.0,
                  thinking_time_range: tuple = (2, 10),
                  break_probability: float = 0.05,
@@ -28,6 +35,7 @@ class UsuarioBot(ChatBotBase):
                 Você está no banco para discutir uma nova oportunidade de investimento. Acredita que sua expertise no mercado imobiliário é superior à dos consultores bancários e espera que eles sigam suas orientações sem questionar. Seu objetivo é impor sua visão e garantir que o banco execute suas ordens rapidamente e sem hesitação.
                 Finalize com 'quit' assim que sentir que suas ordens estão sendo seguidas ou se frustrar com qualquer sinal de discordância ou questionamento. """
             )
+        self.persona_id = persona_id
         super().__init__(think_exp=think_exp,
                          system_message=system_message,
                          use_sqlitesaver=True)
@@ -47,6 +55,25 @@ class UsuarioBot(ChatBotBase):
         self.last_break_time = 0
         self.total_thinking_time = 0
         self.total_typing_time = 0
+
+    def initialize(self, use_sqlitesaver: bool) -> None:
+        """
+        Inicializa o chatbot, selecionando o modelo e definindo se
+        as mensagens serão salvas em memória ou em banco de dados.
+        """
+        self.model = self._get_model(self.think_exp)
+        self.prompt = CustomSystemPromptStrategy(
+            prompt_template=self.system_message
+        ).generate_prompt()
+
+        memory_saver = self._get_memory_saver(use_sqlitesaver)
+        self.app = PersonaWorkflowBuilder().build_persona_workflow(
+            node_name="model",
+            function=PersonaChatFunction(model=self.model, prompt=self.prompt),
+            memory=memory_saver
+        )
+
+        self.config = {"configurable": {"thread_id": self.thread_id}}
 
     def _calculate_typing_time(self, message: str) -> float:
         """
@@ -178,6 +205,7 @@ class UsuarioBot(ChatBotBase):
         print(f"Tempo total digitando: {self.total_typing_time:.2f} segundos")
         print(f"Último tempo de pausa: {self.last_break_time:.2f} segundos")
         print(f"Timestamp final simulado: {self.simulated_timestamp.strftime('%Y-%m-%d %H:%M:%S')}")
+        self._finish_bancobot_session()
 
     def _send_to_bancobot(self, message: str) -> str:
         """
@@ -219,6 +247,17 @@ class UsuarioBot(ChatBotBase):
             print(f"Erro ao comunicar com o serviço BancoBot: {e}")
             return "Houve um erro na comunicação com o banco. Por favor, tente novamente mais tarde."
 
+    def _finish_bancobot_session(self):
+        """
+        Encerra a sessão atual com o BancoBot, se houver.
+        """
+        if self.session_id:
+            try:
+                response = requests.delete(f"{self.api_url}/api/sessions/{self.session_id}")
+                response.raise_for_status()
+            except requests.RequestException as e:
+                print(f"Erro ao encerrar a sessão com o serviço BancoBot: {e}")
+
     def process_query(self, query: str) -> str:
         """
         Sobrescreve o método de ChatBotBase para incluir metadados de temporização.
@@ -240,5 +279,5 @@ class UsuarioBot(ChatBotBase):
         }
 
         input_messages = [HumanMessage(content=query, additional_kwargs={"timing_metadata": timing_metadata})]
-        output = self.app.invoke({"messages": input_messages}, self.config)
+        output = self.app.invoke({"messages": input_messages, "persona_id": self.persona_id}, self.config)
         return output["messages"][-1].content

@@ -57,7 +57,7 @@ async def process_message(request: MessageRequest = Body(...)):
         loop = asyncio.get_event_loop()
         bot_instances[session_id] = await loop.run_in_executor(
             executor,
-            lambda: BancoBot(think_exp=True)
+            lambda: BancoBot(think_exp=False)
         )
         print(f"Nova sessão criada: {session_id}")
 

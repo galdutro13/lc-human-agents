@@ -2,164 +2,197 @@ import os
 import time
 import argparse
 import threading
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from dotenv import load_dotenv
 import requests
 import json
 from source.tests.chatbot_test.usuario import UsuarioBot
 
+"""
+Script para executar uma suíte de personas definidas em um arquivo JSON (``prompts-file``)
+contra o BancoBot.
 
-def load_prompt_from_file(file_path):
-    """Carrega um prompt de um arquivo de texto."""
-    try:
-        with open(file_path, 'r', encoding='utf-8') as f:
-            return f.read()
-    except Exception as e:
-        print(f"Erro ao carregar prompt do arquivo {file_path}: {e}")
-        return None
+**Alterações relevantes desta versão**
+1. **Parâmetro ``--window-size``** – define o grau máximo de paralelismo.
+2. **Parâmetro ``--passes``** – repete a lista de personas quantas vezes for
+   necessário para gerar alta carga de teste (``total_runs = len(prompts) * passes``).
+3. **Paralelismo dinâmico** – utilização de ``ThreadPoolExecutor`` garante que,
+   enquanto houver personas na fila, sempre permanecerão ``window-size``
+   execuções ativas; assim que um ``UsuarioBot`` termina, o próximo é iniciado
+   automaticamente.
+4. **Identificadores de persona genéricos** – chaves no JSON podem ser strings
+   arbitrárias.
+5. **Sem ``--num-usuarios``** – número total de execuções derivado de ``passes``.
 
+Exemplo de uso:
+```
+python run_prompts.py \
+    --prompts-file ./prompts.json \
+    --window-size 6 \
+    --passes 10
+```
+"""
 
-def iniciar_usuario(id_usuario, prompt_personalizado=None, api_url="http://localhost:8080",
-                    typing_speed_wpm=40.0, thinking_time_range=(2, 10),
-                    break_probability=0.05, break_time_range=(60, 3600),
-                    simulate_delays=False):
-    """
-    Inicia um UsuarioBot com configuração personalizada, incluindo parâmetros de temporização.
+# ---------------------------- Funções utilitárias -----------------------------
 
-    Args:
-        id_usuario: Identificador único do usuário
-        prompt_personalizado: Prompt personalizado para o usuário (opcional)
-        api_url: URL da API do BancoBot
-        typing_speed_wpm: Velocidade média de digitação em palavras por minuto
-        thinking_time_range: Faixa de tempo para pensar (min, max) em segundos
-        break_probability: Probabilidade de fazer uma pausa após enviar uma mensagem
-        break_time_range: Faixa de tempo para pausas (min, max) em segundos
-        simulate_delays: Se deve aguardar os atrasos simulados
-    """
-    print(f"Iniciando Usuário {id_usuario}...")
+def iniciar_usuario(persona_id: str,
+                    prompt_personalizado: str | None = None,
+                    *,
+                    api_url: str,
+                    typing_speed_wpm: float,
+                    thinking_time_range: tuple[float, float],
+                    break_probability: float,
+                    break_time_range: tuple[float, float],
+                    simulate_delays: bool) -> None:
+    """Instancia e executa um :class:`UsuarioBot` para a persona fornecida."""
+    print(f"[INFO] Iniciando persona '{persona_id}'…")
 
-    # Usar o prompt personalizado ou manter o padrão
     usuario_bot = UsuarioBot(
         think_exp=True,
+        persona_id=f"persona_{persona_id}",
         system_message=prompt_personalizado,
         api_url=api_url,
         typing_speed_wpm=typing_speed_wpm,
         thinking_time_range=thinking_time_range,
         break_probability=break_probability,
         break_time_range=break_time_range,
-        simulate_delays=simulate_delays
+        simulate_delays=simulate_delays,
     )
 
-    # Iniciar a conversa
     try:
         usuario_bot.run(
             initial_query="Olá cliente Itaú! Como posso lhe ajudar?",
-            max_iterations=10
+            max_iterations=10,
         )
-        print(f"Usuário {id_usuario} encerrou a conversa.")
-    except Exception as e:
-        print(f"Erro na execução do Usuário {id_usuario}: {e}")
+        print(f"[INFO] Persona '{persona_id}' concluiu a conversa.")
+    except Exception as exc:
+        print(f"[ERRO] Falha na execução da persona '{persona_id}': {exc}")
 
 
-def check_server_availability(api_url):
-    """Verifica se o servidor BancoBot está disponível."""
+def check_server_availability(api_url: str) -> bool:
+    """Retorna *True* se `api_url/health` responder *HTTP 200* em até 5 s."""
     try:
         response = requests.get(f"{api_url}/health", timeout=5)
-        if response.status_code == 200:
-            return True
-        return False
+        return response.status_code == 200
     except requests.RequestException:
         return False
 
 
+# ---------------------------------- Main -------------------------------------
+
 if __name__ == "__main__":
-    # Carregar variáveis de ambiente
     load_dotenv()
 
-    # Verificar variáveis de ambiente necessárias
     if not os.getenv("OPENAI_API_KEY"):
-        print("ERRO: OPENAI_API_KEY não definida. Configure o arquivo .env")
+        print("ERRO: variável de ambiente OPENAI_API_KEY não definida.")
         exit(1)
 
-    # Configurar o parser de argumentos
-    parser = argparse.ArgumentParser(description="Inicia múltiplos usuários simulados para teste")
-    parser.add_argument("-n", "--num-usuarios", type=int, default=1, help="Número de usuários a serem iniciados")
+    parser = argparse.ArgumentParser(
+        description="Executa personas definidas em JSON contra o BancoBot")
+
+    # Execução geral
+    parser.add_argument("--prompts-file", required=True, type=str,
+                        help="Arquivo JSON com os prompts das personas")
+    parser.add_argument("--api-url", type=str, default="http://localhost:8080",
+                        help="URL base da API do BancoBot")
     parser.add_argument("--sequencial", action="store_true",
-                        help="Executa os usuários sequencialmente (padrão: paralelo)")
-    parser.add_argument("--api-url", type=str, default="http://localhost:8080", help="URL da API do BancoBot")
-    parser.add_argument("--prompts-file", type=str, help="Arquivo JSON com prompts personalizados para cada usuário")
+                        help="Executa as personas uma a uma, sem paralelismo")
+    parser.add_argument("--window-size", "-w", type=int, default=4,
+                        help="Máximo de UsuarioBots simultâneos (padrão: 4)")
+    parser.add_argument("--passes", "-p", type=int, default=1,
+                        help="Número de varreduras completas sobre o arquivo de prompts (padrão: 1)")
 
     # Parâmetros de temporização
     parser.add_argument("--typing-speed", type=float, default=40.0,
-                        help="Velocidade média de digitação em palavras por minuto (padrão: 40)")
+                        help="Velocidade média de digitação (palavras/minuto)")
     parser.add_argument("--thinking-min", type=float, default=2.0,
-                        help="Tempo mínimo de reflexão em segundos (padrão: 2)")
+                        help="Tempo mínimo de reflexão (s)")
     parser.add_argument("--thinking-max", type=float, default=10.0,
-                        help="Tempo máximo de reflexão em segundos (padrão: 10)")
+                        help="Tempo máximo de reflexão (s)")
     parser.add_argument("--break-probability", type=float, default=0.05,
-                        help="Probabilidade de fazer uma pausa após enviar uma mensagem (padrão: 0.05)")
+                        help="Probabilidade de pausa após uma mensagem")
     parser.add_argument("--break-min", type=float, default=60.0,
-                        help="Tempo mínimo de pausa em segundos (padrão: 60)")
+                        help="Pausa mínima (s)")
     parser.add_argument("--break-max", type=float, default=3600.0,
-                        help="Tempo máximo de pausa em segundos (padrão: 3600)")
+                        help="Pausa máxima (s)")
     parser.add_argument("--no-simulate-delays", action="store_true",
-                        help="Não aguardar pelos atrasos simulados (default: aguarda)")
+                        help="Ignora atrasos simulados (execução rápida)")
 
     args = parser.parse_args()
 
-    # Verificar disponibilidade do servidor
-    if not check_server_availability(args.api_url):
-        print(f"ERRO: Servidor BancoBot não está disponível em {args.api_url}")
-        print("Inicie o servidor antes de executar este script")
+    # ---------------------------------------------------------------------
+    # Pré-validações
+    # ---------------------------------------------------------------------
+    if args.passes < 1:
+        print("ERRO: --passes deve ser >= 1.")
         exit(1)
 
-    # Carregar prompts personalizados, se fornecidos
-    prompts = {}
-    if args.prompts_file:
-        try:
-            with open(args.prompts_file, 'r', encoding='utf-8') as f:
-                prompts = json.load(f)
-            print(f"Carregados {len(prompts)} prompts personalizados.")
-        except Exception as e:
-            print(f"Erro ao carregar prompts do arquivo {args.prompts_file}: {e}")
-            exit(1)
+    if not check_server_availability(args.api_url):
+        print(f"ERRO: servidor BancoBot indisponível em {args.api_url}")
+        exit(1)
 
-    # Criar threads para cada usuário
-    threads = []
-    for i in range(args.num_usuarios):
-        user_id = i + 1
-        # Usar prompt personalizado se disponível, ou None para usar o padrão
-        user_prompt = prompts.get(str(user_id)) if prompts else None
+    try:
+        with open(args.prompts_file, "r", encoding="utf-8") as fp:
+            prompts: dict[str, str] = json.load(fp)
+    except Exception as exc:
+        print(f"ERRO: não foi possível ler {args.prompts_file}: {exc}")
+        exit(1)
 
-        thread = threading.Thread(
-            target=iniciar_usuario,
-            args=(user_id, user_prompt, args.api_url),
-            kwargs={
-                "typing_speed_wpm": args.typing_speed,
-                "thinking_time_range": (args.thinking_min, args.thinking_max),
-                "break_probability": args.break_probability,
-                "break_time_range": (args.break_min, args.break_max),
-                "simulate_delays": not args.no_simulate_delays
-            }
-        )
-        threads.append(thread)
+    if not prompts:
+        print("ERRO: arquivo de prompts vazio.")
+        exit(1)
 
-    # Iniciar threads (modo paralelo ou sequencial)
+    print(f"[INFO] {len(prompts)} personas carregadas de {args.prompts_file}.")
+
+    # ---------------------------------------------------------------------
+    # Construção da fila de execução
+    # ---------------------------------------------------------------------
+    persona_items = list(prompts.items())  # (persona_id, prompt)
+    run_queue = persona_items * args.passes
+    total_runs = len(run_queue)
+
+    print(f"[INFO] Total de execuções planejadas: {total_runs} (passes = {args.passes}).")
+
+    max_parallel = max(1, args.window_size)
+    thinking_range = (args.thinking_min, args.thinking_max)
+    break_range = (args.break_min, args.break_max)
+
+    # ---------------------------------------------------------------------
+    # Execução
+    # ---------------------------------------------------------------------
     if args.sequencial:
-        # Execução sequencial
-        print(f"Iniciando {args.num_usuarios} usuários em modo SEQUENCIAL")
-        for thread in threads:
-            thread.start()
-            thread.join()
+        print("[INFO] Modo sequencial ativado…")
+        for persona_id, persona_prompt in run_queue:
+            iniciar_usuario(
+                persona_id,
+                persona_prompt,
+                api_url=args.api_url,
+                typing_speed_wpm=args.typing_speed,
+                thinking_time_range=thinking_range,
+                break_probability=args.break_probability,
+                break_time_range=break_range,
+                simulate_delays=not args.no_simulate_delays,
+            )
     else:
-        # Execução em paralelo
-        print(f"Iniciando {args.num_usuarios} usuários em modo PARALELO")
-        for thread in threads:
-            thread.start()
-            # Pequeno delay para evitar colisões na API
-            time.sleep(0.5)
+        print(f"[INFO] Executando em paralelo com até {max_parallel} threads…")
+        with ThreadPoolExecutor(max_workers=max_parallel) as executor:
+            futures = [
+                executor.submit(
+                    iniciar_usuario,
+                    persona_id,
+                    persona_prompt,
+                    api_url=args.api_url,
+                    typing_speed_wpm=args.typing_speed,
+                    thinking_time_range=thinking_range,
+                    break_probability=args.break_probability,
+                    break_time_range=break_range,
+                    simulate_delays=not args.no_simulate_delays,
+                )
+                for persona_id, persona_prompt in run_queue
+            ]
 
-        # Aguardar todas as threads terminarem
-        for thread in threads:
-            thread.join()
+            # Feedback de progresso opcional
+            for _ in as_completed(futures):
+                pass  # Aguardamos todas completarem; logs acontecem dentro de iniciar_usuario
 
-    print("Todos os usuários concluíram suas conversas.")
+    print("[INFO] Todas as execuções concluídas.")

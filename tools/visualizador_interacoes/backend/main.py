@@ -1,4 +1,5 @@
 import logging
+import zipfile
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import StreamingResponse
 import sqlite3
@@ -159,6 +160,36 @@ def list_interactions():
     finally:
         conn.close()
 
+@app.get("/interactions/raw/{thread_id}")
+def get_interaction_raw(thread_id: str):
+    conn = get_db_connection()
+    try:
+        # Recupera o último checkpoint do 'thread_id' especificado
+        cursor = conn.execute("""
+                SELECT checkpoint, type 
+                FROM checkpoints
+                WHERE thread_id = ?
+                ORDER BY checkpoint_id DESC
+                LIMIT 1
+            """, (thread_id,))
+        row = cursor.fetchone()
+        if row is None:
+            # Nenhuma interação encontrada para o thread_id
+            raise HTTPException(status_code=404, detail="Interação não encontrada.")
+
+        checkpoint_data = row["checkpoint"]
+        record_type = row["type"]
+        if checkpoint_data is None:
+            # Histórico vazio ou inexistente, mesmo com o thread_id encontrado
+            raise HTTPException(status_code=404, detail="Histórico não encontrado.")
+
+        # Decodifica o checkpoint usando o serializador apropriado
+        conversation = JsonPlusSerializer().loads_typed((record_type, checkpoint_data))
+        # Retorna o objeto JSON completo
+        return conversation
+    finally:
+        # Garante o fechamento da conexão com o banco de dados
+        conn.close()
 
 @app.get("/interactions/{thread_id}")
 def get_interaction(thread_id: str):
@@ -278,8 +309,8 @@ def get_interaction(thread_id: str):
         conn.close()
 
 
-@app.get("/interactions/{thread_id}/excel")
-def export_interaction_excel(thread_id: str):
+@app.get("/interactions/{thread_id}/csv")
+def export_interaction_csv(thread_id: str):
     """
     Gera e retorna um arquivo CSV contendo todas as mensagens
     (content e type) referentes à thread_id informada.
@@ -305,6 +336,7 @@ def export_interaction_excel(thread_id: str):
         # Decodifica usando o serializador
         conversation = JsonPlusSerializer().loads_typed((record_type, checkpoint_data))
         messages = conversation.get("channel_values", {}).get("messages", [])
+        persona_id = conversation.get("channel_values", {}).get("persona_id", None)
 
         # Monta uma lista de dicionários simples para criar o DataFrame
         data_for_df = []
@@ -329,7 +361,7 @@ def export_interaction_excel(thread_id: str):
         output.seek(0)
 
         # Retorna como StreamingResponse para download
-        filename = f"conversa_{thread_id}.csv"
+        filename = f"conversa_{persona_id}_{thread_id}.csv"
         headers = {"Content-Disposition": f"attachment; filename={filename}"}
         return StreamingResponse(
             output,
@@ -337,5 +369,70 @@ def export_interaction_excel(thread_id: str):
             headers=headers
         )
 
+    finally:
+        conn.close()
+
+@app.get("/interactions/export/all_csv_zip")
+def export_all_interactions_zip():
+    """
+    Exporta todas as interações em arquivos CSV separados e retorna um ZIP.
+    Cada CSV corresponde a uma thread_id.
+    """
+    conn = get_db_connection()
+    try:
+        # Busca todos os thread_ids distintos
+        cursor = conn.execute("SELECT DISTINCT thread_id FROM checkpoints;")
+        rows = cursor.fetchall()
+        thread_ids = [row["thread_id"] for row in rows]
+
+        # Cria um ZIP em memória
+        zip_buffer = io.BytesIO()
+        with zipfile.ZipFile(zip_buffer, "w", zipfile.ZIP_DEFLATED) as zip_file:
+            for tid in thread_ids:
+                # Busca o último checkpoint da thread
+                c = conn.execute("""
+                    SELECT checkpoint, type
+                    FROM checkpoints
+                    WHERE thread_id = ?
+                    ORDER BY checkpoint_id DESC
+                    LIMIT 1
+                """, (tid,))
+                row = c.fetchone()
+                if not row or not row["checkpoint"]:
+                    continue
+
+                checkpoint_data = row["checkpoint"]
+                record_type = row["type"]
+                conversation = JsonPlusSerializer().loads_typed((record_type, checkpoint_data))
+                messages = conversation.get("channel_values", {}).get("messages", [])
+                persona_id = conversation.get("channel_values", {}).get("persona_id", "unknown")
+
+                # Monta lista de mensagens para o DataFrame
+                data_for_df = []
+                for msg in messages:
+                    if isinstance(msg, HumanMessage):
+                        msg_type = "ai"
+                    elif isinstance(msg, AIMessage):
+                        msg_type = "human"
+                    else:
+                        msg_type = "other"
+                    data_for_df.append({
+                        "type": msg_type,
+                        "content": getattr(msg, "content", "")
+                    })
+
+                # Cria o DataFrame e salva em CSV em memória
+                df = pd.DataFrame(data_for_df)
+                csv_buffer = io.StringIO()
+                df.to_csv(csv_buffer, index=False)
+                csv_bytes = csv_buffer.getvalue().encode("utf-8")
+
+                # Nome do arquivo CSV
+                filename = f"conversa_{persona_id}_{tid}.csv"
+                zip_file.writestr(filename, csv_bytes)
+
+        zip_buffer.seek(0)
+        headers = {"Content-Disposition": "attachment; filename=interacoes.zip"}
+        return StreamingResponse(zip_buffer, media_type="application/zip", headers=headers)
     finally:
         conn.close()

@@ -124,7 +124,7 @@ class ChatBotRag(ChatBotBase):
         self.app = RAGSystem(base_path="./RAG Cartões",
                              thread_id=self.config,
                              memory=memory_saver,
-                             model_name=ModelName.GEMINI_THINKING_EXP)
+                             model_name=ModelName.GPT4)
         self.app.initialize(reindex=False)
 
     def process_query(self, query: str) -> str:
