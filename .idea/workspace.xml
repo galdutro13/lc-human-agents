@@ -4,8 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0cea1559-660a-43f1-803f-04da1cdf897d" name="Changes" comment="**Refatora gestão de personas, fluxos de interação e exportação de dados**&#10;&#10;* **personas.json**: reorganiza e amplia os templates de personas, renomeando chaves para IDs genéricos (“1” → “1t”, “2t” etc.) e adicionando novos perfis.&#10;* **Módulo `source/persona`**: introduz `PersonaWorkflowBuilder`, `PersonaState` e `PersonaChatFunction` para orquestrar workflows de persona com LangGraph.&#10;* **`usuario.py`**: inclui `persona_id` no construtor, passa o ID ao invocar o fluxo, implementa `initialize` via `PersonaWorkflowBuilder` e finaliza sessão com o BancoBot.&#10;* **`tools/enxame_usuario/start_usuarios.py`**: refatora o script de execução de personas para usar `ThreadPoolExecutor`, adiciona parâmetros `--window-size` e `--passes`, e suporta modo seqüencial ou paralelo com carregamento dinâmico de personas.&#10;* **`visualizador_interacoes/backend/main.py`**:&#10;&#10;  * importa `zipfile`&#10;  * adiciona endpoint **GET /interactions/raw/{thread\_id}** para retornar o checkpoint completo&#10;  * renomeia `/interactions/{thread_id}/excel` → **/csv**, incluindo `persona_id` no nome do arquivo&#10;  * cria **/interactions/export/all\_csv\_zip** para exportar todas as threads como ZIP de CSVs&#10;* **`source/constantes/models.py`**: atualiza `GEMINI_THINKING_EXP` para a nova versão “gemini-2.5-pro-preview-05-06”.&#10;* **`source/tests/chatbot_test/chatbot.py`**: altera modelo padrão de `GEMINI_THINKING_EXP` para `GPT4`.&#10;* **`tools/bancobot_service/banco_service.py`**: ajusta instância de `BancoBot` para `think_exp=False`.&#10;* **`RAG Cartões/config.yaml`**: padroniza e enriquece os templates de prompts RAG, incluindo seção de “Processo de Resposta Sugerido” e instruções de formatação.">
+    <list default="true" id="0cea1559-660a-43f1-803f-04da1cdf897d" name="Changes" comment="Adicionar o parametro pra controlar o uso de tokens de pensamento.">
+      <change afterPath="$PROJECT_DIR$/personas_tf.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RAG Cartões/config.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/RAG Cartões/config.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/personas.json" beforeDir="false" afterPath="$PROJECT_DIR$/personas.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/constantes/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/constantes/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tools/enxame_usuario/start_usuarios.py" beforeDir="false" afterPath="$PROJECT_DIR$/tools/enxame_usuario/start_usuarios.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -106,7 +110,7 @@
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;database.data.extractors.current.export.id&quot;: &quot;Comma-separated (CSV)_id&quot;,
     &quot;database.data.extractors.current.id&quot;: &quot;Comma-separated (CSV)_id&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;trabalho__gabriel&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;C:/Users/galdu/PycharmProjects/lc-human-agents/source/constantes&quot;,
@@ -150,7 +154,7 @@
       <recent name="C:\Users\galdu\PycharmProjects\lc-human-agents\tools\db_work" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.start_enxame_usuarios">
+  <component name="RunManager" selected="Python.launcher">
     <configuration name="Extract personas" type="PythonConfigurationType" factoryName="Python" folderName="TOOLS">
       <module name="lc-human-agents" />
       <option name="ENV_FILES" value="" />
@@ -423,7 +427,7 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/tools/enxame_usuario/start_usuarios.py" />
-      <option name="PARAMETERS" value="-t --window-size 4 --passes 7 --prompts-file personas.json --typing-speed 305 --break-probability 0.0001 --api-url http://localhost:8080" />
+      <option name="PARAMETERS" value="-t --window-size 4 --passes 7 --prompts-file personas_tf.json --typing-speed 305 --break-probability 0.0001 --api-url http://localhost:8080" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
@@ -496,19 +500,19 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="FastAPI.visualizador_backend" />
       <item itemvalue="Python.Extract personas" />
-      <item itemvalue="Python.prompt_generation" />
-      <item itemvalue="Python.start_banco_service" />
-      <item itemvalue="Python.start_enxame_usuarios" />
+      <item itemvalue="Python.chatbot_test" />
       <item itemvalue="Python.document_loader_integration" />
-      <item itemvalue="Python.rag_test" />
       <item itemvalue="Python.gerar_missoes" />
       <item itemvalue="Python.insert_cenario&amp;persona" />
-      <item itemvalue="Python.setup_db_cenarios" />
-      <item itemvalue="Python.chatbot_test" />
       <item itemvalue="Python.launcher" />
+      <item itemvalue="Python.prompt_generation" />
       <item itemvalue="Python.rag_system" />
+      <item itemvalue="Python.rag_test" />
+      <item itemvalue="Python.setup_db_cenarios" />
+      <item itemvalue="Python.start_banco_service" />
+      <item itemvalue="Python.start_enxame_usuarios" />
+      <item itemvalue="FastAPI.visualizador_backend" />
       <item itemvalue="Python tests.Python tests for workflow_integration_test.TestChatGraphPromptIntegration" />
       <item itemvalue="Python tests.Python tests for workflow_integration_test.TestChatGraphPromptIntegration.test_chat_function" />
       <item itemvalue="Python tests.Python tests for workflow_integration_test.TestChatGraphPromptIntegration.test_default_workflow" />
@@ -651,7 +655,14 @@
       <workItem from="1747024954156" duration="55000" />
       <workItem from="1747051434399" duration="2496000" />
       <workItem from="1747070737299" duration="229000" />
-      <workItem from="1747089083546" duration="472000" />
+      <workItem from="1747089083546" duration="650000" />
+      <workItem from="1747091796812" duration="2284000" />
+      <workItem from="1747152639597" duration="8454000" />
+      <workItem from="1747169861451" duration="66000" />
+      <workItem from="1747172215713" duration="1022000" />
+      <workItem from="1747180738167" duration="1127000" />
+      <workItem from="1747223647739" duration="859000" />
+      <workItem from="1747226969264" duration="129000" />
     </task>
     <task id="LOCAL-00001" summary="Initial Commit.">
       <option name="closed" value="true" />
@@ -941,14 +952,21 @@
       <option name="project" value="LOCAL" />
       <updated>1747070911446</updated>
     </task>
-    <option name="localTasksCounter" value="37" />
+    <task id="LOCAL-00037" summary="Adicionar o parametro pra controlar o uso de tokens de pensamento.">
+      <option name="closed" value="true" />
+      <created>1747089646531</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1747089646531</updated>
+    </task>
+    <option name="localTasksCounter" value="38" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Introduction of the RAG codebase." />
     <MESSAGE value="Correções de bugs na logica do RAG." />
     <MESSAGE value="Refatorar sistema de recuperação de documentos no RAG&#10;&#10;Implementa uma classe RetrieveFunction para substituir a função anônima de recuperação, &#10;permitindo o acesso direto aos retrievers por datasource. Principais alterações:&#10;&#10;- Adiciona classe RetrieveFunction que implementa a interface ChatFunction&#10;- Armazena retrievers separadamente na RAGResponseFunction para reuso&#10;- Modifica o workflow para utilizar a nova função de recuperação&#10;- Remove a função anônima _create_retriever_function&#10;&#10;Esta mudança melhora a modularidade do código e corrige problemas na lógica de recuperação&#10;de documentos, fornecendo tratamento adequado para datasources indisponíveis." />
     <MESSAGE value="refactor(rag): implementar a capacidade de armazenar o histórico de conversa." />
@@ -973,7 +991,8 @@
     <MESSAGE value="Desagregação das funções do rag em arquivos diferentes para melhorar a manutenibilidade." />
     <MESSAGE value="COMMIT_MSG" />
     <MESSAGE value="**Refatora gestão de personas, fluxos de interação e exportação de dados**&#10;&#10;* **personas.json**: reorganiza e amplia os templates de personas, renomeando chaves para IDs genéricos (“1” → “1t”, “2t” etc.) e adicionando novos perfis.&#10;* **Módulo `source/persona`**: introduz `PersonaWorkflowBuilder`, `PersonaState` e `PersonaChatFunction` para orquestrar workflows de persona com LangGraph.&#10;* **`usuario.py`**: inclui `persona_id` no construtor, passa o ID ao invocar o fluxo, implementa `initialize` via `PersonaWorkflowBuilder` e finaliza sessão com o BancoBot.&#10;* **`tools/enxame_usuario/start_usuarios.py`**: refatora o script de execução de personas para usar `ThreadPoolExecutor`, adiciona parâmetros `--window-size` e `--passes`, e suporta modo seqüencial ou paralelo com carregamento dinâmico de personas.&#10;* **`visualizador_interacoes/backend/main.py`**:&#10;&#10;  * importa `zipfile`&#10;  * adiciona endpoint **GET /interactions/raw/{thread\_id}** para retornar o checkpoint completo&#10;  * renomeia `/interactions/{thread_id}/excel` → **/csv**, incluindo `persona_id` no nome do arquivo&#10;  * cria **/interactions/export/all\_csv\_zip** para exportar todas as threads como ZIP de CSVs&#10;* **`source/constantes/models.py`**: atualiza `GEMINI_THINKING_EXP` para a nova versão “gemini-2.5-pro-preview-05-06”.&#10;* **`source/tests/chatbot_test/chatbot.py`**: altera modelo padrão de `GEMINI_THINKING_EXP` para `GPT4`.&#10;* **`tools/bancobot_service/banco_service.py`**: ajusta instância de `BancoBot` para `think_exp=False`.&#10;* **`RAG Cartões/config.yaml`**: padroniza e enriquece os templates de prompts RAG, incluindo seção de “Processo de Resposta Sugerido” e instruções de formatação." />
-    <option name="LAST_COMMIT_MESSAGE" value="**Refatora gestão de personas, fluxos de interação e exportação de dados**&#10;&#10;* **personas.json**: reorganiza e amplia os templates de personas, renomeando chaves para IDs genéricos (“1” → “1t”, “2t” etc.) e adicionando novos perfis.&#10;* **Módulo `source/persona`**: introduz `PersonaWorkflowBuilder`, `PersonaState` e `PersonaChatFunction` para orquestrar workflows de persona com LangGraph.&#10;* **`usuario.py`**: inclui `persona_id` no construtor, passa o ID ao invocar o fluxo, implementa `initialize` via `PersonaWorkflowBuilder` e finaliza sessão com o BancoBot.&#10;* **`tools/enxame_usuario/start_usuarios.py`**: refatora o script de execução de personas para usar `ThreadPoolExecutor`, adiciona parâmetros `--window-size` e `--passes`, e suporta modo seqüencial ou paralelo com carregamento dinâmico de personas.&#10;* **`visualizador_interacoes/backend/main.py`**:&#10;&#10;  * importa `zipfile`&#10;  * adiciona endpoint **GET /interactions/raw/{thread\_id}** para retornar o checkpoint completo&#10;  * renomeia `/interactions/{thread_id}/excel` → **/csv**, incluindo `persona_id` no nome do arquivo&#10;  * cria **/interactions/export/all\_csv\_zip** para exportar todas as threads como ZIP de CSVs&#10;* **`source/constantes/models.py`**: atualiza `GEMINI_THINKING_EXP` para a nova versão “gemini-2.5-pro-preview-05-06”.&#10;* **`source/tests/chatbot_test/chatbot.py`**: altera modelo padrão de `GEMINI_THINKING_EXP` para `GPT4`.&#10;* **`tools/bancobot_service/banco_service.py`**: ajusta instância de `BancoBot` para `think_exp=False`.&#10;* **`RAG Cartões/config.yaml`**: padroniza e enriquece os templates de prompts RAG, incluindo seção de “Processo de Resposta Sugerido” e instruções de formatação." />
+    <MESSAGE value="Adicionar o parametro pra controlar o uso de tokens de pensamento." />
+    <option name="LAST_COMMIT_MESSAGE" value="Adicionar o parametro pra controlar o uso de tokens de pensamento." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1000,12 +1019,12 @@
     </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/human_agents$start_banco_service.coverage" NAME="start_banco_service Coverage Results" MODIFIED="1747051444988" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/human_agents$start_banco_service.coverage" NAME="start_banco_service Coverage Results" MODIFIED="1747223737337" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/lc_human_agents$gerar_missoes.coverage" NAME="gerar_missoes Coverage Results" MODIFIED="1735167511941" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/lc_human_agents$Extract_personas.coverage" NAME="Extract personas Coverage Results" MODIFIED="1735162567412" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/lc_human_agents$launcher.coverage" NAME="launcher Coverage Results" MODIFIED="1745446642223" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/lc_human_agents$visualizador_backend.coverage" NAME="visualizador_backend Coverage Results" MODIFIED="1744146242613" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
-    <SUITE FILE_PATH="coverage/human_agents$start_enxame_usuarios.coverage" NAME="start_enxame_usuarios Coverage Results" MODIFIED="1747051468307" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/human_agents$start_enxame_usuarios.coverage" NAME="start_enxame_usuarios Coverage Results" MODIFIED="1747223746282" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/lc_human_agents$rag_system.coverage" NAME="rag_system Coverage Results" MODIFIED="1743626120825" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/source/rag/system" />
     <SUITE FILE_PATH="coverage/lc_human_agents$prompt_generator.coverage" NAME="prompt_generator Coverage Results" MODIFIED="1735165702542" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tools/prompt_generation" />
     <SUITE FILE_PATH="coverage/human_agents$rag_test.coverage" NAME="rag_test Coverage Results" MODIFIED="1745612912293" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
@@ -1016,7 +1035,7 @@
     <SUITE FILE_PATH="coverage/lc_human_agents$rag_test.coverage" NAME="rag_test Coverage Results" MODIFIED="1745441865179" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/lc_human_agents$run_services.coverage" NAME="run_services Coverage Results" MODIFIED="1742846551041" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/lc_human_agents$prompt_generation.coverage" NAME="prompt_generation Coverage Results" MODIFIED="1735239266449" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
-    <SUITE FILE_PATH="coverage/human_agents$launcher.coverage" NAME="launcher Coverage Results" MODIFIED="1747065321997" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/human_agents$launcher.coverage" NAME="launcher Coverage Results" MODIFIED="1747226984950" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/lc_human_agents$chatbot_server_test.coverage" NAME="chatbot server test Coverage Results" MODIFIED="1735141967192" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="C:\Users\galdu\PycharmProjects\lc-human-agents" />
     <SUITE FILE_PATH="coverage/lc_human_agents$read_personas.coverage" NAME="read_personas Coverage Results" MODIFIED="1735148903371" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tools" />
     <SUITE FILE_PATH="coverage/lc_human_agents$chatbot_test.coverage" NAME="chatbot_test Coverage Results" MODIFIED="1743020322202" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />

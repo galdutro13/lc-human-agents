@@ -62,7 +62,7 @@ def iniciar_usuario(persona_id: str,
 
     try:
         usuario_bot.run(
-            initial_query="Olá cliente Itaú! Como posso lhe ajudar?",
+            initial_query="Olá cliente, como posso lhe ajudar?",
             max_iterations=10,
         )
         print(f"[INFO] Persona '{persona_id}' concluiu a conversa.")
