@@ -1,4 +1,4 @@
-from typing import Dict, List, Optional, Union, Literal
+from typing import Dict, List, Optional, Any
 from pydantic import BaseModel, Field
 
 class RetrieverConfig(BaseModel):
@@ -48,6 +48,10 @@ class EmbeddingConfig(BaseModel):
     model: str
     provider: str = "openai"
     batch_size: Optional[int] = None
+    model_kwargs: Dict[str, Any] = Field(
+        default_factory=dict,
+        description="Argumentos adicionais passados ao construtor do modelo (ex.: {'device':'cpu'})"
+    )
 
 
 class VectorstoreConfig(BaseModel):

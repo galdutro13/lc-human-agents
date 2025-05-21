@@ -37,7 +37,8 @@ class EmbeddingModelFactory:
             return OpenAIEmbeddings(**kwargs)
 
         elif config.provider.lower() == "huggingface":
-            return HuggingFaceEmbeddings(model_name=config.model)
+            return HuggingFaceEmbeddings(model_name=config.model,
+                                         model_kwargs=config.model_kwargs)
 
         else:
             raise ValueError(f"Unsupported embedding provider: {config.provider}")
