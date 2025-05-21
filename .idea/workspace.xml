@@ -4,11 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0cea1559-660a-43f1-803f-04da1cdf897d" name="Changes" comment="Novo branch para os testes do Gabriel">
+    <list default="true" id="0cea1559-660a-43f1-803f-04da1cdf897d" name="Changes" comment="Configurações do dispositivo de execução: agora é possível configurar se o RAG será executado na CPU ou na GPU.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/RAG Cartões/config.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/RAG Cartões/config.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/rag/config/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/rag/config/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/rag/vectorstore/vectorstore_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/rag/vectorstore/vectorstore_manager.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,7 +34,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="master" />
+        <entry key="$PROJECT_DIR$" value="trabalho_gabriel" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -67,62 +65,61 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;FastAPI.visualizador_backend.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests for persona_csv_integration.TestPersonaCSVIntegration.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests for test_csv_to_json.TestCSVtoJSONConverter.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests for test_csv_to_json.TestCSVtoJSONConverter.test_malformed_csv.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests for test_prompt_manager.TestPromptGenerators.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests for test_prompt_manager.TestPromptGenerators.test_custom_prompt_generator.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests for test_prompt_manager.TestPromptGenerators.test_system_prompt_generator_invalid_strategy.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests for workflow_integration_test.TestChatGraphPromptIntegration.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests for workflow_integration_test.TestChatGraphPromptIntegration.test_chat_function.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests for workflow_integration_test.TestChatGraphPromptIntegration.test_default_workflow.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests for workflow_integration_test.TestChatGraphPromptIntegration.test_initial.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests in test_prompt_manager.py.executor&quot;: &quot;Run&quot;,
-    &quot;Python.Extract personas.executor&quot;: &quot;Run&quot;,
-    &quot;Python.chatbot server test.executor&quot;: &quot;Run&quot;,
-    &quot;Python.chatbot_test.executor&quot;: &quot;Run&quot;,
-    &quot;Python.document_loader_integration.executor&quot;: &quot;Run&quot;,
-    &quot;Python.export_checkpoints.executor&quot;: &quot;Run&quot;,
-    &quot;Python.gerar_missoes.executor&quot;: &quot;Run&quot;,
-    &quot;Python.insert_cenario&amp;persona.executor&quot;: &quot;Run&quot;,
-    &quot;Python.launcher.executor&quot;: &quot;Run&quot;,
-    &quot;Python.llms.executor&quot;: &quot;Run&quot;,
-    &quot;Python.main.executor&quot;: &quot;Run&quot;,
-    &quot;Python.models.executor&quot;: &quot;Run&quot;,
-    &quot;Python.prompt_generation.executor&quot;: &quot;Run&quot;,
-    &quot;Python.prompt_generator.executor&quot;: &quot;Run&quot;,
-    &quot;Python.rag_system.executor&quot;: &quot;Run&quot;,
-    &quot;Python.rag_test.executor&quot;: &quot;Run&quot;,
-    &quot;Python.read_personas.executor&quot;: &quot;Run&quot;,
-    &quot;Python.run_services.executor&quot;: &quot;Run&quot;,
-    &quot;Python.setup_db_cenarios.executor&quot;: &quot;Run&quot;,
-    &quot;Python.setup_simulacoes_db.executor&quot;: &quot;Run&quot;,
-    &quot;Python.start_banco_service.executor&quot;: &quot;Run&quot;,
-    &quot;Python.start_enxame_usuarios.executor&quot;: &quot;Run&quot;,
-    &quot;Python.workflow_builder.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;database.data.extractors.current.export.id&quot;: &quot;Comma-separated (CSV)_id&quot;,
-    &quot;database.data.extractors.current.id&quot;: &quot;Comma-separated (CSV)_id&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;trabalho__gabriel&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/galdu/PycharmProjects/lc-human-agents/source/constantes&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;com.github.copilot.settings.ApplicationConfigurable&quot;,
-    &quot;vcs.patch.path&quot;: &quot;C:/Users/galdu/OneDrive/Desktop&quot;,
-    &quot;vcs.patch.to.clipboard&quot;: &quot;true&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "FastAPI.visualizador_backend.executor": "Run",
+    "Python tests.Python tests for persona_csv_integration.TestPersonaCSVIntegration.executor": "Run",
+    "Python tests.Python tests for test_csv_to_json.TestCSVtoJSONConverter.executor": "Run",
+    "Python tests.Python tests for test_csv_to_json.TestCSVtoJSONConverter.test_malformed_csv.executor": "Run",
+    "Python tests.Python tests for test_prompt_manager.TestPromptGenerators.executor": "Run",
+    "Python tests.Python tests for test_prompt_manager.TestPromptGenerators.test_custom_prompt_generator.executor": "Run",
+    "Python tests.Python tests for test_prompt_manager.TestPromptGenerators.test_system_prompt_generator_invalid_strategy.executor": "Run",
+    "Python tests.Python tests for workflow_integration_test.TestChatGraphPromptIntegration.executor": "Run",
+    "Python tests.Python tests for workflow_integration_test.TestChatGraphPromptIntegration.test_chat_function.executor": "Run",
+    "Python tests.Python tests for workflow_integration_test.TestChatGraphPromptIntegration.test_default_workflow.executor": "Run",
+    "Python tests.Python tests for workflow_integration_test.TestChatGraphPromptIntegration.test_initial.executor": "Run",
+    "Python tests.Python tests in test_prompt_manager.py.executor": "Run",
+    "Python.Extract personas.executor": "Run",
+    "Python.chatbot server test.executor": "Run",
+    "Python.chatbot_test.executor": "Run",
+    "Python.document_loader_integration.executor": "Run",
+    "Python.export_checkpoints.executor": "Run",
+    "Python.gerar_missoes.executor": "Run",
+    "Python.insert_cenario&persona.executor": "Run",
+    "Python.launcher.executor": "Run",
+    "Python.llms.executor": "Run",
+    "Python.main.executor": "Run",
+    "Python.models.executor": "Run",
+    "Python.prompt_generation.executor": "Run",
+    "Python.prompt_generator.executor": "Run",
+    "Python.rag_system.executor": "Run",
+    "Python.rag_test.executor": "Run",
+    "Python.read_personas.executor": "Run",
+    "Python.run_services.executor": "Run",
+    "Python.setup_db_cenarios.executor": "Run",
+    "Python.setup_simulacoes_db.executor": "Run",
+    "Python.start_banco_service.executor": "Run",
+    "Python.start_enxame_usuarios.executor": "Run",
+    "Python.workflow_builder.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "database.data.extractors.current.export.id": "Comma-separated (CSV)_id",
+    "database.data.extractors.current.id": "Comma-separated (CSV)_id",
+    "git-widget-placeholder": "futuro__main",
+    "ignore.virus.scanning.warn.message": "true",
+    "junie.onboarding.icon.badge.shown": "true",
+    "last_opened_file_path": "C:/Users/galdu/PycharmProjects/lc-human-agents/source/constantes",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "com.github.copilot.settings.ApplicationConfigurable",
+    "vcs.patch.path": "C:/Users/galdu/OneDrive/Desktop",
+    "vcs.patch.to.clipboard": "true",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="QodanaHighlightedReportService">
     <option name="localReportPersistedInfo">
       <LocalReportPersistedInfo>
@@ -666,7 +663,7 @@
       <workItem from="1747327543779" duration="197000" />
       <workItem from="1747678545509" duration="2000" />
       <workItem from="1747767136613" duration="43000" />
-      <workItem from="1747832832404" duration="4056000" />
+      <workItem from="1747832832404" duration="5359000" />
     </task>
     <task id="LOCAL-00001" summary="Initial Commit.">
       <option name="closed" value="true" />
@@ -972,14 +969,21 @@
       <option name="project" value="LOCAL" />
       <updated>1747244282625</updated>
     </task>
-    <option name="localTasksCounter" value="39" />
+    <task id="LOCAL-00039" summary="Configurações do dispositivo de execução: agora é possível configurar se o RAG será executado na CPU ou na GPU.">
+      <option name="closed" value="true" />
+      <created>1747839446348</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1747839446348</updated>
+    </task>
+    <option name="localTasksCounter" value="40" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Refatorar sistema de recuperação de documentos no RAG&#10;&#10;Implementa uma classe RetrieveFunction para substituir a função anônima de recuperação, &#10;permitindo o acesso direto aos retrievers por datasource. Principais alterações:&#10;&#10;- Adiciona classe RetrieveFunction que implementa a interface ChatFunction&#10;- Armazena retrievers separadamente na RAGResponseFunction para reuso&#10;- Modifica o workflow para utilizar a nova função de recuperação&#10;- Remove a função anônima _create_retriever_function&#10;&#10;Esta mudança melhora a modularidade do código e corrige problemas na lógica de recuperação&#10;de documentos, fornecendo tratamento adequado para datasources indisponíveis." />
     <MESSAGE value="refactor(rag): implementar a capacidade de armazenar o histórico de conversa." />
     <MESSAGE value="Incluir as modificações do workspace.xml" />
     <MESSAGE value="Integração do sistema rag à plataforma de teste." />
@@ -1004,7 +1008,8 @@
     <MESSAGE value="**Refatora gestão de personas, fluxos de interação e exportação de dados**&#10;&#10;* **personas.json**: reorganiza e amplia os templates de personas, renomeando chaves para IDs genéricos (“1” → “1t”, “2t” etc.) e adicionando novos perfis.&#10;* **Módulo `source/persona`**: introduz `PersonaWorkflowBuilder`, `PersonaState` e `PersonaChatFunction` para orquestrar workflows de persona com LangGraph.&#10;* **`usuario.py`**: inclui `persona_id` no construtor, passa o ID ao invocar o fluxo, implementa `initialize` via `PersonaWorkflowBuilder` e finaliza sessão com o BancoBot.&#10;* **`tools/enxame_usuario/start_usuarios.py`**: refatora o script de execução de personas para usar `ThreadPoolExecutor`, adiciona parâmetros `--window-size` e `--passes`, e suporta modo seqüencial ou paralelo com carregamento dinâmico de personas.&#10;* **`visualizador_interacoes/backend/main.py`**:&#10;&#10;  * importa `zipfile`&#10;  * adiciona endpoint **GET /interactions/raw/{thread\_id}** para retornar o checkpoint completo&#10;  * renomeia `/interactions/{thread_id}/excel` → **/csv**, incluindo `persona_id` no nome do arquivo&#10;  * cria **/interactions/export/all\_csv\_zip** para exportar todas as threads como ZIP de CSVs&#10;* **`source/constantes/models.py`**: atualiza `GEMINI_THINKING_EXP` para a nova versão “gemini-2.5-pro-preview-05-06”.&#10;* **`source/tests/chatbot_test/chatbot.py`**: altera modelo padrão de `GEMINI_THINKING_EXP` para `GPT4`.&#10;* **`tools/bancobot_service/banco_service.py`**: ajusta instância de `BancoBot` para `think_exp=False`.&#10;* **`RAG Cartões/config.yaml`**: padroniza e enriquece os templates de prompts RAG, incluindo seção de “Processo de Resposta Sugerido” e instruções de formatação." />
     <MESSAGE value="Adicionar o parametro pra controlar o uso de tokens de pensamento." />
     <MESSAGE value="Novo branch para os testes do Gabriel" />
-    <option name="LAST_COMMIT_MESSAGE" value="Novo branch para os testes do Gabriel" />
+    <MESSAGE value="Configurações do dispositivo de execução: agora é possível configurar se o RAG será executado na CPU ou na GPU." />
+    <option name="LAST_COMMIT_MESSAGE" value="Configurações do dispositivo de execução: agora é possível configurar se o RAG será executado na CPU ou na GPU." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
