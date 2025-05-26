@@ -51,7 +51,10 @@ class UsuarioBot(ChatBotBase):
         self.simulate_delays = simulate_delays  # Se deve aguardar os atrasos simulados
 
         # Estado de temporização
-        self.simulated_timestamp = datetime.now()
+        self.pre_banco_generation_time = datetime.now()
+        self.banco_generation_time = datetime.now()
+        self.banco_generation_elapsed_time: timedelta = timedelta(seconds=0)
+        self.simulated_timestamp = self.pre_banco_generation_time
         self.last_break_time = 0
         self.total_thinking_time = 0
         self.total_typing_time = 0
@@ -134,7 +137,7 @@ class UsuarioBot(ChatBotBase):
             max_iterations: Número máximo de trocas de mensagens
         """
         query = initial_query
-
+        self.pre_banco_generation_time = datetime.now()
         # Processa a consulta inicial (banco inicia a conversa)
         response = self.process_query(query)
         print("=== UsuarioBot Mensagem ===")
@@ -169,7 +172,10 @@ class UsuarioBot(ChatBotBase):
 
             # Envia a mensagem
             print(f"[Simulação] Enviando mensagem em {self.simulated_timestamp.strftime('%Y-%m-%d %H:%M:%S')}")
+            self.pre_banco_generation_time = datetime.now()
             banco_response = self._send_to_bancobot(response)
+            self.banco_generation_time = datetime.now()
+            self.banco_generation_elapsed_time = self.banco_generation_time - self.pre_banco_generation_time
             query = banco_response
 
             if query.lower() == exit_command:
@@ -271,13 +277,18 @@ class UsuarioBot(ChatBotBase):
         from langchain_core.messages import HumanMessage
 
         # Inclui metadados de temporização na mensagem
-        timing_metadata = {
+        user_timing_metadata = {
             "simulated_timestamp": self.simulated_timestamp.isoformat(),
             "thinking_time": self.total_thinking_time,
             "typing_time": self.total_typing_time,
             "break_time": self.last_break_time
         }
 
-        input_messages = [HumanMessage(content=query, additional_kwargs={"timing_metadata": timing_metadata})]
-        output = self.app.invoke({"messages": input_messages, "persona_id": self.persona_id}, self.config)
+        banco_timing_metadata = {
+            "banco_generation_timestamp": self.banco_generation_time.isoformat(),
+            "banco_generation_elapsed_time": self.banco_generation_elapsed_time.total_seconds()
+        }
+
+        input_messages = [HumanMessage(content=query, additional_kwargs={"timing_metadata": banco_timing_metadata})] # additional_kwargs={"timing_metadata": timing_metadata}
+        output = self.app.invoke({"messages": input_messages, "persona_id": self.persona_id, "timing_metadata": user_timing_metadata}, self.config)
         return output["messages"][-1].content

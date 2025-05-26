@@ -1,5 +1,7 @@
 from typing import Any
 
+from langchain_core.messages import AIMessage
+
 from source.chat_graph.chat_function import ChatFunction
 from source.persona.persona_state import PersonaState
 
@@ -12,9 +14,18 @@ class PersonaChatFunction(ChatFunction):
         self._prompt = prompt
         self._model = model
 
+    # TODO: corrigir o funcionamento
     def __call__(self, state: PersonaState) -> dict:
+        metadata = {}
+        if hasattr(state, 'timing_metadata'):
+            metadata['timing_metadata'] = state.timing_metadata
+
         chain = self._prompt | self._model
         response = chain.invoke(state)
+
+        if isinstance(response, AIMessage):
+            response.additional_kwargs.update(metadata)
+
         return {"messages": response}
 
     @property

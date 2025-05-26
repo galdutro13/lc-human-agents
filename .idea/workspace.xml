@@ -4,10 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0cea1559-660a-43f1-803f-04da1cdf897d" name="Changes" comment="rodar na CPU.">
-      <change afterPath="$PROJECT_DIR$/personas_carlos.json" afterDir="false" />
+    <list default="true" id="0cea1559-660a-43f1-803f-04da1cdf897d" name="Changes" comment="personas do carlos">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/constantes/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/constantes/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/persona/persona_function.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/persona/persona_function.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/persona/persona_state.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/persona/persona_state.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/tests/chatbot_test/usuario.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/tests/chatbot_test/usuario.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -31,6 +32,9 @@
         <entry key="FLASK_APP" value="app" />
       </map>
     </option>
+  </component>
+  <component name="Git.Merge.Settings">
+    <option name="BRANCH" value="origin/futuro_main" />
   </component>
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
@@ -106,7 +110,7 @@
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;database.data.extractors.current.export.id&quot;: &quot;Comma-separated (CSV)_id&quot;,
     &quot;database.data.extractors.current.id&quot;: &quot;Comma-separated (CSV)_id&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;futuro__main&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;C:/Users/galdu/PycharmProjects/lc-human-agents/source/constantes&quot;,
@@ -423,7 +427,7 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/tools/enxame_usuario/start_usuarios.py" />
-      <option name="PARAMETERS" value="--window-size 4 --passes 5 --prompts-file personas_carlos.json --typing-speed 305 --break-probability 0.0001 --api-url http://localhost:8080" />
+      <option name="PARAMETERS" value="--window-size 2 --passes 5 --prompts-file personas_carlos.json --typing-speed 305 --break-probability 0.0001 --api-url http://localhost:8080" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
@@ -668,6 +672,9 @@
       <workItem from="1747886437580" duration="10842000" />
       <workItem from="1747937179555" duration="1231000" />
       <workItem from="1748021115869" duration="483000" />
+      <workItem from="1748034646171" duration="456000" />
+      <workItem from="1748225269014" duration="180000" />
+      <workItem from="1748225873284" duration="3180000" />
     </task>
     <task id="LOCAL-00001" summary="Initial Commit.">
       <option name="closed" value="true" />
@@ -1048,12 +1055,12 @@
     </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/human_agents$start_banco_service.coverage" NAME="start_banco_service Coverage Results" MODIFIED="1747937325416" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/human_agents$start_banco_service.coverage" NAME="start_banco_service Coverage Results" MODIFIED="1748276070144" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/lc_human_agents$gerar_missoes.coverage" NAME="gerar_missoes Coverage Results" MODIFIED="1735167511941" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/lc_human_agents$Extract_personas.coverage" NAME="Extract personas Coverage Results" MODIFIED="1735162567412" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/lc_human_agents$launcher.coverage" NAME="launcher Coverage Results" MODIFIED="1745446642223" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/lc_human_agents$visualizador_backend.coverage" NAME="visualizador_backend Coverage Results" MODIFIED="1744146242613" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
-    <SUITE FILE_PATH="coverage/human_agents$start_enxame_usuarios.coverage" NAME="start_enxame_usuarios Coverage Results" MODIFIED="1747937334414" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/human_agents$start_enxame_usuarios.coverage" NAME="start_enxame_usuarios Coverage Results" MODIFIED="1748276079821" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/lc_human_agents$rag_system.coverage" NAME="rag_system Coverage Results" MODIFIED="1743626120825" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/source/rag/system" />
     <SUITE FILE_PATH="coverage/lc_human_agents$prompt_generator.coverage" NAME="prompt_generator Coverage Results" MODIFIED="1735165702542" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tools/prompt_generation" />
     <SUITE FILE_PATH="coverage/human_agents$rag_test.coverage" NAME="rag_test Coverage Results" MODIFIED="1745612912293" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
@@ -1064,7 +1071,7 @@
     <SUITE FILE_PATH="coverage/lc_human_agents$rag_test.coverage" NAME="rag_test Coverage Results" MODIFIED="1745441865179" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/lc_human_agents$run_services.coverage" NAME="run_services Coverage Results" MODIFIED="1742846551041" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/lc_human_agents$prompt_generation.coverage" NAME="prompt_generation Coverage Results" MODIFIED="1735239266449" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
-    <SUITE FILE_PATH="coverage/human_agents$launcher.coverage" NAME="launcher Coverage Results" MODIFIED="1747937806998" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/human_agents$launcher.coverage" NAME="launcher Coverage Results" MODIFIED="1748277188220" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/lc_human_agents$chatbot_server_test.coverage" NAME="chatbot server test Coverage Results" MODIFIED="1735141967192" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="C:\Users\galdu\PycharmProjects\lc-human-agents" />
     <SUITE FILE_PATH="coverage/lc_human_agents$read_personas.coverage" NAME="read_personas Coverage Results" MODIFIED="1735148903371" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tools" />
     <SUITE FILE_PATH="coverage/lc_human_agents$chatbot_test.coverage" NAME="chatbot_test Coverage Results" MODIFIED="1743020322202" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
