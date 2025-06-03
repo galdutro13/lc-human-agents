@@ -171,8 +171,6 @@ lc-human-agents/
     ```
 4. Gere os prompts:
 
-    ```bash
-    python tools/prompt_generation/prompt_generator.py
-    ```
-
-Por favor, me avise se você gostaria de fazer alguma alteração ou se está pronto para que eu crie o arquivo README.
+```bash
+python tools/prompt_generation/prompt_generator.py
+```
