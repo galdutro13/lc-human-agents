@@ -313,18 +313,18 @@ def get_interaction(thread_id: str):
 def export_interaction_csv(thread_id: str):
     """
     Gera e retorna um arquivo CSV contendo todas as mensagens
-    (content e type) referentes à thread_id informada.
+    (content, type, simulated_timestamp e elapsed_time) referentes à thread_id informada.
     """
     conn = get_db_connection()
     try:
         # Pega o último checkpoint do thread_id
         cursor = conn.execute("""
-            SELECT checkpoint, type 
-            FROM checkpoints
-            WHERE thread_id = ?
-            ORDER BY checkpoint_id DESC
-            LIMIT 1
-        """, (thread_id,))
+                              SELECT checkpoint, type
+                              FROM checkpoints
+                              WHERE thread_id = ?
+                              ORDER BY checkpoint_id DESC
+                              LIMIT 1
+                              """, (thread_id,))
         row = cursor.fetchone()
 
         if row is None or row["checkpoint"] is None:
@@ -338,18 +338,40 @@ def export_interaction_csv(thread_id: str):
         messages = conversation.get("channel_values", {}).get("messages", [])
         persona_id = conversation.get("channel_values", {}).get("persona_id", None)
 
-        # Monta uma lista de dicionários simples para criar o DataFrame
+        # Monta uma lista de dicionários para criar o DataFrame
         data_for_df = []
         for msg in messages:
+            # Determina o tipo de mensagem (invertido conforme explicado)
             if isinstance(msg, HumanMessage):
-                msg_type = "ai"
+                msg_type = "ai"  # Mensagens do banco têm type="human" mas representam o chatbot
             elif isinstance(msg, AIMessage):
-                msg_type = "human"
+                msg_type = "human"  # Mensagens do simulador têm type="ai" mas representam o usuário
             else:
                 msg_type = "other"
+
+            # Extrai informações de timing
+            timing_metadata = getattr(msg, "additional_kwargs", {}).get("timing_metadata", {})
+
+            # Determina simulated_timestamp e elapsed_time baseado no tipo real
+            if isinstance(msg, HumanMessage):  # Mensagem do banco
+                simulated_timestamp = timing_metadata.get("banco_generation_timestamp", "")
+                elapsed_time = timing_metadata.get("banco_generation_elapsed_time", 0)
+            elif isinstance(msg, AIMessage):  # Mensagem do simulador
+                simulated_timestamp = timing_metadata.get("simulated_timestamp", "")
+                # Soma thinking_time + typing_time + break_time
+                thinking_time = timing_metadata.get("thinking_time", 0)
+                typing_time = timing_metadata.get("typing_time", 0)
+                break_time = timing_metadata.get("break_time", 0)
+                elapsed_time = thinking_time + typing_time + break_time
+            else:
+                simulated_timestamp = ""
+                elapsed_time = 0
+
             data_for_df.append({
                 "type": msg_type,
-                "content": getattr(msg, "content", "")
+                "content": getattr(msg, "content", ""),
+                "simulated_timestamp": simulated_timestamp,
+                "elapsed_time": elapsed_time
             })
 
         # Cria o DataFrame
@@ -372,11 +394,12 @@ def export_interaction_csv(thread_id: str):
     finally:
         conn.close()
 
+
 @app.get("/interactions/export/all_csv_zip")
 def export_all_interactions_zip():
     """
     Exporta todas as interações em arquivos CSV separados e retorna um ZIP.
-    Cada CSV corresponde a uma thread_id.
+    Cada CSV corresponde a uma thread_id e inclui informações de timestamp.
     """
     conn = get_db_connection()
     try:
@@ -391,12 +414,12 @@ def export_all_interactions_zip():
             for tid in thread_ids:
                 # Busca o último checkpoint da thread
                 c = conn.execute("""
-                    SELECT checkpoint, type
-                    FROM checkpoints
-                    WHERE thread_id = ?
-                    ORDER BY checkpoint_id DESC
-                    LIMIT 1
-                """, (tid,))
+                                 SELECT checkpoint, type
+                                 FROM checkpoints
+                                 WHERE thread_id = ?
+                                 ORDER BY checkpoint_id DESC
+                                 LIMIT 1
+                                 """, (tid,))
                 row = c.fetchone()
                 if not row or not row["checkpoint"]:
                     continue
@@ -410,15 +433,37 @@ def export_all_interactions_zip():
                 # Monta lista de mensagens para o DataFrame
                 data_for_df = []
                 for msg in messages:
+                    # Determina o tipo de mensagem (invertido conforme explicado)
                     if isinstance(msg, HumanMessage):
-                        msg_type = "ai"
+                        msg_type = "ai"  # Mensagens do banco
                     elif isinstance(msg, AIMessage):
-                        msg_type = "human"
+                        msg_type = "human"  # Mensagens do simulador
                     else:
                         msg_type = "other"
+
+                    # Extrai informações de timing
+                    timing_metadata = getattr(msg, "additional_kwargs", {}).get("timing_metadata", {})
+
+                    # Determina simulated_timestamp e elapsed_time baseado no tipo real
+                    if isinstance(msg, HumanMessage):  # Mensagem do banco
+                        simulated_timestamp = timing_metadata.get("banco_generation_timestamp", "")
+                        elapsed_time = timing_metadata.get("banco_generation_elapsed_time", 0)
+                    elif isinstance(msg, AIMessage):  # Mensagem do simulador
+                        simulated_timestamp = timing_metadata.get("simulated_timestamp", "")
+                        # Soma thinking_time + typing_time + break_time
+                        thinking_time = timing_metadata.get("thinking_time", 0)
+                        typing_time = timing_metadata.get("typing_time", 0)
+                        break_time = timing_metadata.get("break_time", 0)
+                        elapsed_time = thinking_time + typing_time + break_time
+                    else:
+                        simulated_timestamp = ""
+                        elapsed_time = 0
+
                     data_for_df.append({
                         "type": msg_type,
-                        "content": getattr(msg, "content", "")
+                        "content": getattr(msg, "content", ""),
+                        "simulated_timestamp": simulated_timestamp,
+                        "elapsed_time": elapsed_time
                     })
 
                 # Cria o DataFrame e salva em CSV em memória
