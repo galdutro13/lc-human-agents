@@ -138,37 +138,35 @@ class UsuarioBot(ChatBotBase):
         """
         query = initial_query
         self.pre_banco_generation_time = datetime.now()
+
+        # CORREÇÃO: Calcula tempos ANTES da primeira resposta
+        # Simula o tempo de reflexão inicial
+        initial_thinking_time = self._calculate_thinking_time()
+        self.total_thinking_time = initial_thinking_time
+        self.simulated_timestamp = self.pre_banco_generation_time + timedelta(seconds=initial_thinking_time)
+
+        if self.simulate_delays:
+            print(f"[DELAY REAL] Aguardando {initial_thinking_time:.2f} segundos de reflexão inicial...")
+            time.sleep(initial_thinking_time)
+
         # Processa a consulta inicial (banco inicia a conversa)
         response = self.process_query(query)
         print("=== UsuarioBot Mensagem ===")
         print(response)
 
+        # Calcula o tempo de digitação da primeira resposta
+        initial_typing_time = self._calculate_typing_time(response)
+        self.total_typing_time = initial_typing_time
+        self.simulated_timestamp += timedelta(seconds=initial_typing_time)
+
+        if self.simulate_delays:
+            print(f"[DELAY REAL] Aguardando {initial_typing_time:.2f} segundos de digitação inicial...")
+            time.sleep(initial_typing_time)
+
         exit_command = "quit"
 
         for i in range(max_iterations):
             print(f"\n--- Iteração {i + 1} de {max_iterations} ---")
-
-            # Simula o tempo de reflexão
-            thinking_time = self._calculate_thinking_time()
-            self.total_thinking_time += thinking_time
-            self.simulated_timestamp += timedelta(seconds=thinking_time)
-            print(f"[Simulação] Pensando por {thinking_time:.2f} segundos...")
-
-            # Aguarda o tempo de reflexão (forçado a True para garantir os delays)
-            if self.simulate_delays:
-                print(f"[DELAY REAL] Aguardando {thinking_time:.2f} segundos de reflexão...")
-                time.sleep(thinking_time)
-
-            # Simula o tempo de digitação
-            typing_time = self._calculate_typing_time(response)
-            self.total_typing_time += typing_time
-            self.simulated_timestamp += timedelta(seconds=typing_time)
-            print(f"[Simulação] Digitando por {typing_time:.2f} segundos (velocidade: {self.typing_speed_wpm} wpm)...")
-
-            # Aguarda o tempo de digitação (forçado a True para garantir os delays)
-            if self.simulate_delays:
-                print(f"[DELAY REAL] Aguardando {typing_time:.2f} segundos de digitação...")
-                time.sleep(typing_time)
 
             # Envia a mensagem
             print(f"[Simulação] Enviando mensagem em {self.simulated_timestamp.strftime('%Y-%m-%d %H:%M:%S')}")
@@ -191,10 +189,24 @@ class UsuarioBot(ChatBotBase):
                 print(f"[Simulação] Fazendo uma pausa de {break_time:.2f} segundos...")
                 print(f"[Simulação] Retornando em {self.simulated_timestamp.strftime('%Y-%m-%d %H:%M:%S')}")
 
-                # Aguarda o tempo de pausa (forçado a True para garantir os delays)
+                # Aguarda o tempo de pausa
                 if self.simulate_delays:
                     print(f"[DELAY REAL] Aguardando {break_time:.2f} segundos de pausa...")
                     time.sleep(break_time)
+            else:
+                # Se não houver pausa, zera o valor
+                self.last_break_time = 0
+
+            # Simula o tempo de reflexão para a próxima resposta
+            thinking_time = self._calculate_thinking_time()
+            self.total_thinking_time += thinking_time
+            self.simulated_timestamp += timedelta(seconds=thinking_time)
+            print(f"[Simulação] Pensando por {thinking_time:.2f} segundos...")
+
+            # Aguarda o tempo de reflexão
+            if self.simulate_delays:
+                print(f"[DELAY REAL] Aguardando {thinking_time:.2f} segundos de reflexão...")
+                time.sleep(thinking_time)
 
             # Processa a resposta
             response = self.process_query(query)
@@ -204,6 +216,17 @@ class UsuarioBot(ChatBotBase):
             if exit_command in response.lower():
                 print("Encerrando a conversa pelo usuário.")
                 break
+
+            # Simula o tempo de digitação
+            typing_time = self._calculate_typing_time(response)
+            self.total_typing_time += typing_time
+            self.simulated_timestamp += timedelta(seconds=typing_time)
+            print(f"[Simulação] Digitando por {typing_time:.2f} segundos (velocidade: {self.typing_speed_wpm} wpm)...")
+
+            # Aguarda o tempo de digitação
+            if self.simulate_delays:
+                print(f"[DELAY REAL] Aguardando {typing_time:.2f} segundos de digitação...")
+                time.sleep(typing_time)
 
         # Imprime resumo das estatísticas de tempo
         print("\n=== Estatísticas de Tempo ===")
