@@ -25,7 +25,8 @@ class UsuarioBot(ChatBotBase):
                  thinking_time_range: tuple = (2, 10),
                  break_probability: float = 0.05,
                  break_time_range: tuple = (60, 3600),
-                 simulate_delays: bool = True):
+                 simulate_delays: bool = True,
+                 temporal_offset: timedelta = timedelta(0)):
         if not system_message:
             system_message = (
                 """Você é Alberto Vasconcelos, de 60 anos, residente em João Pessoa (PB). É presidente de uma incorporadora de imóveis de luxo, do segmento Clientes Private Bank. Siga as duas próximas seções: [[como agir]] e [[missão]].
@@ -49,12 +50,14 @@ class UsuarioBot(ChatBotBase):
         self.break_probability = break_probability  # Probabilidade de fazer uma pausa após enviar uma mensagem
         self.break_time_range = break_time_range  # Faixa de tempo para pausas (min, max) em segundos
         self.simulate_delays = simulate_delays  # Se deve aguardar os atrasos simulados
+        self.temporal_offset = temporal_offset  # Offset temporal para aplicar aos timestamps
 
         # Estado de temporização
         self.pre_banco_generation_time = datetime.now()
         self.banco_generation_time = datetime.now()
         self.banco_generation_elapsed_time: timedelta = timedelta(seconds=0)
-        self.simulated_timestamp = self.pre_banco_generation_time
+        # Aplicar offset temporal ao timestamp simulado inicial
+        self.simulated_timestamp = self.pre_banco_generation_time + self.temporal_offset
         self.last_break_time = 0
         self.total_thinking_time = 0
         self.total_typing_time = 0
@@ -139,11 +142,14 @@ class UsuarioBot(ChatBotBase):
         query = initial_query
         self.pre_banco_generation_time = datetime.now()
 
+        # Aplicar offset temporal ao timestamp inicial
+        self.simulated_timestamp = self.pre_banco_generation_time + self.temporal_offset
+
         # CORREÇÃO: Calcula tempos ANTES da primeira resposta
         # Simula o tempo de reflexão inicial
         initial_thinking_time = self._calculate_thinking_time()
         self.total_thinking_time = initial_thinking_time
-        self.simulated_timestamp = self.pre_banco_generation_time + timedelta(seconds=initial_thinking_time)
+        self.simulated_timestamp += timedelta(seconds=initial_thinking_time)
 
         if self.simulate_delays:
             print(f"[DELAY REAL] Aguardando {initial_thinking_time:.2f} segundos de reflexão inicial...")
@@ -234,6 +240,7 @@ class UsuarioBot(ChatBotBase):
         print(f"Tempo total digitando: {self.total_typing_time:.2f} segundos")
         print(f"Último tempo de pausa: {self.last_break_time:.2f} segundos")
         print(f"Timestamp final simulado: {self.simulated_timestamp.strftime('%Y-%m-%d %H:%M:%S')}")
+        print(f"Offset temporal aplicado: {self.temporal_offset}")
         self._finish_bancobot_session()
 
     def _send_to_bancobot(self, message: str) -> str:
@@ -307,11 +314,13 @@ class UsuarioBot(ChatBotBase):
             "break_time": self.last_break_time
         }
 
+        # Ajustar banco_generation_time para incluir o offset temporal
+        banco_generation_timestamp = self.banco_generation_time + self.temporal_offset
         banco_timing_metadata = {
-            "banco_generation_timestamp": self.banco_generation_time.isoformat(),
+            "banco_generation_timestamp": banco_generation_timestamp.isoformat(),
             "banco_generation_elapsed_time": self.banco_generation_elapsed_time.total_seconds()
         }
 
-        input_messages = [HumanMessage(content=query, additional_kwargs={"timing_metadata": banco_timing_metadata})] # additional_kwargs={"timing_metadata": timing_metadata}
+        input_messages = [HumanMessage(content=query, additional_kwargs={"timing_metadata": banco_timing_metadata})]
         output = self.app.invoke({"messages": input_messages, "persona_id": self.persona_id, "timing_metadata": user_timing_metadata}, self.config)
         return output["messages"][-1].content

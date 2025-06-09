@@ -4,10 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0cea1559-660a-43f1-803f-04da1cdf897d" name="Changes" comment="Código para exportar os tempos de interação.">
+    <list default="true" id="0cea1559-660a-43f1-803f-04da1cdf897d" name="Changes" comment="Modificações para corrigir a grafação do tempo para a primeira interação.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/personas.json" beforeDir="false" afterPath="$PROJECT_DIR$/personas.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/tests/chatbot_test/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/tests/chatbot_test/main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/source/tests/chatbot_test/usuario.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/tests/chatbot_test/usuario.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tools/enxame_usuario/start_usuarios.py" beforeDir="false" afterPath="$PROJECT_DIR$/tools/enxame_usuario/start_usuarios.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -154,7 +155,7 @@
       <recent name="C:\Users\galdu\PycharmProjects\lc-human-agents\tools\db_work" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.launcher">
+  <component name="RunManager" selected="Python.start_banco_service">
     <configuration name="Extract personas" type="PythonConfigurationType" factoryName="Python" folderName="TOOLS">
       <module name="lc-human-agents" />
       <option name="ENV_FILES" value="" />
@@ -681,7 +682,7 @@
       <workItem from="1748450024354" duration="4000" />
       <workItem from="1748461567385" duration="3912000" />
       <workItem from="1749408705420" duration="3472000" />
-      <workItem from="1749416176177" duration="3911000" />
+      <workItem from="1749416176177" duration="7728000" />
     </task>
     <task id="LOCAL-00001" summary="Initial Commit.">
       <option name="closed" value="true" />
@@ -1019,14 +1020,21 @@
       <option name="project" value="LOCAL" />
       <updated>1749408812549</updated>
     </task>
-    <option name="localTasksCounter" value="43" />
+    <task id="LOCAL-00043" summary="Modificações para corrigir a grafação do tempo para a primeira interação.">
+      <option name="closed" value="true" />
+      <created>1749427649786</created>
+      <option name="number" value="00043" />
+      <option name="presentableId" value="LOCAL-00043" />
+      <option name="project" value="LOCAL" />
+      <updated>1749427649786</updated>
+    </task>
+    <option name="localTasksCounter" value="44" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Integração das modificações de SimuladorPersonas ao código de RAG." />
     <MESSAGE value="Mudanças:&#10;1. Modificações da estrutura do rag que deve tornar os resultados mais precisos. &#10;2. Inicio de implementação de uma nova plataforma de testes baseada em micro-serviços." />
     <MESSAGE value="Limpeza do código de microserviços." />
     <MESSAGE value="Melhoria do código do launch_simulador.py para que possamos ter melhores mensagens de erro." />
@@ -1051,7 +1059,8 @@
     <MESSAGE value="rodar na CPU." />
     <MESSAGE value="Implementação inicial do código de armazenamento de metadados de resposta ('timing_metadata') nas mensagens geradas pela persona." />
     <MESSAGE value="Código para exportar os tempos de interação." />
-    <option name="LAST_COMMIT_MESSAGE" value="Código para exportar os tempos de interação." />
+    <MESSAGE value="Modificações para corrigir a grafação do tempo para a primeira interação." />
+    <option name="LAST_COMMIT_MESSAGE" value="Modificações para corrigir a grafação do tempo para a primeira interação." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1078,13 +1087,13 @@
     </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/human_agents$start_banco_service.coverage" NAME="start_banco_service Coverage Results" MODIFIED="1749419227583" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/human_agents$start_banco_service.coverage" NAME="start_banco_service Coverage Results" MODIFIED="1749431476480" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/lc_human_agents$gerar_missoes.coverage" NAME="gerar_missoes Coverage Results" MODIFIED="1735167511941" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/lc_human_agents$Extract_personas.coverage" NAME="Extract personas Coverage Results" MODIFIED="1735162567412" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/lc_human_agents$launcher.coverage" NAME="launcher Coverage Results" MODIFIED="1745446642223" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/human_agents$persona_function.coverage" NAME="persona_function Coverage Results" MODIFIED="1748282617633" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/source/persona" />
     <SUITE FILE_PATH="coverage/lc_human_agents$visualizador_backend.coverage" NAME="visualizador_backend Coverage Results" MODIFIED="1744146242613" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
-    <SUITE FILE_PATH="coverage/human_agents$start_enxame_usuarios.coverage" NAME="start_enxame_usuarios Coverage Results" MODIFIED="1749419255098" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/human_agents$start_enxame_usuarios.coverage" NAME="start_enxame_usuarios Coverage Results" MODIFIED="1749431481853" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/lc_human_agents$rag_system.coverage" NAME="rag_system Coverage Results" MODIFIED="1743626120825" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/source/rag/system" />
     <SUITE FILE_PATH="coverage/lc_human_agents$prompt_generator.coverage" NAME="prompt_generator Coverage Results" MODIFIED="1735165702542" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tools/prompt_generation" />
     <SUITE FILE_PATH="coverage/human_agents$rag_test.coverage" NAME="rag_test Coverage Results" MODIFIED="1748462189120" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
