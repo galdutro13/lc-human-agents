@@ -1,5 +1,5 @@
-# source/rag/functions/grader.py
-from typing import Dict, Any
+# source/rag/functions/grader.py (MODIFIED)
+from typing import Dict, Any, Optional
 from pydantic import BaseModel, Field
 
 from langchain_core.prompts import ChatPromptTemplate
@@ -7,6 +7,8 @@ from langchain_core.prompts import ChatPromptTemplate
 from source.chat_graph.chat_function import ChatFunction
 from source.rag.config.models import RAGConfig
 from source.rag.state.rag_state import RAGState
+from source.rag.logging.rag_logger import RAGLogger, rag_function_logger
+
 
 class GraderFunction(ChatFunction):
     """
@@ -14,10 +16,11 @@ class GraderFunction(ChatFunction):
     Implements the ChatFunction interface for compatibility with the existing system.
     """
 
-    def __init__(self, config: RAGConfig, model: Any):
+    def __init__(self, config: RAGConfig, model: Any, logger: Optional[RAGLogger] = None):
         self._config = config
         self._model = model
         self._prompt = self._create_grader_prompt()
+        self._logger = logger
 
     def __call__(self, state: RAGState) -> Dict[str, Any]:
         """
@@ -29,57 +32,82 @@ class GraderFunction(ChatFunction):
         Returns:
             Partial dictionary updating relevance assessment and relevant documents
         """
-        print("---GRADE DOCUMENTS---")
+        with rag_function_logger(self._logger, "GraderFunction", state):
+            print("---GRADE DOCUMENTS---")
 
-        # Acesso via dicionário
-        context = state.get('context', []) # Usa .get com default
-        question = state.get('question')
+            # Acesso via dicionário
+            context = state.get('context', [])
+            question = state.get('question')
 
-        # Validações iniciais
-        if not context or not question:
-            print("No context or question in state for grading.")
-            # Retorna atualização parcial
-            return {"documents_relevant": False, "relevant_context": []}
-        if all(not doc.strip() for doc in context):
-            print("All context documents are empty. Grading as not relevant.")
-             # Retorna atualização parcial
-            return {"documents_relevant": False, "relevant_context": []}
+            # Validações iniciais
+            if not context or not question:
+                print("No context or question in state for grading.")
+                if self._logger:
+                    self._logger.log("WARNING", "No context or question for grading",
+                                     {"has_context": bool(context), "has_question": bool(question)})
+                return {"documents_relevant": False, "relevant_context": []}
 
-        # Modelo de saída para o grader
-        class GradeDocuments(BaseModel):
-            binary_score: str = Field(
-                ...,
-                description="Document is relevant to the question, 'yes' or 'no'"
-            )
-        structured_grader = self._model.with_structured_output(GradeDocuments)
-        grader_chain = self._prompt | structured_grader
+            if all(not doc.strip() for doc in context):
+                print("All context documents are empty. Grading as not relevant.")
+                if self._logger:
+                    self._logger.log("WARNING", "All context documents are empty")
+                return {"documents_relevant": False, "relevant_context": []}
 
-        relevant_documents = []
-        try:
-            for idx, document in enumerate(context):
-                if not document or not document.strip(): # Pula documentos vazios
-                    print(f"Document {idx + 1} is empty, skipping grade.")
-                    continue
+            # Modelo de saída para o grader
+            class GradeDocuments(BaseModel):
+                binary_score: str = Field(
+                    ...,
+                    description="Document is relevant to the question, 'yes' or 'no'"
+                )
 
-                result = grader_chain.invoke({"question": question, "document": document})
-                is_relevant = result.binary_score.lower() == "yes"
-                print(f"Document {idx + 1} relevance: {'YES' if is_relevant else 'NO'}")
-                if is_relevant:
-                    relevant_documents.append(document)
+            structured_grader = self._model.with_structured_output(GradeDocuments)
+            grader_chain = self._prompt | structured_grader
 
-            documents_relevant = len(relevant_documents) > 0
-            print(f"Grading complete: {len(relevant_documents)} relevant documents found.")
+            relevant_documents = []
+            document_grades = []
 
-            # Retorna atualização parcial
-            return {
-                "documents_relevant": documents_relevant,
-                "relevant_context": relevant_documents
-            }
+            try:
+                for idx, document in enumerate(context):
+                    if not document or not document.strip():
+                        print(f"Document {idx + 1} is empty, skipping grade.")
+                        document_grades.append({
+                            "index": idx,
+                            "relevant": False,
+                            "reason": "empty_document"
+                        })
+                        continue
 
-        except Exception as e:
-            print(f"Error grading documents: {str(e)}")
-             # Retorna atualização parcial em caso de erro
-            return {"documents_relevant": False, "relevant_context": []}
+                    result = grader_chain.invoke({"question": question, "document": document})
+                    is_relevant = result.binary_score.lower() == "yes"
+                    print(f"Document {idx + 1} relevance: {'YES' if is_relevant else 'NO'}")
+
+                    document_grades.append({
+                        "index": idx,
+                        "relevant": is_relevant,
+                        "document_preview": document[:100] + "..." if len(document) > 100 else document
+                    })
+
+                    if is_relevant:
+                        relevant_documents.append(document)
+
+                documents_relevant = len(relevant_documents) > 0
+                print(f"Grading complete: {len(relevant_documents)} relevant documents found.")
+
+                # Log grading results
+                if self._logger:
+                    self._logger.log_grading(document_grades)
+
+                return {
+                    "documents_relevant": documents_relevant,
+                    "relevant_context": relevant_documents
+                }
+
+            except Exception as e:
+                print(f"Error grading documents: {str(e)}")
+                if self._logger:
+                    import traceback
+                    self._logger.log_error("GradingError", str(e), traceback.format_exc())
+                return {"documents_relevant": False, "relevant_context": []}
 
     def _create_grader_prompt(self) -> ChatPromptTemplate:
         return ChatPromptTemplate.from_messages([

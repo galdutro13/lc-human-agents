@@ -1,4 +1,4 @@
-# source/rag/workflow/rag_workflow_builder.py
+# source/rag/workflow/rag_workflow_builder.py (MODIFIED)
 from typing import Dict, Any, Optional, Callable
 from langgraph.graph import StateGraph, START, END
 
@@ -15,6 +15,7 @@ from source.rag.functions import (
 )
 from langchain_core.messages import HumanMessage, SystemMessage
 from langgraph.checkpoint.base import BaseCheckpointSaver
+from source.rag.logging.rag_logger import RAGLogger, log_state_transition
 
 
 class RAGWorkflowBuilder(Builder):
@@ -29,6 +30,7 @@ class RAGWorkflowBuilder(Builder):
         """
         # A inicialização do StateGraph usa o RAGState refatorado (TypedDict)
         self._workflow = StateGraph(RAGState)
+        self._logger = None
 
     def build_workflow(self, memory: BaseCheckpointSaver[str] = None) -> Any:
         """
@@ -73,12 +75,14 @@ class RAGWorkflowBuilder(Builder):
                            rewriter: RewriteQueryFunction,
                            aggregator: AggregateDocsFunction,
                            cleanup: CleanupAggregatedDocsFunction,
-                           memory: Optional[BaseCheckpointSaver[str]] = None) -> Any:
+                           memory: Optional[BaseCheckpointSaver[str]] = None,
+                           logger: Optional[RAGLogger] = None) -> Any:
         """
         Builds a complete RAG workflow with all required components,
         including the new query rewriting and looping functionality.
         """
-        retriever = RetrieveFunction(responder.retrievers)
+        retriever = RetrieveFunction(responder.retrievers, logger=logger)
+        self._logger = logger
 
         # Função condicional para determinar o próximo passo após a avaliação de documentos
         def decide_next_step(state: RAGState) -> str:
@@ -98,9 +102,13 @@ class RAGWorkflowBuilder(Builder):
 
             if documents_are_relevant and relevant_docs:
                 print(f"Routing to 'relevant': {len(relevant_docs)} relevant documents found.")
+                log_state_transition(logger, "grade", "respond_with_relevant",
+                                   f"{len(relevant_docs)} relevant documents")
                 return "relevant"
             else:
                 print("Routing to 'irrelevant': No relevant documents found or relevance flag is False.")
+                log_state_transition(logger, "grade", "respond_with_fallback",
+                                   "No relevant documents")
                 return "irrelevant"
 
         # Adiciona nós para o novo fluxo
@@ -127,7 +135,17 @@ class RAGWorkflowBuilder(Builder):
         self.add_edge(from_node="retrieve", to_node="aggregate_docs")
 
         # Aresta condicional após agregação: continuar o loop ou seguir para avaliação
-        self.add_conditional_edge("aggregate_docs", should_continue_loop, {
+        def should_continue_loop_with_logging(state: RAGState) -> str:
+            result = should_continue_loop(state)
+            if result == "continue_loop":
+                log_state_transition(logger, "aggregate_docs", "prepare_next_query",
+                                   "More queries to process")
+            else:
+                log_state_transition(logger, "aggregate_docs", "prepare_for_grading",
+                                   "All queries processed")
+            return result
+
+        self.add_conditional_edge("aggregate_docs", should_continue_loop_with_logging, {
             "continue_loop": "prepare_next_query",  # Continua o loop
             "finish_loop": "prepare_for_grading"  # Sai do loop
         })

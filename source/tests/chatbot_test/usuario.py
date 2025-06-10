@@ -246,7 +246,7 @@ class UsuarioBot(ChatBotBase):
     def _send_to_bancobot(self, message: str) -> str:
         """
         Envia uma mensagem para o serviço BancoBot e retorna a resposta,
-        incluindo informações de temporização.
+        incluindo informações de temporização e persona_id.
 
         Args:
             message: Mensagem a ser enviada
@@ -258,6 +258,7 @@ class UsuarioBot(ChatBotBase):
             # Preparar o payload para a requisição
             payload = {
                 "message": message,
+                "persona_id": self.persona_id,  # Include persona_id
                 "timing_metadata": {
                     "simulated_timestamp": self.simulated_timestamp.isoformat(),
                     "thinking_time": self.total_thinking_time,
