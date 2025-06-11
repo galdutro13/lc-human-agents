@@ -10,6 +10,8 @@ import pandas as pd
 import threading
 from datetime import datetime
 from pydantic import BaseModel
+from pathlib import Path
+import glob
 
 from langgraph.checkpoint.serde.jsonplus import JsonPlusSerializer
 from langchain.schema import HumanMessage, AIMessage
@@ -26,18 +28,235 @@ class InteractionResponse(BaseModel):
     success: bool
 
 
+class ThreadIdMapping(BaseModel):
+    mappings: dict[str, str]
+
+
 # Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
 logger = logging.getLogger("app")
 logger.setLevel(logging.INFO)
+
+# Set debug level for specific debugging
+# Uncomment the following line to enable debug logging for RAG logs extraction
+# logger.setLevel(logging.DEBUG)
+
 app = FastAPI()
 
 DATABASE_PATH = "checkpoints.db"
+RAG_LOGS_PATH = "rag_logs"  # Path to RAG logs directory
+
+# IMPORTANT: Thread ID Mapping Configuration
+# If there's a consistent mismatch between checkpoint thread_ids and RAG log thread_ids,
+# you can define a mapping here. For example:
+# THREAD_ID_MAPPING = {
+#     "checkpoint_thread_id": "rag_log_thread_id",
+#     "0296d8a620475903": "8f49061abfe8ca53",
+#     # Add more mappings as needed
+# }
+THREAD_ID_MAPPING = {}  # Empty by default
 
 
 def get_db_connection() -> sqlite3.Connection:
     conn = sqlite3.connect(DATABASE_PATH, check_same_thread=False)
     conn.row_factory = sqlite3.Row
     return conn
+
+
+def find_rag_log_by_persona(persona_id: str, thread_id: str) -> str:
+    """
+    Try to find RAG log file by persona_id if thread_id doesn't match.
+
+    Args:
+        persona_id: The persona ID to look for
+        thread_id: The thread ID (for reference)
+
+    Returns:
+        Path to the log file if found, None otherwise
+    """
+    try:
+        # Pattern: rag_logs_{persona_id}_{any_thread_id}_{timestamp}.zip
+        # Note: persona_id might be in format "persona_X"
+        pattern = os.path.join(RAG_LOGS_PATH, f"rag_logs_{persona_id}_*.zip")
+        files = glob.glob(pattern)
+
+        if files:
+            # Return the most recent file
+            return max(files, key=os.path.getctime)
+
+        return None
+    except Exception as e:
+        logger.error(f"Error finding RAG log by persona: {e}")
+        return None
+
+
+def find_rag_log_by_timestamp(conversation_ts: str, tolerance_minutes: int = 30) -> str:
+    """
+    Try to find RAG log file by timestamp proximity.
+
+    Args:
+        conversation_ts: The conversation timestamp
+        tolerance_minutes: Time tolerance in minutes
+
+    Returns:
+        Path to the log file if found within tolerance, None otherwise
+    """
+    try:
+        if not conversation_ts:
+            return None
+
+        # Parse conversation timestamp
+        conv_time = datetime.fromisoformat(conversation_ts.replace('Z', '+00:00'))
+
+        # Get all RAG log files
+        rag_files = glob.glob(os.path.join(RAG_LOGS_PATH, "rag_logs_*.zip"))
+
+        best_match = None
+        min_diff = float('inf')
+
+        for file_path in rag_files:
+            filename = os.path.basename(file_path)
+            # Extract timestamp from filename (last part before .zip)
+            # Pattern: rag_logs_persona_X_{thread_id}_{YYYYMMDD_HHMMSS}.zip
+            parts = filename.replace('.zip', '').split('_')
+            if len(parts) >= 6:
+                try:
+                    date_str = parts[-2]  # YYYYMMDD
+                    time_str = parts[-1]  # HHMMSS
+                    file_time = datetime.strptime(f"{date_str}_{time_str}", "%Y%m%d_%H%M%S")
+
+                    # Calculate time difference
+                    diff = abs((file_time - conv_time.replace(tzinfo=None)).total_seconds() / 60)
+
+                    if diff < tolerance_minutes and diff < min_diff:
+                        min_diff = diff
+                        best_match = file_path
+                except:
+                    continue
+
+        if best_match:
+            logger.info(f"Found RAG log by timestamp proximity: {best_match} (diff: {min_diff:.1f} minutes)")
+
+        return best_match
+    except Exception as e:
+        logger.error(f"Error finding RAG log by timestamp: {e}")
+        return None
+
+
+def extract_datasources_from_rag_logs(thread_id: str, message_index: int, persona_id: str = None,
+                                      conversation_ts: str = None) -> list:
+    """
+    Extract unique datasources used for a specific message from RAG logs.
+
+    IMPORTANT: There might be a mismatch between thread_ids in the checkpoints database
+    and thread_ids in the RAG log filenames. This can happen if:
+    1. The RAG logs are from a different run than the checkpoints
+    2. Thread IDs are transformed between systems
+    3. The logs have been manually moved or renamed
+
+    To debug this issue, use the /debug/rag_logs_mapping endpoint.
+
+    Args:
+        thread_id: The thread ID to look for
+        message_index: The message index (1-based) to extract datasources for
+        persona_id: Optional persona ID to use as fallback
+        conversation_ts: Optional conversation timestamp for fallback
+
+    Returns:
+        List of unique datasources used, or ["none"] if fallback was used
+    """
+    try:
+        # Check if RAG logs directory exists
+        if not os.path.exists(RAG_LOGS_PATH):
+            logger.warning(f"RAG logs directory does not exist: {RAG_LOGS_PATH}")
+            return []
+
+        # Check if there's a manual mapping for this thread_id
+        mapped_thread_id = THREAD_ID_MAPPING.get(thread_id, thread_id)
+        if mapped_thread_id != thread_id:
+            logger.info(f"Using mapped thread_id: {mapped_thread_id} for original: {thread_id}")
+
+        # Find the RAG log ZIP file for this thread
+        # Pattern: rag_logs_persona_X_{thread_id}_{timestamp}.zip
+        log_pattern = os.path.join(RAG_LOGS_PATH, f"rag_logs_persona_*_{mapped_thread_id}_*.zip")
+        log_files = glob.glob(log_pattern)
+
+        # If not found by thread_id and persona_id is provided, try finding by persona
+        if not log_files and persona_id:
+            log_file = find_rag_log_by_persona(persona_id, thread_id)
+            if log_file:
+                log_files = [log_file]
+                logger.info(f"Found RAG log by persona_id: {persona_id} for thread_id: {thread_id}")
+
+        # If still not found, try by timestamp
+        if not log_files and conversation_ts:
+            log_file = find_rag_log_by_timestamp(conversation_ts)
+            if log_file:
+                log_files = [log_file]
+                logger.info(f"Found RAG log by timestamp for thread_id: {thread_id}")
+
+        if not log_files:
+            # Log available files for debugging
+            available_files = os.listdir(RAG_LOGS_PATH)
+            logger.debug(f"Available RAG log files: {available_files}")
+            logger.warning(
+                f"No RAG log files found for thread_id: {thread_id} (mapped: {mapped_thread_id}) with pattern: {log_pattern}")
+            return []
+
+        # Use the most recent log file if multiple exist
+        log_file = max(log_files, key=os.path.getctime)
+        logger.debug(f"Found RAG log file: {log_file} for thread_id: {thread_id}")
+
+        # Extract and parse the session metadata
+        with zipfile.ZipFile(log_file, 'r') as zf:
+            # Find the metadata file
+            metadata_files = [f for f in zf.namelist() if f.startswith("session_metadata_")]
+            if not metadata_files:
+                logger.warning(f"No metadata file found in {log_file}")
+                return []
+
+            # Read the metadata
+            with zf.open(metadata_files[0]) as mf:
+                metadata = json.load(mf)
+
+        # Find the logs for the specific message
+        datasources = set()
+        fallback_used = False
+
+        # Look for the message with the given index
+        for msg in metadata.get("messages", []):
+            if msg.get("index") == message_index:
+                # Parse logs for this message
+                for log_entry in msg.get("logs", []):
+                    # Look for routing decisions
+                    if log_entry.get("message") == "Routing decision":
+                        datasource = log_entry.get("data", {}).get("selected_datasource")
+                        if datasource:
+                            datasources.add(datasource)
+
+                    # Check if fallback was used
+                    if "Generating fallback response" in log_entry.get("message", ""):
+                        fallback_used = True
+
+                    # Also check for fallback in function names
+                    if log_entry.get("message", "").startswith("Starting FallbackFunction"):
+                        fallback_used = True
+
+                break
+
+        # If fallback was used and no datasources were selected, return ["none"]
+        if fallback_used and not datasources:
+            return ["none"]
+
+        # Return sorted list of unique datasources
+        return sorted(list(datasources))
+
+    except Exception as e:
+        logger.error(f"Error extracting datasources from RAG logs: {e}")
+        return []
 
 
 def run_chatbot(prompt: str, api_url: str = "http://localhost:8080", max_iterations: int = 10) -> bool:
@@ -125,12 +344,12 @@ def list_interactions():
         for tid in thread_ids:
             # Seleciona o primeiro checkpoint da thread para obter seu timestamp inicial
             c = conn.execute("""
-                SELECT checkpoint, type
-                FROM checkpoints
-                WHERE thread_id = ?
-                ORDER BY checkpoint_id ASC
-                LIMIT 1
-            """, (tid,))
+                             SELECT checkpoint, type
+                             FROM checkpoints
+                             WHERE thread_id = ?
+                             ORDER BY checkpoint_id ASC
+                             LIMIT 1
+                             """, (tid,))
             first_row = c.fetchone()
             if not first_row:
                 # Se não houver registro, passa para o próximo thread_id
@@ -162,18 +381,73 @@ def list_interactions():
     finally:
         conn.close()
 
+
+@app.post("/config/thread_id_mapping")
+def update_thread_id_mapping(mapping_request: ThreadIdMapping):
+    """
+    Update the thread ID mapping configuration.
+
+    Example request body:
+    {
+        "mappings": {
+            "0296d8a620475903": "8f49061abfe8ca53",
+            "05b1cb0ec39314b9": "0d99eb38b87b7165"
+        }
+    }
+    """
+    global THREAD_ID_MAPPING
+    THREAD_ID_MAPPING.update(mapping_request.mappings)
+    logger.info(f"Updated thread ID mapping with {len(mapping_request.mappings)} entries")
+    return {"success": True, "updated_mappings": len(mapping_request.mappings),
+            "total_mappings": len(THREAD_ID_MAPPING)}
+
+
+@app.get("/config/thread_id_mapping")
+def get_thread_id_mapping():
+    """
+    Get the current thread ID mapping configuration.
+    """
+    return {
+        "mappings": THREAD_ID_MAPPING,
+        "total_mappings": len(THREAD_ID_MAPPING)
+    }
+
+
+@app.get("/debug/rag_logs_mapping")
+def debug_rag_logs():
+    """
+    Debug endpoint to show the mapping between thread_ids and RAG log files.
+    """
+    mapping = debug_rag_logs_mapping()
+
+    # Also get thread_ids from the database
+    conn = get_db_connection()
+    try:
+        cursor = conn.execute("SELECT DISTINCT thread_id FROM checkpoints;")
+        db_thread_ids = [row["thread_id"] for row in cursor.fetchall()]
+
+        return {
+            "rag_logs_mapping": mapping,
+            "database_thread_ids": db_thread_ids,
+            "rag_logs_path": RAG_LOGS_PATH,
+            "rag_logs_exist": os.path.exists(RAG_LOGS_PATH)
+        }
+    finally:
+        conn.close()
+
+
 @app.get("/interactions/raw/{thread_id}")
 def get_interaction_raw(thread_id: str):
     conn = get_db_connection()
     try:
         # Recupera o último checkpoint do 'thread_id' especificado
         cursor = conn.execute("""
-                SELECT checkpoint, type 
-                FROM checkpoints
-                WHERE thread_id = ?
-                ORDER BY checkpoint_id DESC
-                LIMIT 1
-            """, (thread_id,))
+                              SELECT checkpoint, type
+                              FROM checkpoints
+                              WHERE thread_id = ?
+                              ORDER BY checkpoint_id DESC
+                              LIMIT 1
+                              """, (thread_id,))
         row = cursor.fetchone()
         if row is None:
             # Nenhuma interação encontrada para o thread_id
@@ -192,6 +466,7 @@ def get_interaction_raw(thread_id: str):
     finally:
         # Garante o fechamento da conexão com o banco de dados
         conn.close()
+
 
 @app.get("/interactions/{thread_id}")
 def get_interaction(thread_id: str):
@@ -261,12 +536,12 @@ def get_interaction(thread_id: str):
     try:
         # Recupera o último checkpoint do 'thread_id' especificado
         cursor = conn.execute("""
-            SELECT checkpoint, type 
-            FROM checkpoints
-            WHERE thread_id = ?
-            ORDER BY checkpoint_id DESC
-            LIMIT 1
-        """, (thread_id,))
+                              SELECT checkpoint, type
+                              FROM checkpoints
+                              WHERE thread_id = ?
+                              ORDER BY checkpoint_id DESC
+                              LIMIT 1
+                              """, (thread_id,))
         row = cursor.fetchone()
         if row is None:
             # Nenhuma interação encontrada para o thread_id
@@ -489,7 +764,7 @@ def export_all_interactions_zip():
 def export_all_interactions_json_zip():
     """
     Exporta todas as interações em arquivos JSON separados e retorna um ZIP.
-    Cada JSON corresponde a uma thread_id e inclui informações de timestamp.
+    Cada JSON corresponde a uma thread_id e inclui informações de timestamp e datasources do RAG.
     """
     conn = get_db_connection()
     try:
@@ -528,12 +803,23 @@ def export_all_interactions_json_zip():
 
                 # Monta lista de mensagens para o JSON
                 messages_data = []
+                message_counter = 0  # Contador para rastrear a posição da mensagem no RAG
+
+                # IMPORTANTE: O mapeamento dos datasources considera que:
+                # - A primeira mensagem AI (index 0) é um placeholder que não passa pelo RAG
+                # - O primeiro datasource do RAG corresponde à segunda mensagem AI (index 2)
+                # - E assim por diante: RAG message 1 -> AI message index 2,
+                #                      RAG message 2 -> AI message index 4, etc.
+
                 for msg_index, msg in enumerate(messages):
                     # Determina o tipo de mensagem (invertido conforme explicado)
                     if isinstance(msg, HumanMessage):
-                        msg_type = "ai"  # Mensagens do banco
+                        msg_type = "ai"  # Mensagens do banco têm type="human" mas representam o chatbot
+                        # Incrementa o contador apenas para mensagens AI que não sejam o placeholder inicial
+                        if msg_index > 0:
+                            message_counter += 1
                     elif isinstance(msg, AIMessage):
-                        msg_type = "human"  # Mensagens do simulador
+                        msg_type = "human"  # Mensagens do simulador têm type="ai" mas representam o usuário
                     else:
                         msg_type = "other"
 
@@ -569,6 +855,17 @@ def export_all_interactions_json_zip():
                     if hasattr(msg, "id") and msg.id:
                         message_obj["message_id"] = msg.id
 
+                    # Adiciona datasources do RAG apenas para mensagens do tipo "ai" (respostas do banco)
+                    if msg_type == "ai":
+                        if msg_index == 0:
+                            # A primeira mensagem AI é um placeholder que não passa pelo RAG
+                            message_obj["rag_datasources"] = []
+                        else:
+                            # Mensagens AI subsequentes têm datasources do RAG
+                            datasources = extract_datasources_from_rag_logs(tid, message_counter, persona_id,
+                                                                            conversation_ts)
+                            message_obj["rag_datasources"] = datasources
+
                     messages_data.append(message_obj)
 
                 # Cria estrutura completa da conversa
@@ -580,7 +877,7 @@ def export_all_interactions_json_zip():
                     "messages": messages_data,
                     "metadata": {
                         "export_timestamp": datetime.now().isoformat(),
-                        "export_version": "1.0"
+                        "export_version": "2.0"  # Updated version to indicate RAG datasources support
                     }
                 }
 
@@ -607,7 +904,7 @@ def export_all_interactions_json_zip():
                     "export_metadata": {
                         "export_timestamp": datetime.now().isoformat(),
                         "total_conversations": len(all_conversations_index),
-                        "export_version": "1.0"
+                        "export_version": "2.0"  # Updated version
                     },
                     "conversations": all_conversations_index
                 }
@@ -625,7 +922,7 @@ def export_all_interactions_json_zip():
 def export_interaction_json(thread_id: str):
     """
     Gera e retorna um arquivo JSON contendo todas as mensagens e metadados
-    completos referentes à thread_id informada.
+    completos referentes à thread_id informada, incluindo os datasources do RAG.
     """
     conn = get_db_connection()
     try:
@@ -653,10 +950,21 @@ def export_interaction_json(thread_id: str):
 
         # Monta estrutura completa das mensagens
         messages_data = []
+        message_counter = 0  # Contador para rastrear a posição da mensagem no RAG
+
+        # IMPORTANTE: O mapeamento dos datasources considera que:
+        # - A primeira mensagem AI (index 0) é um placeholder que não passa pelo RAG
+        # - O primeiro datasource do RAG corresponde à segunda mensagem AI (index 2)
+        # - E assim por diante: RAG message 1 -> AI message index 2,
+        #                      RAG message 2 -> AI message index 4, etc.
+
         for msg_index, msg in enumerate(messages):
             # Determina o tipo de mensagem (invertido conforme explicado)
             if isinstance(msg, HumanMessage):
                 msg_type = "ai"  # Mensagens do banco têm type="human" mas representam o chatbot
+                # Incrementa o contador apenas para mensagens AI que não sejam o placeholder inicial
+                if msg_index > 0:
+                    message_counter += 1
             elif isinstance(msg, AIMessage):
                 msg_type = "human"  # Mensagens do simulador têm type="ai" mas representam o usuário
             else:
@@ -694,6 +1002,17 @@ def export_interaction_json(thread_id: str):
             if hasattr(msg, "id") and msg.id:
                 message_obj["message_id"] = msg.id
 
+            # Adiciona datasources do RAG apenas para mensagens do tipo "ai" (respostas do banco)
+            if msg_type == "ai":
+                if msg_index == 0:
+                    # A primeira mensagem AI é um placeholder que não passa pelo RAG
+                    message_obj["rag_datasources"] = []
+                else:
+                    # Mensagens AI subsequentes têm datasources do RAG
+                    datasources = extract_datasources_from_rag_logs(thread_id, message_counter, persona_id,
+                                                                    conversation_ts)
+                    message_obj["rag_datasources"] = datasources
+
             messages_data.append(message_obj)
 
         # Estrutura completa para exportação
@@ -705,7 +1024,7 @@ def export_interaction_json(thread_id: str):
             "messages": messages_data,
             "metadata": {
                 "export_timestamp": datetime.now().isoformat(),
-                "export_version": "1.0"
+                "export_version": "2.0"  # Updated version to indicate RAG datasources support
             }
         }
 

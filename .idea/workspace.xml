@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0cea1559-660a-43f1-803f-04da1cdf897d" name="Changes" comment="Adiciona suporte a logging detalhado no sistema RAG, incluindo integração com RAGLogger em várias funções e classes, além de melhorias na gestão de sessões e geração de logs.">
+    <list default="true" id="0cea1559-660a-43f1-803f-04da1cdf897d" name="Changes" comment="Adiciona importação de módulos JSON e datetime no main.py">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tools/visualizador_interacoes/backend/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/tools/visualizador_interacoes/backend/main.py" afterDir="false" />
     </list>
@@ -688,7 +688,7 @@
       <workItem from="1749591676839" duration="101000" />
       <workItem from="1749598453966" duration="96000" />
       <workItem from="1749598980096" duration="7808000" />
-      <workItem from="1749647523818" duration="919000" />
+      <workItem from="1749647523818" duration="3936000" />
     </task>
     <task id="LOCAL-00001" summary="Initial Commit.">
       <option name="closed" value="true" />
@@ -1066,15 +1066,29 @@
       <option name="project" value="LOCAL" />
       <updated>1749599096645</updated>
     </task>
-    <option name="localTasksCounter" value="48" />
+    <task id="LOCAL-00048" summary="Função JSON.">
+      <option name="closed" value="true" />
+      <created>1749650065230</created>
+      <option name="number" value="00048" />
+      <option name="presentableId" value="LOCAL-00048" />
+      <option name="project" value="LOCAL" />
+      <updated>1749650065230</updated>
+    </task>
+    <task id="LOCAL-00049" summary="Adiciona importação de módulos JSON e datetime no main.py">
+      <option name="closed" value="true" />
+      <created>1749650704843</created>
+      <option name="number" value="00049" />
+      <option name="presentableId" value="LOCAL-00049" />
+      <option name="project" value="LOCAL" />
+      <updated>1749650704843</updated>
+    </task>
+    <option name="localTasksCounter" value="50" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Commit com o script de iniciar multiplos usuários." />
-    <MESSAGE value="Adicionar documentações para os scripts desacoplados." />
     <MESSAGE value="feat: Desacopla serviço BancoBot e adiciona visualização de grafo RAG&#10;&#10;- Refatora `launch_simulador.py` para rodar `bancobot_service` como um subprocesso gerenciado separadamente.&#10;  - Adiciona funções para iniciar, monitorar e limpar o processo do serviço.&#10;  - Atualiza criação do banco de dados para interagir com o serviço em execução via `UsuarioBot`.&#10;  - Melhora o tratamento de processos e a lógica de limpeza.&#10;- Atualiza backend `visualizador_interacoes` (`main.py`):&#10;  - Substitui chamada direta de `test_chatbot` por interação `UsuarioBot` direcionada à API `bancobot_service`.&#10;  - Executa interações do chatbot em threads separadas para evitar bloqueio da API.&#10;- Adiciona visualização do fluxo de trabalho RAG:&#10;  - Introduz método `visualize` em `RAGSystem` para exibir o fluxo LangGraph usando `IPython.display` e `pygraphviz`.&#10;  - Adiciona argumento de linha de comando `--visualize` a `rag_test.py` para acionar exibição do grafo.&#10;- Adiciona `ipython` a `requirements.txt` para suporte à visualização.&#10;- Modifica `start_banco_service.py` para verificar variáveis de ambiente para `OPENAI_API_KEY` se não encontrado em `.env`." />
     <MESSAGE value="refactor: Melhora estado RAG e tratamento de mensagens no fluxo LangGraph&#10;&#10;- Refatora funções RAG (Retrieve, Route, Grade, Respond, Fallback) para modificar apenas seus campos de estado específicos, removendo adições de SystemMessage para passos intermediários.&#10;- Atualiza RouterFunction para adicionar o HumanMessage inicial ao estado.&#10;- Modifica RAGResponseFunction e FallbackFunction para gerar respostas invocando diretamente o LLM com o histórico completo de mensagens do estado, precedido por um SystemMessage dinâmico contendo contexto ou instruções de fallback. Remove dependência de cadeias/parsers separados para geração de resposta.&#10;- Altera ponto de entrada do fluxo RAG de `add_human_message` (removido) para `route`.&#10;- Passa MemorySaver explicitamente para RAGSystem em `rag_test.py`.&#10;- Remove importações e métodos não utilizados relacionados à lógica anterior de geração de resposta." />
     <MESSAGE value="[ COMMIT_MSG ]" />
@@ -1098,7 +1112,9 @@
     <MESSAGE value="Adiciona suporte a parâmetros de temporização para o UsuarioBot, incluindo configuração de duração e offset temporal nas personas." />
     <MESSAGE value="code cleanup" />
     <MESSAGE value="Adiciona suporte a logging detalhado no sistema RAG, incluindo integração com RAGLogger em várias funções e classes, além de melhorias na gestão de sessões e geração de logs." />
-    <option name="LAST_COMMIT_MESSAGE" value="Adiciona suporte a logging detalhado no sistema RAG, incluindo integração com RAGLogger em várias funções e classes, além de melhorias na gestão de sessões e geração de logs." />
+    <MESSAGE value="Função JSON." />
+    <MESSAGE value="Adiciona importação de módulos JSON e datetime no main.py" />
+    <option name="LAST_COMMIT_MESSAGE" value="Adiciona importação de módulos JSON e datetime no main.py" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1141,7 +1157,7 @@
     <SUITE FILE_PATH="coverage/lc_human_agents$export_checkpoints.coverage" NAME="export_checkpoints Coverage Results" MODIFIED="1744156092400" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/lc_human_agents$run_services.coverage" NAME="run_services Coverage Results" MODIFIED="1742846551041" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/lc_human_agents$prompt_generation.coverage" NAME="prompt_generation Coverage Results" MODIFIED="1735239266449" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
-    <SUITE FILE_PATH="coverage/human_agents$launcher.coverage" NAME="launcher Coverage Results" MODIFIED="1749472819026" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/human_agents$launcher.coverage" NAME="launcher Coverage Results" MODIFIED="1749653164079" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/lc_human_agents$chatbot_server_test.coverage" NAME="chatbot server test Coverage Results" MODIFIED="1735141967192" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="C:\Users\galdu\PycharmProjects\lc-human-agents" />
     <SUITE FILE_PATH="coverage/lc_human_agents$read_personas.coverage" NAME="read_personas Coverage Results" MODIFIED="1735148903371" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tools" />
   </component>
