@@ -481,3 +481,243 @@ def export_all_interactions_zip():
         return StreamingResponse(zip_buffer, media_type="application/zip", headers=headers)
     finally:
         conn.close()
+
+
+@app.get("/interactions/export/all_json_zip")
+def export_all_interactions_json_zip():
+    """
+    Exporta todas as interações em arquivos JSON separados e retorna um ZIP.
+    Cada JSON corresponde a uma thread_id e inclui informações de timestamp.
+    """
+    conn = get_db_connection()
+    try:
+        # Busca todos os thread_ids distintos
+        cursor = conn.execute("SELECT DISTINCT thread_id FROM checkpoints;")
+        rows = cursor.fetchall()
+        thread_ids = [row["thread_id"] for row in rows]
+
+        # Cria um ZIP em memória
+        zip_buffer = io.BytesIO()
+        with zipfile.ZipFile(zip_buffer, "w", zipfile.ZIP_DEFLATED) as zip_file:
+            # Também cria um índice geral de todas as conversas
+            all_conversations_index = []
+
+            for tid in thread_ids:
+                # Busca o último checkpoint da thread
+                c = conn.execute("""
+                                 SELECT checkpoint, type
+                                 FROM checkpoints
+                                 WHERE thread_id = ?
+                                 ORDER BY checkpoint_id DESC
+                                 LIMIT 1
+                                 """, (tid,))
+                row = c.fetchone()
+                if not row or not row["checkpoint"]:
+                    continue
+
+                checkpoint_data = row["checkpoint"]
+                record_type = row["type"]
+                conversation = JsonPlusSerializer().loads_typed((record_type, checkpoint_data))
+                messages = conversation.get("channel_values", {}).get("messages", [])
+                persona_id = conversation.get("channel_values", {}).get("persona_id", "unknown")
+
+                # Extrai timestamp da conversa
+                conversation_ts = conversation.get("ts", None)
+
+                # Monta lista de mensagens para o JSON
+                messages_data = []
+                for msg_index, msg in enumerate(messages):
+                    # Determina o tipo de mensagem (invertido conforme explicado)
+                    if isinstance(msg, HumanMessage):
+                        msg_type = "ai"  # Mensagens do banco
+                    elif isinstance(msg, AIMessage):
+                        msg_type = "human"  # Mensagens do simulador
+                    else:
+                        msg_type = "other"
+
+                    # Extrai informações de timing
+                    timing_metadata = getattr(msg, "additional_kwargs", {}).get("timing_metadata", {})
+
+                    # Determina simulated_timestamp e elapsed_time baseado no tipo real
+                    if isinstance(msg, HumanMessage):  # Mensagem do banco
+                        simulated_timestamp = timing_metadata.get("banco_generation_timestamp", "")
+                        elapsed_time = timing_metadata.get("banco_generation_elapsed_time", 0)
+                    elif isinstance(msg, AIMessage):  # Mensagem do simulador
+                        simulated_timestamp = timing_metadata.get("simulated_timestamp", "")
+                        # Soma thinking_time + typing_time + break_time
+                        thinking_time = timing_metadata.get("thinking_time", 0)
+                        typing_time = timing_metadata.get("typing_time", 0)
+                        break_time = timing_metadata.get("break_time", 0)
+                        elapsed_time = thinking_time + typing_time + break_time
+                    else:
+                        simulated_timestamp = ""
+                        elapsed_time = 0
+
+                    # Cria objeto da mensagem com metadados adicionais
+                    message_obj = {
+                        "index": msg_index,
+                        "type": msg_type,
+                        "content": getattr(msg, "content", ""),
+                        "simulated_timestamp": simulated_timestamp,
+                        "elapsed_time": elapsed_time,
+                        "timing_metadata": timing_metadata  # Inclui todos os metadados de timing
+                    }
+
+                    # Adiciona ID da mensagem se disponível
+                    if hasattr(msg, "id") and msg.id:
+                        message_obj["message_id"] = msg.id
+
+                    messages_data.append(message_obj)
+
+                # Cria estrutura completa da conversa
+                conversation_data = {
+                    "thread_id": tid,
+                    "persona_id": persona_id,
+                    "conversation_timestamp": conversation_ts,
+                    "total_messages": len(messages_data),
+                    "messages": messages_data,
+                    "metadata": {
+                        "export_timestamp": datetime.now().isoformat(),
+                        "export_version": "1.0"
+                    }
+                }
+
+                # Adiciona informações resumidas ao índice geral
+                all_conversations_index.append({
+                    "thread_id": tid,
+                    "persona_id": persona_id,
+                    "conversation_timestamp": conversation_ts,
+                    "total_messages": len(messages_data),
+                    "filename": f"conversa_{persona_id}_{tid}.json"
+                })
+
+                # Converte para JSON com formatação legível
+                json_content = json.dumps(conversation_data, indent=2, ensure_ascii=False)
+                json_bytes = json_content.encode("utf-8")
+
+                # Nome do arquivo JSON
+                filename = f"conversa_{persona_id}_{tid}.json"
+                zip_file.writestr(filename, json_bytes)
+
+            # Adiciona arquivo de índice ao ZIP
+            if all_conversations_index:
+                index_data = {
+                    "export_metadata": {
+                        "export_timestamp": datetime.now().isoformat(),
+                        "total_conversations": len(all_conversations_index),
+                        "export_version": "1.0"
+                    },
+                    "conversations": all_conversations_index
+                }
+                index_json = json.dumps(index_data, indent=2, ensure_ascii=False)
+                zip_file.writestr("index.json", index_json.encode("utf-8"))
+
+        zip_buffer.seek(0)
+        headers = {"Content-Disposition": "attachment; filename=interacoes_json.zip"}
+        return StreamingResponse(zip_buffer, media_type="application/zip", headers=headers)
+    finally:
+        conn.close()
+
+
+@app.get("/interactions/{thread_id}/json")
+def export_interaction_json(thread_id: str):
+    """
+    Gera e retorna um arquivo JSON contendo todas as mensagens e metadados
+    completos referentes à thread_id informada.
+    """
+    conn = get_db_connection()
+    try:
+        # Pega o último checkpoint do thread_id
+        cursor = conn.execute("""
+                              SELECT checkpoint, type
+                              FROM checkpoints
+                              WHERE thread_id = ?
+                              ORDER BY checkpoint_id DESC
+                              LIMIT 1
+                              """, (thread_id,))
+        row = cursor.fetchone()
+
+        if row is None or row["checkpoint"] is None:
+            raise HTTPException(status_code=404, detail="Interação não encontrada ou sem conteúdo.")
+
+        checkpoint_data = row["checkpoint"]
+        record_type = row["type"]
+
+        # Decodifica usando o serializador
+        conversation = JsonPlusSerializer().loads_typed((record_type, checkpoint_data))
+        messages = conversation.get("channel_values", {}).get("messages", [])
+        persona_id = conversation.get("channel_values", {}).get("persona_id", None)
+        conversation_ts = conversation.get("ts", None)
+
+        # Monta estrutura completa das mensagens
+        messages_data = []
+        for msg_index, msg in enumerate(messages):
+            # Determina o tipo de mensagem (invertido conforme explicado)
+            if isinstance(msg, HumanMessage):
+                msg_type = "ai"  # Mensagens do banco têm type="human" mas representam o chatbot
+            elif isinstance(msg, AIMessage):
+                msg_type = "human"  # Mensagens do simulador têm type="ai" mas representam o usuário
+            else:
+                msg_type = "other"
+
+            # Extrai informações de timing
+            timing_metadata = getattr(msg, "additional_kwargs", {}).get("timing_metadata", {})
+
+            # Determina simulated_timestamp e elapsed_time baseado no tipo real
+            if isinstance(msg, HumanMessage):  # Mensagem do banco
+                simulated_timestamp = timing_metadata.get("banco_generation_timestamp", "")
+                elapsed_time = timing_metadata.get("banco_generation_elapsed_time", 0)
+            elif isinstance(msg, AIMessage):  # Mensagem do simulador
+                simulated_timestamp = timing_metadata.get("simulated_timestamp", "")
+                # Soma thinking_time + typing_time + break_time
+                thinking_time = timing_metadata.get("thinking_time", 0)
+                typing_time = timing_metadata.get("typing_time", 0)
+                break_time = timing_metadata.get("break_time", 0)
+                elapsed_time = thinking_time + typing_time + break_time
+            else:
+                simulated_timestamp = ""
+                elapsed_time = 0
+
+            # Cria objeto completo da mensagem
+            message_obj = {
+                "index": msg_index,
+                "type": msg_type,
+                "content": getattr(msg, "content", ""),
+                "simulated_timestamp": simulated_timestamp,
+                "elapsed_time": elapsed_time,
+                "timing_metadata": timing_metadata
+            }
+
+            # Adiciona ID da mensagem se disponível
+            if hasattr(msg, "id") and msg.id:
+                message_obj["message_id"] = msg.id
+
+            messages_data.append(message_obj)
+
+        # Estrutura completa para exportação
+        export_data = {
+            "thread_id": thread_id,
+            "persona_id": persona_id,
+            "conversation_timestamp": conversation_ts,
+            "total_messages": len(messages_data),
+            "messages": messages_data,
+            "metadata": {
+                "export_timestamp": datetime.now().isoformat(),
+                "export_version": "1.0"
+            }
+        }
+
+        # Gera o JSON
+        json_content = json.dumps(export_data, indent=2, ensure_ascii=False)
+
+        # Retorna como StreamingResponse para download
+        filename = f"conversa_{persona_id}_{thread_id}.json"
+        headers = {"Content-Disposition": f"attachment; filename={filename}"}
+        return StreamingResponse(
+            io.StringIO(json_content),
+            media_type="application/json",
+            headers=headers
+        )
+
+    finally:
+        conn.close()
