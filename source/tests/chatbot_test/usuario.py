@@ -180,6 +180,7 @@ class UsuarioBot(ChatBotBase):
             banco_response = self._send_to_bancobot(response)
             self.banco_generation_time = datetime.now()
             self.banco_generation_elapsed_time = self.banco_generation_time - self.pre_banco_generation_time
+            self.simulated_timestamp += self.banco_generation_elapsed_time
             query = banco_response
 
             if query.lower() == exit_command:
