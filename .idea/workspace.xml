@@ -4,11 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0cea1559-660a-43f1-803f-04da1cdf897d" name="Changes" comment="Adiciona suporte para mapeamento de IDs de thread e extração de datasources dos logs RAG, incluindo endpoints para configuração e depuração.">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
+    <list default="true" id="0cea1559-660a-43f1-803f-04da1cdf897d" name="Changes" comment="Atualiza timestamp simulado após geração de banco no usuário.py">
+      <change afterPath="$PROJECT_DIR$/1_persona.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/persona/persona_function.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/persona/persona_function.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/persona/persona_state.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/persona/persona_state.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/source/tests/chatbot_test/usuario.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/tests/chatbot_test/usuario.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test_rag_debug.py" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -429,7 +430,7 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/tools/enxame_usuario/start_usuarios.py" />
-      <option name="PARAMETERS" value="--window-size 2 --passes 1 --prompts-file personas.json --break-probability 0.0001 --api-url http://localhost:8080" />
+      <option name="PARAMETERS" value="--window-size 4 --passes 1 --prompts-file personas.json --break-probability 0.0001 --api-url http://localhost:8080" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
@@ -502,19 +503,19 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="FastAPI.visualizador_backend" />
       <item itemvalue="Python.Extract personas" />
-      <item itemvalue="Python.prompt_generation" />
-      <item itemvalue="Python.start_banco_service" />
-      <item itemvalue="Python.start_enxame_usuarios" />
+      <item itemvalue="Python.chatbot_test" />
       <item itemvalue="Python.document_loader_integration" />
-      <item itemvalue="Python.rag_test" />
       <item itemvalue="Python.gerar_missoes" />
       <item itemvalue="Python.insert_cenario&amp;persona" />
-      <item itemvalue="Python.setup_db_cenarios" />
-      <item itemvalue="Python.chatbot_test" />
       <item itemvalue="Python.launcher" />
+      <item itemvalue="Python.prompt_generation" />
       <item itemvalue="Python.rag_system" />
+      <item itemvalue="Python.rag_test" />
+      <item itemvalue="Python.setup_db_cenarios" />
+      <item itemvalue="Python.start_banco_service" />
+      <item itemvalue="Python.start_enxame_usuarios" />
+      <item itemvalue="FastAPI.visualizador_backend" />
       <item itemvalue="Python tests.Python tests for workflow_integration_test.TestChatGraphPromptIntegration" />
       <item itemvalue="Python tests.Python tests for workflow_integration_test.TestChatGraphPromptIntegration.test_chat_function" />
       <item itemvalue="Python tests.Python tests for workflow_integration_test.TestChatGraphPromptIntegration.test_default_workflow" />
@@ -691,15 +692,9 @@
       <workItem from="1749598453966" duration="96000" />
       <workItem from="1749598980096" duration="7808000" />
       <workItem from="1749647523818" duration="4604000" />
-      <workItem from="1749657525646" duration="6681000" />
-    </task>
-    <task id="LOCAL-00002" summary="Implementa classes de função de chat, construtor de workflows e testes&#10;&#10;- Adicionadas as classes abstratas `ChatFunction` e `ClassicChatFunction` para modularizar a execução de funções de chat.&#10;- Criado o módulo `models.py` com a enumeração `ModelName` para gerenciamento de modelos de linguagem.&#10;- Desenvolvido `workflow_builder.py` com a interface `Builder` e a implementação `ClassicWorkflowBuilder`, facilitando a construção de workflows personalizados.&#10;- Implementada a função `get_openai_llm` em `llms.py` para carregar modelos OpenAI com cache.&#10;- Atualizado `persona.py` com documentação aprimorada e método `get_dados_str` para acessar dados da persona como string.&#10;- Adicionado `__init__.py` no pacote `chat_graph` para exportar classes e funções relevantes.&#10;- Desenvolvidos testes unitários em `test_csv_to_json.py` para verificar a conversão de CSV para JSON.&#10;- Criados testes de integração em `workflow_integration_test.py` e `persona_csv_integration.py` para validar a integração entre workflows, funções de chat e conversão de CSV.&#10;&#10;**Benefícios:**&#10;&#10;- Melhor modularização e aderência aos princípios SOLID, facilitando a manutenção e extensão do código.&#10;- Aumento da cobertura de testes, garantindo robustez e confiabilidade das funcionalidades implementadas.">
-      <option name="closed" value="true" />
-      <created>1733430183454</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1733430183454</updated>
+      <workItem from="1749657525646" duration="13096000" />
+      <workItem from="1749745488207" duration="7747000" />
+      <workItem from="1749778242293" duration="3110000" />
     </task>
     <task id="LOCAL-00003" summary="Grande revisão do código">
       <option name="closed" value="true" />
@@ -1085,14 +1080,21 @@
       <option name="project" value="LOCAL" />
       <updated>1749656023710</updated>
     </task>
-    <option name="localTasksCounter" value="51" />
+    <task id="LOCAL-00051" summary="Atualiza timestamp simulado após geração de banco no usuário.py">
+      <option name="closed" value="true" />
+      <created>1749685900748</created>
+      <option name="number" value="00051" />
+      <option name="presentableId" value="LOCAL-00051" />
+      <option name="project" value="LOCAL" />
+      <updated>1749685900748</updated>
+    </task>
+    <option name="localTasksCounter" value="52" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="refactor: Melhora estado RAG e tratamento de mensagens no fluxo LangGraph&#10;&#10;- Refatora funções RAG (Retrieve, Route, Grade, Respond, Fallback) para modificar apenas seus campos de estado específicos, removendo adições de SystemMessage para passos intermediários.&#10;- Atualiza RouterFunction para adicionar o HumanMessage inicial ao estado.&#10;- Modifica RAGResponseFunction e FallbackFunction para gerar respostas invocando diretamente o LLM com o histórico completo de mensagens do estado, precedido por um SystemMessage dinâmico contendo contexto ou instruções de fallback. Remove dependência de cadeias/parsers separados para geração de resposta.&#10;- Altera ponto de entrada do fluxo RAG de `add_human_message` (removido) para `route`.&#10;- Passa MemorySaver explicitamente para RAGSystem em `rag_test.py`.&#10;- Remove importações e métodos não utilizados relacionados à lógica anterior de geração de resposta." />
     <MESSAGE value="[ COMMIT_MSG ]" />
     <MESSAGE value="refactor: Migra estado RAG para TypedDict e adiciona ferramenta de exportação de checkpoint&#10;&#10;- Refatora `RAGState` de Pydantic `BaseModel` para `typing.TypedDict`, herdando de `langgraph.graph.MessagesState`.&#10;- Atualiza funções RAG (`rag_functions.py`) e construtor de fluxo (`rag_workflow_builder.py`) para usar acesso estilo dicionário (`.get()`) para elementos de estado.&#10;- Modifica funções RAG para retornar dicionários parciais para atualizações de estado.&#10;- Adiciona novo script `tools/export_checkpoints.py` para exportar dados de conversas de checkpoints SQLite para CSV, incluindo detalhes de mensagens e metadados do LLM.&#10;- Garante que `RAGSystem` passe o objeto `memory` saver corretamente ao construir o fluxo de trabalho.&#10;- Remove métodos de propriedade redundantes e atualiza logs/tratamento de erros nas funções RAG." />
     <MESSAGE value="Adicionado o arquivo `personas.json` para a instancia de vários usuários com prompts diferentes, através do script `start_enxame_usuarios`." />
@@ -1117,7 +1119,8 @@
     <MESSAGE value="Função JSON." />
     <MESSAGE value="Adiciona importação de módulos JSON e datetime no main.py" />
     <MESSAGE value="Adiciona suporte para mapeamento de IDs de thread e extração de datasources dos logs RAG, incluindo endpoints para configuração e depuração." />
-    <option name="LAST_COMMIT_MESSAGE" value="Adiciona suporte para mapeamento de IDs de thread e extração de datasources dos logs RAG, incluindo endpoints para configuração e depuração." />
+    <MESSAGE value="Atualiza timestamp simulado após geração de banco no usuário.py" />
+    <option name="LAST_COMMIT_MESSAGE" value="Atualiza timestamp simulado após geração de banco no usuário.py" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1139,7 +1142,7 @@
     </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/human_agents$start_banco_service.coverage" NAME="start_banco_service Coverage Results" MODIFIED="1749667278227" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/human_agents$start_banco_service.coverage" NAME="start_banco_service Coverage Results" MODIFIED="1749778277311" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/lc_human_agents$gerar_missoes.coverage" NAME="gerar_missoes Coverage Results" MODIFIED="1735167511941" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/lc_human_agents$launcher.coverage" NAME="launcher Coverage Results" MODIFIED="1745446642223" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/lc_human_agents$rag_system.coverage" NAME="rag_system Coverage Results" MODIFIED="1743626120825" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/source/rag/system" />
@@ -1153,14 +1156,14 @@
     <SUITE FILE_PATH="coverage/lc_human_agents$Extract_personas.coverage" NAME="Extract personas Coverage Results" MODIFIED="1735162567412" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/human_agents$persona_function.coverage" NAME="persona_function Coverage Results" MODIFIED="1748282617633" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/source/persona" />
     <SUITE FILE_PATH="coverage/lc_human_agents$visualizador_backend.coverage" NAME="visualizador_backend Coverage Results" MODIFIED="1744146242613" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
-    <SUITE FILE_PATH="coverage/human_agents$start_enxame_usuarios.coverage" NAME="start_enxame_usuarios Coverage Results" MODIFIED="1749667290176" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/human_agents$start_enxame_usuarios.coverage" NAME="start_enxame_usuarios Coverage Results" MODIFIED="1749778283336" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/lc_human_agents$prompt_generator.coverage" NAME="prompt_generator Coverage Results" MODIFIED="1735165702542" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tools/prompt_generation" />
     <SUITE FILE_PATH="coverage/lc_human_agents$start_banco_service.coverage" NAME="start_banco_service Coverage Results" MODIFIED="1745445501145" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/lc_human_agents$document_loader_integration.coverage" NAME="document_loader_integration Coverage Results" MODIFIED="1741895137464" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/lc_human_agents$export_checkpoints.coverage" NAME="export_checkpoints Coverage Results" MODIFIED="1744156092400" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/lc_human_agents$run_services.coverage" NAME="run_services Coverage Results" MODIFIED="1742846551041" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/lc_human_agents$prompt_generation.coverage" NAME="prompt_generation Coverage Results" MODIFIED="1735239266449" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
-    <SUITE FILE_PATH="coverage/human_agents$launcher.coverage" NAME="launcher Coverage Results" MODIFIED="1749685509965" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/human_agents$launcher.coverage" NAME="launcher Coverage Results" MODIFIED="1749783206700" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/lc_human_agents$chatbot_server_test.coverage" NAME="chatbot server test Coverage Results" MODIFIED="1735141967192" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="C:\Users\galdu\PycharmProjects\lc-human-agents" />
     <SUITE FILE_PATH="coverage/lc_human_agents$read_personas.coverage" NAME="read_personas Coverage Results" MODIFIED="1735148903371" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tools" />
   </component>

@@ -59,7 +59,7 @@ class UsuarioBot(ChatBotBase):
         # Aplicar offset temporal ao timestamp simulado inicial
         self.simulated_timestamp = self.pre_banco_generation_time + self.temporal_offset
         self.last_break_time = 0
-        self.total_thinking_time = 0
+        self.thinking_time = 0
         self.total_typing_time = 0
 
     def initialize(self, use_sqlitesaver: bool) -> None:
@@ -81,28 +81,55 @@ class UsuarioBot(ChatBotBase):
 
         self.config = {"configurable": {"thread_id": self.thread_id}}
 
-    def _calculate_typing_time(self, message: str) -> float:
+    def _get_typing_time_from_response(self, output: dict) -> float:
         """
-        Calcula o tempo de digitação com base no comprimento da mensagem e na velocidade de digitação.
+        Extrai o tempo de digitação calculado pela PersonaChatFunction.
 
         Args:
-            message: O texto da mensagem
+            output: Output do workflow contendo as mensagens
 
         Returns:
             Tempo de digitação em segundos
         """
-        # Estima o número de palavras na mensagem
-        words = len(message.split())
+        try:
+            # Pega a última mensagem (resposta do AI)
+            last_message = output["messages"][-1]
+            # Extrai o timing_metadata do additional_kwargs
+            timing_metadata = last_message.additional_kwargs.get("timing_metadata", {})
+            # Retorna o typing_time ou 0 se não encontrar
+            return timing_metadata.get("typing_time", 0.0)
+        except (KeyError, IndexError, AttributeError):
+            return 0.0
 
-        # Calcula o tempo de digitação em minutos
-        typing_time_minutes = words / self.typing_speed_wpm
+    def _get_simulated_timestamp(self, output: dict) -> datetime:
+        """
+        Extrai o timestamp simulado do output do workflow.
 
-        # Converte para segundos
-        typing_time_seconds = typing_time_minutes * 60
+        Args:
+            output: Output do workflow contendo as mensagens
 
-        # Adiciona aleatoriedade (±20%)
-        randomness = random.uniform(0.8, 1.2)
-        return typing_time_seconds * randomness
+        Returns:
+            Timestamp simulado como objeto datetime
+        """
+        try:
+            # Pega a última mensagem (resposta do AI)
+            last_message = output["messages"][-1]
+            # Extrai o timing_metadata do additional_kwargs
+            timing_metadata = last_message.additional_kwargs.get("timing_metadata", {})
+            # Obtém o simulated_timestamp
+            timestamp_str = timing_metadata.get("simulated_timestamp", None)
+
+            if timestamp_str:
+                # Converte de string ISO para datetime
+                return datetime.fromisoformat(timestamp_str)
+            else:
+                # Retorna o timestamp atual se não encontrar
+                return self.simulated_timestamp
+
+        except (KeyError, IndexError, AttributeError, ValueError) as e:
+            # Em caso de erro, mantém o timestamp atual
+            print(f"[AVISO] Erro ao extrair timestamp simulado: {e}")
+            return self.simulated_timestamp
 
     def _calculate_thinking_time(self) -> float:
         """
@@ -145,10 +172,9 @@ class UsuarioBot(ChatBotBase):
         # Aplicar offset temporal ao timestamp inicial
         self.simulated_timestamp = self.pre_banco_generation_time + self.temporal_offset
 
-        # CORREÇÃO: Calcula tempos ANTES da primeira resposta
         # Simula o tempo de reflexão inicial
         initial_thinking_time = self._calculate_thinking_time()
-        self.total_thinking_time = initial_thinking_time
+        self.thinking_time = initial_thinking_time
         self.simulated_timestamp += timedelta(seconds=initial_thinking_time)
 
         if self.simulate_delays:
@@ -156,14 +182,16 @@ class UsuarioBot(ChatBotBase):
             time.sleep(initial_thinking_time)
 
         # Processa a consulta inicial (banco inicia a conversa)
-        response = self.process_query(query)
+        output = self.process_query_with_output(query)
+        response = output["messages"][-1].content
         print("=== UsuarioBot Mensagem ===")
         print(response)
 
-        # Calcula o tempo de digitação da primeira resposta
-        initial_typing_time = self._calculate_typing_time(response)
+        # Extrai o tempo de digitação calculado pela PersonaChatFunction
+        initial_typing_time = self._get_typing_time_from_response(output)
         self.total_typing_time = initial_typing_time
-        self.simulated_timestamp += timedelta(seconds=initial_typing_time)
+        sim_timestamp = self._get_simulated_timestamp(output)
+        self.simulated_timestamp = sim_timestamp
 
         if self.simulate_delays:
             print(f"[DELAY REAL] Aguardando {initial_typing_time:.2f} segundos de digitação inicial...")
@@ -206,7 +234,7 @@ class UsuarioBot(ChatBotBase):
 
             # Simula o tempo de reflexão para a próxima resposta
             thinking_time = self._calculate_thinking_time()
-            self.total_thinking_time += thinking_time
+            self.thinking_time = thinking_time
             self.simulated_timestamp += timedelta(seconds=thinking_time)
             print(f"[Simulação] Pensando por {thinking_time:.2f} segundos...")
 
@@ -216,7 +244,8 @@ class UsuarioBot(ChatBotBase):
                 time.sleep(thinking_time)
 
             # Processa a resposta
-            response = self.process_query(query)
+            output = self.process_query_with_output(query)
+            response = output["messages"][-1].content
             print("=== UsuarioBot Mensagem ===")
             print(response)
 
@@ -224,10 +253,11 @@ class UsuarioBot(ChatBotBase):
                 print("Encerrando a conversa pelo usuário.")
                 break
 
-            # Simula o tempo de digitação
-            typing_time = self._calculate_typing_time(response)
+            # Extrai o tempo de digitação calculado pela PersonaChatFunction
+            typing_time = self._get_typing_time_from_response(output)
             self.total_typing_time += typing_time
-            self.simulated_timestamp += timedelta(seconds=typing_time)
+            sim_timestamp = self._get_simulated_timestamp(output)
+            self.simulated_timestamp = sim_timestamp
             print(f"[Simulação] Digitando por {typing_time:.2f} segundos (velocidade: {self.typing_speed_wpm} wpm)...")
 
             # Aguarda o tempo de digitação
@@ -237,7 +267,7 @@ class UsuarioBot(ChatBotBase):
 
         # Imprime resumo das estatísticas de tempo
         print("\n=== Estatísticas de Tempo ===")
-        print(f"Tempo total pensando: {self.total_thinking_time:.2f} segundos")
+        print(f"Tempo total pensando: {self.thinking_time:.2f} segundos")
         print(f"Tempo total digitando: {self.total_typing_time:.2f} segundos")
         print(f"Último tempo de pausa: {self.last_break_time:.2f} segundos")
         print(f"Timestamp final simulado: {self.simulated_timestamp.strftime('%Y-%m-%d %H:%M:%S')}")
@@ -262,8 +292,7 @@ class UsuarioBot(ChatBotBase):
                 "persona_id": self.persona_id,  # Include persona_id
                 "timing_metadata": {
                     "simulated_timestamp": self.simulated_timestamp.isoformat(),
-                    "thinking_time": self.total_thinking_time,
-                    "typing_time": self.total_typing_time,
+                    "thinking_time": self.thinking_time,
                     "break_time": self.last_break_time
                 }
             }
@@ -296,23 +325,23 @@ class UsuarioBot(ChatBotBase):
             except requests.RequestException as e:
                 print(f"Erro ao encerrar a sessão com o serviço BancoBot: {e}")
 
-    def process_query(self, query: str) -> str:
+    def process_query_with_output(self, query: str) -> dict:
         """
-        Sobrescreve o método de ChatBotBase para incluir metadados de temporização.
+        Processa a mensagem e retorna o output completo do workflow.
 
         Args:
             query: Texto enviado pelo usuário.
 
         Returns:
-            Texto de resposta gerado pelo modelo.
+            Output completo do workflow incluindo mensagens.
         """
         from langchain_core.messages import HumanMessage
 
         # Inclui metadados de temporização na mensagem
         user_timing_metadata = {
             "simulated_timestamp": self.simulated_timestamp.isoformat(),
-            "thinking_time": self.total_thinking_time,
-            "typing_time": self.total_typing_time,
+            "thinking_time": self.thinking_time,
+            "typing_time": self.total_typing_time,  # Ainda incluímos mas será sobrescrito pela PersonaChatFunction
             "break_time": self.last_break_time
         }
 
@@ -324,5 +353,26 @@ class UsuarioBot(ChatBotBase):
         }
 
         input_messages = [HumanMessage(content=query, additional_kwargs={"timing_metadata": banco_timing_metadata})]
-        output = self.app.invoke({"messages": input_messages, "persona_id": self.persona_id, "timing_metadata": user_timing_metadata}, self.config)
+
+        # Passa typing_speed_wpm através do estado
+        output = self.app.invoke({
+            "messages": input_messages,
+            "persona_id": self.persona_id,
+            "timing_metadata": user_timing_metadata,
+            "typing_speed_wpm": self.typing_speed_wpm  # Passa a velocidade de digitação
+        }, self.config)
+
+        return output
+
+    def process_query(self, query: str) -> str:
+        """
+        Sobrescreve o método de ChatBotBase para incluir metadados de temporização.
+
+        Args:
+            query: Texto enviado pelo usuário.
+
+        Returns:
+            Texto de resposta gerado pelo modelo.
+        """
+        output = self.process_query_with_output(query)
         return output["messages"][-1].content
