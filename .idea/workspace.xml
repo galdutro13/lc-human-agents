@@ -4,15 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0cea1559-660a-43f1-803f-04da1cdf897d" name="Changes" comment="Adiciona arquivo de persona e calcula tempo de digitação na função de chat">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/personas.json" beforeDir="false" afterPath="$PROJECT_DIR$/personas.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/personas_tf.json" beforeDir="false" afterPath="$PROJECT_DIR$/personas_tf.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/tests/chatbot_test/usuario.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/tests/chatbot_test/usuario.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tools/bancobot_service/banco_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/tools/bancobot_service/banco_service.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tools/bancobot_service/start_banco_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/tools/bancobot_service/start_banco_service.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tools/enxame_usuario/start_usuarios.py" beforeDir="false" afterPath="$PROJECT_DIR$/tools/enxame_usuario/start_usuarios.py" afterDir="false" />
-    </list>
+    <list default="true" id="0cea1559-660a-43f1-803f-04da1cdf897d" name="Changes" comment="Adiciona arquivo de persona e atualiza configuração de execução para o script de extração de personas" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -702,22 +694,7 @@
       <workItem from="1750203968167" duration="45000" />
       <workItem from="1750281977555" duration="1014000" />
       <workItem from="1750336746790" duration="3257000" />
-    </task>
-    <task id="LOCAL-00004" summary="Modificação do tempo de espera.">
-      <option name="closed" value="true" />
-      <created>1735170237927</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1735170237927</updated>
-    </task>
-    <task id="LOCAL-00005" summary="Modificação do tempo de espera.">
-      <option name="closed" value="true" />
-      <created>1735170678814</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1735170678814</updated>
+      <workItem from="1750344116132" duration="88000" />
     </task>
     <task id="LOCAL-00006" summary="Atualização do código.">
       <option name="closed" value="true" />
@@ -1095,15 +1072,29 @@
       <option name="project" value="LOCAL" />
       <updated>1750121355897</updated>
     </task>
-    <option name="localTasksCounter" value="53" />
+    <task id="LOCAL-00053" summary="Adiciona gerenciamento de sessões com limpeza automática e prevenção de vazamentos de memória">
+      <option name="closed" value="true" />
+      <created>1750344134490</created>
+      <option name="number" value="00053" />
+      <option name="presentableId" value="LOCAL-00053" />
+      <option name="project" value="LOCAL" />
+      <updated>1750344134490</updated>
+    </task>
+    <task id="LOCAL-00054" summary="Adiciona arquivo de persona e atualiza configuração de execução para o script de extração de personas">
+      <option name="closed" value="true" />
+      <created>1750344144593</created>
+      <option name="number" value="00054" />
+      <option name="presentableId" value="LOCAL-00054" />
+      <option name="project" value="LOCAL" />
+      <updated>1750344144593</updated>
+    </task>
+    <option name="localTasksCounter" value="55" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="refactor: Migra estado RAG para TypedDict e adiciona ferramenta de exportação de checkpoint&#10;&#10;- Refatora `RAGState` de Pydantic `BaseModel` para `typing.TypedDict`, herdando de `langgraph.graph.MessagesState`.&#10;- Atualiza funções RAG (`rag_functions.py`) e construtor de fluxo (`rag_workflow_builder.py`) para usar acesso estilo dicionário (`.get()`) para elementos de estado.&#10;- Modifica funções RAG para retornar dicionários parciais para atualizações de estado.&#10;- Adiciona novo script `tools/export_checkpoints.py` para exportar dados de conversas de checkpoints SQLite para CSV, incluindo detalhes de mensagens e metadados do LLM.&#10;- Garante que `RAGSystem` passe o objeto `memory` saver corretamente ao construir o fluxo de trabalho.&#10;- Remove métodos de propriedade redundantes e atualiza logs/tratamento de erros nas funções RAG." />
-    <MESSAGE value="Adicionado o arquivo `personas.json` para a instancia de vários usuários com prompts diferentes, através do script `start_enxame_usuarios`." />
     <MESSAGE value="Transferir o prompt de fallback para o arquivo de configurações." />
     <MESSAGE value="Introdução do código de melhoria do prompt." />
     <MESSAGE value="Correção do comportamento de melhoria do prompt: agora a lista agregada de documentos é recetada no fim da execução do fluxo." />
@@ -1127,7 +1118,9 @@
     <MESSAGE value="Adiciona suporte para mapeamento de IDs de thread e extração de datasources dos logs RAG, incluindo endpoints para configuração e depuração." />
     <MESSAGE value="Atualiza timestamp simulado após geração de banco no usuário.py" />
     <MESSAGE value="Adiciona arquivo de persona e calcula tempo de digitação na função de chat" />
-    <option name="LAST_COMMIT_MESSAGE" value="Adiciona arquivo de persona e calcula tempo de digitação na função de chat" />
+    <MESSAGE value="Adiciona gerenciamento de sessões com limpeza automática e prevenção de vazamentos de memória" />
+    <MESSAGE value="Adiciona arquivo de persona e atualiza configuração de execução para o script de extração de personas" />
+    <option name="LAST_COMMIT_MESSAGE" value="Adiciona arquivo de persona e atualiza configuração de execução para o script de extração de personas" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
