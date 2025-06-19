@@ -1,12 +1,25 @@
 import os
+import sys
 import argparse
 from dotenv import load_dotenv
+
+# Check for optional dependencies
+try:
+    import psutil
+
+    PSUTIL_AVAILABLE = True
+except ImportError:
+    print("WARNING: psutil not installed. Memory monitoring will be unavailable.")
+    print("Install with: pip install psutil")
+    print("")
+    PSUTIL_AVAILABLE = False
+
 from banco_service import start_server
 
 
 def parse_args():
     parser = argparse.ArgumentParser(
-        description="Inicia o serviço BancoBot API."
+        description="Inicia o serviço BancoBot API com gerenciamento de memória."
     )
 
     parser.add_argument(
@@ -44,5 +57,14 @@ if __name__ == "__main__":
 
     args = parse_args()
 
-    print(f"Iniciando Serviço BancoBot em {args.host}:{args.port}...")
+    print(f"Iniciando Serviço BancoBot v2.0 em {args.host}:{args.port}...")
+    print("Recursos de gerenciamento de memória ativados:")
+    print("- Limite máximo de sessões: 1000")
+    print("- Timeout de sessão: 30 minutos")
+    print("- Limpeza automática: a cada 5 minutos")
+    if PSUTIL_AVAILABLE:
+        print("- Monitoramento de memória disponível em /health")
+    else:
+        print("- Monitoramento de memória: INDISPONÍVEL (instale psutil)")
+
     start_server(host=args.host, port=args.port)

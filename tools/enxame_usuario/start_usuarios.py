@@ -40,18 +40,22 @@ python run_prompts.py \
 
 # ---------------------------- Funções utilitárias -----------------------------
 
-def calculate_temporal_offset(offset_type: str) -> timedelta:
+def calculate_temporal_offset(offset_type: str, max_days: int = 30) -> timedelta:
     """
-    Calcula um offset temporal aleatório baseado no tipo especificado.
+    Calcula um offset temporal aleatório baseado no tipo especificado,
+    podendo ser de até 30 dias no futuro.
 
     Args:
         offset_type: Tipo de offset ("manhã", "tarde", "noite", "horario-comercial")
+        max_days: Número máximo de dias para o offset (padrão: 30)
 
     Returns:
         timedelta representando o offset a ser aplicado
     """
     now = datetime.now()
     current_hour = now.hour
+    current_minute = now.minute
+    current_second = now.second
 
     # Define os intervalos para cada período
     time_ranges = {
@@ -66,38 +70,147 @@ def calculate_temporal_offset(offset_type: str) -> timedelta:
 
     start_hour, end_hour = time_ranges[offset_type]
 
+    # Primeiro, sorteia quantos dias no futuro (0 a max_days)
+    days_offset = random.randint(0, max_days)
+
     # Tratamento especial para "noite" que atravessa meia-noite
     if offset_type == "noite":
-        if current_hour >= 18:
-            # Estamos depois das 18h, calcular offset para continuar na noite de hoje
-            target_hour = random.randint(current_hour, 23)
-        elif current_hour < 6:
-            # Estamos na madrugada, calcular offset para continuar na madrugada
-            target_hour = random.randint(current_hour, 5)
-        else:
-            # Estamos durante o dia, calcular offset para a noite (18h+)
+        # Para noite, precisamos considerar dois intervalos: 18-23:59 e 0-5:59
+        if random.random() < 0.7:  # 70% de chance de ser no período noturno (18h-23:59)
             target_hour = random.randint(18, 23)
+        else:  # 30% de chance de ser na madrugada (0h-5:59)
+            target_hour = random.randint(0, 5)
     else:
         # Para outros períodos, escolher hora aleatória no intervalo
-        if start_hour <= current_hour <= end_hour:
-            # Já estamos no período, escolher hora entre agora e o fim
-            target_hour = random.randint(current_hour, end_hour)
+        target_hour = random.randint(start_hour, end_hour)
+
+    # Adicionar minutos e segundos aleatórios para maior realismo
+    target_minute = random.randint(0, 59)
+    target_second = random.randint(0, 59)
+
+    # Calcular o datetime alvo
+    target_datetime = now.replace(
+        hour=target_hour,
+        minute=target_minute,
+        second=target_second,
+        microsecond=0
+    ) + timedelta(days=days_offset)
+
+    # Se o horário alvo for antes do horário atual (pode acontecer com days_offset=0),
+    # adicionar um dia
+    if days_offset == 0 and target_datetime <= now:
+        target_datetime += timedelta(days=1)
+
+    # Calcular o offset final
+    offset = target_datetime - now
+
+    # Log para debug (opcional)
+    print(f"[Offset Temporal] Tipo: {offset_type}")
+    print(f"  - Hora atual: {now.strftime('%Y-%m-%d %H:%M:%S')}")
+    print(f"  - Alvo: {target_datetime.strftime('%Y-%m-%d %H:%M:%S')}")
+    print(f"  - Offset: {offset.days} dias, {offset.seconds // 3600} horas, {(offset.seconds % 3600) // 60} minutos")
+
+    return offset
+
+
+# Exemplo de uso estendido com controle de dias máximos
+def calculate_temporal_offset_with_distribution(offset_type: str,
+                                                distribution: str = "uniform",
+                                                max_days: int = 30) -> timedelta:
+    """
+    Versão estendida que permite diferentes distribuições de probabilidade
+    para o sorteio dos dias.
+
+    Args:
+        offset_type: Tipo de offset ("manhã", "tarde", "noite", "horario-comercial")
+        distribution: Tipo de distribuição ("uniform", "exponential", "weighted")
+        max_days: Número máximo de dias para o offset
+
+    Returns:
+        timedelta representando o offset a ser aplicado
+    """
+    now = datetime.now()
+
+    # Define os intervalos para cada período
+    time_ranges = {
+        "manhã": (7, 11),
+        "tarde": (12, 17),
+        "noite": (18, 6),
+        "horario-comercial": (8, 17)
+    }
+
+    if offset_type not in time_ranges:
+        return timedelta(0)
+
+    # Sortear dias com base na distribuição escolhida
+    if distribution == "exponential":
+        # Distribuição exponencial: mais provável escolher dias próximos
+        # Lambda = 0.1 significa ~63% de chance nos primeiros 10 dias
+        days_offset = min(int(random.expovariate(0.1)), max_days)
+    elif distribution == "weighted":
+        # Distribuição com pesos: primeiros dias mais prováveis
+        weights = [1 / (i + 1) for i in range(max_days + 1)]
+        days_offset = random.choices(range(max_days + 1), weights=weights)[0]
+    else:  # uniform
+        # Distribuição uniforme: todos os dias têm a mesma probabilidade
+        days_offset = random.randint(0, max_days)
+
+    start_hour, end_hour = time_ranges[offset_type]
+
+    # Tratamento especial para "noite"
+    if offset_type == "noite":
+        if random.random() < 0.7:
+            target_hour = random.randint(18, 23)
         else:
-            # Não estamos no período, escolher hora aleatória no intervalo
-            target_hour = random.randint(start_hour, end_hour)
+            target_hour = random.randint(0, 5)
+    else:
+        target_hour = random.randint(start_hour, end_hour)
 
-    # Calcular o offset em horas
-    offset_hours = target_hour - current_hour
+    # Adicionar variação realista
+    target_minute = random.randint(0, 59)
+    target_second = random.randint(0, 59)
 
-    # Se o offset for negativo, significa que é para o dia seguinte
-    if offset_hours < 0 and offset_type != "noite":
-        offset_hours += 24
+    # Criar datetime alvo
+    target_datetime = now.replace(
+        hour=target_hour,
+        minute=target_minute,
+        second=target_second,
+        microsecond=0
+    ) + timedelta(days=days_offset)
 
-    # Adicionar minutos e segundos aleatórios
-    offset_minutes = random.randint(0, 59)
-    offset_seconds = random.randint(0, 59)
+    # Garantir que é no futuro
+    if days_offset == 0 and target_datetime <= now:
+        target_datetime += timedelta(days=1)
 
-    return timedelta(hours=offset_hours, minutes=offset_minutes, seconds=offset_seconds)
+    return target_datetime - now
+
+
+# Função auxiliar para validar e limitar o offset
+def calculate_temporal_offset_safe(offset_type: str,
+                                   max_days: int = 30,
+                                   min_hours: int = 1) -> timedelta:
+    """
+    Versão segura que garante um offset mínimo e máximo.
+
+    Args:
+        offset_type: Tipo de offset
+        max_days: Número máximo de dias
+        min_hours: Número mínimo de horas no futuro
+
+    Returns:
+        timedelta com validações aplicadas
+    """
+    offset = calculate_temporal_offset(offset_type, max_days)
+
+    # Garantir offset mínimo
+    if offset < timedelta(hours=min_hours):
+        offset = timedelta(hours=min_hours)
+
+    # Garantir offset máximo
+    if offset > timedelta(days=max_days):
+        offset = timedelta(days=max_days)
+
+    return offset
 
 
 def get_duration_parameters(duration_type: str) -> dict:
@@ -211,7 +324,7 @@ def iniciar_usuario(persona_id: str,
     try:
         usuario_bot.run(
             initial_query="Olá cliente, como posso lhe ajudar?",
-            max_iterations=10,
+            max_iterations=15,
         )
         print(f"[INFO] Persona '{persona_id}' concluiu a conversa.")
     except Exception as exc:

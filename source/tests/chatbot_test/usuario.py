@@ -158,7 +158,7 @@ class UsuarioBot(ChatBotBase):
         """
         return random.uniform(self.break_time_range[0], self.break_time_range[1])
 
-    def run(self, initial_query, max_iterations=10):
+    def run(self, initial_query, max_iterations=15):
         """
         Executa a conversa com o BancoBot através da API com simulação de comportamento temporal.
 
