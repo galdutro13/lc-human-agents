@@ -175,10 +175,27 @@ def new_interaction():
 # Sidebar
 ##############################
 with st.sidebar:
-    st.write("**Nova interação**")
-    if st.button("", key="btn_new_interaction", help="Iniciar nova interação", icon="➕"):
-        st.session_state.show_new_interaction_modal = True
-        st.session_state.new_interaction_error = ""  # reset any previous error
+    st.write("**Exportar Interações**")
+    if st.button("", key="btn_export_interactions", help="Exportar interações", icon="💾"):
+        try:
+            # Faz a requisição para obter o conteúdo do Excel
+            zip_url = f"{BASE_URL}/interactions/export/all_json_zip"
+            response = requests.get(zip_url)
+            response.raise_for_status()
+
+            # Converte em bytes
+            zip_data = response.content
+
+            # Mostra imediatamente um botão de download
+            st.download_button(
+                label="Baixar zip",
+                data=zip_data,
+                file_name="interactions_export.zip",
+                mime="application/zip"
+            )
+        except Exception as e:
+            st.error(f"Falha ao gerar ou baixar o Excel: {e}")
+
     st.write("**Conversas**")
     for i, item in enumerate(st.session_state.interactions):
         ts_str = format_ts(item["ts"])

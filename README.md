@@ -18,27 +18,6 @@ Este projeto tem como objetivo simular interações entre agentes humanos e chat
 
 [Streamlit](https://streamlit.io/) é uma biblioteca de código aberto que permite a criação de aplicações web interativas para visualização de dados e aprendizado de máquina. Neste projeto, Streamlit é usado para criar uma interface de usuário para visualizar as interações entre agentes humanos e chatbots.
 
-### Google Generative AI
-
-[Google Generative AI](https://ai.google.dev/docs) é um conjunto de ferramentas e APIs que permitem aos desenvolvedores integrar modelos generativos de IA em suas aplicações. Neste projeto, ele é usado para gerar prompts para os agentes humanos e para alimentar os modelos de linguagem que dirigem os chatbots.
-
-### SQLite
-
-[SQLite](https://www.sqlite.org/docs.html) é um sistema de gerenciamento de banco de dados relacional (RDBMS) contido em uma biblioteca C. É um banco de dados leve, baseado em arquivo, que não requer um processo de servidor separado. Neste projeto, o SQLite é usado para armazenar e recuperar dados relacionados a cenários, personas, missões e interações.
-
-## Tecnologias Utilizadas
-
-*   **Python**: Linguagem de programação principal utilizada para o desenvolvimento do projeto.
-*   **LangChain**: Framework para o desenvolvimento de aplicações que utilizam modelos de linguagem.
-*   **LangGraph**: Biblioteca para a criação de aplicações de agente multi-ator e cíclicas.
-*   **Streamlit**: Biblioteca para a criação de aplicações web interativas.
-*   **FastAPI**: Framework web para a construção de APIs com Python.
-*   **Google Generative AI**: Conjunto de ferramentas e APIs para integrar modelos generativos de IA em aplicações.
-*   **SQLite**: Sistema de gerenciamento de banco de dados relacional baseado em arquivo.
-*   **OpenAI**: Fornece acesso a modelos de linguagem como GPT-3 e GPT-4.
-*   **LangChain Core**: Fornece componentes fundamentais para o LangChain.
-*   **LangChain OpenAI**: Integração do LangChain com os modelos da OpenAI.
-*   **LangChain Google GenAI**: Integração do LangChain com os modelos da Google Generative AI.
 
 ## Estrutura do Projeto
 
@@ -66,26 +45,32 @@ lc-human-agents/
         └── frontend/
 ```
 
-*   **data/**: Contém os dados utilizados no projeto, como arquivos CSV e JSON com informações sobre personas e cenários.
-    *   **extracted/**: Contém arquivos JSON extraídos do arquivo `Personas.CSV`, cada um representando uma persona individual.
-*   **source/**: Contém o código-fonte principal do projeto.
-    *   **chat\_graph/**: Contém classes relacionadas ao grafo de chat e à construção do fluxo de trabalho.
-    *   **constantes/**: Contém constantes como `TEMPERATURE`, `FREQUENCY_PENALTY`, e `PRESENCE_PENALTY` utilizadas na configuração dos modelos de linguagem.
-    *   **persona/**: Contém a classe `Persona` para representar e manipular dados de personas.
-    *   **prompt\_manager/**: Contém classes relacionadas à geração de prompts, incluindo estratégias e constantes para diferentes tipos de agentes.
-        *   **constantes/**: Contém templates de prompts, como `template_padrao` e `template_agressivo`.
-    *   **scripts/**: Contém scripts utilitários, como `csv_to_json.py` para converter dados de CSV para JSON.
-    *   **tests/**: Contém testes unitários e de integração para o projeto.
-        *   **chatbotserver\_test/**: Contém código para executar chatbots em servidores, como `server_usuario.py` e `server_banco.py`, e `chatbot.py` que é uma classe base para chatbots.
-        *   **chatbot\_test/**: Contém classes para testar os chatbots, como `BancoBot` e `UsuarioBot`, e `chatbot.py` que é uma classe base para chatbots.
-        *   **integratio\_test/**: Contém testes de integração para diferentes componentes, como `persona_csv_integration.py` e `workflow_integration_test.py`.
-        *   **unittest/**: Contém testes unitários para módulos individuais, como `test_csv_to_json.py` e `test_prompt_manager.py`.
-*   **tools/**: Contém ferramentas auxiliares para o projeto.
-    *   **db\_work/**: Contém scripts para configurar e popular o banco de dados SQLite, como `setup_db_cenarios.py`, `insert_cenario&persona.py`, e `gerar_missoes.py`.
-    *   **prompt\_generation/**: Contém scripts para geração de prompts usando modelos de linguagem, como `prompt_generator.py`, `get_generator_prompt.py` e `rate_limiter.py`.
-    *   **visualizador\_interacoes/**: Contém código para uma aplicação Streamlit que visualiza as interações dos chatbots.
-        *   **backend/**: Contém o código do servidor FastAPI que fornece os dados para o frontend, como `main.py`.
-        *   **frontend/**: Contém o código do frontend Streamlit, como `st_frontend.py`.
+### **source/**
+
+* #### **chat_graph/**
+    Núcleo da construção e gerenciamento dos fluxos de conversa do chatbot. Ele é composto por `llms.py`, que carrega os modelos de linguagem; `workflow_builder.py`, que utiliza `StateGraph` para construir a estrutura da conversa; e `chat_function.py`, que define as classes abstratas e concretas para as funções executadas em cada nó do grafo de conversação.
+* #### **constantes/**
+    Centraliza as constantes utilizadas no projeto. Ele inclui `hiper_parametros.py`, que define os hiperparâmetros dos modelos, como temperatura e penalidades, e `models.py`, que enumera os diferentes modelos de linguagem disponíveis para uso no sistema.
+
+* #### **persona/**
+    Responsável por definir e gerenciar as personas dos usuários que interagem com o chatbot. Ele contém `persona.py`, que define a classe `Persona`; `persona_state.py`, que gerencia o estado da persona no fluxo de trabalho; `persona_function.py`, que implementa a função de chat específica para a persona; e `persona_workflow_builder.py`, que constrói os fluxos de trabalho específicos para cada persona.
+
+* #### **rag/**
+    Implementa o sistema de Retrieval-Augmented Generation (RAG). Ele é composto por vários submódulos: `config` para o gerenciamento de configurações, `document` para o carregamento e processamento de documentos, `functions` para as diferentes funções do RAG (roteador, classificador, recuperador, etc.), `logging` para o registro detalhado do processo RAG, `state` para o estado do fluxo de trabalho RAG, `system` para a fachada principal do sistema RAG, `vectorstore` para o gerenciamento de vector stores, e `workflow` para a construção do fluxo de trabalho RAG.
+
+* #### **tests/**
+    Este módulo abriga todos os testes do projeto. Ele está dividido em `unittest` para testes unitários de módulos individuais e `integratio_test` para testar a integração entre os diferentes componentes do sistema. Além disso, o diretório `chatbot_test` contém a implementação do mecanismo de interação entre as personas e o chatbot.
+
+### **tools/**
+
+* #### **bancobot_service/**
+    Esta ferramenta implementa o serviço de backend para o chatbot do banco. Utilizando FastAPI, ela cria uma API RESTful que permite que múltiplos bots de usuário interajam com o bot do banco. O arquivo `banco_service.py` define os endpoints da API e gerencia as sessões de usuário, enquanto `start_banco_service.py` é o script utilizado para iniciar o serviço.
+
+* #### **enxame_usuario/**
+    Esta ferramenta é utilizada para simular a interação de múltiplos usuários com o bot do banco simultaneamente. O script principal, `start_usuarios.py`, lança um "enxame" de bots de usuário, cada um com sua própria persona e comportamento, com o objetivo de testar o bot do banco sob carga e em diferentes cenários de uso.
+
+* #### **visualizador_interacoes/**
+    Esta ferramenta oferece uma interface web para a visualização das interações entre os bots de usuário e o bot do banco. Ela é composta por um `backend` desenvolvido com FastAPI (`main.py`), que fornece os dados das conversas, e um `frontend` construído com Streamlit (`st_frontend.py`), que exibe o histórico de interações.
 
 ## Como Usar
 
@@ -102,13 +87,23 @@ lc-human-agents/
     ```bash
     git clone <repository_url>
     ```
-2. Instale as dependências:
+
+2. Crie um ambiente virtual e ative-o:
 
     ```bash
     cd lc-human-agents
+    python -m venv venv
+    source venv/bin/activate  # No Windows use: venv\Scripts\activate
+    ```
+3. Instale as dependências:
+
+    ```bash
     pip install -r requirements.txt
     ```
-3. Configure as variáveis de ambiente para as chaves de API da OpenAI e do Google AI:
+
+    > **Atenção:** Caso ocorra algum erro relacionado à instalação do `chromadb`, verifique se você possui o `gcc` e as dependências de build do Python instaladas no seu sistema. No Windows, recomenda-se instalar o [Build Tools for Visual Studio](https://visualstudio.microsoft.com/visual-cpp-build-tools/). Consulte a [documentação oficial do chromadb](https://docs.trychroma.com/troubleshooting) para mais detalhes sobre troubleshooting.
+
+4. Configure as variáveis de ambiente para as chaves de API da OpenAI e do Google AI:
 
     ```bash
     export OPENAI_API_KEY="your_openai_api_key"

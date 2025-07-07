@@ -27,6 +27,7 @@ contra o BancoBot.
 5. **Sem ``--num-usuarios``** – número total de execuções derivado de ``passes``.
 6. **Suporte a configurações de temporização via JSON** – cada persona pode ter
    configurações individuais de duração e offset temporal.
+7. **Parâmetro ``weekend``** – controla se o offset temporal deve cair em fim de semana ou dia útil.
 
 Exemplo de uso:
 ```
@@ -40,14 +41,17 @@ python run_prompts.py \
 
 # ---------------------------- Funções utilitárias -----------------------------
 
-def calculate_temporal_offset(offset_type: str, max_days: int = 30) -> timedelta:
+def calculate_temporal_offset(offset_type: str, max_days: int = 30, weekend: bool = None) -> timedelta:
     """
     Calcula um offset temporal aleatório baseado no tipo especificado,
-    podendo ser de até 30 dias no futuro.
+    podendo ser de até 30 dias no futuro, com controle de fim de semana.
 
     Args:
         offset_type: Tipo de offset ("manhã", "tarde", "noite", "horario-comercial")
         max_days: Número máximo de dias para o offset (padrão: 30)
+        weekend: Se True, garante que o offset caia em fim de semana.
+                Se False, garante que caia em dia útil.
+                Se None, não aplica restrição.
 
     Returns:
         timedelta representando o offset a ser aplicado
@@ -70,8 +74,47 @@ def calculate_temporal_offset(offset_type: str, max_days: int = 30) -> timedelta
 
     start_hour, end_hour = time_ranges[offset_type]
 
+    # Função auxiliar para verificar se uma data é fim de semana
+    def is_weekend(date):
+        # 5 = sábado, 6 = domingo
+        return date.weekday() in [5, 6]
+
     # Primeiro, sorteia quantos dias no futuro (0 a max_days)
-    days_offset = random.randint(0, max_days)
+    # Se weekend não for None, precisamos garantir que o dia alvo seja conforme solicitado
+    if weekend is not None:
+        # Tenta até 100 vezes encontrar um dia que atenda o critério
+        max_attempts = 100
+        attempts = 0
+
+        while attempts < max_attempts:
+            days_offset = random.randint(0, max_days)
+            target_date = now + timedelta(days=days_offset)
+
+            # Verifica se o dia atende o critério
+            if weekend and is_weekend(target_date):
+                break  # Encontrou um fim de semana
+            elif not weekend and not is_weekend(target_date):
+                break  # Encontrou um dia útil
+
+            attempts += 1
+
+        # Se não encontrou após as tentativas, procura o próximo dia válido
+        if attempts >= max_attempts:
+            days_offset = 0
+            target_date = now
+
+            # Procura o próximo dia que atenda o critério
+            for i in range(max_days + 1):
+                test_date = now + timedelta(days=i)
+                if weekend and is_weekend(test_date):
+                    days_offset = i
+                    break
+                elif not weekend and not is_weekend(test_date):
+                    days_offset = i
+                    break
+    else:
+        # Sem restrição de fim de semana
+        days_offset = random.randint(0, max_days)
 
     # Tratamento especial para "noite" que atravessa meia-noite
     if offset_type == "noite":
@@ -99,16 +142,37 @@ def calculate_temporal_offset(offset_type: str, max_days: int = 30) -> timedelta
     # Se o horário alvo for antes do horário atual (pode acontecer com days_offset=0),
     # adicionar um dia
     if days_offset == 0 and target_datetime <= now:
-        target_datetime += timedelta(days=1)
+        # Precisamos avançar pelo menos um dia
+        if weekend is not None:
+            # Encontra o próximo dia que atenda o critério
+            for i in range(1, max_days + 1):
+                test_date = now + timedelta(days=i)
+                if weekend and is_weekend(test_date):
+                    days_offset = i
+                    break
+                elif not weekend and not is_weekend(test_date):
+                    days_offset = i
+                    break
+
+            target_datetime = now.replace(
+                hour=target_hour,
+                minute=target_minute,
+                second=target_second,
+                microsecond=0
+            ) + timedelta(days=days_offset)
+        else:
+            target_datetime += timedelta(days=1)
 
     # Calcular o offset final
     offset = target_datetime - now
 
-    # Log para debug (opcional)
-    print(f"[Offset Temporal] Tipo: {offset_type}")
-    print(f"  - Hora atual: {now.strftime('%Y-%m-%d %H:%M:%S')}")
-    print(f"  - Alvo: {target_datetime.strftime('%Y-%m-%d %H:%M:%S')}")
+    # Log para debug
+    weekday_names = ['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado', 'Domingo']
+    print(f"[Offset Temporal] Tipo: {offset_type}, Weekend: {weekend}")
+    print(f"  - Hora atual: {now.strftime('%Y-%m-%d %H:%M:%S')} ({weekday_names[now.weekday()]})")
+    print(f"  - Alvo: {target_datetime.strftime('%Y-%m-%d %H:%M:%S')} ({weekday_names[target_datetime.weekday()]})")
     print(f"  - Offset: {offset.days} dias, {offset.seconds // 3600} horas, {(offset.seconds % 3600) // 60} minutos")
+    print(f"  - É fim de semana? {is_weekend(target_datetime)}")
 
     return offset
 
@@ -116,15 +180,17 @@ def calculate_temporal_offset(offset_type: str, max_days: int = 30) -> timedelta
 # Exemplo de uso estendido com controle de dias máximos
 def calculate_temporal_offset_with_distribution(offset_type: str,
                                                 distribution: str = "uniform",
-                                                max_days: int = 30) -> timedelta:
+                                                max_days: int = 30,
+                                                weekend: bool = None) -> timedelta:
     """
     Versão estendida que permite diferentes distribuições de probabilidade
-    para o sorteio dos dias.
+    para o sorteio dos dias, com controle de fim de semana.
 
     Args:
         offset_type: Tipo de offset ("manhã", "tarde", "noite", "horario-comercial")
         distribution: Tipo de distribuição ("uniform", "exponential", "weighted")
         max_days: Número máximo de dias para o offset
+        weekend: Se True, garante fim de semana. Se False, garante dia útil.
 
     Returns:
         timedelta representando o offset a ser aplicado
@@ -142,18 +208,39 @@ def calculate_temporal_offset_with_distribution(offset_type: str,
     if offset_type not in time_ranges:
         return timedelta(0)
 
+    # Função auxiliar para verificar se uma data é fim de semana
+    def is_weekend(date):
+        return date.weekday() in [5, 6]
+
+    # Coletar todos os dias válidos dentro do intervalo
+    valid_days = []
+    for i in range(max_days + 1):
+        test_date = now + timedelta(days=i)
+        if weekend is None:
+            valid_days.append(i)
+        elif weekend and is_weekend(test_date):
+            valid_days.append(i)
+        elif not weekend and not is_weekend(test_date):
+            valid_days.append(i)
+
+    if not valid_days:
+        # Se não houver dias válidos, retorna sem offset
+        return timedelta(0)
+
     # Sortear dias com base na distribuição escolhida
     if distribution == "exponential":
         # Distribuição exponencial: mais provável escolher dias próximos
-        # Lambda = 0.1 significa ~63% de chance nos primeiros 10 dias
-        days_offset = min(int(random.expovariate(0.1)), max_days)
+        weights = [1 / (2 ** (i / 3)) for i in range(len(valid_days))]
+        weights_sum = sum(weights)
+        weights = [w / weights_sum for w in weights]
+        days_offset = random.choices(valid_days, weights=weights)[0]
     elif distribution == "weighted":
         # Distribuição com pesos: primeiros dias mais prováveis
-        weights = [1 / (i + 1) for i in range(max_days + 1)]
-        days_offset = random.choices(range(max_days + 1), weights=weights)[0]
+        weights = [1 / (i + 1) for i in range(len(valid_days))]
+        days_offset = random.choices(valid_days, weights=weights)[0]
     else:  # uniform
         # Distribuição uniforme: todos os dias têm a mesma probabilidade
-        days_offset = random.randint(0, max_days)
+        days_offset = random.choice(valid_days)
 
     start_hour, end_hour = time_ranges[offset_type]
 
@@ -180,7 +267,17 @@ def calculate_temporal_offset_with_distribution(offset_type: str,
 
     # Garantir que é no futuro
     if days_offset == 0 and target_datetime <= now:
-        target_datetime += timedelta(days=1)
+        # Encontra o próximo dia válido
+        if valid_days[1:]:  # Se houver mais dias válidos
+            days_offset = valid_days[1]
+            target_datetime = now.replace(
+                hour=target_hour,
+                minute=target_minute,
+                second=target_second,
+                microsecond=0
+            ) + timedelta(days=days_offset)
+        else:
+            target_datetime += timedelta(days=1)
 
     return target_datetime - now
 
@@ -188,23 +285,44 @@ def calculate_temporal_offset_with_distribution(offset_type: str,
 # Função auxiliar para validar e limitar o offset
 def calculate_temporal_offset_safe(offset_type: str,
                                    max_days: int = 30,
-                                   min_hours: int = 1) -> timedelta:
+                                   min_hours: int = 1,
+                                   weekend: bool = None) -> timedelta:
     """
-    Versão segura que garante um offset mínimo e máximo.
+    Versão segura que garante um offset mínimo e máximo com controle de fim de semana.
 
     Args:
         offset_type: Tipo de offset
         max_days: Número máximo de dias
         min_hours: Número mínimo de horas no futuro
+        weekend: Se True, garante fim de semana. Se False, garante dia útil.
 
     Returns:
         timedelta com validações aplicadas
     """
-    offset = calculate_temporal_offset(offset_type, max_days)
+    offset = calculate_temporal_offset(offset_type, max_days, weekend)
 
     # Garantir offset mínimo
     if offset < timedelta(hours=min_hours):
-        offset = timedelta(hours=min_hours)
+        # Se o offset for muito pequeno, procura o próximo dia válido
+        now = datetime.now()
+        min_datetime = now + timedelta(hours=min_hours)
+
+        # Função auxiliar para verificar se uma data é fim de semana
+        def is_weekend(date):
+            return date.weekday() in [5, 6]
+
+        # Procura o próximo dia válido a partir do mínimo
+        for i in range(max_days):
+            test_date = min_datetime + timedelta(days=i)
+            if weekend is None:
+                offset = test_date - now
+                break
+            elif weekend and is_weekend(test_date):
+                offset = test_date - now
+                break
+            elif not weekend and not is_weekend(test_date):
+                offset = test_date - now
+                break
 
     # Garantir offset máximo
     if offset > timedelta(days=max_days):
@@ -248,7 +366,7 @@ def get_duration_parameters(duration_type: str) -> dict:
 def parse_persona_config(persona_data, default_args):
     """
     Analisa a configuração da persona, suportando tanto formato antigo (string)
-    quanto novo formato (objeto com persona, duração e offset).
+    quanto novo formato (objeto com persona, duração, offset e weekend).
 
     Args:
         persona_data: String ou dicionário com dados da persona
@@ -283,7 +401,12 @@ def parse_persona_config(persona_data, default_args):
 
         # Calcular offset temporal
         offset_type = persona_data.get("offset", None)
-        temporal_offset = calculate_temporal_offset(offset_type) if offset_type else timedelta(0)
+        weekend = persona_data.get("weekend", None)  # Novo parâmetro
+
+        if offset_type:
+            temporal_offset = calculate_temporal_offset(offset_type, weekend=weekend)
+        else:
+            temporal_offset = timedelta(0)
 
         return prompt, typing_speed, thinking_range, temporal_offset
 
@@ -323,7 +446,7 @@ def iniciar_usuario(persona_id: str,
 
     try:
         usuario_bot.run(
-            initial_query="Olá cliente, como posso lhe ajudar?",
+            initial_query="Olá cliente Itaú, como posso lhe ajudar?",
             max_iterations=15,
         )
         print(f"[INFO] Persona '{persona_id}' concluiu a conversa.")
