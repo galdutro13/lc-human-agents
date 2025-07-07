@@ -2,7 +2,7 @@
 
 ## Visão Geral
 
-Este projeto tem como objetivo simular interações entre agentes humanos e chatbots em um ambiente bancário. Ele utiliza técnicas de Processamento de Linguagem Natural (PLN) e Aprendizado de Máquina (ML) para criar agentes com personalidades distintas e cenários realistas. O projeto é construído usando Python e diversas bibliotecas de código aberto, como LangChain, LangGraph, Streamlit, e Google Generative AI.
+Este projeto tem como objetivo simular interações entre agentes humanos e chatbots em um ambiente bancário. Ele utiliza a biblioteca LangChain para construir fluxos de conversa complexos, permitindo que múltiplos agentes interajam com um chatbot bancário. O sistema é projetado para ser extensível, permitindo a adição de novas personas e cenários de interação.
 
 ## Técnicas Importantes
 
@@ -109,63 +109,43 @@ lc-human-agents/
     export OPENAI_API_KEY="your_openai_api_key"
     export GOOGLE_API_KEY="your_google_api_key"
     ```
+   
+5. Configure e popule os datasources utilizados para o rag:
 
-### Executando os Testes
+    > Na pasta RAG Cartões está disponível um exemplo de configuração padrão. Você pode seguir com ele, e edita-lo. Ou então, cirar sua própria configuração.
+   
+### Executando a simulação de interações
 
-*   Para executar os testes unitários:
+**Atenção:** Antes de executar a simulação, certifique-se que as seguintes variáveis de ambiente estejam configuradas:
 
-    ```bash
-    python -m unittest discover source/tests/unittest
-    ```
-*   Para executar os testes de integração:
+```bash
+export PYTHONUNBUFFERED=1 # $env:PYTHONUNBUFFERED="1" no PowerShell
+export PYTHONPATH=$PWD # $env:PYTHONPATH=(Get-Location).Path no PowerShell
+```
 
-    ```bash
-    python -m unittest discover source/tests/integratio_test
-    ```
+Após isso, você deve executar o seguinte comando para iniciar o serviço do chatbot do banco:
 
-### Executando os Chatbots
+```bash
+python .\tools\bancobot_service\start_banco_service.py
+```
 
-1. Execute o script principal para iniciar a interação entre os chatbots:
+Depois de iniciar o serviço do chatbot do banco, você pode executar a simulação de interações com múltiplos usuários. Para isso, utilize o seguinte comando:
 
-    ```bash
-    python source/tests/chatbot_test/main.py
-    ```
+```bash
+python .\tools\enxame_usuario\start_usuarios.py --prompts-file "<caminho_para_o_arquivo_de_prompts>"
+```
 
 ### Executando o Visualizador de Interações
 
-1. Inicie o backend FastAPI:
-
-    ```bash
-    cd tools/visualizador_interacoes/backend
-    uvicorn main:app --reload
-    ```
-2. Inicie o frontend Streamlit em uma nova janela de terminal:
-
-    ```bash
-    cd tools/visualizador_interacoes/frontend
-    streamlit run st_frontend.py
-    ```
-3. Acesse o visualizador de interações em seu navegador, normalmente em `http://localhost:8501`.
-
-### Gerando Prompts
-
-1. Configure o banco de dados:
-
-    ```bash
-    python tools/db_work/setup_db_cenarios.py
-    ```
-2. Insira dados de cenários e personas:
-
-    ```bash
-    python tools/db_work/insert_cenario&persona.py
-    ```
-3. Gere as missões:
-
-    ```bash
-    python tools/db_work/gerar_missoes.py
-    ```
-4. Gere os prompts:
+**Atenção:** Antes de executar o visualizador, certifique-se que as seguintes variáveis de ambiente estejam configuradas:
 
 ```bash
-python tools/prompt_generation/prompt_generator.py
+export PYTHONUNBUFFERED=1 # $env:PYTHONUNBUFFERED="1" no PowerShell
+export PYTHONPATH=$PWD # $env:PYTHONPATH=(Get-Location).Path no PowerShell
+```
+
+Após isso, você deve executar o seguinte comando para iniciar o visualizador de interações:
+
+```bash
+python .\launch_simulador.py
 ```
