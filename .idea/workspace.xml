@@ -4,11 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0cea1559-660a-43f1-803f-04da1cdf897d" name="Changes" comment="Atualiza a documentação do README para incluir instruções sobre a configuração do arquivo .env e a execução do script de teste de integração">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/launch_simulador.py" beforeDir="false" afterPath="$PROJECT_DIR$/launch_simulador.py" afterDir="false" />
-    </list>
+    <list default="true" id="0cea1559-660a-43f1-803f-04da1cdf897d" name="Changes" comment="Remove funções de criação e execução do serviço BancoBot do simulador" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -707,15 +703,7 @@
       <workItem from="1751486317235" duration="3232000" />
       <workItem from="1751563901455" duration="638000" />
       <workItem from="1751653745866" duration="2883000" />
-      <workItem from="1751906894896" duration="10655000" />
-    </task>
-    <task id="LOCAL-00011" summary="Ajustes finais na interface do visualizador de prompt.">
-      <option name="closed" value="true" />
-      <created>1738874450368</created>
-      <option name="number" value="00011" />
-      <option name="presentableId" value="LOCAL-00011" />
-      <option name="project" value="LOCAL" />
-      <updated>1738874450368</updated>
+      <workItem from="1751906894896" duration="10971000" />
     </task>
     <task id="LOCAL-00012" summary="Introduction of the RAG codebase.">
       <option name="closed" value="true" />
@@ -1101,14 +1089,21 @@
       <option name="project" value="LOCAL" />
       <updated>1751916062577</updated>
     </task>
-    <option name="localTasksCounter" value="60" />
+    <task id="LOCAL-00060" summary="Remove funções de criação e execução do serviço BancoBot do simulador">
+      <option name="closed" value="true" />
+      <created>1751918172739</created>
+      <option name="number" value="00060" />
+      <option name="presentableId" value="LOCAL-00060" />
+      <option name="project" value="LOCAL" />
+      <updated>1751918172739</updated>
+    </task>
+    <option name="localTasksCounter" value="61" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Desagregação das funções do rag em arquivos diferentes para melhorar a manutenibilidade." />
     <MESSAGE value="COMMIT_MSG" />
     <MESSAGE value="**Refatora gestão de personas, fluxos de interação e exportação de dados**&#10;&#10;* **personas.json**: reorganiza e amplia os templates de personas, renomeando chaves para IDs genéricos (“1” → “1t”, “2t” etc.) e adicionando novos perfis.&#10;* **Módulo `source/persona`**: introduz `PersonaWorkflowBuilder`, `PersonaState` e `PersonaChatFunction` para orquestrar workflows de persona com LangGraph.&#10;* **`usuario.py`**: inclui `persona_id` no construtor, passa o ID ao invocar o fluxo, implementa `initialize` via `PersonaWorkflowBuilder` e finaliza sessão com o BancoBot.&#10;* **`tools/enxame_usuario/start_usuarios.py`**: refatora o script de execução de personas para usar `ThreadPoolExecutor`, adiciona parâmetros `--window-size` e `--passes`, e suporta modo seqüencial ou paralelo com carregamento dinâmico de personas.&#10;* **`visualizador_interacoes/backend/main.py`**:&#10;&#10;  * importa `zipfile`&#10;  * adiciona endpoint **GET /interactions/raw/{thread\_id}** para retornar o checkpoint completo&#10;  * renomeia `/interactions/{thread_id}/excel` → **/csv**, incluindo `persona_id` no nome do arquivo&#10;  * cria **/interactions/export/all\_csv\_zip** para exportar todas as threads como ZIP de CSVs&#10;* **`source/constantes/models.py`**: atualiza `GEMINI_THINKING_EXP` para a nova versão “gemini-2.5-pro-preview-05-06”.&#10;* **`source/tests/chatbot_test/chatbot.py`**: altera modelo padrão de `GEMINI_THINKING_EXP` para `GPT4`.&#10;* **`tools/bancobot_service/banco_service.py`**: ajusta instância de `BancoBot` para `think_exp=False`.&#10;* **`RAG Cartões/config.yaml`**: padroniza e enriquece os templates de prompts RAG, incluindo seção de “Processo de Resposta Sugerido” e instruções de formatação." />
     <MESSAGE value="Adicionar o parametro pra controlar o uso de tokens de pensamento." />
@@ -1133,7 +1128,8 @@
     <MESSAGE value="Adiciona funcionalidade de exportação de interações e controle de fim de semana no cálculo de offset temporal" />
     <MESSAGE value="Atualiza a documentação do README para refletir mudanças na simulação de interações e na configuração do ambiente" />
     <MESSAGE value="Atualiza a documentação do README para incluir instruções sobre a configuração do arquivo .env e a execução do script de teste de integração" />
-    <option name="LAST_COMMIT_MESSAGE" value="Atualiza a documentação do README para incluir instruções sobre a configuração do arquivo .env e a execução do script de teste de integração" />
+    <MESSAGE value="Remove funções de criação e execução do serviço BancoBot do simulador" />
+    <option name="LAST_COMMIT_MESSAGE" value="Remove funções de criação e execução do serviço BancoBot do simulador" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
