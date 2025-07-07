@@ -4,7 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0cea1559-660a-43f1-803f-04da1cdf897d" name="Changes" comment="Atualiza a documentação do README para refletir mudanças na simulação de interações e na configuração do ambiente">
+    <list default="true" id="0cea1559-660a-43f1-803f-04da1cdf897d" name="Changes" comment="Atualiza a documentação do README para incluir instruções sobre a configuração do arquivo .env e a execução do script de teste de integração">
+      <change afterPath="$PROJECT_DIR$/tools/touchpoints_extractor/Touchpoint_ai.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tools/touchpoints_extractor/Touchpoint_human.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tools/touchpoints_extractor/main.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tools/touchpoints_extractor/readme.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tools/touchpoints_extractor/requirements.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
     </list>
@@ -706,15 +711,7 @@
       <workItem from="1751486317235" duration="3232000" />
       <workItem from="1751563901455" duration="638000" />
       <workItem from="1751653745866" duration="2883000" />
-      <workItem from="1751906894896" duration="7513000" />
-    </task>
-    <task id="LOCAL-00009" summary="Implement new interaction API endpoint and frontend integration&#10;&#10;This patch introduces a new API endpoint /new_interaction to the backend, allowing the frontend to trigger chatbot interactions dynamically.&#10;&#10;Key changes include:&#10;&#10;Backend (main.py):&#10;&#10;Added a /new_interaction POST endpoint that receives a user query and executes the test_chatbot function.&#10;&#10;Implemented request and response models using Pydantic for API clarity.&#10;&#10;Integrated basic logging for improved error tracking and debugging.&#10;&#10;Frontend (st_frontend.py):&#10;&#10;Implemented logic to start the backend server directly from the Streamlit frontend using threading and uvicorn. This simplifies deployment and ensures the backend is running when the frontend is accessed.&#10;&#10;Added path configuration to ensure the frontend can locate and import backend modules correctly.&#10;&#10;Chatbot Tests (source/tests/chatbot_test):&#10;&#10;Corrected import paths in banco.py and main.py to align with project structure.&#10;&#10;Exported test_chatbot and chatbot classes in __init__.py to make them accessible to other modules.&#10;&#10;Modified the default system message in UsuarioBot to represent a different persona (Alberto Vasconcelos).&#10;&#10;These changes enhance the system's functionality by enabling user-initiated chatbot interactions through the frontend and streamlining the setup process for both development and potentially deployment.">
-      <option name="closed" value="true" />
-      <created>1738859116676</created>
-      <option name="number" value="00009" />
-      <option name="presentableId" value="LOCAL-00009" />
-      <option name="project" value="LOCAL" />
-      <updated>1738859116676</updated>
+      <workItem from="1751906894896" duration="8797000" />
     </task>
     <task id="LOCAL-00010" summary="Introdução da funcionalidade de criar uma nova interação através da interface do streamlit.">
       <option name="closed" value="true" />
@@ -1100,14 +1097,21 @@
       <option name="project" value="LOCAL" />
       <updated>1751911705608</updated>
     </task>
-    <option name="localTasksCounter" value="58" />
+    <task id="LOCAL-00058" summary="Atualiza a documentação do README para incluir instruções sobre a configuração do arquivo .env e a execução do script de teste de integração">
+      <option name="closed" value="true" />
+      <created>1751914769490</created>
+      <option name="number" value="00058" />
+      <option name="presentableId" value="LOCAL-00058" />
+      <option name="project" value="LOCAL" />
+      <updated>1751914769490</updated>
+    </task>
+    <option name="localTasksCounter" value="59" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="alguns ajustes adicionais:&#10;1. Agora estamos testando modelos de raciocinio através da api do google." />
     <MESSAGE value="Desagregação das funções do rag em arquivos diferentes para melhorar a manutenibilidade." />
     <MESSAGE value="COMMIT_MSG" />
     <MESSAGE value="**Refatora gestão de personas, fluxos de interação e exportação de dados**&#10;&#10;* **personas.json**: reorganiza e amplia os templates de personas, renomeando chaves para IDs genéricos (“1” → “1t”, “2t” etc.) e adicionando novos perfis.&#10;* **Módulo `source/persona`**: introduz `PersonaWorkflowBuilder`, `PersonaState` e `PersonaChatFunction` para orquestrar workflows de persona com LangGraph.&#10;* **`usuario.py`**: inclui `persona_id` no construtor, passa o ID ao invocar o fluxo, implementa `initialize` via `PersonaWorkflowBuilder` e finaliza sessão com o BancoBot.&#10;* **`tools/enxame_usuario/start_usuarios.py`**: refatora o script de execução de personas para usar `ThreadPoolExecutor`, adiciona parâmetros `--window-size` e `--passes`, e suporta modo seqüencial ou paralelo com carregamento dinâmico de personas.&#10;* **`visualizador_interacoes/backend/main.py`**:&#10;&#10;  * importa `zipfile`&#10;  * adiciona endpoint **GET /interactions/raw/{thread\_id}** para retornar o checkpoint completo&#10;  * renomeia `/interactions/{thread_id}/excel` → **/csv**, incluindo `persona_id` no nome do arquivo&#10;  * cria **/interactions/export/all\_csv\_zip** para exportar todas as threads como ZIP de CSVs&#10;* **`source/constantes/models.py`**: atualiza `GEMINI_THINKING_EXP` para a nova versão “gemini-2.5-pro-preview-05-06”.&#10;* **`source/tests/chatbot_test/chatbot.py`**: altera modelo padrão de `GEMINI_THINKING_EXP` para `GPT4`.&#10;* **`tools/bancobot_service/banco_service.py`**: ajusta instância de `BancoBot` para `think_exp=False`.&#10;* **`RAG Cartões/config.yaml`**: padroniza e enriquece os templates de prompts RAG, incluindo seção de “Processo de Resposta Sugerido” e instruções de formatação." />
@@ -1132,7 +1136,8 @@
     <MESSAGE value="Mudanças no arquivo de prompt." />
     <MESSAGE value="Adiciona funcionalidade de exportação de interações e controle de fim de semana no cálculo de offset temporal" />
     <MESSAGE value="Atualiza a documentação do README para refletir mudanças na simulação de interações e na configuração do ambiente" />
-    <option name="LAST_COMMIT_MESSAGE" value="Atualiza a documentação do README para refletir mudanças na simulação de interações e na configuração do ambiente" />
+    <MESSAGE value="Atualiza a documentação do README para incluir instruções sobre a configuração do arquivo .env e a execução do script de teste de integração" />
+    <option name="LAST_COMMIT_MESSAGE" value="Atualiza a documentação do README para incluir instruções sobre a configuração do arquivo .env e a execução do script de teste de integração" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

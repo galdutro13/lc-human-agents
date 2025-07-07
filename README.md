@@ -147,7 +147,7 @@ python .\tools\enxame_usuario\start_usuarios.py --prompts-file "<caminho_para_o_
 > ```bash
 > python source/tests/integratio_test/rag_test.py
 > ```
-> Dentro desse script, você deve enviar um prompt qualquer. Isso gerará os vector stores necessários para o funcionamento do sistema.
+> Dentro desse script, você deve enviar um prompt qualquer. Após isso, aguarde até a geração da resposta do chatbot.
 
 ### Executando o Visualizador de Interações
 
@@ -162,4 +162,16 @@ Após isso, você deve executar o seguinte comando para iniciar o visualizador d
 
 ```bash
 python .\launch_simulador.py
+```
+
+### Executar o extrator de touchpoints
+Para extrair os touchpoints das interações, você primeiro deve exporta-las através do visualizador de interações. Você pode fazer isso clicando no botão "💾".
+Após isso, você pode executar o seguinte comando para iniciar o extrator de touchpoints:
+
+```bash
+python touchpoint_classifier.py \
+  --dialogue_json <interações_exportadas_pelo_visualizador> \
+  --touchpoints_ai_json Touchpoint_ai.json \
+  --touchpoints_human_json Touchpoint_human.json \
+  --output_csv analises_todas.csv
 ```
