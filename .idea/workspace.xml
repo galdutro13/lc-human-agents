@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0cea1559-660a-43f1-803f-04da1cdf897d" name="Changes" comment="Remove funções de criação e execução do serviço BancoBot do simulador" />
+    <list default="true" id="0cea1559-660a-43f1-803f-04da1cdf897d" name="Changes" comment="Melhorar o nome do touchpoints extractor">
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -703,15 +705,7 @@
       <workItem from="1751486317235" duration="3232000" />
       <workItem from="1751563901455" duration="638000" />
       <workItem from="1751653745866" duration="2883000" />
-      <workItem from="1751906894896" duration="10971000" />
-    </task>
-    <task id="LOCAL-00012" summary="Introduction of the RAG codebase.">
-      <option name="closed" value="true" />
-      <created>1741907674388</created>
-      <option name="number" value="00012" />
-      <option name="presentableId" value="LOCAL-00012" />
-      <option name="project" value="LOCAL" />
-      <updated>1741907674388</updated>
+      <workItem from="1751906894896" duration="11225000" />
     </task>
     <task id="LOCAL-00013" summary="Correções de bugs na logica do RAG.">
       <option name="closed" value="true" />
@@ -1097,14 +1091,21 @@
       <option name="project" value="LOCAL" />
       <updated>1751918172739</updated>
     </task>
-    <option name="localTasksCounter" value="61" />
+    <task id="LOCAL-00061" summary="Melhorar o nome do touchpoints extractor">
+      <option name="closed" value="true" />
+      <created>1751918345840</created>
+      <option name="number" value="00061" />
+      <option name="presentableId" value="LOCAL-00061" />
+      <option name="project" value="LOCAL" />
+      <updated>1751918345840</updated>
+    </task>
+    <option name="localTasksCounter" value="62" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="COMMIT_MSG" />
     <MESSAGE value="**Refatora gestão de personas, fluxos de interação e exportação de dados**&#10;&#10;* **personas.json**: reorganiza e amplia os templates de personas, renomeando chaves para IDs genéricos (“1” → “1t”, “2t” etc.) e adicionando novos perfis.&#10;* **Módulo `source/persona`**: introduz `PersonaWorkflowBuilder`, `PersonaState` e `PersonaChatFunction` para orquestrar workflows de persona com LangGraph.&#10;* **`usuario.py`**: inclui `persona_id` no construtor, passa o ID ao invocar o fluxo, implementa `initialize` via `PersonaWorkflowBuilder` e finaliza sessão com o BancoBot.&#10;* **`tools/enxame_usuario/start_usuarios.py`**: refatora o script de execução de personas para usar `ThreadPoolExecutor`, adiciona parâmetros `--window-size` e `--passes`, e suporta modo seqüencial ou paralelo com carregamento dinâmico de personas.&#10;* **`visualizador_interacoes/backend/main.py`**:&#10;&#10;  * importa `zipfile`&#10;  * adiciona endpoint **GET /interactions/raw/{thread\_id}** para retornar o checkpoint completo&#10;  * renomeia `/interactions/{thread_id}/excel` → **/csv**, incluindo `persona_id` no nome do arquivo&#10;  * cria **/interactions/export/all\_csv\_zip** para exportar todas as threads como ZIP de CSVs&#10;* **`source/constantes/models.py`**: atualiza `GEMINI_THINKING_EXP` para a nova versão “gemini-2.5-pro-preview-05-06”.&#10;* **`source/tests/chatbot_test/chatbot.py`**: altera modelo padrão de `GEMINI_THINKING_EXP` para `GPT4`.&#10;* **`tools/bancobot_service/banco_service.py`**: ajusta instância de `BancoBot` para `think_exp=False`.&#10;* **`RAG Cartões/config.yaml`**: padroniza e enriquece os templates de prompts RAG, incluindo seção de “Processo de Resposta Sugerido” e instruções de formatação." />
     <MESSAGE value="Adicionar o parametro pra controlar o uso de tokens de pensamento." />
     <MESSAGE value="Novo branch para os testes do Gabriel" />
@@ -1129,7 +1130,8 @@
     <MESSAGE value="Atualiza a documentação do README para refletir mudanças na simulação de interações e na configuração do ambiente" />
     <MESSAGE value="Atualiza a documentação do README para incluir instruções sobre a configuração do arquivo .env e a execução do script de teste de integração" />
     <MESSAGE value="Remove funções de criação e execução do serviço BancoBot do simulador" />
-    <option name="LAST_COMMIT_MESSAGE" value="Remove funções de criação e execução do serviço BancoBot do simulador" />
+    <MESSAGE value="Melhorar o nome do touchpoints extractor" />
+    <option name="LAST_COMMIT_MESSAGE" value="Melhorar o nome do touchpoints extractor" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

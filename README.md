@@ -169,9 +169,9 @@ Para extrair os touchpoints das interações, você primeiro deve exporta-las at
 Após isso, você pode executar o seguinte comando para iniciar o extrator de touchpoints:
 
 ```bash
-python touchpoint_classifier.py \
+python .\tools\touchpoints_extractor\touchpoint_classifier.py \
   --dialogue_json <interações_exportadas_pelo_visualizador> \
-  --touchpoints_ai_json Touchpoint_ai.json \
-  --touchpoints_human_json Touchpoint_human.json \
+  --touchpoints_ai_json .\tools\touchpoints_extractor\Touchpoint_ai.json \
+  --touchpoints_human_json .\tools\touchpoints_extractor\Touchpoint_human.json \
   --output_csv analises_todas.csv
 ```
