@@ -2,7 +2,7 @@
 
 ## Visão Geral
 
-Este projeto tem como objetivo simular interações entre agentes humanos e chatbots em um ambiente bancário. Ele utiliza a biblioteca LangChain para construir fluxos de conversa complexos, permitindo que múltiplos agentes interajam com um chatbot bancário. O sistema é projetado para ser extensível, permitindo a adição de novas personas e cenários de interação.
+Este projeto tem como objetivo simular interações entre agentes "humanos" e chatbots em um ambiente bancário. Ele utiliza a biblioteca LangChain para construir fluxos de conversa complexos, permitindo que múltiplos agentes interajam com um chatbot bancário. O sistema é projetado para ser extensível, permitindo a adição de novas personas e cenários de interação.
 
 ## Técnicas Importantes
 

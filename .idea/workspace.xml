@@ -5,13 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0cea1559-660a-43f1-803f-04da1cdf897d" name="Changes" comment="Atualiza a documentação do README para incluir instruções sobre a configuração do arquivo .env e a execução do script de teste de integração">
-      <change afterPath="$PROJECT_DIR$/tools/touchpoints_extractor/Touchpoint_ai.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/touchpoints_extractor/Touchpoint_human.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/touchpoints_extractor/main.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/touchpoints_extractor/readme.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/touchpoints_extractor/requirements.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/launch_simulador.py" beforeDir="false" afterPath="$PROJECT_DIR$/launch_simulador.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -711,15 +707,7 @@
       <workItem from="1751486317235" duration="3232000" />
       <workItem from="1751563901455" duration="638000" />
       <workItem from="1751653745866" duration="2883000" />
-      <workItem from="1751906894896" duration="8797000" />
-    </task>
-    <task id="LOCAL-00010" summary="Introdução da funcionalidade de criar uma nova interação através da interface do streamlit.">
-      <option name="closed" value="true" />
-      <created>1738865697488</created>
-      <option name="number" value="00010" />
-      <option name="presentableId" value="LOCAL-00010" />
-      <option name="project" value="LOCAL" />
-      <updated>1738865697488</updated>
+      <workItem from="1751906894896" duration="10655000" />
     </task>
     <task id="LOCAL-00011" summary="Ajustes finais na interface do visualizador de prompt.">
       <option name="closed" value="true" />
@@ -1105,7 +1093,15 @@
       <option name="project" value="LOCAL" />
       <updated>1751914769490</updated>
     </task>
-    <option name="localTasksCounter" value="59" />
+    <task id="LOCAL-00059" summary="Atualiza a documentação do README para incluir instruções sobre a configuração do arquivo .env e a execução do script de teste de integração">
+      <option name="closed" value="true" />
+      <created>1751916062577</created>
+      <option name="number" value="00059" />
+      <option name="presentableId" value="LOCAL-00059" />
+      <option name="project" value="LOCAL" />
+      <updated>1751916062577</updated>
+    </task>
+    <option name="localTasksCounter" value="60" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1180,7 +1176,7 @@
     <SUITE FILE_PATH="coverage/lc_human_agents$export_checkpoints.coverage" NAME="export_checkpoints Coverage Results" MODIFIED="1744156092400" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/lc_human_agents$run_services.coverage" NAME="run_services Coverage Results" MODIFIED="1742846551041" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/lc_human_agents$prompt_generation.coverage" NAME="prompt_generation Coverage Results" MODIFIED="1735239266449" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
-    <SUITE FILE_PATH="coverage/human_agents$launcher.coverage" NAME="launcher Coverage Results" MODIFIED="1751654803502" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/human_agents$launcher.coverage" NAME="launcher Coverage Results" MODIFIED="1751918133410" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/lc_human_agents$chatbot_server_test.coverage" NAME="chatbot server test Coverage Results" MODIFIED="1735141967192" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="C:\Users\galdu\PycharmProjects\lc-human-agents" />
     <SUITE FILE_PATH="coverage/lc_human_agents$read_personas.coverage" NAME="read_personas Coverage Results" MODIFIED="1735148903371" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tools" />
   </component>
