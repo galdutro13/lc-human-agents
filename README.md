@@ -109,10 +109,16 @@ lc-human-agents/
     export OPENAI_API_KEY="your_openai_api_key"
     export GOOGLE_API_KEY="your_google_api_key"
     ```
+   Ou insira as chaves no arquivo `.env` na raiz do projeto:
+
+    ```bash
+    OPENAI_API_KEY=your_openai_api_key
+    GOOGLE_API_KEY=your_google_api_key
+    ```
    
 5. Configure e popule os datasources utilizados para o rag:
 
-    > Na pasta RAG Cartões está disponível um exemplo de configuração padrão. Você pode seguir com ele, e edita-lo. Ou então, cirar sua própria configuração.
+    Na pasta RAG Cartões está disponível um exemplo de configuração padrão. Você pode seguir com ele, e edita-lo. Ou então, cirar sua própria configuração.
    
 ### Executando a simulação de interações
 
@@ -134,6 +140,14 @@ Depois de iniciar o serviço do chatbot do banco, você pode executar a simulaç
 ```bash
 python .\tools\enxame_usuario\start_usuarios.py --prompts-file "<caminho_para_o_arquivo_de_prompts>"
 ```
+
+> **Atenção:** Na primeira execução do chatbot do banco, o RAG criará os vector stores necessários para o funcionamento do sistema. Isso pode levar algum tempo, dependendo do tamanho dos dados e da configuração do seu ambiente.
+> Por isso recomendamos que você execute script `source/tests/integratio_test/rag_test.py` antes de iniciar a simulação de interações. Isso garantirá que os vector stores estejam prontos e que o sistema funcione corretamente.
+> Você pode executa-lo com o seguinte comando:
+> ```bash
+> python source/tests/integratio_test/rag_test.py
+> ```
+> Dentro desse script, você deve enviar um prompt qualquer. Isso gerará os vector stores necessários para o funcionamento do sistema.
 
 ### Executando o Visualizador de Interações
 
