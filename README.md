@@ -4,6 +4,14 @@
 
 Este projeto tem como objetivo simular interações entre agentes "humanos" e chatbots em um ambiente bancário. Ele utiliza a biblioteca LangChain para construir fluxos de conversa complexos, permitindo que múltiplos agentes interajam com um chatbot bancário. O sistema é projetado para ser extensível, permitindo a adição de novas personas e cenários de interação.
 
+Especificamente como prova de conceito, fornecemos um conjunto de 25 prompts para definição de 25 personas e seus cenários. 
+
+**A documentação usada para RAG bem como os diálogos gerados não são fornecidos por conterem informações sensíveis de uma instituição financeira. Detalhes técnicos sobre esses artefatos podem ser obtidos via contato por email com a equipe do projeto.**
+
+Essas interações simuladas podem ser avaliadas via extração touchpoints (pontos de contato). Touchpoints são pontos de contato entre o diálogo e os objetivos de uma conversa dentro do escopo de um processo de negócio. Neste projeto, para um domínio específico, fornecemos como exemplo um conjunto de touchpoints para ser usado como entrada para um modelo de linguagem analisar o diálogo, interpretá-lo e extrair um touchpoint para cada fala no diálogo. Um exemplo de prompt para essa tarefa também é fornecido. 
+
+Ainda, a análise proposta para essa avaliação é baseada em mineração de processos. Assim, a instrumentação do código de geração de diálogo para distribuí-lo no tempo, simulando um tempo de execução de um sistema real, bem como o código para geração do arquivo de log de eventos exigida por essa análise são fornecidos. 
+
 ## Técnicas Importantes
 
 ### LangChain
