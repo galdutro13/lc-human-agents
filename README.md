@@ -1,33 +1,32 @@
 # lc-human-agents
 
-## Visão Geral
+## Overview
 
-Este projeto tem como objetivo simular interações entre agentes "humanos" e chatbots em um ambiente bancário. Ele utiliza a biblioteca LangChain para construir fluxos de conversa complexos, permitindo que múltiplos agentes interajam com um chatbot bancário. O sistema é projetado para ser extensível, permitindo a adição de novas personas e cenários de interação.
+This project aims to simulate interactions between "human" agents and chatbots in a banking environment. It uses the LangChain library to construct complex conversation flows, allowing multiple agents to interact with a banking chatbot. The system is designed to be extensible, enabling the addition of new personas and interaction scenarios.
 
-Especificamente como prova de conceito, fornecemos um conjunto de 25 prompts para definição de 25 personas e seus cenários. 
+As a proof of concept, we provide a set of 25 prompts defining 25 personas and their respective scenarios.
 
-**A documentação usada para RAG bem como os diálogos gerados não são fornecidos por conterem informações sensíveis de uma instituição financeira. Detalhes técnicos sobre esses artefatos podem ser obtidos via contato por email com a equipe do projeto.**
+**The documentation used for RAG as well as the generated dialogues are not provided, as they contain sensitive information from a financial institution. Technical details about these artifacts can be obtained via email contact with the project team.**
 
-Essas interações simuladas podem ser avaliadas via extração touchpoints (pontos de contato). Touchpoints são pontos de contato entre o diálogo e os objetivos de uma conversa dentro do escopo de um processo de negócio. Neste projeto, para um domínio específico, fornecemos como exemplo um conjunto de touchpoints para ser usado como entrada para um modelo de linguagem analisar o diálogo, interpretá-lo e extrair um touchpoint para cada fala no diálogo. Um exemplo de prompt para essa tarefa também é fornecido. 
+These simulated interactions can be evaluated through the extraction of touchpoints. Touchpoints are points of contact between the dialogue and the goals of a conversation within the scope of a business process. In this project, for a specific domain, we provide an example set of touchpoints to be used as input for a language model to analyze the dialogue, interpret it, and extract one touchpoint per utterance. An example prompt for this task is also provided.
 
-Ainda, a análise proposta para essa avaliação é baseada em mineração de processos. Assim, a instrumentação do código de geração de diálogo para distribuí-lo no tempo, simulando um tempo de execução de um sistema real, bem como o código para geração do arquivo de log de eventos exigida por essa análise são fornecidos. 
+Furthermore, the proposed analysis for this evaluation is based on process mining. Thus, the instrumentation code to distribute the dialogue generation over time—simulating the runtime of a real system—as well as the code to generate the event log file required for this analysis, are also provided.
 
-## Técnicas Importantes
+## Key Technologies
 
 ### LangChain
 
-[LangChain](https://python.langchain.com/docs/get_started/introduction) é uma estrutura para o desenvolvimento de aplicações que utilizam modelos de linguagem. Ela fornece uma interface padrão para cadeias, integrações com várias ferramentas e implementações de ponta a ponta para cadeias comuns. Neste projeto, LangChain é usado para criar e gerenciar os modelos de linguagem que dirigem os agentes humanos e chatbots.
+[LangChain](https://python.langchain.com/docs/get_started/introduction) is a framework for developing applications using language models. It provides a standard interface for chains, integrations with various tools, and end-to-end implementations for common chains. In this project, LangChain is used to create and manage the language models that drive both the human agents and the chatbots.
 
 ### LangGraph
 
-[LangGraph](https://python.langchain.com/docs/langgraph) estende a biblioteca LangChain para suportar a criação de aplicações de agente multi-ator e cíclicas. É usado para gerenciar o fluxo de conversas e manter o estado das interações.
+[LangGraph](https://python.langchain.com/docs/langgraph) extends the LangChain library to support the creation of multi-actor and cyclic agent applications. It is used to manage the conversation flow and maintain the state of interactions.
 
 ### Streamlit
 
-[Streamlit](https://streamlit.io/) é uma biblioteca de código aberto que permite a criação de aplicações web interativas para visualização de dados e aprendizado de máquina. Neste projeto, Streamlit é usado para criar uma interface de usuário para visualizar as interações entre agentes humanos e chatbots.
+[Streamlit](https://streamlit.io/) is an open-source library that enables the creation of interactive web applications for data visualization and machine learning. In this project, Streamlit is used to create a user interface to visualize interactions between human agents and chatbots.
 
-
-## Estrutura do Projeto
+## Project Structure
 
 ```
 lc-human-agents/
@@ -55,130 +54,144 @@ lc-human-agents/
 
 ### **source/**
 
-* #### **chat_graph/**
-    Núcleo da construção e gerenciamento dos fluxos de conversa do chatbot. Ele é composto por `llms.py`, que carrega os modelos de linguagem; `workflow_builder.py`, que utiliza `StateGraph` para construir a estrutura da conversa; e `chat_function.py`, que define as classes abstratas e concretas para as funções executadas em cada nó do grafo de conversação.
+* #### **chat\_graph/**
+
+  Core of the chatbot conversation flow construction and management. It includes `llms.py` (loads language models), `workflow_builder.py` (uses `StateGraph` to build the conversation structure), and `chat_function.py` (defines abstract and concrete classes for functions executed at each graph node).
+
 * #### **constantes/**
-    Centraliza as constantes utilizadas no projeto. Ele inclui `hiper_parametros.py`, que define os hiperparâmetros dos modelos, como temperatura e penalidades, e `models.py`, que enumera os diferentes modelos de linguagem disponíveis para uso no sistema.
+
+  Centralizes constants used in the project, including `hiper_parametros.py` (defines model hyperparameters like temperature and penalties) and `models.py` (enumerates available language models for use in the system).
 
 * #### **persona/**
-    Responsável por definir e gerenciar as personas dos usuários que interagem com o chatbot. Ele contém `persona.py`, que define a classe `Persona`; `persona_state.py`, que gerencia o estado da persona no fluxo de trabalho; `persona_function.py`, que implementa a função de chat específica para a persona; e `persona_workflow_builder.py`, que constrói os fluxos de trabalho específicos para cada persona.
+
+  Responsible for defining and managing user personas that interact with the chatbot. It contains `persona.py` (defines the `Persona` class), `persona_state.py` (manages persona state in the workflow), `persona_function.py` (implements the persona-specific chat function), and `persona_workflow_builder.py` (builds persona-specific workflows).
 
 * #### **rag/**
-    Implementa o sistema de Retrieval-Augmented Generation (RAG). Ele é composto por vários submódulos: `config` para o gerenciamento de configurações, `document` para o carregamento e processamento de documentos, `functions` para as diferentes funções do RAG (roteador, classificador, recuperador, etc.), `logging` para o registro detalhado do processo RAG, `state` para o estado do fluxo de trabalho RAG, `system` para a fachada principal do sistema RAG, `vectorstore` para o gerenciamento de vector stores, e `workflow` para a construção do fluxo de trabalho RAG.
+
+  Implements the Retrieval-Augmented Generation (RAG) system. Comprises several submodules: `config` (configuration management), `document` (document loading and processing), `functions` (RAG functions such as router, classifier, retriever, etc.), `logging` (detailed RAG process logging), `state` (workflow state), `system` (main RAG system interface), `vectorstore` (vector store management), and `workflow` (workflow construction).
 
 * #### **tests/**
-    Este módulo abriga todos os testes do projeto. Ele está dividido em `unittest` para testes unitários de módulos individuais e `integratio_test` para testar a integração entre os diferentes componentes do sistema. Além disso, o diretório `chatbot_test` contém a implementação do mecanismo de interação entre as personas e o chatbot.
+
+  Contains all project tests. Divided into `unittest` for unit tests of individual modules and `integratio_test` for integration testing across components. The `chatbot_test` directory implements the interaction mechanism between personas and the chatbot.
 
 ### **tools/**
 
-* #### **bancobot_service/**
-    Esta ferramenta implementa o serviço de backend para o chatbot do banco. Utilizando FastAPI, ela cria uma API RESTful que permite que múltiplos bots de usuário interajam com o bot do banco. O arquivo `banco_service.py` define os endpoints da API e gerencia as sessões de usuário, enquanto `start_banco_service.py` é o script utilizado para iniciar o serviço.
+* #### **bancobot\_service/**
 
-* #### **enxame_usuario/**
-    Esta ferramenta é utilizada para simular a interação de múltiplos usuários com o bot do banco simultaneamente. O script principal, `start_usuarios.py`, lança um "enxame" de bots de usuário, cada um com sua própria persona e comportamento, com o objetivo de testar o bot do banco sob carga e em diferentes cenários de uso.
+  Backend service implementation for the banking chatbot. Using FastAPI, it creates a RESTful API enabling multiple user bots to interact with the bank bot. The `banco_service.py` file defines the API endpoints and manages user sessions, while `start_banco_service.py` starts the service.
 
-* #### **visualizador_interacoes/**
-    Esta ferramenta oferece uma interface web para a visualização das interações entre os bots de usuário e o bot do banco. Ela é composta por um `backend` desenvolvido com FastAPI (`main.py`), que fornece os dados das conversas, e um `frontend` construído com Streamlit (`st_frontend.py`), que exibe o histórico de interações.
+* #### **enxame\_usuario/**
 
-## Como Usar
+  Simulates simultaneous interaction of multiple users with the bank bot. The main script, `start_usuarios.py`, launches a "swarm" of user bots, each with its own persona and behavior, aiming to test the bot under load and various usage scenarios.
 
-### Pré-requisitos
+* #### **visualizador\_interacoes/**
 
-*   Python 3.11 ou superior
-*   Uma chave de API da OpenAI
-*   Uma chave de API do Google AI
+  Provides a web interface to visualize interactions between user bots and the bank bot. It includes a FastAPI `backend` (`main.py`) for providing conversation data and a Streamlit `frontend` (`st_frontend.py`) for displaying the interaction history.
 
-### Configuração
+## How to Use
 
-1. Clone o repositório:
+### Prerequisites
 
-    ```bash
-    git clone <repository_url>
-    ```
+* Python 3.11 or higher
+* An OpenAI API key
+* A Google AI API key
 
-2. Crie um ambiente virtual e ative-o:
+### Setup
 
-    ```bash
-    cd lc-human-agents
-    python -m venv venv
-    source venv/bin/activate  # No Windows use: venv\Scripts\activate
-    ```
-3. Instale as dependências:
+1. Clone the repository:
 
-    ```bash
-    pip install -r requirements.txt
-    ```
+   ```bash
+   git clone <repository_url>
+   ```
 
-    > **Atenção:** Caso ocorra algum erro relacionado à instalação do `chromadb`, verifique se você possui o `gcc` e as dependências de build do Python instaladas no seu sistema. No Windows, recomenda-se instalar o [Build Tools for Visual Studio](https://visualstudio.microsoft.com/visual-cpp-build-tools/). Consulte a [documentação oficial do chromadb](https://docs.trychroma.com/troubleshooting) para mais detalhes sobre troubleshooting.
+2. Create and activate a virtual environment:
 
-4. Configure as variáveis de ambiente para as chaves de API da OpenAI e do Google AI:
+   ```bash
+   cd lc-human-agents
+   python -m venv venv
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   ```
 
-    ```bash
-    export OPENAI_API_KEY="your_openai_api_key"
-    export GOOGLE_API_KEY="your_google_api_key"
-    ```
-   Ou insira as chaves no arquivo `.env` na raiz do projeto:
+3. Install dependencies:
 
-    ```bash
-    OPENAI_API_KEY=your_openai_api_key
-    GOOGLE_API_KEY=your_google_api_key
-    ```
-   
-5. Configure e popule os datasources utilizados para o rag:
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-    Na pasta RAG Cartões está disponível um exemplo de configuração padrão. Você pode seguir com ele, e edita-lo. Ou então, cirar sua própria configuração.
-   
-### Executando a simulação de interações
+   > **Note:** If an error occurs related to `chromadb` installation, ensure you have `gcc` and Python build dependencies installed on your system. On Windows, it's recommended to install [Build Tools for Visual Studio](https://visualstudio.microsoft.com/visual-cpp-build-tools/). Refer to the [chromadb documentation](https://docs.trychroma.com/troubleshooting) for troubleshooting.
 
-**Atenção:** Antes de executar a simulação, certifique-se que as seguintes variáveis de ambiente estejam configuradas:
+4. Set environment variables for OpenAI and Google AI API keys:
+
+   ```bash
+   export OPENAI_API_KEY="your_openai_api_key"
+   export GOOGLE_API_KEY="your_google_api_key"
+   ```
+
+   Or add them to the `.env` file at the project root:
+
+   ```bash
+   OPENAI_API_KEY=your_openai_api_key
+   GOOGLE_API_KEY=your_google_api_key
+   ```
+
+5. Set up and populate the datasources used for RAG:
+
+   The "RAG Cartoes" folder contains a sample default configuration. You may use it as-is or edit it to suit your needs. Alternatively, you can create your own configuration.
+
+### Running the Interaction Simulation
+
+**Note:** Before running the simulation, make sure the following environment variables are set:
 
 ```bash
-export PYTHONUNBUFFERED=1 # $env:PYTHONUNBUFFERED="1" no PowerShell
-export PYTHONPATH=$PWD # $env:PYTHONPATH=(Get-Location).Path no PowerShell
+export PYTHONUNBUFFERED=1 # $env:PYTHONUNBUFFERED="1" in PowerShell
+export PYTHONPATH=$PWD # $env:PYTHONPATH=(Get-Location).Path in PowerShell
 ```
 
-Após isso, você deve executar o seguinte comando para iniciar o serviço do chatbot do banco:
+Then, start the bank chatbot service with the following command:
 
 ```bash
 python .\tools\bancobot_service\start_banco_service.py
 ```
 
-Depois de iniciar o serviço do chatbot do banco, você pode executar a simulação de interações com múltiplos usuários. Para isso, utilize o seguinte comando:
+Once the bank chatbot service is running, you can simulate interactions with multiple users:
 
 ```bash
-python .\tools\enxame_usuario\start_usuarios.py --prompts-file "<caminho_para_o_arquivo_de_prompts>"
+python .\tools\enxame_usuario\start_usuarios.py --prompts-file "<path_to_prompts_file>"
 ```
 
-> **Atenção:** Na primeira execução do chatbot do banco, o RAG criará os vector stores necessários para o funcionamento do sistema. Isso pode levar algum tempo, dependendo do tamanho dos dados e da configuração do seu ambiente.
-> Por isso recomendamos que você execute script `source/tests/integratio_test/rag_test.py` antes de iniciar a simulação de interações. Isso garantirá que os vector stores estejam prontos e que o sistema funcione corretamente.
-> Você pode executa-lo com o seguinte comando:
+> **Note:** On first run, the RAG system will build the necessary vector stores. This may take time depending on data size and environment configuration.
+> Therefore, we recommend running the script `source/tests/integratio_test/rag_test.py` beforehand to ensure vector stores are ready and the system operates correctly.
+> Run it with:
+>
 > ```bash
 > python source/tests/integratio_test/rag_test.py
 > ```
-> Dentro desse script, você deve enviar um prompt qualquer. Após isso, aguarde até a geração da resposta do chatbot.
+>
+> Inside the script, submit any prompt and wait for the chatbot's response.
 
-### Executando o Visualizador de Interações
+### Running the Interaction Visualizer
 
-**Atenção:** Antes de executar o visualizador, certifique-se que as seguintes variáveis de ambiente estejam configuradas:
+**Note:** Before running the visualizer, ensure the following environment variables are set:
 
 ```bash
-export PYTHONUNBUFFERED=1 # $env:PYTHONUNBUFFERED="1" no PowerShell
-export PYTHONPATH=$PWD # $env:PYTHONPATH=(Get-Location).Path no PowerShell
+export PYTHONUNBUFFERED=1 # $env:PYTHONUNBUFFERED="1" in PowerShell
+export PYTHONPATH=$PWD # $env:PYTHONPATH=(Get-Location).Path in PowerShell
 ```
 
-Após isso, você deve executar o seguinte comando para iniciar o visualizador de interações:
+Then run the following command to start the interaction visualizer:
 
 ```bash
 python .\launch_simulador.py
 ```
 
-### Executar o extrator de touchpoints
-Para extrair os touchpoints das interações, você primeiro deve exporta-las através do visualizador de interações. Você pode fazer isso clicando no botão "💾".
-Após isso, você pode executar o seguinte comando para iniciar o extrator de touchpoints:
+### Running the Touchpoint Extractor
+
+To extract touchpoints from interactions, first export them via the visualizer by clicking the "💾" button.
+Then run the following command to start the touchpoint extractor:
 
 ```bash
 python .\tools\touchpoints_extractor\touchpoint_classifier.py \
-  --dialogue_json <interações_exportadas_pelo_visualizador> \
+  --dialogue_json <exported_interactions_file> \
   --touchpoints_ai_json .\tools\touchpoints_extractor\Touchpoint_ai.json \
   --touchpoints_human_json .\tools\touchpoints_extractor\Touchpoint_human.json \
   --output_csv analises_todas.csv

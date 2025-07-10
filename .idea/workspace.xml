@@ -4,8 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0cea1559-660a-43f1-803f-04da1cdf897d" name="Changes" comment="Atualiza caminhos no README para o extrator de touchpoints">
+    <list default="true" id="0cea1559-660a-43f1-803f-04da1cdf897d" name="Changes" comment="Atualiza a documentação do README para incluir informações sobre a prova de conceito e a análise de touchpoints">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -706,14 +707,7 @@
       <workItem from="1751563901455" duration="638000" />
       <workItem from="1751653745866" duration="2883000" />
       <workItem from="1751906894896" duration="12356000" />
-    </task>
-    <task id="LOCAL-00014" summary="Refatorar sistema de recuperação de documentos no RAG&#10;&#10;Implementa uma classe RetrieveFunction para substituir a função anônima de recuperação, &#10;permitindo o acesso direto aos retrievers por datasource. Principais alterações:&#10;&#10;- Adiciona classe RetrieveFunction que implementa a interface ChatFunction&#10;- Armazena retrievers separadamente na RAGResponseFunction para reuso&#10;- Modifica o workflow para utilizar a nova função de recuperação&#10;- Remove a função anônima _create_retriever_function&#10;&#10;Esta mudança melhora a modularidade do código e corrige problemas na lógica de recuperação&#10;de documentos, fornecendo tratamento adequado para datasources indisponíveis.">
-      <option name="closed" value="true" />
-      <created>1741970350073</created>
-      <option name="number" value="00014" />
-      <option name="presentableId" value="LOCAL-00014" />
-      <option name="project" value="LOCAL" />
-      <updated>1741970350073</updated>
+      <workItem from="1752159133629" duration="660000" />
     </task>
     <task id="LOCAL-00015" summary="refactor(rag): implementar a capacidade de armazenar o histórico de conversa.">
       <option name="closed" value="true" />
@@ -1099,14 +1093,21 @@
       <option name="project" value="LOCAL" />
       <updated>1751918552703</updated>
     </task>
-    <option name="localTasksCounter" value="63" />
+    <task id="LOCAL-00063" summary="Atualiza a documentação do README para incluir informações sobre a prova de conceito e a análise de touchpoints">
+      <option name="closed" value="true" />
+      <created>1752159278256</created>
+      <option name="number" value="00063" />
+      <option name="presentableId" value="LOCAL-00063" />
+      <option name="project" value="LOCAL" />
+      <updated>1752159278256</updated>
+    </task>
+    <option name="localTasksCounter" value="64" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Adicionar o parametro pra controlar o uso de tokens de pensamento." />
     <MESSAGE value="Novo branch para os testes do Gabriel" />
     <MESSAGE value="Configurações do dispositivo de execução: agora é possível configurar se o RAG será executado na CPU ou na GPU." />
     <MESSAGE value="rodar na CPU." />
@@ -1131,7 +1132,8 @@
     <MESSAGE value="Remove funções de criação e execução do serviço BancoBot do simulador" />
     <MESSAGE value="Melhorar o nome do touchpoints extractor" />
     <MESSAGE value="Atualiza caminhos no README para o extrator de touchpoints" />
-    <option name="LAST_COMMIT_MESSAGE" value="Atualiza caminhos no README para o extrator de touchpoints" />
+    <MESSAGE value="Atualiza a documentação do README para incluir informações sobre a prova de conceito e a análise de touchpoints" />
+    <option name="LAST_COMMIT_MESSAGE" value="Atualiza a documentação do README para incluir informações sobre a prova de conceito e a análise de touchpoints" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
