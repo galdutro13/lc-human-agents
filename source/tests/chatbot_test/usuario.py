@@ -1,6 +1,7 @@
 import random
 import time
 from datetime import datetime, timedelta
+from typing import Optional  # MOD: para anotar o snapshot opcional
 import requests
 
 from source.persona import PersonaWorkflowBuilder, PersonaChatFunction
@@ -14,6 +15,10 @@ class UsuarioBot(ChatBotBase):
     Adaptado para se comunicar com o serviço BancoBot via API.
     Inclui simulação de comportamento temporal do usuário (tempo de digitação,
     tempo de reflexão e pausas).
+
+    MOD: A linha do tempo do banco (banco_generation_timestamp) foi desacoplada do relógio de parede.
+    Agora, o timestamp do banco é sempre um snapshot do relógio simulado (simulated_timestamp),
+    impedindo desalinhamentos causados por standby/ajustes de relógio.
     """
 
     def __init__(self,
@@ -56,8 +61,14 @@ class UsuarioBot(ChatBotBase):
         self.pre_banco_generation_time = datetime.now()
         self.banco_generation_time = datetime.now()
         self.banco_generation_elapsed_time: timedelta = timedelta(seconds=0)
+
         # Aplicar offset temporal ao timestamp simulado inicial
         self.simulated_timestamp = self.pre_banco_generation_time + self.temporal_offset
+
+        # MOD: snapshot do timestamp simulado no momento em que o banco "gerou/enviou" sua mensagem
+        # Usado por process_query_with_output para preencher banco_generation_timestamp
+        self.last_banco_generation_sim_ts: Optional[datetime] = None
+
         self.last_break_time = 0
         self.thinking_time = 0
         self.total_typing_time = 0
@@ -172,7 +183,11 @@ class UsuarioBot(ChatBotBase):
         # Aplicar offset temporal ao timestamp inicial
         self.simulated_timestamp = self.pre_banco_generation_time + self.temporal_offset
 
-        # Simula o tempo de reflexão inicial
+        # MOD: snapshot do tempo do banco na ESCALA SIMULADA para a mensagem inicial do banco.
+        # O banco "enviou" a primeira mensagem neste instante simulado (antes do usuário pensar).
+        self.last_banco_generation_sim_ts = self.simulated_timestamp
+
+        # Simula o tempo de reflexão inicial do usuário antes de responder ao banco
         initial_thinking_time = self._calculate_thinking_time()
         self.thinking_time = initial_thinking_time
         self.simulated_timestamp += timedelta(seconds=initial_thinking_time)
@@ -181,7 +196,7 @@ class UsuarioBot(ChatBotBase):
             print(f"[DELAY REAL] Aguardando {initial_thinking_time:.2f} segundos de reflexão inicial...")
             time.sleep(initial_thinking_time)
 
-        # Processa a consulta inicial (banco inicia a conversa)
+        # Processa a consulta inicial (banco inicia a conversa) -> UsuarioBot responde
         output = self.process_query_with_output(query)
         response = output["messages"][-1].content
         print("=== UsuarioBot Mensagem ===")
@@ -205,10 +220,19 @@ class UsuarioBot(ChatBotBase):
             # Envia a mensagem
             print(f"[Simulação] Enviando mensagem em {self.simulated_timestamp.strftime('%Y-%m-%d %H:%M:%S')}")
             self.pre_banco_generation_time = datetime.now()
+
             banco_response = self._send_to_bancobot(response)
+
             self.banco_generation_time = datetime.now()
             self.banco_generation_elapsed_time = self.banco_generation_time - self.pre_banco_generation_time
-            self.simulated_timestamp += self.banco_generation_elapsed_time
+
+            # MOD: NÃO AVANÇAR a simulação com a latência real do banco (evita desalinhamento por standby)
+            # self.simulated_timestamp += self.banco_generation_elapsed_time
+
+            # MOD: snapshot do "momento simulado" em que o banco respondeu (escala de simulação)
+            # Este valor será usado por process_query_with_output como banco_generation_timestamp
+            self.last_banco_generation_sim_ts = self.simulated_timestamp
+
             query = banco_response
 
             if query.lower() == exit_command:
@@ -243,7 +267,7 @@ class UsuarioBot(ChatBotBase):
                 print(f"[DELAY REAL] Aguardando {thinking_time:.2f} segundos de reflexão...")
                 time.sleep(thinking_time)
 
-            # Processa a resposta
+            # Processa a resposta do UsuarioBot
             output = self.process_query_with_output(query)
             response = output["messages"][-1].content
             print("=== UsuarioBot Mensagem ===")
@@ -334,10 +358,14 @@ class UsuarioBot(ChatBotBase):
 
         Returns:
             Output completo do workflow incluindo mensagens.
+
+        MOD: O campo "banco_generation_timestamp" agora é derivado do relógio simulado
+        (snapshot last_banco_generation_sim_ts), e não mais de datetime.now().
+        Isso elimina desalinhamentos quando há standby/ajustes de relógio.
         """
         from langchain_core.messages import HumanMessage
 
-        # Inclui metadados de temporização na mensagem
+        # Inclui metadados de temporização na mensagem (escala do usuário/simulação)
         user_timing_metadata = {
             "simulated_timestamp": self.simulated_timestamp.isoformat(),
             "thinking_time": self.thinking_time,
@@ -345,10 +373,12 @@ class UsuarioBot(ChatBotBase):
             "break_time": self.last_break_time
         }
 
-        # Ajustar banco_generation_time para incluir o offset temporal
-        banco_generation_timestamp = self.banco_generation_time + self.temporal_offset
+        # MOD: Ajustar banco_generation_timestamp para a escala SIMULADA (snapshot)
+        banco_generation_timestamp = (self.last_banco_generation_sim_ts or self.simulated_timestamp).isoformat()
+
+        # Mantém a latência real apenas como telemetria/diagnóstico (não afeta a simulação)
         banco_timing_metadata = {
-            "banco_generation_timestamp": banco_generation_timestamp.isoformat(),
+            "banco_generation_timestamp": banco_generation_timestamp,
             "banco_generation_elapsed_time": self.banco_generation_elapsed_time.total_seconds()
         }
 
