@@ -109,7 +109,7 @@ lc-human-agents/
    ```bash
    cd lc-human-agents
    python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   source venv/bin/activate # On Windows: venv\Scripts\activate
    ```
 
 3. Install dependencies:
@@ -122,12 +122,7 @@ lc-human-agents/
 
 4. Set environment variables for OpenAI and Google AI API keys:
 
-   ```bash
-   export OPENAI_API_KEY="your_openai_api_key"
-   export GOOGLE_API_KEY="your_google_api_key"
-   ```
-
-   Or add them to the `.env` file at the project root:
+   Add them to the `.env` file at the project root:
 
    ```bash
    OPENAI_API_KEY=your_openai_api_key
@@ -140,7 +135,7 @@ lc-human-agents/
 
 ### Running the Interaction Simulation
 
-**Note:** Before running the simulation, make sure the following environment variables are set:
+**Note:** Before running the simulation, make sure the following environment variables are set on both consoles:
 
 ```bash
 export PYTHONUNBUFFERED=1 # $env:PYTHONUNBUFFERED="1" in PowerShell
@@ -150,13 +145,13 @@ export PYTHONPATH=$PWD # $env:PYTHONPATH=(Get-Location).Path in PowerShell
 Then, start the bank chatbot service with the following command:
 
 ```bash
-python .\tools\bancobot_service\start_banco_service.py
+python ./tools/bancobot_service/start_banco_service.py
 ```
 
 Once the bank chatbot service is running, you can simulate interactions with multiple users:
 
 ```bash
-python .\tools\enxame_usuario\start_usuarios.py --prompts-file "<path_to_prompts_file>"
+python ./tools/enxame_usuario/start_usuarios.py --prompts-file "<path_to_prompts_file>"
 ```
 
 > **Note:** On first run, the RAG system will build the necessary vector stores. This may take time depending on data size and environment configuration.

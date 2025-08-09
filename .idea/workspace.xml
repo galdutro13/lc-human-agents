@@ -4,9 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0cea1559-660a-43f1-803f-04da1cdf897d" name="Changes" comment="Tradução do arquivo readme para o inglês.">
+    <list default="true" id="0cea1559-660a-43f1-803f-04da1cdf897d" name="Changes" comment="Desacopla o timestamp do banco do relógio de parede e ajusta a simulação para evitar desalinhamentos">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/tests/chatbot_test/usuario.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/tests/chatbot_test/usuario.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -501,19 +501,19 @@
       <method v="2" />
     </configuration>
     <list>
+      <item itemvalue="FastAPI.visualizador_backend" />
       <item itemvalue="Python.Extract personas" />
-      <item itemvalue="Python.chatbot_test" />
-      <item itemvalue="Python.document_loader_integration" />
-      <item itemvalue="Python.gerar_missoes" />
-      <item itemvalue="Python.insert_cenario&amp;persona" />
-      <item itemvalue="Python.launcher" />
       <item itemvalue="Python.prompt_generation" />
-      <item itemvalue="Python.rag_system" />
-      <item itemvalue="Python.rag_test" />
-      <item itemvalue="Python.setup_db_cenarios" />
       <item itemvalue="Python.start_banco_service" />
       <item itemvalue="Python.start_enxame_usuarios" />
-      <item itemvalue="FastAPI.visualizador_backend" />
+      <item itemvalue="Python.document_loader_integration" />
+      <item itemvalue="Python.rag_test" />
+      <item itemvalue="Python.gerar_missoes" />
+      <item itemvalue="Python.insert_cenario&amp;persona" />
+      <item itemvalue="Python.setup_db_cenarios" />
+      <item itemvalue="Python.chatbot_test" />
+      <item itemvalue="Python.launcher" />
+      <item itemvalue="Python.rag_system" />
       <item itemvalue="Python tests.Python tests for workflow_integration_test.TestChatGraphPromptIntegration" />
       <item itemvalue="Python tests.Python tests for workflow_integration_test.TestChatGraphPromptIntegration.test_chat_function" />
       <item itemvalue="Python tests.Python tests for workflow_integration_test.TestChatGraphPromptIntegration.test_default_workflow" />
@@ -714,14 +714,8 @@
       <workItem from="1754412036848" duration="6656000" />
       <workItem from="1754587969568" duration="623000" />
       <workItem from="1754668726628" duration="4045000" />
-    </task>
-    <task id="LOCAL-00016" summary="Incluir as modificações do workspace.xml">
-      <option name="closed" value="true" />
-      <created>1742233211792</created>
-      <option name="number" value="00016" />
-      <option name="presentableId" value="LOCAL-00016" />
-      <option name="project" value="LOCAL" />
-      <updated>1742233211792</updated>
+      <workItem from="1754680087625" duration="51000" />
+      <workItem from="1754694252982" duration="2160000" />
     </task>
     <task id="LOCAL-00017" summary="Integração do sistema rag à plataforma de teste.">
       <option name="closed" value="true" />
@@ -1107,14 +1101,21 @@
       <option name="project" value="LOCAL" />
       <updated>1752159972884</updated>
     </task>
-    <option name="localTasksCounter" value="65" />
+    <task id="LOCAL-00065" summary="Desacopla o timestamp do banco do relógio de parede e ajusta a simulação para evitar desalinhamentos">
+      <option name="closed" value="true" />
+      <created>1754680125506</created>
+      <option name="number" value="00065" />
+      <option name="presentableId" value="LOCAL-00065" />
+      <option name="project" value="LOCAL" />
+      <updated>1754680125506</updated>
+    </task>
+    <option name="localTasksCounter" value="66" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Configurações do dispositivo de execução: agora é possível configurar se o RAG será executado na CPU ou na GPU." />
     <MESSAGE value="rodar na CPU." />
     <MESSAGE value="Implementação inicial do código de armazenamento de metadados de resposta ('timing_metadata') nas mensagens geradas pela persona." />
     <MESSAGE value="Código para exportar os tempos de interação." />
@@ -1139,7 +1140,8 @@
     <MESSAGE value="Atualiza caminhos no README para o extrator de touchpoints" />
     <MESSAGE value="Atualiza a documentação do README para incluir informações sobre a prova de conceito e a análise de touchpoints" />
     <MESSAGE value="Tradução do arquivo readme para o inglês." />
-    <option name="LAST_COMMIT_MESSAGE" value="Tradução do arquivo readme para o inglês." />
+    <MESSAGE value="Desacopla o timestamp do banco do relógio de parede e ajusta a simulação para evitar desalinhamentos" />
+    <option name="LAST_COMMIT_MESSAGE" value="Desacopla o timestamp do banco do relógio de parede e ajusta a simulação para evitar desalinhamentos" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
