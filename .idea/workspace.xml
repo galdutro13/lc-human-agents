@@ -4,9 +4,64 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0cea1559-660a-43f1-803f-04da1cdf897d" name="Changes" comment="Desacopla o timestamp do banco do relógio de parede e ajusta a simulação para evitar desalinhamentos">
+    <list default="true" id="0cea1559-660a-43f1-803f-04da1cdf897d" name="Changes" comment="Atualiza o README para melhorar a clareza das instruções de configuração e execução">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RAG Cartões/config.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/RAG Cartões/config.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/Personas.CSV" beforeDir="false" afterPath="$PROJECT_DIR$/data/Personas.CSV" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/extracted/persona0.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/extracted/persona0.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/extracted/persona1.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/extracted/persona1.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/extracted/persona10.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/extracted/persona10.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/extracted/persona11.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/extracted/persona11.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/extracted/persona12.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/extracted/persona12.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/extracted/persona15.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/extracted/persona15.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/extracted/persona16.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/extracted/persona16.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/extracted/persona17.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/extracted/persona17.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/extracted/persona18.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/extracted/persona18.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/extracted/persona19.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/extracted/persona19.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/extracted/persona2.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/extracted/persona2.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/extracted/persona20.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/extracted/persona20.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/extracted/persona21.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/extracted/persona21.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/extracted/persona22.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/extracted/persona22.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/extracted/persona23.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/extracted/persona23.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/extracted/persona24.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/extracted/persona24.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/extracted/persona25.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/extracted/persona25.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/extracted/persona26.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/extracted/persona26.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/extracted/persona27.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/extracted/persona27.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/extracted/persona28.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/extracted/persona28.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/extracted/persona29.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/extracted/persona29.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/extracted/persona3.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/extracted/persona3.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/extracted/persona30.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/extracted/persona30.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/extracted/persona32.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/extracted/persona32.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/extracted/persona33.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/extracted/persona33.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/extracted/persona34.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/extracted/persona34.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/extracted/persona36.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/extracted/persona36.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/extracted/persona37.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/extracted/persona37.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/extracted/persona38.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/extracted/persona38.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/extracted/persona39.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/extracted/persona39.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/extracted/persona4.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/extracted/persona4.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/extracted/persona41.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/extracted/persona41.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/extracted/persona42.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/extracted/persona42.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/extracted/persona43.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/extracted/persona43.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/extracted/persona44.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/extracted/persona44.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/extracted/persona45.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/extracted/persona45.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/extracted/persona46.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/extracted/persona46.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/extracted/persona48.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/extracted/persona48.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/extracted/persona49.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/extracted/persona49.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/extracted/persona5.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/extracted/persona5.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/extracted/persona50.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/extracted/persona50.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/extracted/persona51.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/extracted/persona51.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/extracted/persona53.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/extracted/persona53.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/extracted/persona54.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/extracted/persona54.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/extracted/persona55.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/extracted/persona55.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/extracted/persona56.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/extracted/persona56.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/extracted/persona7.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/extracted/persona7.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/extracted/persona8.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/extracted/persona8.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/personas.json" beforeDir="false" afterPath="$PROJECT_DIR$/personas.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/personas_tf.json" beforeDir="false" afterPath="$PROJECT_DIR$/personas_tf.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/tests/chatbot_test/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/tests/chatbot_test/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tools/enxame_usuario/start_usuarios.py" beforeDir="false" afterPath="$PROJECT_DIR$/tools/enxame_usuario/start_usuarios.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tools/prompt_generation/get_generator_prompt.py" beforeDir="false" afterPath="$PROJECT_DIR$/tools/prompt_generation/get_generator_prompt.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tools/visualizador_interacoes/backend/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/tools/visualizador_interacoes/backend/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,7 +92,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="trabalho_gabriel" />
+        <entry key="$PROJECT_DIR$" value="master" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -68,64 +123,64 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;FastAPI.visualizador_backend.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests for persona_csv_integration.TestPersonaCSVIntegration.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests for test_csv_to_json.TestCSVtoJSONConverter.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests for test_csv_to_json.TestCSVtoJSONConverter.test_malformed_csv.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests for test_prompt_manager.TestPromptGenerators.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests for test_prompt_manager.TestPromptGenerators.test_custom_prompt_generator.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests for test_prompt_manager.TestPromptGenerators.test_system_prompt_generator_invalid_strategy.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests for workflow_integration_test.TestChatGraphPromptIntegration.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests for workflow_integration_test.TestChatGraphPromptIntegration.test_chat_function.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests for workflow_integration_test.TestChatGraphPromptIntegration.test_default_workflow.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests for workflow_integration_test.TestChatGraphPromptIntegration.test_initial.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests in test_prompt_manager.py.executor&quot;: &quot;Run&quot;,
-    &quot;Python.Extract personas.executor&quot;: &quot;Run&quot;,
-    &quot;Python.chatbot server test.executor&quot;: &quot;Run&quot;,
-    &quot;Python.chatbot_test.executor&quot;: &quot;Run&quot;,
-    &quot;Python.document_loader_integration.executor&quot;: &quot;Run&quot;,
-    &quot;Python.export_checkpoints.executor&quot;: &quot;Run&quot;,
-    &quot;Python.gerar_missoes.executor&quot;: &quot;Run&quot;,
-    &quot;Python.insert_cenario&amp;persona.executor&quot;: &quot;Run&quot;,
-    &quot;Python.launcher.executor&quot;: &quot;Run&quot;,
-    &quot;Python.llms.executor&quot;: &quot;Run&quot;,
-    &quot;Python.main.executor&quot;: &quot;Run&quot;,
-    &quot;Python.models.executor&quot;: &quot;Run&quot;,
-    &quot;Python.persona_function.executor&quot;: &quot;Run&quot;,
-    &quot;Python.prompt_generation.executor&quot;: &quot;Run&quot;,
-    &quot;Python.prompt_generator.executor&quot;: &quot;Run&quot;,
-    &quot;Python.rag_system.executor&quot;: &quot;Run&quot;,
-    &quot;Python.rag_test.executor&quot;: &quot;Run&quot;,
-    &quot;Python.read_personas.executor&quot;: &quot;Run&quot;,
-    &quot;Python.run_services.executor&quot;: &quot;Run&quot;,
-    &quot;Python.setup_db_cenarios.executor&quot;: &quot;Run&quot;,
-    &quot;Python.setup_simulacoes_db.executor&quot;: &quot;Run&quot;,
-    &quot;Python.start_banco_service.executor&quot;: &quot;Run&quot;,
-    &quot;Python.start_enxame_usuarios.executor&quot;: &quot;Run&quot;,
-    &quot;Python.test_rag_debug.executor&quot;: &quot;Run&quot;,
-    &quot;Python.workflow_builder.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;database.data.extractors.current.export.id&quot;: &quot;Comma-separated (CSV)_id&quot;,
-    &quot;database.data.extractors.current.id&quot;: &quot;Comma-separated (CSV)_id&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/galdu/PycharmProjects/lc-human-agents/source/constantes&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;com.github.copilot.settings.ApplicationConfigurable&quot;,
-    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
-    &quot;vcs.patch.path&quot;: &quot;C:/Users/galdu/OneDrive/Desktop&quot;,
-    &quot;vcs.patch.to.clipboard&quot;: &quot;true&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "FastAPI.visualizador_backend.executor": "Run",
+    "Python tests.Python tests for persona_csv_integration.TestPersonaCSVIntegration.executor": "Run",
+    "Python tests.Python tests for test_csv_to_json.TestCSVtoJSONConverter.executor": "Run",
+    "Python tests.Python tests for test_csv_to_json.TestCSVtoJSONConverter.test_malformed_csv.executor": "Run",
+    "Python tests.Python tests for test_prompt_manager.TestPromptGenerators.executor": "Run",
+    "Python tests.Python tests for test_prompt_manager.TestPromptGenerators.test_custom_prompt_generator.executor": "Run",
+    "Python tests.Python tests for test_prompt_manager.TestPromptGenerators.test_system_prompt_generator_invalid_strategy.executor": "Run",
+    "Python tests.Python tests for workflow_integration_test.TestChatGraphPromptIntegration.executor": "Run",
+    "Python tests.Python tests for workflow_integration_test.TestChatGraphPromptIntegration.test_chat_function.executor": "Run",
+    "Python tests.Python tests for workflow_integration_test.TestChatGraphPromptIntegration.test_default_workflow.executor": "Run",
+    "Python tests.Python tests for workflow_integration_test.TestChatGraphPromptIntegration.test_initial.executor": "Run",
+    "Python tests.Python tests in test_prompt_manager.py.executor": "Run",
+    "Python.Extract personas.executor": "Run",
+    "Python.chatbot server test.executor": "Run",
+    "Python.chatbot_test.executor": "Run",
+    "Python.document_loader_integration.executor": "Run",
+    "Python.export_checkpoints.executor": "Run",
+    "Python.gerar_missoes.executor": "Run",
+    "Python.insert_cenario&persona.executor": "Run",
+    "Python.launcher.executor": "Run",
+    "Python.llms.executor": "Run",
+    "Python.main.executor": "Run",
+    "Python.models.executor": "Run",
+    "Python.persona_function.executor": "Run",
+    "Python.prompt_generation.executor": "Run",
+    "Python.prompt_generator.executor": "Run",
+    "Python.rag_system.executor": "Run",
+    "Python.rag_test.executor": "Run",
+    "Python.read_personas.executor": "Run",
+    "Python.run_services.executor": "Run",
+    "Python.setup_db_cenarios.executor": "Run",
+    "Python.setup_simulacoes_db.executor": "Run",
+    "Python.start_banco_service.executor": "Run",
+    "Python.start_enxame_usuarios.executor": "Run",
+    "Python.test_rag_debug.executor": "Run",
+    "Python.workflow_builder.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "database.data.extractors.current.export.id": "Comma-separated (CSV)_id",
+    "database.data.extractors.current.id": "Comma-separated (CSV)_id",
+    "git-widget-placeholder": "for__publishing",
+    "ignore.virus.scanning.warn.message": "true",
+    "junie.onboarding.icon.badge.shown": "true",
+    "last_opened_file_path": "C:/Users/galdu/PycharmProjects/lc-human-agents/source/constantes",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "com.github.copilot.settings.ApplicationConfigurable",
+    "to.speed.mode.migration.done": "true",
+    "vcs.patch.path": "C:/Users/galdu/OneDrive/Desktop",
+    "vcs.patch.to.clipboard": "true",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="QodanaHighlightedReportService">
     <option name="localReportPersistedInfo">
       <LocalReportPersistedInfo>
@@ -715,15 +770,7 @@
       <workItem from="1754587969568" duration="623000" />
       <workItem from="1754668726628" duration="4045000" />
       <workItem from="1754680087625" duration="51000" />
-      <workItem from="1754694252982" duration="2160000" />
-    </task>
-    <task id="LOCAL-00017" summary="Integração do sistema rag à plataforma de teste.">
-      <option name="closed" value="true" />
-      <created>1742240464020</created>
-      <option name="number" value="00017" />
-      <option name="presentableId" value="LOCAL-00017" />
-      <option name="project" value="LOCAL" />
-      <updated>1742240464020</updated>
+      <workItem from="1754694252982" duration="6397000" />
     </task>
     <task id="LOCAL-00018" summary="Integração das modificações de SimuladorPersonas ao código de RAG.">
       <option name="closed" value="true" />
@@ -1109,14 +1156,21 @@
       <option name="project" value="LOCAL" />
       <updated>1754680125506</updated>
     </task>
-    <option name="localTasksCounter" value="66" />
+    <task id="LOCAL-00066" summary="Atualiza o README para melhorar a clareza das instruções de configuração e execução">
+      <option name="closed" value="true" />
+      <created>1754698962571</created>
+      <option name="number" value="00066" />
+      <option name="presentableId" value="LOCAL-00066" />
+      <option name="project" value="LOCAL" />
+      <updated>1754698962571</updated>
+    </task>
+    <option name="localTasksCounter" value="67" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="rodar na CPU." />
     <MESSAGE value="Implementação inicial do código de armazenamento de metadados de resposta ('timing_metadata') nas mensagens geradas pela persona." />
     <MESSAGE value="Código para exportar os tempos de interação." />
     <MESSAGE value="Modificações para corrigir a grafação do tempo para a primeira interação." />
@@ -1141,7 +1195,8 @@
     <MESSAGE value="Atualiza a documentação do README para incluir informações sobre a prova de conceito e a análise de touchpoints" />
     <MESSAGE value="Tradução do arquivo readme para o inglês." />
     <MESSAGE value="Desacopla o timestamp do banco do relógio de parede e ajusta a simulação para evitar desalinhamentos" />
-    <option name="LAST_COMMIT_MESSAGE" value="Desacopla o timestamp do banco do relógio de parede e ajusta a simulação para evitar desalinhamentos" />
+    <MESSAGE value="Atualiza o README para melhorar a clareza das instruções de configuração e execução" />
+    <option name="LAST_COMMIT_MESSAGE" value="Atualiza o README para melhorar a clareza das instruções de configuração e execução" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

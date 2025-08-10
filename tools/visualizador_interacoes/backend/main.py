@@ -282,7 +282,7 @@ def run_chatbot(prompt: str, api_url: str = "http://localhost:8080", max_iterati
 
         # Start the interaction with an initial greeting
         usuario_bot.run(
-            initial_query="Olá cliente Itaú! Como posso lhe ajudar?",
+            initial_query="Olá cliente X! Como posso lhe ajudar?",
             max_iterations=max_iterations
         )
         return True

@@ -101,7 +101,7 @@ def main(usuario_prompt: str = None):
         temporal_offset=timedelta(0)  # Sem offset quando executado diretamente
     )
 
-    initial_query = "Olá cliente Itaú! Como posso lhe ajudar?"
+    initial_query = "Olá cliente X! Como posso lhe ajudar?"
     usuario_bot.run(initial_query, max_iterations=10)
 
 
