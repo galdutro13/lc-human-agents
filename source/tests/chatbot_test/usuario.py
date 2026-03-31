@@ -1,7 +1,7 @@
 import random
 import time
 from datetime import datetime, timedelta
-from typing import Optional  # MOD: para anotar o snapshot opcional
+from typing import Any, Optional  # MOD: para anotar o snapshot opcional
 import requests
 
 from source.persona import PersonaWorkflowBuilder, PersonaChatFunction
@@ -25,6 +25,7 @@ class UsuarioBot(ChatBotBase):
                  think_exp: bool,
                  persona_id: str,
                  system_message: str = None,
+                 simulation_metadata: Optional[dict[str, Any]] = None,
                  api_url: str = "http://localhost:8080",
                  typing_speed_wpm: float = 40.0,
                  thinking_time_range: tuple = (2, 10),
@@ -42,6 +43,7 @@ class UsuarioBot(ChatBotBase):
                 Finalize com 'quit' assim que sentir que suas ordens estão sendo seguidas ou se frustrar com qualquer sinal de discordância ou questionamento. """
             )
         self.persona_id = persona_id
+        self.simulation_metadata = dict(simulation_metadata or {})
         super().__init__(think_exp=think_exp,
                          system_message=system_message,
                          use_sqlitesaver=True)
@@ -314,6 +316,7 @@ class UsuarioBot(ChatBotBase):
             payload = {
                 "message": message,
                 "persona_id": self.persona_id,  # Include persona_id
+                "simulation_metadata": self.simulation_metadata,
                 "timing_metadata": {
                     "simulated_timestamp": self.simulated_timestamp.isoformat(),
                     "thinking_time": self.thinking_time,
@@ -382,13 +385,17 @@ class UsuarioBot(ChatBotBase):
             "banco_generation_elapsed_time": self.banco_generation_elapsed_time.total_seconds()
         }
 
-        input_messages = [HumanMessage(content=query, additional_kwargs={"timing_metadata": banco_timing_metadata})]
+        input_messages = [HumanMessage(content=query, additional_kwargs={
+            "timing_metadata": banco_timing_metadata,
+            "simulation_metadata": self.simulation_metadata
+        })]
 
         # Passa typing_speed_wpm através do estado
         output = self.app.invoke({
             "messages": input_messages,
             "persona_id": self.persona_id,
             "timing_metadata": user_timing_metadata,
+            "simulation_metadata": self.simulation_metadata,
             "typing_speed_wpm": self.typing_speed_wpm  # Passa a velocidade de digitação
         }, self.config)
 

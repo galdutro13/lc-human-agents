@@ -1,0 +1,394 @@
+{
+  "$defs": {
+    "ComboSelector": {
+      "additionalProperties": false,
+      "properties": {
+        "config_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Config Id"
+        }
+      },
+      "title": "ComboSelector",
+      "type": "object"
+    },
+    "ConfigurationDefinition": {
+      "additionalProperties": false,
+      "properties": {
+        "duracao": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Duracao"
+        },
+        "periodo": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Periodo"
+        },
+        "fim_de_semana": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Fim De Semana"
+        },
+        "base_config_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Base Config Id"
+        }
+      },
+      "title": "ConfigurationDefinition",
+      "type": "object"
+    },
+    "DistributionTarget": {
+      "additionalProperties": false,
+      "properties": {
+        "fonte": {
+          "title": "Fonte",
+          "type": "string"
+        },
+        "configuracoes": {
+          "additionalProperties": {
+            "type": "number"
+          },
+          "title": "Configuracoes",
+          "type": "object"
+        }
+      },
+      "required": [
+        "fonte"
+      ],
+      "title": "DistributionTarget",
+      "type": "object"
+    },
+    "PersonaDefinition": {
+      "additionalProperties": false,
+      "properties": {
+        "nome": {
+          "title": "Nome",
+          "type": "string"
+        },
+        "prompt": {
+          "title": "Prompt",
+          "type": "string"
+        }
+      },
+      "required": [
+        "nome",
+        "prompt"
+      ],
+      "title": "PersonaDefinition",
+      "type": "object"
+    },
+    "RareComboControl": {
+      "additionalProperties": false,
+      "properties": {
+        "selector": {
+          "$ref": "#/$defs/ComboSelector"
+        },
+        "min_casos": {
+          "minimum": 0,
+          "title": "Min Casos",
+          "type": "integer"
+        },
+        "max_proporcao": {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Max Proporcao",
+          "type": "number"
+        }
+      },
+      "required": [
+        "selector",
+        "min_casos",
+        "max_proporcao"
+      ],
+      "title": "RareComboControl",
+      "type": "object"
+    },
+    "SamplingAudit": {
+      "additionalProperties": false,
+      "properties": {
+        "desvio_maximo_aceitavel": {
+          "minimum": 0.0,
+          "title": "Desvio Maximo Aceitavel",
+          "type": "number"
+        },
+        "repetir_sorteio_se_violado": {
+          "title": "Repetir Sorteio Se Violado",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "desvio_maximo_aceitavel",
+        "repetir_sorteio_se_violado"
+      ],
+      "title": "SamplingAudit",
+      "type": "object"
+    },
+    "SamplingComponent": {
+      "additionalProperties": false,
+      "properties": {
+        "nome": {
+          "title": "Nome",
+          "type": "string"
+        },
+        "proporcao": {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Proporcao",
+          "type": "number"
+        },
+        "base": {
+          "title": "Base",
+          "type": "string"
+        }
+      },
+      "required": [
+        "nome",
+        "proporcao",
+        "base"
+      ],
+      "title": "SamplingComponent",
+      "type": "object"
+    },
+    "SamplingDefinition": {
+      "additionalProperties": false,
+      "properties": {
+        "tipo": {
+          "title": "Tipo",
+          "type": "string"
+        },
+        "componentes": {
+          "items": {
+            "$ref": "#/$defs/SamplingComponent"
+          },
+          "title": "Componentes",
+          "type": "array"
+        }
+      },
+      "required": [
+        "tipo"
+      ],
+      "title": "SamplingDefinition",
+      "type": "object"
+    },
+    "SamplingPolicy": {
+      "additionalProperties": false,
+      "properties": {
+        "objetivo": {
+          "title": "Objetivo",
+          "type": "string"
+        },
+        "n_total": {
+          "minimum": 0,
+          "title": "N Total",
+          "type": "integer"
+        },
+        "seed": {
+          "minimum": 0,
+          "title": "Seed",
+          "type": "integer"
+        },
+        "distribuicao_alvo": {
+          "$ref": "#/$defs/DistributionTarget"
+        },
+        "restricoes": {
+          "$ref": "#/$defs/SamplingRestrictions"
+        },
+        "amostragem": {
+          "$ref": "#/$defs/SamplingDefinition"
+        },
+        "auditoria": {
+          "$ref": "#/$defs/SamplingAudit"
+        }
+      },
+      "required": [
+        "objetivo",
+        "n_total",
+        "seed",
+        "distribuicao_alvo",
+        "restricoes",
+        "amostragem",
+        "auditoria"
+      ],
+      "title": "SamplingPolicy",
+      "type": "object"
+    },
+    "SamplingRestrictions": {
+      "additionalProperties": false,
+      "properties": {
+        "min_por_persona": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Min Por Persona",
+          "type": "integer"
+        },
+        "min_por_configuracao": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Min Por Configuracao",
+          "type": "integer"
+        },
+        "max_proporcao_por_combinacao": {
+          "default": 1.0,
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Max Proporcao Por Combinacao",
+          "type": "number"
+        },
+        "combos_proibidos": {
+          "items": {
+            "type": "object"
+          },
+          "title": "Combos Proibidos",
+          "type": "array"
+        },
+        "combos_raros_controlados": {
+          "items": {
+            "$ref": "#/$defs/RareComboControl"
+          },
+          "title": "Combos Raros Controlados",
+          "type": "array"
+        }
+      },
+      "title": "SamplingRestrictions",
+      "type": "object"
+    },
+    "SimulationRecord": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "politica_id": {
+          "title": "Politica Id",
+          "type": "string"
+        },
+        "persona_id": {
+          "title": "Persona Id",
+          "type": "string"
+        },
+        "config_id": {
+          "title": "Config Id",
+          "type": "string"
+        },
+        "estrato": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Estrato"
+        },
+        "prob_alvo": {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Prob Alvo",
+          "type": "number"
+        },
+        "prob_amostragem": {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Prob Amostragem",
+          "type": "number"
+        },
+        "peso_analitico": {
+          "minimum": 0.0,
+          "title": "Peso Analitico",
+          "type": "number"
+        }
+      },
+      "required": [
+        "id",
+        "politica_id",
+        "persona_id",
+        "config_id",
+        "prob_alvo",
+        "prob_amostragem",
+        "peso_analitico"
+      ],
+      "title": "SimulationRecord",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "versao_schema": {
+      "title": "Versao Schema",
+      "type": "string"
+    },
+    "personas": {
+      "additionalProperties": {
+        "$ref": "#/$defs/PersonaDefinition"
+      },
+      "title": "Personas",
+      "type": "object"
+    },
+    "configuracoes": {
+      "additionalProperties": {
+        "$ref": "#/$defs/ConfigurationDefinition"
+      },
+      "title": "Configuracoes",
+      "type": "object"
+    },
+    "politicas_amostrais": {
+      "additionalProperties": {
+        "$ref": "#/$defs/SamplingPolicy"
+      },
+      "title": "Politicas Amostrais",
+      "type": "object"
+    },
+    "simulacoes": {
+      "items": {
+        "$ref": "#/$defs/SimulationRecord"
+      },
+      "title": "Simulacoes",
+      "type": "array"
+    }
+  },
+  "required": [
+    "versao_schema"
+  ],
+  "title": "SimulationDocumentV3",
+  "type": "object"
+}

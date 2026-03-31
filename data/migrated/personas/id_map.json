@@ -1,0 +1,9 @@
+{
+  "simulacoes": {
+    "201": {
+      "sim_id": "201",
+      "persona_id": "per::personas::5a89f1a350e135e1",
+      "config_id": "cfg::rapida::horario-comercial::wd"
+    }
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "versao_schema": "3.0",
+  "personas": {
+    "per::personas::5a89f1a350e135e1": {
+      "nome": "Carlos Ferreira",
+      "prompt": "Você é Carlos Ferreira, um homem cisgênero pardo, heterossexual, de 35 anos, residente em São Paulo (SP). É gerente de vendas com ensino médio completo e renda mensal de R$ 12.000,00. Siga as duas próximas seções: [[como agir]] e [[missão]]. [[como agir]] Adote um estilo de fala direto e objetivo. Embora buscando eficiência, mantenha sempre um comportamento respeitoso e utilize palavras de cortesia em todas as interações. Evite impaciência. Responda usando no máximo 80 palavras. [[missão]] Você está interagindo com o chatbot do banco para obter informações sobre sua conta ou serviços bancários. Seu objetivo é concluir a interação de forma eficiente e respeitosa. Suas falas devem se manter dentro do contexto dos seus objetivos, mantendo a conversa na mesma linha do que você quer que o banco te responda. Finalize com 'quit' assim que obtiver as informações necessárias ou se sentir que não pode progredir."
+    }
+  },
+  "configuracoes": {
+    "cfg::rapida::horario-comercial::wd": {
+      "duracao": "rapida",
+      "periodo": "horario-comercial",
+      "fim_de_semana": false
+    }
+  },
+  "politicas_amostrais": {
+    "pol::personas::derived-freq-v1": {
+      "objetivo": "Política derivada automaticamente do legado personas.json a partir das frequências observadas por configuração.",
+      "n_total": 1,
+      "seed": 1684415356,
+      "distribuicao_alvo": {
+        "fonte": "frequencias_observadas::personas.json::6466237c056c",
+        "configuracoes": {
+          "cfg::rapida::horario-comercial::wd": 1.0
+        }
+      },
+      "restricoes": {
+        "min_por_persona": 0,
+        "min_por_configuracao": 0,
+        "max_proporcao_por_combinacao": 1.0,
+        "combos_proibidos": [],
+        "combos_raros_controlados": []
+      },
+      "amostragem": {
+        "tipo": "mistura_ponderada_estratificada",
+        "componentes": [
+          {
+            "nome": "naturalistica",
+            "proporcao": 1.0,
+            "base": "distribuicao_alvo"
+          }
+        ]
+      },
+      "auditoria": {
+        "desvio_maximo_aceitavel": 0.02,
+        "repetir_sorteio_se_violado": true
+      }
+    }
+  },
+  "simulacoes": [
+    {
+      "id": "201",
+      "politica_id": "pol::personas::derived-freq-v1",
+      "persona_id": "per::personas::5a89f1a350e135e1",
+      "config_id": "cfg::rapida::horario-comercial::wd",
+      "prob_alvo": 1.0,
+      "prob_amostragem": 1.0,
+      "peso_analitico": 1.0
+    }
+  ]
+}

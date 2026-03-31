@@ -58,6 +58,8 @@ class PersonaChatFunction(ChatFunction):
         if isinstance(state, dict):
             if 'timing_metadata' in state:
                 metadata_to_preserve['timing_metadata'] = state['timing_metadata'].copy()
+            if 'simulation_metadata' in state:
+                metadata_to_preserve['simulation_metadata'] = state['simulation_metadata'].copy()
             if 'persona_id' in state:
                 metadata_to_preserve['persona_id'] = state['persona_id']
             # Extrai typing_speed_wpm se existir
@@ -65,6 +67,8 @@ class PersonaChatFunction(ChatFunction):
         else:
             if hasattr(state, 'timing_metadata') and state.timing_metadata:
                 metadata_to_preserve['timing_metadata'] = state.timing_metadata.copy()
+            if hasattr(state, 'simulation_metadata') and state.simulation_metadata:
+                metadata_to_preserve['simulation_metadata'] = state.simulation_metadata.copy()
             # Extrai persona_id se existir
             if hasattr(state, 'persona_id') and state.persona_id:
                 metadata_to_preserve['persona_id'] = state.persona_id

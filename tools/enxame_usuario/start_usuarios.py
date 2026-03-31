@@ -8,6 +8,8 @@ import requests
 import json
 import random
 from datetime import datetime, timedelta
+
+from source.simulations import ResolvedSimulation, load_simulations
 from source.tests.chatbot_test.usuario import UsuarioBot
 
 """
@@ -414,10 +416,25 @@ def parse_persona_config(persona_data, default_args):
     return "", default_args.typing_speed, (default_args.thinking_min, default_args.thinking_max), timedelta(0)
 
 
+def build_simulation_execution_config(simulation: ResolvedSimulation) -> tuple[str, float, tuple[float, float], timedelta]:
+    """
+    ConstrÃ³i os parÃ¢metros de execuÃ§Ã£o a partir de uma simulaÃ§Ã£o resolvida do schema 3.0.
+    """
+    duration_params = get_duration_parameters(simulation.duracao)
+    temporal_offset = calculate_temporal_offset(simulation.periodo, weekend=simulation.fim_de_semana)
+    return (
+        simulation.prompt,
+        duration_params["typing_speed"],
+        (duration_params["thinking_min"], duration_params["thinking_max"]),
+        temporal_offset,
+    )
+
+
 def iniciar_usuario(persona_id: str,
                     think_exp: bool,
                     prompt_personalizado: str | None = None,
                     *,
+                    simulation_metadata: dict | None = None,
                     api_url: str,
                     typing_speed_wpm: float,
                     thinking_time_range: tuple[float, float],
@@ -433,8 +450,9 @@ def iniciar_usuario(persona_id: str,
 
     usuario_bot = UsuarioBot(
         think_exp=think_exp,
-        persona_id=f"persona_{persona_id}",
+        persona_id=persona_id,
         system_message=prompt_personalizado,
+        simulation_metadata=simulation_metadata,
         api_url=api_url,
         typing_speed_wpm=typing_speed_wpm,
         thinking_time_range=thinking_time_range,
@@ -477,7 +495,7 @@ if __name__ == "__main__":
 
     # Execução geral
     parser.add_argument("--prompts-file", required=True, type=str,
-                        help="Arquivo JSON com os prompts das personas")
+                        help="Arquivo JSON no schema 3.0 com as simulacoes a executar")
     parser.add_argument("--api-url", type=str, default="http://localhost:8080",
                         help="URL base da API do BancoBot")
     parser.add_argument("--sequencial", action="store_true",
@@ -531,15 +549,34 @@ if __name__ == "__main__":
 
     print(f"[INFO] {len(prompts)} personas carregadas de {args.prompts_file}.")
 
+    try:
+        simulations = load_simulations(args.prompts_file)
+    except Exception as exc:
+        print(f"ERRO: nÃ£o foi possÃ­vel validar {args.prompts_file} como schema 3.0: {exc}")
+        exit(1)
+
+    if not simulations:
+        print("ERRO: arquivo 3.0 sem simulacoes executÃ¡veis.")
+        exit(1)
+
     # ---------------------------------------------------------------------
     # Construção da fila de execução com parsing das configurações
     # ---------------------------------------------------------------------
     parsed_personas = []
-    for persona_id, persona_data in prompts.items():
-        prompt, typing_speed, thinking_range, temporal_offset = parse_persona_config(
-            persona_data, args
+    for simulation in simulations:
+        prompt, typing_speed, thinking_range, temporal_offset = build_simulation_execution_config(
+            simulation
         )
-        parsed_personas.append((persona_id, prompt, typing_speed, thinking_range, temporal_offset))
+        parsed_personas.append(
+            (
+                simulation.persona_id,
+                prompt,
+                typing_speed,
+                thinking_range,
+                temporal_offset,
+                simulation.simulation_metadata,
+            )
+        )
 
     # Repetir conforme número de passes
     run_queue = parsed_personas * args.passes
@@ -556,11 +593,12 @@ if __name__ == "__main__":
     # ---------------------------------------------------------------------
     if args.sequencial:
         print("[INFO] Modo sequencial ativado…")
-        for persona_id, persona_prompt, typing_speed, thinking_range, temporal_offset in run_queue:
+        for persona_id, persona_prompt, typing_speed, thinking_range, temporal_offset, simulation_metadata in run_queue:
             iniciar_usuario(
                 persona_id,
                 use_thinking,
                 persona_prompt,
+                simulation_metadata=simulation_metadata,
                 api_url=args.api_url,
                 typing_speed_wpm=typing_speed,
                 thinking_time_range=thinking_range,
@@ -578,6 +616,7 @@ if __name__ == "__main__":
                     persona_id,
                     use_thinking,
                     persona_prompt,
+                    simulation_metadata=simulation_metadata,
                     api_url=args.api_url,
                     typing_speed_wpm=typing_speed,
                     thinking_time_range=thinking_range,
@@ -586,7 +625,7 @@ if __name__ == "__main__":
                     simulate_delays=not args.no_simulate_delays,
                     temporal_offset=temporal_offset,
                 )
-                for persona_id, persona_prompt, typing_speed, thinking_range, temporal_offset in run_queue
+                for persona_id, persona_prompt, typing_speed, thinking_range, temporal_offset, simulation_metadata in run_queue
             ]
 
             # Feedback de progresso opcional

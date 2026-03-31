@@ -1,0 +1,29 @@
+{
+  "source_file": "personas_carlos.json",
+  "source_slug": "personas_carlos",
+  "source_sha256": "2315a8919c30937410cd4fc726230b2d73a88052c7f3d77f678ec19046935a1a",
+  "migration_mode": "prompt_catalog_partial",
+  "summary": {
+    "legacy_entries": 1,
+    "personas_unique": 1,
+    "configuracoes_unique": 0,
+    "politicas_unique": 0,
+    "simulacoes_unique": 0
+  },
+  "defaults_applied": [
+    "versao_schema=3.0",
+    "configuracoes={} porque o legado não fornece duração/período/fim de semana",
+    "politicas_amostrais={} porque o legado não fornece desenho amostral",
+    "simulacoes=[] porque o legado não descreve instâncias executáveis completas"
+  ],
+  "human_review_required": [
+    "Decidir se este catálogo deve ser enriquecido manualmente para se tornar uma fonte executável de simulações."
+  ],
+  "anomalies": [
+    {
+      "type": "partial_migration",
+      "severity": "warning",
+      "message": "Arquivo legado contém apenas catálogo de prompts; configuracoes, politicas_amostrais e simulacoes foram deixadas vazias por não serem inferíveis automaticamente."
+    }
+  ]
+}

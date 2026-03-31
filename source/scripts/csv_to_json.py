@@ -48,9 +48,18 @@ class CSVtoJSONConverter:
         """
         try:
             with open(self.csv_file_path, 'r', newline='', encoding='utf-8') as csvfile:
-                reader = csv.DictReader(csvfile, delimiter=';')
+                sample = csvfile.read(4096)
+                csvfile.seek(0)
+                try:
+                    dialect = csv.Sniffer().sniff(sample, delimiters=';,')
+                except csv.Error:
+                    dialect = csv.excel
+                    dialect.delimiter = ',' if sample.count(',') > sample.count(';') else ';'
+                reader = csv.DictReader(csvfile, dialect=dialect)
                 headers = reader.fieldnames
                 records = []
+                if not headers:
+                    raise ValueError("Arquivo CSV sem cabeçalho detectado.")
                 for row in reader:
                     if None in row.values():
                         raise ValueError("Linha com campos faltantes detectada.")

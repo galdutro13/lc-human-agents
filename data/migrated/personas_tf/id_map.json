@@ -1,0 +1,1504 @@
+{
+  "simulacoes": {
+    "1": {
+      "sim_id": "1",
+      "persona_id": "per::personas_tf::86f4335985734e60",
+      "config_id": "cfg::media::horario-comercial::wd"
+    },
+    "2": {
+      "sim_id": "2",
+      "persona_id": "per::personas_tf::86f4335985734e60",
+      "config_id": "cfg::media::noite::we"
+    },
+    "3": {
+      "sim_id": "3",
+      "persona_id": "per::personas_tf::86f4335985734e60",
+      "config_id": "cfg::rapida::horario-comercial::wd"
+    },
+    "4": {
+      "sim_id": "4",
+      "persona_id": "per::personas_tf::86f4335985734e60",
+      "config_id": "cfg::lenta::horario-comercial::wd"
+    },
+    "5": {
+      "sim_id": "5",
+      "persona_id": "per::personas_tf::9858fc3627c882c0",
+      "config_id": "cfg::rapida::horario-comercial::wd"
+    },
+    "6": {
+      "sim_id": "6",
+      "persona_id": "per::personas_tf::9858fc3627c882c0",
+      "config_id": "cfg::media::noite::we"
+    },
+    "7": {
+      "sim_id": "7",
+      "persona_id": "per::personas_tf::9858fc3627c882c0",
+      "config_id": "cfg::lenta::horario-comercial::wd"
+    },
+    "8": {
+      "sim_id": "8",
+      "persona_id": "per::personas_tf::9858fc3627c882c0",
+      "config_id": "cfg::rapida::horario-comercial::wd"
+    },
+    "9": {
+      "sim_id": "9",
+      "persona_id": "per::personas_tf::5a89f1a350e135e1",
+      "config_id": "cfg::rapida::horario-comercial::wd"
+    },
+    "10": {
+      "sim_id": "10",
+      "persona_id": "per::personas_tf::5a89f1a350e135e1",
+      "config_id": "cfg::rapida::noite::wd"
+    },
+    "11": {
+      "sim_id": "11",
+      "persona_id": "per::personas_tf::5a89f1a350e135e1",
+      "config_id": "cfg::media::horario-comercial::wd"
+    },
+    "12": {
+      "sim_id": "12",
+      "persona_id": "per::personas_tf::5a89f1a350e135e1",
+      "config_id": "cfg::lenta::horario-comercial::wd"
+    },
+    "13": {
+      "sim_id": "13",
+      "persona_id": "per::personas_tf::753ea92e57b12aa1",
+      "config_id": "cfg::lenta::horario-comercial::wd"
+    },
+    "14": {
+      "sim_id": "14",
+      "persona_id": "per::personas_tf::753ea92e57b12aa1",
+      "config_id": "cfg::lenta::noite::wd"
+    },
+    "15": {
+      "sim_id": "15",
+      "persona_id": "per::personas_tf::753ea92e57b12aa1",
+      "config_id": "cfg::media::horario-comercial::wd"
+    },
+    "16": {
+      "sim_id": "16",
+      "persona_id": "per::personas_tf::753ea92e57b12aa1",
+      "config_id": "cfg::lenta::horario-comercial::wd"
+    },
+    "17": {
+      "sim_id": "17",
+      "persona_id": "per::personas_tf::7555d7e4f1459640",
+      "config_id": "cfg::lenta::noite::we"
+    },
+    "18": {
+      "sim_id": "18",
+      "persona_id": "per::personas_tf::7555d7e4f1459640",
+      "config_id": "cfg::media::noite::wd"
+    },
+    "19": {
+      "sim_id": "19",
+      "persona_id": "per::personas_tf::7555d7e4f1459640",
+      "config_id": "cfg::lenta::horario-comercial::wd"
+    },
+    "20": {
+      "sim_id": "20",
+      "persona_id": "per::personas_tf::7555d7e4f1459640",
+      "config_id": "cfg::media::horario-comercial::wd"
+    },
+    "21": {
+      "sim_id": "21",
+      "persona_id": "per::personas_tf::ff3857f5b8baec3a",
+      "config_id": "cfg::rapida::horario-comercial::wd"
+    },
+    "22": {
+      "sim_id": "22",
+      "persona_id": "per::personas_tf::ff3857f5b8baec3a",
+      "config_id": "cfg::media::horario-comercial::wd"
+    },
+    "23": {
+      "sim_id": "23",
+      "persona_id": "per::personas_tf::ff3857f5b8baec3a",
+      "config_id": "cfg::rapida::noite::wd"
+    },
+    "24": {
+      "sim_id": "24",
+      "persona_id": "per::personas_tf::ff3857f5b8baec3a",
+      "config_id": "cfg::lenta::horario-comercial::wd"
+    },
+    "25": {
+      "sim_id": "25",
+      "persona_id": "per::personas_tf::a0505b7e58290aad",
+      "config_id": "cfg::lenta::horario-comercial::wd"
+    },
+    "26": {
+      "sim_id": "26",
+      "persona_id": "per::personas_tf::a0505b7e58290aad",
+      "config_id": "cfg::lenta::horario-comercial::wd"
+    },
+    "27": {
+      "sim_id": "27",
+      "persona_id": "per::personas_tf::a0505b7e58290aad",
+      "config_id": "cfg::media::horario-comercial::wd"
+    },
+    "28": {
+      "sim_id": "28",
+      "persona_id": "per::personas_tf::a0505b7e58290aad",
+      "config_id": "cfg::lenta::noite::wd"
+    },
+    "29": {
+      "sim_id": "29",
+      "persona_id": "per::personas_tf::11c9d396b02fa3c6",
+      "config_id": "cfg::media::horario-comercial::wd"
+    },
+    "30": {
+      "sim_id": "30",
+      "persona_id": "per::personas_tf::11c9d396b02fa3c6",
+      "config_id": "cfg::rapida::horario-comercial::wd"
+    },
+    "31": {
+      "sim_id": "31",
+      "persona_id": "per::personas_tf::11c9d396b02fa3c6",
+      "config_id": "cfg::media::noite::wd"
+    },
+    "32": {
+      "sim_id": "32",
+      "persona_id": "per::personas_tf::11c9d396b02fa3c6",
+      "config_id": "cfg::rapida::horario-comercial::wd"
+    },
+    "33": {
+      "sim_id": "33",
+      "persona_id": "per::personas_tf::4a8fafacfbbefa1a",
+      "config_id": "cfg::rapida::horario-comercial::wd"
+    },
+    "34": {
+      "sim_id": "34",
+      "persona_id": "per::personas_tf::4a8fafacfbbefa1a",
+      "config_id": "cfg::media::horario-comercial::wd"
+    },
+    "35": {
+      "sim_id": "35",
+      "persona_id": "per::personas_tf::4a8fafacfbbefa1a",
+      "config_id": "cfg::rapida::noite::we"
+    },
+    "36": {
+      "sim_id": "36",
+      "persona_id": "per::personas_tf::4a8fafacfbbefa1a",
+      "config_id": "cfg::lenta::horario-comercial::wd"
+    },
+    "37": {
+      "sim_id": "37",
+      "persona_id": "per::personas_tf::8da9caecd1f38d05",
+      "config_id": "cfg::lenta::noite::we"
+    },
+    "38": {
+      "sim_id": "38",
+      "persona_id": "per::personas_tf::8da9caecd1f38d05",
+      "config_id": "cfg::media::noite::wd"
+    },
+    "39": {
+      "sim_id": "39",
+      "persona_id": "per::personas_tf::8da9caecd1f38d05",
+      "config_id": "cfg::lenta::horario-comercial::wd"
+    },
+    "40": {
+      "sim_id": "40",
+      "persona_id": "per::personas_tf::8da9caecd1f38d05",
+      "config_id": "cfg::media::horario-comercial::wd"
+    },
+    "41": {
+      "sim_id": "41",
+      "persona_id": "per::personas_tf::983958b0eff66ac0",
+      "config_id": "cfg::rapida::horario-comercial::wd"
+    },
+    "42": {
+      "sim_id": "42",
+      "persona_id": "per::personas_tf::983958b0eff66ac0",
+      "config_id": "cfg::media::horario-comercial::wd"
+    },
+    "43": {
+      "sim_id": "43",
+      "persona_id": "per::personas_tf::983958b0eff66ac0",
+      "config_id": "cfg::lenta::noite::wd"
+    },
+    "44": {
+      "sim_id": "44",
+      "persona_id": "per::personas_tf::983958b0eff66ac0",
+      "config_id": "cfg::rapida::horario-comercial::wd"
+    },
+    "45": {
+      "sim_id": "45",
+      "persona_id": "per::personas_tf::655359b017e5ee52",
+      "config_id": "cfg::media::horario-comercial::wd"
+    },
+    "46": {
+      "sim_id": "46",
+      "persona_id": "per::personas_tf::655359b017e5ee52",
+      "config_id": "cfg::rapida::horario-comercial::wd"
+    },
+    "47": {
+      "sim_id": "47",
+      "persona_id": "per::personas_tf::655359b017e5ee52",
+      "config_id": "cfg::media::noite::wd"
+    },
+    "48": {
+      "sim_id": "48",
+      "persona_id": "per::personas_tf::655359b017e5ee52",
+      "config_id": "cfg::lenta::horario-comercial::wd"
+    },
+    "49": {
+      "sim_id": "49",
+      "persona_id": "per::personas_tf::97dbc32705f07e38",
+      "config_id": "cfg::rapida::horario-comercial::wd"
+    },
+    "50": {
+      "sim_id": "50",
+      "persona_id": "per::personas_tf::97dbc32705f07e38",
+      "config_id": "cfg::media::noite::we"
+    },
+    "51": {
+      "sim_id": "51",
+      "persona_id": "per::personas_tf::97dbc32705f07e38",
+      "config_id": "cfg::rapida::horario-comercial::wd"
+    },
+    "52": {
+      "sim_id": "52",
+      "persona_id": "per::personas_tf::97dbc32705f07e38",
+      "config_id": "cfg::media::horario-comercial::wd"
+    },
+    "53": {
+      "sim_id": "53",
+      "persona_id": "per::personas_tf::3001057707d8f684",
+      "config_id": "cfg::media::noite::we"
+    },
+    "54": {
+      "sim_id": "54",
+      "persona_id": "per::personas_tf::3001057707d8f684",
+      "config_id": "cfg::rapida::noite::wd"
+    },
+    "55": {
+      "sim_id": "55",
+      "persona_id": "per::personas_tf::3001057707d8f684",
+      "config_id": "cfg::lenta::horario-comercial::wd"
+    },
+    "56": {
+      "sim_id": "56",
+      "persona_id": "per::personas_tf::3001057707d8f684",
+      "config_id": "cfg::media::horario-comercial::wd"
+    },
+    "57": {
+      "sim_id": "57",
+      "persona_id": "per::personas_tf::007805ccabf989b8",
+      "config_id": "cfg::rapida::noite::we"
+    },
+    "58": {
+      "sim_id": "58",
+      "persona_id": "per::personas_tf::007805ccabf989b8",
+      "config_id": "cfg::media::noite::wd"
+    },
+    "59": {
+      "sim_id": "59",
+      "persona_id": "per::personas_tf::007805ccabf989b8",
+      "config_id": "cfg::rapida::horario-comercial::wd"
+    },
+    "60": {
+      "sim_id": "60",
+      "persona_id": "per::personas_tf::007805ccabf989b8",
+      "config_id": "cfg::lenta::noite::we"
+    },
+    "61": {
+      "sim_id": "61",
+      "persona_id": "per::personas_tf::4a5c5cbc6bcf58a9",
+      "config_id": "cfg::media::horario-comercial::wd"
+    },
+    "62": {
+      "sim_id": "62",
+      "persona_id": "per::personas_tf::4a5c5cbc6bcf58a9",
+      "config_id": "cfg::lenta::horario-comercial::wd"
+    },
+    "63": {
+      "sim_id": "63",
+      "persona_id": "per::personas_tf::4a5c5cbc6bcf58a9",
+      "config_id": "cfg::media::noite::wd"
+    },
+    "64": {
+      "sim_id": "64",
+      "persona_id": "per::personas_tf::4a5c5cbc6bcf58a9",
+      "config_id": "cfg::rapida::horario-comercial::wd"
+    },
+    "65": {
+      "sim_id": "65",
+      "persona_id": "per::personas_tf::6ce51288a975061f",
+      "config_id": "cfg::lenta::horario-comercial::wd"
+    },
+    "66": {
+      "sim_id": "66",
+      "persona_id": "per::personas_tf::6ce51288a975061f",
+      "config_id": "cfg::lenta::horario-comercial::wd"
+    },
+    "67": {
+      "sim_id": "67",
+      "persona_id": "per::personas_tf::6ce51288a975061f",
+      "config_id": "cfg::media::horario-comercial::wd"
+    },
+    "68": {
+      "sim_id": "68",
+      "persona_id": "per::personas_tf::6ce51288a975061f",
+      "config_id": "cfg::media::noite::wd"
+    },
+    "69": {
+      "sim_id": "69",
+      "persona_id": "per::personas_tf::6b25f08513980177",
+      "config_id": "cfg::media::horario-comercial::wd"
+    },
+    "70": {
+      "sim_id": "70",
+      "persona_id": "per::personas_tf::6b25f08513980177",
+      "config_id": "cfg::lenta::horario-comercial::wd"
+    },
+    "71": {
+      "sim_id": "71",
+      "persona_id": "per::personas_tf::6b25f08513980177",
+      "config_id": "cfg::media::noite::wd"
+    },
+    "72": {
+      "sim_id": "72",
+      "persona_id": "per::personas_tf::6b25f08513980177",
+      "config_id": "cfg::rapida::horario-comercial::wd"
+    },
+    "73": {
+      "sim_id": "73",
+      "persona_id": "per::personas_tf::99194728d365b4fb",
+      "config_id": "cfg::rapida::noite::we"
+    },
+    "74": {
+      "sim_id": "74",
+      "persona_id": "per::personas_tf::99194728d365b4fb",
+      "config_id": "cfg::rapida::horario-comercial::wd"
+    },
+    "75": {
+      "sim_id": "75",
+      "persona_id": "per::personas_tf::99194728d365b4fb",
+      "config_id": "cfg::media::noite::wd"
+    },
+    "76": {
+      "sim_id": "76",
+      "persona_id": "per::personas_tf::99194728d365b4fb",
+      "config_id": "cfg::media::horario-comercial::wd"
+    },
+    "77": {
+      "sim_id": "77",
+      "persona_id": "per::personas_tf::b581a42e45bd4b51",
+      "config_id": "cfg::lenta::horario-comercial::wd"
+    },
+    "78": {
+      "sim_id": "78",
+      "persona_id": "per::personas_tf::b581a42e45bd4b51",
+      "config_id": "cfg::lenta::horario-comercial::wd"
+    },
+    "79": {
+      "sim_id": "79",
+      "persona_id": "per::personas_tf::b581a42e45bd4b51",
+      "config_id": "cfg::media::horario-comercial::wd"
+    },
+    "80": {
+      "sim_id": "80",
+      "persona_id": "per::personas_tf::b581a42e45bd4b51",
+      "config_id": "cfg::media::noite::wd"
+    },
+    "81": {
+      "sim_id": "81",
+      "persona_id": "per::personas_tf::9de956c75cacf65e",
+      "config_id": "cfg::lenta::noite::we"
+    },
+    "82": {
+      "sim_id": "82",
+      "persona_id": "per::personas_tf::9de956c75cacf65e",
+      "config_id": "cfg::media::noite::wd"
+    },
+    "83": {
+      "sim_id": "83",
+      "persona_id": "per::personas_tf::9de956c75cacf65e",
+      "config_id": "cfg::lenta::horario-comercial::wd"
+    },
+    "84": {
+      "sim_id": "84",
+      "persona_id": "per::personas_tf::9de956c75cacf65e",
+      "config_id": "cfg::media::horario-comercial::wd"
+    },
+    "85": {
+      "sim_id": "85",
+      "persona_id": "per::personas_tf::a0505b7e58290aad",
+      "config_id": "cfg::lenta::horario-comercial::wd"
+    },
+    "86": {
+      "sim_id": "86",
+      "persona_id": "per::personas_tf::a0505b7e58290aad",
+      "config_id": "cfg::lenta::horario-comercial::wd"
+    },
+    "87": {
+      "sim_id": "87",
+      "persona_id": "per::personas_tf::a0505b7e58290aad",
+      "config_id": "cfg::media::horario-comercial::wd"
+    },
+    "88": {
+      "sim_id": "88",
+      "persona_id": "per::personas_tf::a0505b7e58290aad",
+      "config_id": "cfg::lenta::noite::wd"
+    },
+    "89": {
+      "sim_id": "89",
+      "persona_id": "per::personas_tf::4a8fafacfbbefa1a",
+      "config_id": "cfg::rapida::horario-comercial::wd"
+    },
+    "90": {
+      "sim_id": "90",
+      "persona_id": "per::personas_tf::4a8fafacfbbefa1a",
+      "config_id": "cfg::media::horario-comercial::wd"
+    },
+    "91": {
+      "sim_id": "91",
+      "persona_id": "per::personas_tf::4a8fafacfbbefa1a",
+      "config_id": "cfg::rapida::noite::wd"
+    },
+    "92": {
+      "sim_id": "92",
+      "persona_id": "per::personas_tf::4a8fafacfbbefa1a",
+      "config_id": "cfg::media::horario-comercial::wd"
+    },
+    "93": {
+      "sim_id": "93",
+      "persona_id": "per::personas_tf::8da9caecd1f38d05",
+      "config_id": "cfg::lenta::noite::we"
+    },
+    "94": {
+      "sim_id": "94",
+      "persona_id": "per::personas_tf::8da9caecd1f38d05",
+      "config_id": "cfg::media::noite::wd"
+    },
+    "95": {
+      "sim_id": "95",
+      "persona_id": "per::personas_tf::8da9caecd1f38d05",
+      "config_id": "cfg::lenta::horario-comercial::wd"
+    },
+    "96": {
+      "sim_id": "96",
+      "persona_id": "per::personas_tf::8da9caecd1f38d05",
+      "config_id": "cfg::media::horario-comercial::wd"
+    },
+    "97": {
+      "sim_id": "97",
+      "persona_id": "per::personas_tf::983958b0eff66ac0",
+      "config_id": "cfg::rapida::horario-comercial::wd"
+    },
+    "98": {
+      "sim_id": "98",
+      "persona_id": "per::personas_tf::983958b0eff66ac0",
+      "config_id": "cfg::media::noite::wd"
+    },
+    "99": {
+      "sim_id": "99",
+      "persona_id": "per::personas_tf::983958b0eff66ac0",
+      "config_id": "cfg::lenta::horario-comercial::wd"
+    },
+    "100": {
+      "sim_id": "100",
+      "persona_id": "per::personas_tf::983958b0eff66ac0",
+      "config_id": "cfg::media::horario-comercial::wd"
+    },
+    "101": {
+      "sim_id": "101",
+      "persona_id": "per::personas_tf::86f4335985734e60",
+      "config_id": "cfg::media::horario-comercial::wd"
+    },
+    "102": {
+      "sim_id": "102",
+      "persona_id": "per::personas_tf::86f4335985734e60",
+      "config_id": "cfg::rapida::horario-comercial::wd"
+    },
+    "103": {
+      "sim_id": "103",
+      "persona_id": "per::personas_tf::86f4335985734e60",
+      "config_id": "cfg::media::noite::we"
+    },
+    "104": {
+      "sim_id": "104",
+      "persona_id": "per::personas_tf::86f4335985734e60",
+      "config_id": "cfg::lenta::noite::wd"
+    },
+    "105": {
+      "sim_id": "105",
+      "persona_id": "per::personas_tf::9858fc3627c882c0",
+      "config_id": "cfg::rapida::horario-comercial::wd"
+    },
+    "106": {
+      "sim_id": "106",
+      "persona_id": "per::personas_tf::9858fc3627c882c0",
+      "config_id": "cfg::media::horario-comercial::wd"
+    },
+    "107": {
+      "sim_id": "107",
+      "persona_id": "per::personas_tf::9858fc3627c882c0",
+      "config_id": "cfg::rapida::noite::wd"
+    },
+    "108": {
+      "sim_id": "108",
+      "persona_id": "per::personas_tf::9858fc3627c882c0",
+      "config_id": "cfg::lenta::horario-comercial::wd"
+    },
+    "109": {
+      "sim_id": "109",
+      "persona_id": "per::personas_tf::5a89f1a350e135e1",
+      "config_id": "cfg::rapida::horario-comercial::wd"
+    },
+    "110": {
+      "sim_id": "110",
+      "persona_id": "per::personas_tf::5a89f1a350e135e1",
+      "config_id": "cfg::media::horario-comercial::wd"
+    },
+    "111": {
+      "sim_id": "111",
+      "persona_id": "per::personas_tf::5a89f1a350e135e1",
+      "config_id": "cfg::rapida::noite::wd"
+    },
+    "112": {
+      "sim_id": "112",
+      "persona_id": "per::personas_tf::5a89f1a350e135e1",
+      "config_id": "cfg::lenta::noite::wd"
+    },
+    "113": {
+      "sim_id": "113",
+      "persona_id": "per::personas_tf::753ea92e57b12aa1",
+      "config_id": "cfg::lenta::horario-comercial::wd"
+    },
+    "114": {
+      "sim_id": "114",
+      "persona_id": "per::personas_tf::753ea92e57b12aa1",
+      "config_id": "cfg::media::horario-comercial::wd"
+    },
+    "115": {
+      "sim_id": "115",
+      "persona_id": "per::personas_tf::753ea92e57b12aa1",
+      "config_id": "cfg::lenta::noite::wd"
+    },
+    "116": {
+      "sim_id": "116",
+      "persona_id": "per::personas_tf::753ea92e57b12aa1",
+      "config_id": "cfg::media::noite::wd"
+    },
+    "117": {
+      "sim_id": "117",
+      "persona_id": "per::personas_tf::7555d7e4f1459640",
+      "config_id": "cfg::lenta::noite::we"
+    },
+    "118": {
+      "sim_id": "118",
+      "persona_id": "per::personas_tf::7555d7e4f1459640",
+      "config_id": "cfg::lenta::horario-comercial::wd"
+    },
+    "119": {
+      "sim_id": "119",
+      "persona_id": "per::personas_tf::7555d7e4f1459640",
+      "config_id": "cfg::media::noite::wd"
+    },
+    "120": {
+      "sim_id": "120",
+      "persona_id": "per::personas_tf::7555d7e4f1459640",
+      "config_id": "cfg::media::horario-comercial::wd"
+    },
+    "121": {
+      "sim_id": "121",
+      "persona_id": "per::personas_tf::ff3857f5b8baec3a",
+      "config_id": "cfg::rapida::horario-comercial::wd"
+    },
+    "122": {
+      "sim_id": "122",
+      "persona_id": "per::personas_tf::ff3857f5b8baec3a",
+      "config_id": "cfg::media::horario-comercial::wd"
+    },
+    "123": {
+      "sim_id": "123",
+      "persona_id": "per::personas_tf::ff3857f5b8baec3a",
+      "config_id": "cfg::rapida::noite::wd"
+    },
+    "124": {
+      "sim_id": "124",
+      "persona_id": "per::personas_tf::ff3857f5b8baec3a",
+      "config_id": "cfg::lenta::horario-comercial::wd"
+    },
+    "125": {
+      "sim_id": "125",
+      "persona_id": "per::personas_tf::a0505b7e58290aad",
+      "config_id": "cfg::lenta::horario-comercial::wd"
+    },
+    "126": {
+      "sim_id": "126",
+      "persona_id": "per::personas_tf::a0505b7e58290aad",
+      "config_id": "cfg::lenta::noite::we"
+    },
+    "127": {
+      "sim_id": "127",
+      "persona_id": "per::personas_tf::a0505b7e58290aad",
+      "config_id": "cfg::media::horario-comercial::wd"
+    },
+    "128": {
+      "sim_id": "128",
+      "persona_id": "per::personas_tf::a0505b7e58290aad",
+      "config_id": "cfg::media::noite::wd"
+    },
+    "129": {
+      "sim_id": "129",
+      "persona_id": "per::personas_tf::11c9d396b02fa3c6",
+      "config_id": "cfg::rapida::horario-comercial::wd"
+    },
+    "130": {
+      "sim_id": "130",
+      "persona_id": "per::personas_tf::11c9d396b02fa3c6",
+      "config_id": "cfg::media::horario-comercial::wd"
+    },
+    "131": {
+      "sim_id": "131",
+      "persona_id": "per::personas_tf::11c9d396b02fa3c6",
+      "config_id": "cfg::rapida::noite::we"
+    },
+    "132": {
+      "sim_id": "132",
+      "persona_id": "per::personas_tf::11c9d396b02fa3c6",
+      "config_id": "cfg::media::noite::wd"
+    },
+    "133": {
+      "sim_id": "133",
+      "persona_id": "per::personas_tf::4a8fafacfbbefa1a",
+      "config_id": "cfg::rapida::horario-comercial::wd"
+    },
+    "134": {
+      "sim_id": "134",
+      "persona_id": "per::personas_tf::4a8fafacfbbefa1a",
+      "config_id": "cfg::media::horario-comercial::wd"
+    },
+    "135": {
+      "sim_id": "135",
+      "persona_id": "per::personas_tf::4a8fafacfbbefa1a",
+      "config_id": "cfg::rapida::noite::wd"
+    },
+    "136": {
+      "sim_id": "136",
+      "persona_id": "per::personas_tf::4a8fafacfbbefa1a",
+      "config_id": "cfg::lenta::noite::wd"
+    },
+    "137": {
+      "sim_id": "137",
+      "persona_id": "per::personas_tf::8da9caecd1f38d05",
+      "config_id": "cfg::lenta::noite::we"
+    },
+    "138": {
+      "sim_id": "138",
+      "persona_id": "per::personas_tf::8da9caecd1f38d05",
+      "config_id": "cfg::media::noite::wd"
+    },
+    "139": {
+      "sim_id": "139",
+      "persona_id": "per::personas_tf::8da9caecd1f38d05",
+      "config_id": "cfg::lenta::horario-comercial::wd"
+    },
+    "140": {
+      "sim_id": "140",
+      "persona_id": "per::personas_tf::8da9caecd1f38d05",
+      "config_id": "cfg::media::horario-comercial::wd"
+    },
+    "141": {
+      "sim_id": "141",
+      "persona_id": "per::personas_tf::983958b0eff66ac0",
+      "config_id": "cfg::rapida::horario-comercial::wd"
+    },
+    "142": {
+      "sim_id": "142",
+      "persona_id": "per::personas_tf::983958b0eff66ac0",
+      "config_id": "cfg::media::horario-comercial::wd"
+    },
+    "143": {
+      "sim_id": "143",
+      "persona_id": "per::personas_tf::983958b0eff66ac0",
+      "config_id": "cfg::rapida::noite::wd"
+    },
+    "144": {
+      "sim_id": "144",
+      "persona_id": "per::personas_tf::983958b0eff66ac0",
+      "config_id": "cfg::lenta::horario-comercial::wd"
+    },
+    "145": {
+      "sim_id": "145",
+      "persona_id": "per::personas_tf::655359b017e5ee52",
+      "config_id": "cfg::media::horario-comercial::wd"
+    },
+    "146": {
+      "sim_id": "146",
+      "persona_id": "per::personas_tf::655359b017e5ee52",
+      "config_id": "cfg::rapida::horario-comercial::wd"
+    },
+    "147": {
+      "sim_id": "147",
+      "persona_id": "per::personas_tf::655359b017e5ee52",
+      "config_id": "cfg::media::noite::wd"
+    },
+    "148": {
+      "sim_id": "148",
+      "persona_id": "per::personas_tf::655359b017e5ee52",
+      "config_id": "cfg::lenta::noite::wd"
+    },
+    "149": {
+      "sim_id": "149",
+      "persona_id": "per::personas_tf::97dbc32705f07e38",
+      "config_id": "cfg::rapida::horario-comercial::wd"
+    },
+    "150": {
+      "sim_id": "150",
+      "persona_id": "per::personas_tf::97dbc32705f07e38",
+      "config_id": "cfg::media::horario-comercial::wd"
+    },
+    "151": {
+      "sim_id": "151",
+      "persona_id": "per::personas_tf::97dbc32705f07e38",
+      "config_id": "cfg::rapida::noite::we"
+    },
+    "152": {
+      "sim_id": "152",
+      "persona_id": "per::personas_tf::97dbc32705f07e38",
+      "config_id": "cfg::lenta::noite::wd"
+    },
+    "153": {
+      "sim_id": "153",
+      "persona_id": "per::personas_tf::3001057707d8f684",
+      "config_id": "cfg::media::noite::we"
+    },
+    "154": {
+      "sim_id": "154",
+      "persona_id": "per::personas_tf::3001057707d8f684",
+      "config_id": "cfg::rapida::noite::wd"
+    },
+    "155": {
+      "sim_id": "155",
+      "persona_id": "per::personas_tf::3001057707d8f684",
+      "config_id": "cfg::media::horario-comercial::wd"
+    },
+    "156": {
+      "sim_id": "156",
+      "persona_id": "per::personas_tf::3001057707d8f684",
+      "config_id": "cfg::lenta::horario-comercial::wd"
+    },
+    "157": {
+      "sim_id": "157",
+      "persona_id": "per::personas_tf::9de956c75cacf65e",
+      "config_id": "cfg::lenta::noite::wd"
+    },
+    "158": {
+      "sim_id": "158",
+      "persona_id": "per::personas_tf::9de956c75cacf65e",
+      "config_id": "cfg::lenta::horario-comercial::wd"
+    },
+    "159": {
+      "sim_id": "159",
+      "persona_id": "per::personas_tf::9de956c75cacf65e",
+      "config_id": "cfg::media::noite::we"
+    },
+    "160": {
+      "sim_id": "160",
+      "persona_id": "per::personas_tf::9de956c75cacf65e",
+      "config_id": "cfg::media::horario-comercial::wd"
+    },
+    "161": {
+      "sim_id": "161",
+      "persona_id": "per::personas_tf::a0505b7e58290aad",
+      "config_id": "cfg::lenta::horario-comercial::wd"
+    },
+    "162": {
+      "sim_id": "162",
+      "persona_id": "per::personas_tf::a0505b7e58290aad",
+      "config_id": "cfg::lenta::noite::wd"
+    },
+    "163": {
+      "sim_id": "163",
+      "persona_id": "per::personas_tf::a0505b7e58290aad",
+      "config_id": "cfg::media::horario-comercial::wd"
+    },
+    "164": {
+      "sim_id": "164",
+      "persona_id": "per::personas_tf::a0505b7e58290aad",
+      "config_id": "cfg::media::noite::we"
+    },
+    "165": {
+      "sim_id": "165",
+      "persona_id": "per::personas_tf::4a8fafacfbbefa1a",
+      "config_id": "cfg::rapida::horario-comercial::wd"
+    },
+    "166": {
+      "sim_id": "166",
+      "persona_id": "per::personas_tf::4a8fafacfbbefa1a",
+      "config_id": "cfg::media::horario-comercial::wd"
+    },
+    "167": {
+      "sim_id": "167",
+      "persona_id": "per::personas_tf::4a8fafacfbbefa1a",
+      "config_id": "cfg::rapida::noite::wd"
+    },
+    "168": {
+      "sim_id": "168",
+      "persona_id": "per::personas_tf::4a8fafacfbbefa1a",
+      "config_id": "cfg::lenta::horario-comercial::wd"
+    },
+    "169": {
+      "sim_id": "169",
+      "persona_id": "per::personas_tf::8da9caecd1f38d05",
+      "config_id": "cfg::lenta::noite::wd"
+    },
+    "170": {
+      "sim_id": "170",
+      "persona_id": "per::personas_tf::8da9caecd1f38d05",
+      "config_id": "cfg::media::noite::we"
+    },
+    "171": {
+      "sim_id": "171",
+      "persona_id": "per::personas_tf::8da9caecd1f38d05",
+      "config_id": "cfg::lenta::horario-comercial::wd"
+    },
+    "172": {
+      "sim_id": "172",
+      "persona_id": "per::personas_tf::8da9caecd1f38d05",
+      "config_id": "cfg::media::horario-comercial::wd"
+    },
+    "173": {
+      "sim_id": "173",
+      "persona_id": "per::personas_tf::983958b0eff66ac0",
+      "config_id": "cfg::rapida::horario-comercial::wd"
+    },
+    "174": {
+      "sim_id": "174",
+      "persona_id": "per::personas_tf::983958b0eff66ac0",
+      "config_id": "cfg::media::horario-comercial::wd"
+    },
+    "175": {
+      "sim_id": "175",
+      "persona_id": "per::personas_tf::983958b0eff66ac0",
+      "config_id": "cfg::rapida::noite::wd"
+    },
+    "176": {
+      "sim_id": "176",
+      "persona_id": "per::personas_tf::983958b0eff66ac0",
+      "config_id": "cfg::lenta::horario-comercial::wd"
+    },
+    "177": {
+      "sim_id": "177",
+      "persona_id": "per::personas_tf::007805ccabf989b8",
+      "config_id": "cfg::rapida::noite::we"
+    },
+    "178": {
+      "sim_id": "178",
+      "persona_id": "per::personas_tf::007805ccabf989b8",
+      "config_id": "cfg::media::noite::wd"
+    },
+    "179": {
+      "sim_id": "179",
+      "persona_id": "per::personas_tf::007805ccabf989b8",
+      "config_id": "cfg::rapida::horario-comercial::wd"
+    },
+    "180": {
+      "sim_id": "180",
+      "persona_id": "per::personas_tf::007805ccabf989b8",
+      "config_id": "cfg::lenta::noite::wd"
+    },
+    "181": {
+      "sim_id": "181",
+      "persona_id": "per::personas_tf::4a5c5cbc6bcf58a9",
+      "config_id": "cfg::media::horario-comercial::wd"
+    },
+    "182": {
+      "sim_id": "182",
+      "persona_id": "per::personas_tf::4a5c5cbc6bcf58a9",
+      "config_id": "cfg::lenta::horario-comercial::wd"
+    },
+    "183": {
+      "sim_id": "183",
+      "persona_id": "per::personas_tf::4a5c5cbc6bcf58a9",
+      "config_id": "cfg::media::noite::wd"
+    },
+    "184": {
+      "sim_id": "184",
+      "persona_id": "per::personas_tf::4a5c5cbc6bcf58a9",
+      "config_id": "cfg::rapida::noite::wd"
+    },
+    "185": {
+      "sim_id": "185",
+      "persona_id": "per::personas_tf::6ce51288a975061f",
+      "config_id": "cfg::lenta::horario-comercial::wd"
+    },
+    "186": {
+      "sim_id": "186",
+      "persona_id": "per::personas_tf::6ce51288a975061f",
+      "config_id": "cfg::media::horario-comercial::wd"
+    },
+    "187": {
+      "sim_id": "187",
+      "persona_id": "per::personas_tf::6ce51288a975061f",
+      "config_id": "cfg::lenta::noite::wd"
+    },
+    "188": {
+      "sim_id": "188",
+      "persona_id": "per::personas_tf::6ce51288a975061f",
+      "config_id": "cfg::rapida::horario-comercial::wd"
+    },
+    "189": {
+      "sim_id": "189",
+      "persona_id": "per::personas_tf::6b25f08513980177",
+      "config_id": "cfg::media::horario-comercial::wd"
+    },
+    "190": {
+      "sim_id": "190",
+      "persona_id": "per::personas_tf::6b25f08513980177",
+      "config_id": "cfg::lenta::horario-comercial::wd"
+    },
+    "191": {
+      "sim_id": "191",
+      "persona_id": "per::personas_tf::6b25f08513980177",
+      "config_id": "cfg::media::noite::wd"
+    },
+    "192": {
+      "sim_id": "192",
+      "persona_id": "per::personas_tf::6b25f08513980177",
+      "config_id": "cfg::rapida::horario-comercial::wd"
+    },
+    "193": {
+      "sim_id": "193",
+      "persona_id": "per::personas_tf::99194728d365b4fb",
+      "config_id": "cfg::rapida::noite::we"
+    },
+    "194": {
+      "sim_id": "194",
+      "persona_id": "per::personas_tf::99194728d365b4fb",
+      "config_id": "cfg::rapida::horario-comercial::wd"
+    },
+    "195": {
+      "sim_id": "195",
+      "persona_id": "per::personas_tf::99194728d365b4fb",
+      "config_id": "cfg::media::noite::wd"
+    },
+    "196": {
+      "sim_id": "196",
+      "persona_id": "per::personas_tf::99194728d365b4fb",
+      "config_id": "cfg::media::horario-comercial::wd"
+    },
+    "197": {
+      "sim_id": "197",
+      "persona_id": "per::personas_tf::b581a42e45bd4b51",
+      "config_id": "cfg::lenta::horario-comercial::wd"
+    },
+    "198": {
+      "sim_id": "198",
+      "persona_id": "per::personas_tf::b581a42e45bd4b51",
+      "config_id": "cfg::media::horario-comercial::wd"
+    },
+    "199": {
+      "sim_id": "199",
+      "persona_id": "per::personas_tf::b581a42e45bd4b51",
+      "config_id": "cfg::lenta::noite::we"
+    },
+    "200": {
+      "sim_id": "200",
+      "persona_id": "per::personas_tf::b581a42e45bd4b51",
+      "config_id": "cfg::media::noite::wd"
+    },
+    "201": {
+      "sim_id": "201",
+      "persona_id": "per::personas_tf::86f4335985734e60",
+      "config_id": "cfg::media::horario-comercial::wd"
+    },
+    "202": {
+      "sim_id": "202",
+      "persona_id": "per::personas_tf::86f4335985734e60",
+      "config_id": "cfg::rapida::horario-comercial::wd"
+    },
+    "203": {
+      "sim_id": "203",
+      "persona_id": "per::personas_tf::86f4335985734e60",
+      "config_id": "cfg::lenta::noite::we"
+    },
+    "204": {
+      "sim_id": "204",
+      "persona_id": "per::personas_tf::86f4335985734e60",
+      "config_id": "cfg::media::noite::wd"
+    },
+    "205": {
+      "sim_id": "205",
+      "persona_id": "per::personas_tf::9858fc3627c882c0",
+      "config_id": "cfg::rapida::horario-comercial::wd"
+    },
+    "206": {
+      "sim_id": "206",
+      "persona_id": "per::personas_tf::9858fc3627c882c0",
+      "config_id": "cfg::media::horario-comercial::wd"
+    },
+    "207": {
+      "sim_id": "207",
+      "persona_id": "per::personas_tf::9858fc3627c882c0",
+      "config_id": "cfg::rapida::noite::wd"
+    },
+    "208": {
+      "sim_id": "208",
+      "persona_id": "per::personas_tf::9858fc3627c882c0",
+      "config_id": "cfg::lenta::noite::wd"
+    },
+    "209": {
+      "sim_id": "209",
+      "persona_id": "per::personas_tf::5a89f1a350e135e1",
+      "config_id": "cfg::rapida::horario-comercial::wd"
+    },
+    "210": {
+      "sim_id": "210",
+      "persona_id": "per::personas_tf::5a89f1a350e135e1",
+      "config_id": "cfg::media::horario-comercial::wd"
+    },
+    "211": {
+      "sim_id": "211",
+      "persona_id": "per::personas_tf::5a89f1a350e135e1",
+      "config_id": "cfg::rapida::noite::wd"
+    },
+    "212": {
+      "sim_id": "212",
+      "persona_id": "per::personas_tf::5a89f1a350e135e1",
+      "config_id": "cfg::lenta::horario-comercial::wd"
+    },
+    "213": {
+      "sim_id": "213",
+      "persona_id": "per::personas_tf::753ea92e57b12aa1",
+      "config_id": "cfg::lenta::horario-comercial::wd"
+    },
+    "214": {
+      "sim_id": "214",
+      "persona_id": "per::personas_tf::753ea92e57b12aa1",
+      "config_id": "cfg::media::horario-comercial::wd"
+    },
+    "215": {
+      "sim_id": "215",
+      "persona_id": "per::personas_tf::753ea92e57b12aa1",
+      "config_id": "cfg::lenta::noite::wd"
+    },
+    "216": {
+      "sim_id": "216",
+      "persona_id": "per::personas_tf::753ea92e57b12aa1",
+      "config_id": "cfg::media::noite::wd"
+    },
+    "217": {
+      "sim_id": "217",
+      "persona_id": "per::personas_tf::7555d7e4f1459640",
+      "config_id": "cfg::lenta::noite::we"
+    },
+    "218": {
+      "sim_id": "218",
+      "persona_id": "per::personas_tf::7555d7e4f1459640",
+      "config_id": "cfg::media::noite::wd"
+    },
+    "219": {
+      "sim_id": "219",
+      "persona_id": "per::personas_tf::7555d7e4f1459640",
+      "config_id": "cfg::lenta::horario-comercial::wd"
+    },
+    "220": {
+      "sim_id": "220",
+      "persona_id": "per::personas_tf::7555d7e4f1459640",
+      "config_id": "cfg::media::horario-comercial::we"
+    },
+    "221": {
+      "sim_id": "221",
+      "persona_id": "per::personas_tf::ff3857f5b8baec3a",
+      "config_id": "cfg::rapida::horario-comercial::wd"
+    },
+    "222": {
+      "sim_id": "222",
+      "persona_id": "per::personas_tf::ff3857f5b8baec3a",
+      "config_id": "cfg::media::horario-comercial::wd"
+    },
+    "223": {
+      "sim_id": "223",
+      "persona_id": "per::personas_tf::ff3857f5b8baec3a",
+      "config_id": "cfg::rapida::noite::wd"
+    },
+    "224": {
+      "sim_id": "224",
+      "persona_id": "per::personas_tf::ff3857f5b8baec3a",
+      "config_id": "cfg::lenta::horario-comercial::wd"
+    },
+    "225": {
+      "sim_id": "225",
+      "persona_id": "per::personas_tf::a0505b7e58290aad",
+      "config_id": "cfg::lenta::noite::we"
+    },
+    "226": {
+      "sim_id": "226",
+      "persona_id": "per::personas_tf::a0505b7e58290aad",
+      "config_id": "cfg::lenta::horario-comercial::wd"
+    },
+    "227": {
+      "sim_id": "227",
+      "persona_id": "per::personas_tf::a0505b7e58290aad",
+      "config_id": "cfg::media::horario-comercial::we"
+    },
+    "228": {
+      "sim_id": "228",
+      "persona_id": "per::personas_tf::a0505b7e58290aad",
+      "config_id": "cfg::media::noite::wd"
+    },
+    "229": {
+      "sim_id": "229",
+      "persona_id": "per::personas_tf::11c9d396b02fa3c6",
+      "config_id": "cfg::rapida::horario-comercial::wd"
+    },
+    "230": {
+      "sim_id": "230",
+      "persona_id": "per::personas_tf::11c9d396b02fa3c6",
+      "config_id": "cfg::media::horario-comercial::wd"
+    },
+    "231": {
+      "sim_id": "231",
+      "persona_id": "per::personas_tf::11c9d396b02fa3c6",
+      "config_id": "cfg::rapida::noite::we"
+    },
+    "232": {
+      "sim_id": "232",
+      "persona_id": "per::personas_tf::11c9d396b02fa3c6",
+      "config_id": "cfg::media::noite::wd"
+    },
+    "233": {
+      "sim_id": "233",
+      "persona_id": "per::personas_tf::4a8fafacfbbefa1a",
+      "config_id": "cfg::rapida::horario-comercial::wd"
+    },
+    "234": {
+      "sim_id": "234",
+      "persona_id": "per::personas_tf::4a8fafacfbbefa1a",
+      "config_id": "cfg::media::horario-comercial::wd"
+    },
+    "235": {
+      "sim_id": "235",
+      "persona_id": "per::personas_tf::4a8fafacfbbefa1a",
+      "config_id": "cfg::rapida::noite::wd"
+    },
+    "236": {
+      "sim_id": "236",
+      "persona_id": "per::personas_tf::4a8fafacfbbefa1a",
+      "config_id": "cfg::media::noite::we"
+    },
+    "237": {
+      "sim_id": "237",
+      "persona_id": "per::personas_tf::8da9caecd1f38d05",
+      "config_id": "cfg::lenta::noite::wd"
+    },
+    "238": {
+      "sim_id": "238",
+      "persona_id": "per::personas_tf::8da9caecd1f38d05",
+      "config_id": "cfg::media::noite::we"
+    },
+    "239": {
+      "sim_id": "239",
+      "persona_id": "per::personas_tf::8da9caecd1f38d05",
+      "config_id": "cfg::lenta::horario-comercial::wd"
+    },
+    "240": {
+      "sim_id": "240",
+      "persona_id": "per::personas_tf::8da9caecd1f38d05",
+      "config_id": "cfg::media::horario-comercial::wd"
+    },
+    "241": {
+      "sim_id": "241",
+      "persona_id": "per::personas_tf::983958b0eff66ac0",
+      "config_id": "cfg::rapida::horario-comercial::wd"
+    },
+    "242": {
+      "sim_id": "242",
+      "persona_id": "per::personas_tf::983958b0eff66ac0",
+      "config_id": "cfg::media::horario-comercial::wd"
+    },
+    "243": {
+      "sim_id": "243",
+      "persona_id": "per::personas_tf::983958b0eff66ac0",
+      "config_id": "cfg::rapida::noite::wd"
+    },
+    "244": {
+      "sim_id": "244",
+      "persona_id": "per::personas_tf::983958b0eff66ac0",
+      "config_id": "cfg::lenta::horario-comercial::wd"
+    },
+    "245": {
+      "sim_id": "245",
+      "persona_id": "per::personas_tf::655359b017e5ee52",
+      "config_id": "cfg::media::horario-comercial::wd"
+    },
+    "246": {
+      "sim_id": "246",
+      "persona_id": "per::personas_tf::655359b017e5ee52",
+      "config_id": "cfg::rapida::horario-comercial::wd"
+    },
+    "247": {
+      "sim_id": "247",
+      "persona_id": "per::personas_tf::655359b017e5ee52",
+      "config_id": "cfg::media::noite::wd"
+    },
+    "248": {
+      "sim_id": "248",
+      "persona_id": "per::personas_tf::655359b017e5ee52",
+      "config_id": "cfg::lenta::horario-comercial::wd"
+    },
+    "249": {
+      "sim_id": "249",
+      "persona_id": "per::personas_tf::97dbc32705f07e38",
+      "config_id": "cfg::media::horario-comercial::we"
+    },
+    "250": {
+      "sim_id": "250",
+      "persona_id": "per::personas_tf::97dbc32705f07e38",
+      "config_id": "cfg::rapida::horario-comercial::wd"
+    },
+    "251": {
+      "sim_id": "251",
+      "persona_id": "per::personas_tf::97dbc32705f07e38",
+      "config_id": "cfg::media::noite::we"
+    },
+    "252": {
+      "sim_id": "252",
+      "persona_id": "per::personas_tf::97dbc32705f07e38",
+      "config_id": "cfg::lenta::horario-comercial::wd"
+    },
+    "253": {
+      "sim_id": "253",
+      "persona_id": "per::personas_tf::3001057707d8f684",
+      "config_id": "cfg::media::noite::we"
+    },
+    "254": {
+      "sim_id": "254",
+      "persona_id": "per::personas_tf::3001057707d8f684",
+      "config_id": "cfg::lenta::noite::wd"
+    },
+    "255": {
+      "sim_id": "255",
+      "persona_id": "per::personas_tf::3001057707d8f684",
+      "config_id": "cfg::media::horario-comercial::wd"
+    },
+    "256": {
+      "sim_id": "256",
+      "persona_id": "per::personas_tf::3001057707d8f684",
+      "config_id": "cfg::rapida::horario-comercial::we"
+    },
+    "257": {
+      "sim_id": "257",
+      "persona_id": "per::personas_tf::9de956c75cacf65e",
+      "config_id": "cfg::media::horario-comercial::wd"
+    },
+    "258": {
+      "sim_id": "258",
+      "persona_id": "per::personas_tf::9de956c75cacf65e",
+      "config_id": "cfg::lenta::horario-comercial::wd"
+    },
+    "259": {
+      "sim_id": "259",
+      "persona_id": "per::personas_tf::9de956c75cacf65e",
+      "config_id": "cfg::media::noite::wd"
+    },
+    "260": {
+      "sim_id": "260",
+      "persona_id": "per::personas_tf::9de956c75cacf65e",
+      "config_id": "cfg::lenta::noite::wd"
+    },
+    "261": {
+      "sim_id": "261",
+      "persona_id": "per::personas_tf::a0505b7e58290aad",
+      "config_id": "cfg::lenta::horario-comercial::wd"
+    },
+    "262": {
+      "sim_id": "262",
+      "persona_id": "per::personas_tf::a0505b7e58290aad",
+      "config_id": "cfg::media::horario-comercial::wd"
+    },
+    "263": {
+      "sim_id": "263",
+      "persona_id": "per::personas_tf::a0505b7e58290aad",
+      "config_id": "cfg::lenta::noite::wd"
+    },
+    "264": {
+      "sim_id": "264",
+      "persona_id": "per::personas_tf::a0505b7e58290aad",
+      "config_id": "cfg::media::noite::wd"
+    },
+    "265": {
+      "sim_id": "265",
+      "persona_id": "per::personas_tf::4a8fafacfbbefa1a",
+      "config_id": "cfg::media::horario-comercial::wd"
+    },
+    "266": {
+      "sim_id": "266",
+      "persona_id": "per::personas_tf::4a8fafacfbbefa1a",
+      "config_id": "cfg::rapida::horario-comercial::wd"
+    },
+    "267": {
+      "sim_id": "267",
+      "persona_id": "per::personas_tf::4a8fafacfbbefa1a",
+      "config_id": "cfg::media::noite::wd"
+    },
+    "268": {
+      "sim_id": "268",
+      "persona_id": "per::personas_tf::4a8fafacfbbefa1a",
+      "config_id": "cfg::rapida::noite::wd"
+    },
+    "269": {
+      "sim_id": "269",
+      "persona_id": "per::personas_tf::8da9caecd1f38d05",
+      "config_id": "cfg::media::noite::wd"
+    },
+    "270": {
+      "sim_id": "270",
+      "persona_id": "per::personas_tf::8da9caecd1f38d05",
+      "config_id": "cfg::lenta::noite::wd"
+    },
+    "271": {
+      "sim_id": "271",
+      "persona_id": "per::personas_tf::8da9caecd1f38d05",
+      "config_id": "cfg::media::horario-comercial::wd"
+    },
+    "272": {
+      "sim_id": "272",
+      "persona_id": "per::personas_tf::8da9caecd1f38d05",
+      "config_id": "cfg::rapida::horario-comercial::wd"
+    },
+    "273": {
+      "sim_id": "273",
+      "persona_id": "per::personas_tf::983958b0eff66ac0",
+      "config_id": "cfg::media::horario-comercial::wd"
+    },
+    "274": {
+      "sim_id": "274",
+      "persona_id": "per::personas_tf::983958b0eff66ac0",
+      "config_id": "cfg::rapida::horario-comercial::wd"
+    },
+    "275": {
+      "sim_id": "275",
+      "persona_id": "per::personas_tf::983958b0eff66ac0",
+      "config_id": "cfg::lenta::horario-comercial::wd"
+    },
+    "276": {
+      "sim_id": "276",
+      "persona_id": "per::personas_tf::983958b0eff66ac0",
+      "config_id": "cfg::media::noite::wd"
+    },
+    "277": {
+      "sim_id": "277",
+      "persona_id": "per::personas_tf::007805ccabf989b8",
+      "config_id": "cfg::rapida::noite::we"
+    },
+    "278": {
+      "sim_id": "278",
+      "persona_id": "per::personas_tf::007805ccabf989b8",
+      "config_id": "cfg::rapida::horario-comercial::wd"
+    },
+    "279": {
+      "sim_id": "279",
+      "persona_id": "per::personas_tf::007805ccabf989b8",
+      "config_id": "cfg::lenta::noite::we"
+    },
+    "280": {
+      "sim_id": "280",
+      "persona_id": "per::personas_tf::007805ccabf989b8",
+      "config_id": "cfg::media::horario-comercial::wd"
+    },
+    "281": {
+      "sim_id": "281",
+      "persona_id": "per::personas_tf::4a5c5cbc6bcf58a9",
+      "config_id": "cfg::media::horario-comercial::wd"
+    },
+    "282": {
+      "sim_id": "282",
+      "persona_id": "per::personas_tf::4a5c5cbc6bcf58a9",
+      "config_id": "cfg::lenta::horario-comercial::wd"
+    },
+    "283": {
+      "sim_id": "283",
+      "persona_id": "per::personas_tf::4a5c5cbc6bcf58a9",
+      "config_id": "cfg::media::noite::wd"
+    },
+    "284": {
+      "sim_id": "284",
+      "persona_id": "per::personas_tf::4a5c5cbc6bcf58a9",
+      "config_id": "cfg::rapida::horario-comercial::wd"
+    },
+    "285": {
+      "sim_id": "285",
+      "persona_id": "per::personas_tf::6ce51288a975061f",
+      "config_id": "cfg::lenta::horario-comercial::wd"
+    },
+    "286": {
+      "sim_id": "286",
+      "persona_id": "per::personas_tf::6ce51288a975061f",
+      "config_id": "cfg::media::horario-comercial::wd"
+    },
+    "287": {
+      "sim_id": "287",
+      "persona_id": "per::personas_tf::6ce51288a975061f",
+      "config_id": "cfg::lenta::noite::wd"
+    },
+    "288": {
+      "sim_id": "288",
+      "persona_id": "per::personas_tf::6ce51288a975061f",
+      "config_id": "cfg::rapida::horario-comercial::wd"
+    },
+    "289": {
+      "sim_id": "289",
+      "persona_id": "per::personas_tf::6b25f08513980177",
+      "config_id": "cfg::media::horario-comercial::wd"
+    },
+    "290": {
+      "sim_id": "290",
+      "persona_id": "per::personas_tf::6b25f08513980177",
+      "config_id": "cfg::lenta::horario-comercial::wd"
+    },
+    "291": {
+      "sim_id": "291",
+      "persona_id": "per::personas_tf::6b25f08513980177",
+      "config_id": "cfg::media::noite::wd"
+    },
+    "292": {
+      "sim_id": "292",
+      "persona_id": "per::personas_tf::6b25f08513980177",
+      "config_id": "cfg::rapida::horario-comercial::wd"
+    },
+    "293": {
+      "sim_id": "293",
+      "persona_id": "per::personas_tf::99194728d365b4fb",
+      "config_id": "cfg::rapida::noite::we"
+    },
+    "294": {
+      "sim_id": "294",
+      "persona_id": "per::personas_tf::99194728d365b4fb",
+      "config_id": "cfg::media::noite::wd"
+    },
+    "295": {
+      "sim_id": "295",
+      "persona_id": "per::personas_tf::99194728d365b4fb",
+      "config_id": "cfg::rapida::horario-comercial::we"
+    },
+    "296": {
+      "sim_id": "296",
+      "persona_id": "per::personas_tf::99194728d365b4fb",
+      "config_id": "cfg::media::horario-comercial::wd"
+    },
+    "297": {
+      "sim_id": "297",
+      "persona_id": "per::personas_tf::b581a42e45bd4b51",
+      "config_id": "cfg::lenta::horario-comercial::wd"
+    },
+    "298": {
+      "sim_id": "298",
+      "persona_id": "per::personas_tf::b581a42e45bd4b51",
+      "config_id": "cfg::media::horario-comercial::wd"
+    },
+    "299": {
+      "sim_id": "299",
+      "persona_id": "per::personas_tf::b581a42e45bd4b51",
+      "config_id": "cfg::lenta::noite::we"
+    },
+    "300": {
+      "sim_id": "300",
+      "persona_id": "per::personas_tf::b581a42e45bd4b51",
+      "config_id": "cfg::media::noite::wd"
+    }
+  }
+}

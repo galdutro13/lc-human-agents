@@ -1,0 +1,18 @@
+{
+  "source_file": "personas.json",
+  "preserved_fields": {
+    "sim_ids_preserved": [
+      "201"
+    ],
+    "all_prompts_preserved": true,
+    "all_configurations_preserved": true
+  },
+  "counts": {
+    "legacy_simulations": 1,
+    "migrated_simulations": 1,
+    "legacy_unique_personas": 1,
+    "migrated_unique_personas": 1,
+    "legacy_unique_configurations": 1,
+    "migrated_unique_configurations": 1
+  }
+}

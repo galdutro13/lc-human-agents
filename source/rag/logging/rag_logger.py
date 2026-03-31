@@ -13,6 +13,8 @@ from contextlib import contextmanager
 # Import LangChain message types for proper handling
 from langchain_core.messages import BaseMessage, HumanMessage, AIMessage, SystemMessage
 
+from source.simulations.schema_v3 import sanitize_filename_component
+
 
 class RAGLogger:
     """
@@ -34,6 +36,7 @@ class RAGLogger:
         """
         self.thread_id = thread_id
         self.persona_id = persona_id
+        self.persona_file_id = sanitize_filename_component(persona_id)
         self.log_dir = Path(log_dir)
         self.log_dir.mkdir(parents=True, exist_ok=True)
 
@@ -232,22 +235,22 @@ class RAGLogger:
         with self.lock:
             if not output_path:
                 timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-                output_path = self.log_dir / f"rag_logs_{self.persona_id}_{self.thread_id}_{timestamp}.zip"
+                output_path = self.log_dir / f"rag_logs_{self.persona_file_id}_{self.thread_id}_{timestamp}.zip"
 
             with zipfile.ZipFile(output_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
                 # Adiciona logs de cada mensagem
                 for msg_index, buffer in self.message_buffers.items():
-                    filename = f"{msg_index:03d}_{self.persona_id}_{self.thread_id}.log"
+                    filename = f"{msg_index:03d}_{self.persona_file_id}_{self.thread_id}.log"
                     zipf.writestr(filename, buffer.getvalue())
 
                 # Adiciona metadados da sessão
                 self.session_metadata["end_time"] = datetime.now().isoformat()
-                metadata_filename = f"session_metadata_{self.persona_id}_{self.thread_id}.json"
+                metadata_filename = f"session_metadata_{self.persona_file_id}_{self.thread_id}.json"
                 zipf.writestr(metadata_filename, json.dumps(self.session_metadata, indent=2))
 
                 # Adiciona um resumo
                 summary = self._generate_session_summary()
-                summary_filename = f"session_summary_{self.persona_id}_{self.thread_id}.txt"
+                summary_filename = f"session_summary_{self.persona_file_id}_{self.thread_id}.txt"
                 zipf.writestr(summary_filename, summary)
 
             return str(output_path)

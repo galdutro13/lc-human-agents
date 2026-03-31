@@ -26,6 +26,7 @@ class MessageRequest(BaseModel):
     message: str
     session_id: Optional[str] = None
     timing_metadata: Optional[Dict[str, Any]] = None
+    simulation_metadata: Optional[Dict[str, Any]] = None
     persona_id: Optional[str] = None
 
 
@@ -48,6 +49,7 @@ class SessionManager:
                  timeout_minutes: int = SESSION_TIMEOUT_MINUTES):
         self.bot_instances: Dict[str, BancoBot] = {}
         self.session_personas: Dict[str, str] = {}
+        self.session_simulations: Dict[str, Dict[str, Any]] = {}
         self.session_last_access: Dict[str, datetime] = {}
         self.max_sessions = max_sessions
         self.timeout_delta = timedelta(minutes=timeout_minutes)
@@ -146,6 +148,7 @@ class SessionManager:
             # Remove from tracking dictionaries
             del self.bot_instances[session_id]
             self.session_personas.pop(session_id, None)
+            self.session_simulations.pop(session_id, None)
             self.session_last_access.pop(session_id, None)
 
             # Force garbage collection for large objects
@@ -185,6 +188,7 @@ class SessionManager:
                 sessions_info.append({
                     "session_id": session_id,
                     "persona_id": self.session_personas.get(session_id, "unknown"),
+                    "simulation_metadata": self.session_simulations.get(session_id),
                     "idle_seconds": idle_time,
                     "expires_in_seconds": max(0, (self.timeout_delta.total_seconds() - idle_time))
                 })
@@ -262,6 +266,9 @@ async def process_message(request: MessageRequest = Body(...)):
             executor
         )
 
+        if request.simulation_metadata:
+            session_manager.session_simulations[session_id] = request.simulation_metadata
+
         # Log timing metadata if present
         if request.timing_metadata:
             print(f"[Session {session_id}] Received timing metadata:")
@@ -269,6 +276,9 @@ async def process_message(request: MessageRequest = Body(...)):
             print(f"  - Tempo de reflexão: {request.timing_metadata.get('thinking_time', 0):.2f} segundos")
             print(f"  - Tempo de digitação: {request.timing_metadata.get('typing_time', 0):.2f} segundos")
             print(f"  - Tempo de pausa: {request.timing_metadata.get('break_time', 0):.2f} segundos")
+
+        if request.simulation_metadata:
+            print(f"[Session {session_id}] Simulation metadata: {request.simulation_metadata}")
 
         # Process message asynchronously
         response = await bot.aprocess_message(request.message)

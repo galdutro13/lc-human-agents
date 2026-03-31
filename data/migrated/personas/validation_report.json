@@ -1,0 +1,13 @@
+{
+  "schema_version": "3.0",
+  "status": "ok",
+  "checks": {
+    "schema_validation": true,
+    "referential_integrity": true,
+    "resolved_simulations_count": 1,
+    "simulacoes_count": 1,
+    "personas_count": 1,
+    "configuracoes_count": 1,
+    "politicas_count": 1
+  }
+}

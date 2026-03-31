@@ -1,0 +1,24 @@
+{
+  "source_file": "personas.json",
+  "source_slug": "personas",
+  "source_sha256": "6466237c056ca5a37d86858f3c34a1959e5714528dc236b28d4f931cb2b73d7b",
+  "migration_mode": "legacy_simulation_map",
+  "summary": {
+    "legacy_simulations": 1,
+    "personas_unique": 1,
+    "configuracoes_unique": 1,
+    "politicas_unique": 1
+  },
+  "defaults_applied": [
+    "versao_schema=3.0",
+    "restricoes sem restrições deriváveis foram iniciadas vazias",
+    "amostragem naturalistica com proporcao 1.0 derivada da distribuicao_alvo",
+    "prob_amostragem igual a prob_alvo por falta de probabilidade histórica individual",
+    "peso_analitico=1.0 por default determinístico"
+  ],
+  "human_review_required": [
+    "Revisar redação metodológica de objetivo/fonte da política amostral para uso em artigo.",
+    "Revisar anomalias de prompts quase duplicados antes de qualquer consolidação editorial."
+  ],
+  "anomalies": []
+}

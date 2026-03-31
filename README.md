@@ -151,8 +151,11 @@ python ./tools/bancobot_service/start_banco_service.py
 Once the bank chatbot service is running, you can simulate interactions with multiple users:
 
 ```bash
-python ./tools/enxame_usuario/start_usuarios.py --prompts-file "<path_to_prompts_file>"
+python ./tools/enxame_usuario/migrate_personas_v1_to_v3.py personas_tf.json personas.json personas_carlos.json --output-dir data/migrated
+python ./tools/enxame_usuario/start_usuarios.py --prompts-file "data/migrated/personas_tf/personas_tf.v3.json"
 ```
+
+The runner now validates and consumes only the versioned simulation schema `3.0`. Legacy prompt maps remain in the repository as migration/audit inputs and should be converted before execution.
 
 > **Note:** On first run, the RAG system will build the necessary vector stores. This may take time depending on data size and environment configuration.
 > Therefore, we recommend running the script `source/tests/integratio_test/rag_test.py` beforehand to ensure vector stores are ready and the system operates correctly.

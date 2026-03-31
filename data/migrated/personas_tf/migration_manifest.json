@@ -1,0 +1,32 @@
+{
+  "source_file": "personas_tf.json",
+  "source_slug": "personas_tf",
+  "source_sha256": "595a52c8618603b18bc66046eb61f3314cf5a19c84b7bed66cfb9cc6dafdc33f",
+  "migration_mode": "legacy_simulation_map",
+  "summary": {
+    "legacy_simulations": 300,
+    "personas_unique": 21,
+    "configuracoes_unique": 11,
+    "politicas_unique": 1
+  },
+  "defaults_applied": [
+    "versao_schema=3.0",
+    "restricoes sem restrições deriváveis foram iniciadas vazias",
+    "amostragem naturalistica com proporcao 1.0 derivada da distribuicao_alvo",
+    "prob_amostragem igual a prob_alvo por falta de probabilidade histórica individual",
+    "peso_analitico=1.0 por default determinístico"
+  ],
+  "human_review_required": [
+    "Revisar redação metodológica de objetivo/fonte da política amostral para uso em artigo.",
+    "Revisar anomalias de prompts quase duplicados antes de qualquer consolidação editorial."
+  ],
+  "anomalies": [
+    {
+      "type": "near_duplicate_prompt",
+      "severity": "warning",
+      "persona_id": "per::personas_tf::7555d7e4f1459640",
+      "other_persona_id": "per::personas_tf::9de956c75cacf65e",
+      "similarity_ratio": 0.999555
+    }
+  ]
+}

@@ -16,6 +16,8 @@ import glob
 from langgraph.checkpoint.serde.jsonplus import JsonPlusSerializer
 from langchain.schema import HumanMessage, AIMessage
 
+from source.simulations.schema_v3 import sanitize_filename_component
+
 # Import UsuarioBot directly from the decoupled structure
 from source.tests.chatbot_test.usuario import UsuarioBot
 
@@ -80,7 +82,8 @@ def find_rag_log_by_persona(persona_id: str, thread_id: str) -> str:
     try:
         # Pattern: rag_logs_{persona_id}_{any_thread_id}_{timestamp}.zip
         # Note: persona_id might be in format "persona_X"
-        pattern = os.path.join(RAG_LOGS_PATH, f"rag_logs_{persona_id}_*.zip")
+        persona_file_id = sanitize_filename_component(persona_id)
+        pattern = os.path.join(RAG_LOGS_PATH, f"rag_logs_{persona_file_id}_*.zip")
         files = glob.glob(pattern)
 
         if files:
@@ -181,7 +184,7 @@ def extract_datasources_from_rag_logs(thread_id: str, message_index: int, person
 
         # Find the RAG log ZIP file for this thread
         # Pattern: rag_logs_persona_X_{thread_id}_{timestamp}.zip
-        log_pattern = os.path.join(RAG_LOGS_PATH, f"rag_logs_persona_*_{mapped_thread_id}_*.zip")
+        log_pattern = os.path.join(RAG_LOGS_PATH, f"rag_logs_*_{mapped_thread_id}_*.zip")
         log_files = glob.glob(log_pattern)
 
         # If not found by thread_id and persona_id is provided, try finding by persona
@@ -660,7 +663,7 @@ def export_interaction_csv(thread_id: str):
         output.seek(0)
 
         # Retorna como StreamingResponse para download
-        filename = f"conversa_{persona_id}_{thread_id}.csv"
+        filename = f"conversa_{sanitize_filename_component(str(persona_id))}_{thread_id}.csv"
         headers = {"Content-Disposition": f"attachment; filename={filename}"}
         return StreamingResponse(
             output,
@@ -706,6 +709,7 @@ def export_all_interactions_zip():
                 conversation = JsonPlusSerializer().loads_typed((record_type, checkpoint_data))
                 messages = conversation.get("channel_values", {}).get("messages", [])
                 persona_id = conversation.get("channel_values", {}).get("persona_id", "unknown")
+                simulation_metadata = conversation.get("channel_values", {}).get("simulation_metadata", {})
 
                 # Monta lista de mensagens para o DataFrame
                 data_for_df = []
@@ -720,6 +724,7 @@ def export_all_interactions_zip():
 
                     # Extrai informações de timing
                     timing_metadata = getattr(msg, "additional_kwargs", {}).get("timing_metadata", {})
+                    message_simulation_metadata = getattr(msg, "additional_kwargs", {}).get("simulation_metadata", {})
 
                     # Determina simulated_timestamp e elapsed_time baseado no tipo real
                     if isinstance(msg, HumanMessage):  # Mensagem do banco
@@ -750,7 +755,7 @@ def export_all_interactions_zip():
                 csv_bytes = csv_buffer.getvalue().encode("utf-8")
 
                 # Nome do arquivo CSV
-                filename = f"conversa_{persona_id}_{tid}.csv"
+                filename = f"conversa_{sanitize_filename_component(str(persona_id))}_{tid}.csv"
                 zip_file.writestr(filename, csv_bytes)
 
         zip_buffer.seek(0)
@@ -848,7 +853,8 @@ def export_all_interactions_json_zip():
                         "content": getattr(msg, "content", ""),
                         "simulated_timestamp": simulated_timestamp,
                         "elapsed_time": elapsed_time,
-                        "timing_metadata": timing_metadata  # Inclui todos os metadados de timing
+                        "timing_metadata": timing_metadata,  # Inclui todos os metadados de timing
+                        "simulation_metadata": message_simulation_metadata,
                     }
 
                     # Adiciona ID da mensagem se disponível
@@ -872,6 +878,7 @@ def export_all_interactions_json_zip():
                 conversation_data = {
                     "thread_id": tid,
                     "persona_id": persona_id,
+                    "simulation_metadata": simulation_metadata,
                     "conversation_timestamp": conversation_ts,
                     "total_messages": len(messages_data),
                     "messages": messages_data,
@@ -887,7 +894,7 @@ def export_all_interactions_json_zip():
                     "persona_id": persona_id,
                     "conversation_timestamp": conversation_ts,
                     "total_messages": len(messages_data),
-                    "filename": f"conversa_{persona_id}_{tid}.json"
+                    "filename": f"conversa_{sanitize_filename_component(str(persona_id))}_{tid}.json"
                 })
 
                 # Converte para JSON com formatação legível
@@ -895,7 +902,7 @@ def export_all_interactions_json_zip():
                 json_bytes = json_content.encode("utf-8")
 
                 # Nome do arquivo JSON
-                filename = f"conversa_{persona_id}_{tid}.json"
+                filename = f"conversa_{sanitize_filename_component(str(persona_id))}_{tid}.json"
                 zip_file.writestr(filename, json_bytes)
 
             # Adiciona arquivo de índice ao ZIP
@@ -946,6 +953,7 @@ def export_interaction_json(thread_id: str):
         conversation = JsonPlusSerializer().loads_typed((record_type, checkpoint_data))
         messages = conversation.get("channel_values", {}).get("messages", [])
         persona_id = conversation.get("channel_values", {}).get("persona_id", None)
+        simulation_metadata = conversation.get("channel_values", {}).get("simulation_metadata", {})
         conversation_ts = conversation.get("ts", None)
 
         # Monta estrutura completa das mensagens
@@ -972,6 +980,7 @@ def export_interaction_json(thread_id: str):
 
             # Extrai informações de timing
             timing_metadata = getattr(msg, "additional_kwargs", {}).get("timing_metadata", {})
+            message_simulation_metadata = getattr(msg, "additional_kwargs", {}).get("simulation_metadata", {})
 
             # Determina simulated_timestamp e elapsed_time baseado no tipo real
             if isinstance(msg, HumanMessage):  # Mensagem do banco
@@ -995,7 +1004,8 @@ def export_interaction_json(thread_id: str):
                 "content": getattr(msg, "content", ""),
                 "simulated_timestamp": simulated_timestamp,
                 "elapsed_time": elapsed_time,
-                "timing_metadata": timing_metadata
+                "timing_metadata": timing_metadata,
+                "simulation_metadata": message_simulation_metadata,
             }
 
             # Adiciona ID da mensagem se disponível
@@ -1019,6 +1029,7 @@ def export_interaction_json(thread_id: str):
         export_data = {
             "thread_id": thread_id,
             "persona_id": persona_id,
+            "simulation_metadata": simulation_metadata,
             "conversation_timestamp": conversation_ts,
             "total_messages": len(messages_data),
             "messages": messages_data,
@@ -1032,7 +1043,7 @@ def export_interaction_json(thread_id: str):
         json_content = json.dumps(export_data, indent=2, ensure_ascii=False)
 
         # Retorna como StreamingResponse para download
-        filename = f"conversa_{persona_id}_{thread_id}.json"
+        filename = f"conversa_{sanitize_filename_component(str(persona_id))}_{thread_id}.json"
         headers = {"Content-Disposition": f"attachment; filename={filename}"}
         return StreamingResponse(
             io.StringIO(json_content),

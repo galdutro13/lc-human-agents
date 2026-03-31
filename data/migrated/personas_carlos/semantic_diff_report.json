@@ -1,0 +1,12 @@
+{
+  "source_file": "personas_carlos.json",
+  "preserved_fields": {
+    "all_prompts_preserved": true,
+    "simulations_generated": false
+  },
+  "counts": {
+    "legacy_entries": 1,
+    "migrated_personas": 1,
+    "migrated_simulacoes": 0
+  }
+}
