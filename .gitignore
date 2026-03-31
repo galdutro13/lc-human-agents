@@ -24,6 +24,8 @@ Thumbs.db
 # Project runtime artifacts
 cenarios.db
 checkpoints.db
+checkpoints.db-shm
+checkpoints.db-wal
 rag_logs/
 chroma_db/
 
