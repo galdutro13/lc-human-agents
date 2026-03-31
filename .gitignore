@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage*
+htmlcov/
+.ipynb_checkpoints/
+
+# Local environment and secrets
+.env
+.env.*
+!.env.example
+
+# IDE and OS files
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Project runtime artifacts
+cenarios.db
+checkpoints.db
+rag_logs/
+chroma_db/
+
+# Local RAG document base, but keep shared config
+RAG Cartões/**
+!RAG Cartões/
+!RAG Cartões/config.yaml
