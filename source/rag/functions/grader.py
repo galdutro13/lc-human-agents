@@ -60,7 +60,10 @@ class GraderFunction(ChatFunction):
                     description="Document is relevant to the question, 'yes' or 'no'"
                 )
 
-            structured_grader = self._model.with_structured_output(GradeDocuments)
+            structured_grader = self._model.with_structured_output(
+                GradeDocuments,
+                method="function_calling",
+            )
             grader_chain = self._prompt | structured_grader
 
             relevant_documents = []

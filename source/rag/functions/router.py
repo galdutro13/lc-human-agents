@@ -67,7 +67,10 @@ class RouterFunction(ChatFunction):
                         description="Choose the most relevant datasource for the query"
                     )
 
-                structured_router = self._model.with_structured_output(DynamicRouteQuery)
+                structured_router = self._model.with_structured_output(
+                    DynamicRouteQuery,
+                    method="function_calling",
+                )
                 router_chain = self._prompt | structured_router
                 result = router_chain.invoke({"question": question})
                 selected_datasource = result.datasource
