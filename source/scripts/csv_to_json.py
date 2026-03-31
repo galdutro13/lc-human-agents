@@ -48,7 +48,14 @@ class CSVtoJSONConverter:
         """
         try:
             with open(self.csv_file_path, 'r', newline='', encoding='utf-8') as csvfile:
-                reader = csv.DictReader(csvfile, delimiter=';')
+                sample = csvfile.read(2048)
+                csvfile.seek(0)
+                header_line = sample.splitlines()[0] if sample else ""
+                semicolon_count = header_line.count(';')
+                comma_count = header_line.count(',')
+                delimiter = ';' if semicolon_count > comma_count else ','
+
+                reader = csv.DictReader(csvfile, delimiter=delimiter)
                 headers = reader.fieldnames
                 records = []
                 for row in reader:

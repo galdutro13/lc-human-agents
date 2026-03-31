@@ -151,8 +151,12 @@ python ./tools/bancobot_service/start_banco_service.py
 Once the bank chatbot service is running, you can simulate interactions with multiple users:
 
 ```bash
-python ./tools/enxame_usuario/start_usuarios.py --prompts-file "<path_to_prompts_file>"
+python ./tools/enxame_usuario/start_usuarios.py --prompts-file "./personas_v3.json"
 ```
+
+`start_usuarios.py` now auto-detects both schemas:
+- `v3.0`: recommended format with deduplicated personas, sampling metadata, and deterministic expansion to the runtime v1-like contract.
+- `v1`: legacy flat dictionary, still accepted during the transition period.
 
 > **Note:** On first run, the RAG system will build the necessary vector stores. This may take time depending on data size and environment configuration.
 > Therefore, we recommend running the script `source/tests/integratio_test/rag_test.py` beforehand to ensure vector stores are ready and the system operates correctly.

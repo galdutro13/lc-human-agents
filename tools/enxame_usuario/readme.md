@@ -1,153 +1,97 @@
-# Start Usuarios Script
+# Start Usuarios
 
 ## Descrição
-Ferramenta para iniciar múltiplas instâncias de UsuarioBot que interagem simultaneamente com o serviço BancoBot API. Permite execução de testes de carga, simulações de concorrência e avaliações de qualidade de atendimento com diferentes perfis de usuário.
+
+`start_usuarios.py` executa múltiplas instâncias de `UsuarioBot` contra o serviço BancoBot. O runner aceita arquivos de personas em dois formatos:
+
+- `v3.0` (recomendado): schema deduplicado com `metodologia`, `distribuicao_base`, `template_prompt` e `personas`.
+- `v1` (legado): dicionário plano já expandido com `persona`, `duração`, `offset` e `weekend`.
+
+Durante o período de transição, o runner detecta automaticamente o schema e sempre converte o input para o mesmo contrato em memória consumido pelo restante do pipeline.
 
 ## Requisitos
+
 - Python 3.8+
-- Requests
-- Dotenv
-- Threading
-- Um serviço BancoBot em execução
-- Variável de ambiente `OPENAI_API_KEY` configurada
-
-## Funcionalidades
-- Inicialização de múltiplos usuários simulados
-- Suporte a execução em paralelo ou sequencial
-- Personalização de prompts por usuário
-- Verificação automática de disponibilidade do serviço BancoBot
-- Gerenciamento de threads com saída ordenada
-
-## Instalação
-
-1. Certifique-se de que o diretório `tools/enxame_usuario/` existe. Se não existir, crie-o:
-   ```bash
-   mkdir -p tools/enxame_usuario/
-   ```
-
-2. Copie o arquivo `start_usuarios.py` para o diretório `tools/enxame_usuario/`:
-
-3. Instale as dependências necessárias:
-   ```bash
-   pip install requests python-dotenv
-   ```
-
-4. Configure a variável de ambiente OPENAI_API_KEY:
-   ```bash
-   # No Linux/MacOS
-   export OPENAI_API_KEY='sua-chave-api'
-   
-   # No Windows
-   set OPENAI_API_KEY=sua-chave-api
-   
-   # Ou use um arquivo .env na raiz do projeto
-   echo "OPENAI_API_KEY=sua-chave-api" > .env
-   ```
+- `requests`
+- `python-dotenv`
+- serviço BancoBot disponível
+- variável de ambiente `OPENAI_API_KEY`
 
 ## Uso
 
-### Iniciando usuários simulados
+### Execução básica
 
-Para iniciar um único usuário com configuração padrão:
 ```bash
-python tools/enxame_usuario/start_usuarios.py
+python tools/enxame_usuario/start_usuarios.py --prompts-file ./personas_v3.json
 ```
 
-Para iniciar múltiplos usuários em paralelo:
+### Execução paralela com janela fixa
+
 ```bash
-python tools/enxame_usuario/start_usuarios.py --num-usuarios 5
+python tools/enxame_usuario/start_usuarios.py --prompts-file ./personas_v3.json --window-size 6 --passes 2
 ```
 
-Para iniciar múltiplos usuários sequencialmente:
+### Execução sequencial
+
 ```bash
-python tools/enxame_usuario/start_usuarios.py --num-usuarios 3 --sequencial
+python tools/enxame_usuario/start_usuarios.py --prompts-file ./personas_v3.json --sequencial
 ```
 
-Para conectar a um serviço BancoBot em outro endereço:
+### Endpoint alternativo do BancoBot
+
 ```bash
-python tools/enxame_usuario/start_usuarios.py --api-url http://192.168.1.100:8088
+python tools/enxame_usuario/start_usuarios.py --prompts-file ./personas_v3.json --api-url http://192.168.1.100:8088
 ```
 
-### Personalização de Prompts
-
-Você pode fornecer prompts personalizados para cada usuário usando um arquivo JSON:
-
-1. Crie um arquivo JSON com a seguinte estrutura (o número da chave corresponde ao ID do usuário):
-   ```json
-   {
-     "1": "Texto do prompt para o usuário 1...",
-     "2": "Texto do prompt para o usuário 2...",
-     "3": "Texto do prompt para o usuário 3..."
-   }
-   ```
-
-2. Execute o script com o parâmetro `--prompts-file`:
-   ```bash
-   python tools/enxame_usuario/start_usuarios.py --num-usuarios 3 --prompts-file custom_prompts.json
-   ```
-
-### Opções de Linha de Comando
+## Opções de linha de comando
 
 | Opção | Descrição | Padrão |
-|-------|-----------|--------|
-| `-n, --num-usuarios` | Número de usuários a iniciar | 1 |
-| `--sequencial` | Executa usuários um após o outro | False |
-| `--api-url` | URL da API do BancoBot | http://localhost:8080 |
-| `--prompts-file` | Arquivo JSON com prompts personalizados | None |
+|---|---|---|
+| `--prompts-file` | Caminho do arquivo JSON de personas | obrigatório |
+| `--api-url` | URL base da API do BancoBot | `http://localhost:8080` |
+| `--sequencial` | Executa uma persona por vez | `False` |
+| `--window-size`, `-w` | Número máximo de personas simultâneas | `4` |
+| `--passes`, `-p` | Quantas vezes repetir toda a fila carregada | `1` |
+| `--use-thinking`, `-t` | Ativa modelo com tokens de raciocínio | `False` |
+| `--typing-speed` | Velocidade padrão de digitação quando o schema não define duração | `40.0` |
+| `--thinking-min` | Tempo mínimo de reflexão padrão | `2.0` |
+| `--thinking-max` | Tempo máximo de reflexão padrão | `10.0` |
+| `--break-probability` | Probabilidade de pausa entre mensagens | `0.05` |
+| `--break-min` | Pausa mínima em segundos | `60.0` |
+| `--break-max` | Pausa máxima em segundos | `3600.0` |
+| `--no-simulate-delays` | Remove esperas reais na execução | `False` |
 
-## Estrutura do Arquivo de Prompts
+## Schema v3.0
 
-O arquivo de prompts deve ser um JSON válido onde:
-- As chaves são strings numéricas ("1", "2", etc.) representando IDs de usuário
-- Os valores são strings contendo prompts completos que definem o comportamento do UsuarioBot
+O arquivo `personas_v3.json` contém:
 
-Exemplo:
-```json
-{
-  "1": "Você é Ana Silva, 28 anos... [[como agir]] Seja direta e um pouco ansiosa... [[missão]] Você quer entender as opções de financiamento...",
-  "2": "Você é Roberto Pereira, 42 anos... [[como agir]] Seja impaciente e exigente... [[missão]] Você precisa de informações..."
-}
-```
+- `versao`: deve ser `"3.0"`
+- `metodologia`: seed, tamanho da amostra, piso mínimo por persona e método de amostragem
+- `distribuicao_base`: pesos globais de `duracao`, `offset` e `weekend`
+- `template_prompt`: template com `{identidade}`, `{como_agir}` e `{missao}`
+- `personas`: fragmentos de prompt, peso relativo da persona e ajustes multiplicativos
 
-## Interpretação dos Resultados
+O loader:
 
-O script produz logs detalhados durante a execução:
-- Confirmação de disponibilidade do serviço BancoBot
-- Mensagem de inicialização para cada usuário
-- Transcrição das mensagens trocadas por cada usuário
-- Notificação quando cada usuário encerra sua conversa
-- Resumo após a conclusão de todos os usuários
+- valida o schema com Pydantic
+- renormaliza distribuições ajustadas por persona
+- calcula a quantidade de simulações por persona
+- expande o schema para o formato v1-like em memória
+- gera IDs sequenciais a partir de `1`
 
-## Cenários de Uso
+## Compatibilidade com v1
 
-### Teste de Carga
-```bash
-python tools/enxame_usuario/start_usuarios.py --num-usuarios 20
-```
+Arquivos legados sem `versao` continuam aceitos temporariamente. Quando isso acontece, o runner informa `Schema detectado: v1` e segue em modo de compatibilidade. A leitura direta do v1 não deve mais ser usada como formato de manutenção principal.
 
-### Teste de Diversidade de Perfis
-```bash
-python tools/enxame_usuario/start_usuarios.py --num-usuarios 5 --prompts-file perfis_diversos.json
-```
+## Artefatos da migração
 
-### Teste de Comportamento Sequencial
-```bash
-python tools/enxame_usuario/start_usuarios.py --num-usuarios 3 --sequencial
-```
+- `personas_v3.json`: dataset canônico no novo schema
+- `tools/enxame_usuario/migrate_personas_v1_to_v3.py`: script que gera o v3 a partir do legado
+- `tools/enxame_usuario/personas_v3_methodology.md`: relatório com canonização, anomalias legadas e racional dos ajustes
 
-## Resolução de Problemas
+## Troubleshooting
 
-### Falha na conexão com o serviço BancoBot
-- Verifique se o serviço está rodando (`curl http://localhost:8080/health`)
-- Verifique se a URL está correta
-- Verifique se há firewall ou regras de rede bloqueando a conexão
-
-### Erros nas conversas
-- Examine os logs do UsuarioBot e do serviço BancoBot
-- Verifique se os prompts estão formatados corretamente
-- Confirme que a API key da OpenAI está configurada e é válida
-
-### Problemas de desempenho
-- Ajuste o número de usuários para evitar sobrecarga
-- Utilize o modo sequencial para reduzir o consumo de recursos
-- Monitore o uso de CPU e memória durante a execução
+- Se o runner falhar antes da execução, valide se `personas_v3.json` existe e passa no loader.
+- Se o log mostrar `Schema detectado: v1`, o arquivo ainda está no formato legado.
+- Se o BancoBot não responder, confira `http://localhost:8080/health`.
+- Para eliminar tempo de espera real durante testes locais, use `--no-simulate-delays`.

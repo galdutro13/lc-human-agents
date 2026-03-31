@@ -5,10 +5,14 @@ import threading
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dotenv import load_dotenv
 import requests
-import json
 import random
 from datetime import datetime, timedelta
 from source.tests.chatbot_test.usuario import UsuarioBot
+from tools.enxame_usuario.personas_loader import (
+    PersonasLoaderError,
+    detect_personas_schema_version,
+    load_personas_file,
+)
 
 """
 Script para executar uma suíte de personas definidas em um arquivo JSON (``prompts-file``)
@@ -519,15 +523,19 @@ if __name__ == "__main__":
         exit(1)
 
     try:
-        with open(args.prompts_file, "r", encoding="utf-8") as fp:
-            prompts: dict = json.load(fp)
-    except Exception as exc:
-        print(f"ERRO: não foi possível ler {args.prompts_file}: {exc}")
+        schema_version = detect_personas_schema_version(args.prompts_file)
+        prompts: dict = load_personas_file(args.prompts_file, accept_legacy=True)
+    except PersonasLoaderError as exc:
+        print(f"ERRO: não foi possível carregar {args.prompts_file}: {exc}")
         exit(1)
 
     if not prompts:
         print("ERRO: arquivo de prompts vazio.")
         exit(1)
+
+    print(f"[INFO] Schema detectado: {schema_version}")
+    if schema_version == "v1":
+        print("[AVISO] Schema v1 carregado em modo legado. Migre para personas_v3.json quando possível.")
 
     print(f"[INFO] {len(prompts)} personas carregadas de {args.prompts_file}.")
 
