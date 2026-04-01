@@ -1,0 +1,264 @@
+{
+  "versao_schema": "3.0",
+  "personas": {
+    "per_demo20_ana": {
+      "nome": "Ana Ribeiro",
+      "prompt": "Você é Ana Ribeiro, uma mulher de 29 anos, residente em Belo Horizonte (MG). É analista de marketing, organizada e prática, com renda mensal de R$ 6.500,00. Siga as duas próximas seções: [[como agir]] e [[missão]]. [[como agir]] Adote um estilo de fala cordial, objetivo e colaborativo. Faça perguntas claras, confirme informações importantes e mantenha sempre um tom respeitoso. Responda usando no máximo 120 palavras. [[missão]] Você está interagindo com o chatbot do banco para resolver necessidades do dia a dia financeiro, como entender cobranças, ajustar limites, consultar benefícios e organizar pagamentos. Mantenha a conversa focada no que precisa resolver. Finalize com 'quit' assim que obtiver uma resposta útil e prática, ou se perceber que não conseguirá avançar."
+    },
+    "per_demo20_bruno": {
+      "nome": "Bruno Martins",
+      "prompt": "Você é Bruno Martins, um homem de 41 anos, residente em Campinas (SP). É gerente comercial, tem perfil analítico e renda mensal de R$ 12.800,00. Siga as duas próximas seções: [[como agir]] e [[missão]]. [[como agir]] Adote um estilo de fala direto, racional e um pouco exigente, mas sempre educado. Questione taxas, prazos e critérios quando achar necessário. Responda usando no máximo 130 palavras. [[missão]] Você está interagindo com o chatbot do banco para tomar decisões financeiras mais seguras e eficientes, buscando clareza sobre custos, renegociação, crédito e serviços do cartão. Mantenha a conversa centrada no problema principal. Finalize com 'quit' assim que tiver uma orientação concreta ou se concluir que o atendimento não está ajudando."
+    },
+    "per_demo20_clara": {
+      "nome": "Clara Souza",
+      "prompt": "Você é Clara Souza, uma mulher de 35 anos, residente em Recife (PE). É arquiteta autônoma, criativa, atenta aos detalhes e tem renda mensal variável em torno de R$ 8.900,00. Siga as duas próximas seções: [[como agir]] e [[missão]]. [[como agir]] Adote um estilo de fala humano, curioso e cuidadoso. Peça exemplos simples quando algo estiver confuso e demonstre interesse em entender bem as soluções propostas. Responda usando no máximo 125 palavras. [[missão]] Você está interagindo com o chatbot do banco para resolver questões ligadas a cartão, parcelamento, benefícios, cobrança e planejamento de pagamentos, buscando soluções claras e viáveis. Mantenha a conversa alinhada ao problema apresentado. Finalize com 'quit' assim que tiver segurança sobre o próximo passo ou se sentir que a conversa não está evoluindo."
+    }
+  },
+  "configuracoes": {
+    "cfg_demo20_01": {
+      "duracao": "rapida",
+      "periodo": "horario-comercial",
+      "fim_de_semana": false
+    },
+    "cfg_demo20_02": {
+      "duracao": "media",
+      "periodo": "horario-comercial",
+      "fim_de_semana": false
+    },
+    "cfg_demo20_03": {
+      "duracao": "lenta",
+      "periodo": "noite",
+      "fim_de_semana": false
+    },
+    "cfg_demo20_04": {
+      "duracao": "rapida",
+      "periodo": "noite",
+      "fim_de_semana": true
+    },
+    "cfg_demo20_05": {
+      "duracao": "media",
+      "periodo": "horario-comercial",
+      "fim_de_semana": true
+    }
+  },
+  "politicas_amostrais": {
+    "pol_demo20_v1": {
+      "objetivo": "Conjunto sintético de demonstração com 3 personas e 5 cenários para gerar 20 diálogos de teste no schema 3.0.",
+      "n_total": 20,
+      "seed": 20260401,
+      "distribuicao_alvo": {
+        "fonte": "arquivo_exemplo_controlado::personas_exemplo_20",
+        "configuracoes": {
+          "cfg_demo20_01": 0.25,
+          "cfg_demo20_02": 0.20,
+          "cfg_demo20_03": 0.20,
+          "cfg_demo20_04": 0.20,
+          "cfg_demo20_05": 0.15
+        }
+      },
+      "restricoes": {
+        "min_por_persona": 6,
+        "min_por_configuracao": 3,
+        "max_proporcao_por_combinacao": 0.15,
+        "combos_proibidos": [],
+        "combos_raros_controlados": []
+      },
+      "amostragem": {
+        "tipo": "mistura_ponderada_estratificada",
+        "componentes": [
+          {
+            "nome": "naturalistica",
+            "proporcao": 1.0,
+            "base": "distribuicao_alvo"
+          }
+        ]
+      },
+      "auditoria": {
+        "desvio_maximo_aceitavel": 0.02,
+        "repetir_sorteio_se_violado": true
+      }
+    }
+  },
+  "simulacoes": [
+    {
+      "id": "sim_demo20_001",
+      "politica_id": "pol_demo20_v1",
+      "persona_id": "per_demo20_ana",
+      "config_id": "cfg_demo20_01",
+      "prob_alvo": 0.25,
+      "prob_amostragem": 0.25,
+      "peso_analitico": 1.0
+    },
+    {
+      "id": "sim_demo20_002",
+      "politica_id": "pol_demo20_v1",
+      "persona_id": "per_demo20_ana",
+      "config_id": "cfg_demo20_02",
+      "prob_alvo": 0.20,
+      "prob_amostragem": 0.20,
+      "peso_analitico": 1.0
+    },
+    {
+      "id": "sim_demo20_003",
+      "politica_id": "pol_demo20_v1",
+      "persona_id": "per_demo20_ana",
+      "config_id": "cfg_demo20_03",
+      "prob_alvo": 0.20,
+      "prob_amostragem": 0.20,
+      "peso_analitico": 1.0
+    },
+    {
+      "id": "sim_demo20_004",
+      "politica_id": "pol_demo20_v1",
+      "persona_id": "per_demo20_ana",
+      "config_id": "cfg_demo20_04",
+      "prob_alvo": 0.20,
+      "prob_amostragem": 0.20,
+      "peso_analitico": 1.0
+    },
+    {
+      "id": "sim_demo20_005",
+      "politica_id": "pol_demo20_v1",
+      "persona_id": "per_demo20_ana",
+      "config_id": "cfg_demo20_05",
+      "prob_alvo": 0.15,
+      "prob_amostragem": 0.15,
+      "peso_analitico": 1.0
+    },
+    {
+      "id": "sim_demo20_006",
+      "politica_id": "pol_demo20_v1",
+      "persona_id": "per_demo20_bruno",
+      "config_id": "cfg_demo20_01",
+      "prob_alvo": 0.25,
+      "prob_amostragem": 0.25,
+      "peso_analitico": 1.0
+    },
+    {
+      "id": "sim_demo20_007",
+      "politica_id": "pol_demo20_v1",
+      "persona_id": "per_demo20_bruno",
+      "config_id": "cfg_demo20_02",
+      "prob_alvo": 0.20,
+      "prob_amostragem": 0.20,
+      "peso_analitico": 1.0
+    },
+    {
+      "id": "sim_demo20_008",
+      "politica_id": "pol_demo20_v1",
+      "persona_id": "per_demo20_bruno",
+      "config_id": "cfg_demo20_03",
+      "prob_alvo": 0.20,
+      "prob_amostragem": 0.20,
+      "peso_analitico": 1.0
+    },
+    {
+      "id": "sim_demo20_009",
+      "politica_id": "pol_demo20_v1",
+      "persona_id": "per_demo20_bruno",
+      "config_id": "cfg_demo20_04",
+      "prob_alvo": 0.20,
+      "prob_amostragem": 0.20,
+      "peso_analitico": 1.0
+    },
+    {
+      "id": "sim_demo20_010",
+      "politica_id": "pol_demo20_v1",
+      "persona_id": "per_demo20_bruno",
+      "config_id": "cfg_demo20_05",
+      "prob_alvo": 0.15,
+      "prob_amostragem": 0.15,
+      "peso_analitico": 1.0
+    },
+    {
+      "id": "sim_demo20_011",
+      "politica_id": "pol_demo20_v1",
+      "persona_id": "per_demo20_clara",
+      "config_id": "cfg_demo20_01",
+      "prob_alvo": 0.25,
+      "prob_amostragem": 0.25,
+      "peso_analitico": 1.0
+    },
+    {
+      "id": "sim_demo20_012",
+      "politica_id": "pol_demo20_v1",
+      "persona_id": "per_demo20_clara",
+      "config_id": "cfg_demo20_02",
+      "prob_alvo": 0.20,
+      "prob_amostragem": 0.20,
+      "peso_analitico": 1.0
+    },
+    {
+      "id": "sim_demo20_013",
+      "politica_id": "pol_demo20_v1",
+      "persona_id": "per_demo20_clara",
+      "config_id": "cfg_demo20_03",
+      "prob_alvo": 0.20,
+      "prob_amostragem": 0.20,
+      "peso_analitico": 1.0
+    },
+    {
+      "id": "sim_demo20_014",
+      "politica_id": "pol_demo20_v1",
+      "persona_id": "per_demo20_clara",
+      "config_id": "cfg_demo20_04",
+      "prob_alvo": 0.20,
+      "prob_amostragem": 0.20,
+      "peso_analitico": 1.0
+    },
+    {
+      "id": "sim_demo20_015",
+      "politica_id": "pol_demo20_v1",
+      "persona_id": "per_demo20_clara",
+      "config_id": "cfg_demo20_05",
+      "prob_alvo": 0.15,
+      "prob_amostragem": 0.15,
+      "peso_analitico": 1.0
+    },
+    {
+      "id": "sim_demo20_016",
+      "politica_id": "pol_demo20_v1",
+      "persona_id": "per_demo20_ana",
+      "config_id": "cfg_demo20_01",
+      "prob_alvo": 0.25,
+      "prob_amostragem": 0.25,
+      "peso_analitico": 1.0
+    },
+    {
+      "id": "sim_demo20_017",
+      "politica_id": "pol_demo20_v1",
+      "persona_id": "per_demo20_bruno",
+      "config_id": "cfg_demo20_01",
+      "prob_alvo": 0.25,
+      "prob_amostragem": 0.25,
+      "peso_analitico": 1.0
+    },
+    {
+      "id": "sim_demo20_018",
+      "politica_id": "pol_demo20_v1",
+      "persona_id": "per_demo20_clara",
+      "config_id": "cfg_demo20_02",
+      "prob_alvo": 0.20,
+      "prob_amostragem": 0.20,
+      "peso_analitico": 1.0
+    },
+    {
+      "id": "sim_demo20_019",
+      "politica_id": "pol_demo20_v1",
+      "persona_id": "per_demo20_ana",
+      "config_id": "cfg_demo20_03",
+      "prob_alvo": 0.20,
+      "prob_amostragem": 0.20,
+      "peso_analitico": 1.0
+    },
+    {
+      "id": "sim_demo20_020",
+      "politica_id": "pol_demo20_v1",
+      "persona_id": "per_demo20_bruno",
+      "config_id": "cfg_demo20_04",
+      "prob_alvo": 0.20,
+      "prob_amostragem": 0.20,
+      "peso_analitico": 1.0
+    }
+  ]
+}
