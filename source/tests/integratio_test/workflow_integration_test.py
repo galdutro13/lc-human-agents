@@ -1,4 +1,5 @@
 import unittest
+import os
 
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_openai import ChatOpenAI
@@ -17,6 +18,7 @@ from source.chat_graph import (
 
 
 
+@unittest.skipUnless(os.getenv("OPENAI_API_KEY"), "OPENAI_API_KEY não configurada.")
 class TestChatGraphPromptIntegration(unittest.TestCase):
     def test_initial(self):
         model_name = ModelName.GPT4_MINI

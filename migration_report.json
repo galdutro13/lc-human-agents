@@ -1,0 +1,185 @@
+{
+  "legacy_summary": {
+    "source_path": "personas_tf.json",
+    "input_sha256": "793ed4df4b603776074ae7eb78e90b619652eb8d2c7ca52d61b753e131be0e33",
+    "entries": 300,
+    "unique_personas": 20,
+    "duracao_counts": {
+      "lenta": 94,
+      "media": 125,
+      "rapida": 81
+    },
+    "offset_counts": {
+      "horario-comercial": 182,
+      "noite": 118
+    },
+    "weekend_counts": {
+      "false": 258,
+      "true": 42
+    }
+  },
+  "template_prompt": "{identidade} Siga as duas próximas seções: [[como agir]] e [[missão]]. [[como agir]] {como_agir} [[missão]] {missao}",
+  "personas": {
+    "count": 20,
+    "slugs": [
+      "ana_beatriz_silva",
+      "carla_mendes",
+      "carlos_ferreira",
+      "miguel_santos",
+      "fernanda_costa",
+      "ricardo_tanaka",
+      "antonia_silveira",
+      "paulo_henrique_almeida",
+      "camila_rocha",
+      "jose_carlos_da_silva",
+      "eduardo_martins",
+      "gabriela_ferreira",
+      "rafael_gomes",
+      "luisa_oliveira",
+      "marina_rodrigues",
+      "daniela_nascimento",
+      "roberto_yamamoto",
+      "patricia_santana",
+      "joao_pedro_oliveira",
+      "helena_mendonca"
+    ]
+  },
+  "sampling_summary": {
+    "persona_pesos": {
+      "ana_beatriz_silva": 1,
+      "carla_mendes": 1,
+      "carlos_ferreira": 1,
+      "miguel_santos": 1,
+      "fernanda_costa": 2,
+      "ricardo_tanaka": 1,
+      "antonia_silveira": 2,
+      "paulo_henrique_almeida": 1,
+      "camila_rocha": 2,
+      "jose_carlos_da_silva": 2,
+      "eduardo_martins": 2,
+      "gabriela_ferreira": 1,
+      "rafael_gomes": 1,
+      "luisa_oliveira": 1,
+      "marina_rodrigues": 1,
+      "daniela_nascimento": 1,
+      "roberto_yamamoto": 1,
+      "patricia_santana": 1,
+      "joao_pedro_oliveira": 1,
+      "helena_mendonca": 1
+    },
+    "duracao_default": {
+      "rapida": 1,
+      "media": 2,
+      "lenta": 1
+    },
+    "duracao_overrides": [
+      "antonia_silveira",
+      "camila_rocha",
+      "carla_mendes",
+      "carlos_ferreira",
+      "eduardo_martins",
+      "fernanda_costa",
+      "helena_mendonca",
+      "joao_pedro_oliveira",
+      "jose_carlos_da_silva",
+      "marina_rodrigues",
+      "miguel_santos",
+      "paulo_henrique_almeida",
+      "rafael_gomes",
+      "ricardo_tanaka",
+      "roberto_yamamoto"
+    ],
+    "offset_default": {
+      "horario-comercial": 7,
+      "noite": 5
+    },
+    "offset_overrides": [
+      "camila_rocha",
+      "carla_mendes",
+      "carlos_ferreira",
+      "daniela_nascimento",
+      "eduardo_martins",
+      "fernanda_costa",
+      "gabriela_ferreira",
+      "joao_pedro_oliveira",
+      "jose_carlos_da_silva",
+      "luisa_oliveira",
+      "marina_rodrigues",
+      "patricia_santana",
+      "rafael_gomes",
+      "ricardo_tanaka",
+      "roberto_yamamoto"
+    ],
+    "weekend_condicionais": {
+      "horario-comercial": {
+        "true": 5,
+        "false": 177
+      },
+      "noite": {
+        "true": 37,
+        "false": 81
+      }
+    }
+  },
+  "reconstruction_audit": {
+    "unique_persona_total": 20,
+    "unique_persona_matches": 20,
+    "entry_total": 300,
+    "entry_matches": 300,
+    "mismatches": []
+  },
+  "statistical_validation": {
+    "seed": 44,
+    "passou": true,
+    "resultados": [
+      {
+        "variavel": "persona_id",
+        "chi2": 22.375,
+        "p_valor": 0.266,
+        "passou": true
+      },
+      {
+        "variavel": "duracao",
+        "chi2": 1.76,
+        "p_valor": 0.4148,
+        "passou": true
+      },
+      {
+        "variavel": "offset",
+        "chi2": 0.2235,
+        "p_valor": 0.6364,
+        "passou": true
+      },
+      {
+        "variavel": "weekend",
+        "chi2": 0.2492,
+        "p_valor": 0.6177,
+        "passou": true
+      }
+    ],
+    "min_por_persona": 4,
+    "min_por_persona_passou": true,
+    "contagem_por_persona": {
+      "ana_beatriz_silva": 13,
+      "antonia_silveira": 24,
+      "camila_rocha": 22,
+      "carla_mendes": 7,
+      "carlos_ferreira": 15,
+      "daniela_nascimento": 13,
+      "eduardo_martins": 23,
+      "fernanda_costa": 23,
+      "gabriela_ferreira": 11,
+      "helena_mendonca": 14,
+      "joao_pedro_oliveira": 13,
+      "jose_carlos_da_silva": 15,
+      "luisa_oliveira": 10,
+      "marina_rodrigues": 16,
+      "miguel_santos": 21,
+      "patricia_santana": 5,
+      "paulo_henrique_almeida": 14,
+      "rafael_gomes": 10,
+      "ricardo_tanaka": 15,
+      "roberto_yamamoto": 16
+    }
+  }
+}

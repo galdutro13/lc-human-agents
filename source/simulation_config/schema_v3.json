@@ -1,0 +1,184 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "versao",
+    "personas",
+    "template_prompt",
+    "amostragem"
+  ],
+  "properties": {
+    "versao": {
+      "const": "3.0"
+    },
+    "personas": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "identidade",
+          "como_agir",
+          "missao"
+        ],
+        "properties": {
+          "identidade": {
+            "type": "string",
+            "minLength": 1
+          },
+          "como_agir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "missao": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "template_prompt": {
+      "type": "string",
+      "minLength": 1
+    },
+    "amostragem": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "n",
+        "seed",
+        "metodo",
+        "dag_ordem",
+        "variaveis",
+        "restricoes"
+      ],
+      "properties": {
+        "n": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "seed": {
+          "type": "integer"
+        },
+        "metodo": {
+          "const": "ancestral"
+        },
+        "dag_ordem": {
+          "type": "array",
+          "minItems": 4,
+          "uniqueItems": true,
+          "items": {
+            "type": "string"
+          }
+        },
+        "variaveis": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "persona_id",
+            "duracao",
+            "offset",
+            "weekend"
+          ],
+          "properties": {
+            "persona_id": {
+              "$ref": "#/$defs/root_variable"
+            },
+            "duracao": {
+              "$ref": "#/$defs/dependent_variable"
+            },
+            "offset": {
+              "$ref": "#/$defs/dependent_variable"
+            },
+            "weekend": {
+              "$ref": "#/$defs/dependent_variable"
+            }
+          }
+        },
+        "restricoes": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "min_por_persona"
+          ],
+          "properties": {
+            "min_por_persona": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "weight_map": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "type": "integer",
+        "minimum": 1
+      }
+    },
+    "root_variable": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "descricao",
+        "tipo",
+        "depende_de",
+        "pesos"
+      ],
+      "properties": {
+        "descricao": {
+          "type": "string",
+          "minLength": 1
+        },
+        "tipo": {
+          "const": "categorica"
+        },
+        "depende_de": {
+          "type": "null"
+        },
+        "pesos": {
+          "$ref": "#/$defs/weight_map"
+        }
+      }
+    },
+    "dependent_variable": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "descricao",
+        "tipo",
+        "depende_de",
+        "pesos_condicionais"
+      ],
+      "properties": {
+        "descricao": {
+          "type": "string",
+          "minLength": 1
+        },
+        "tipo": {
+          "enum": [
+            "categorica",
+            "bernoulli"
+          ]
+        },
+        "depende_de": {
+          "type": "string",
+          "minLength": 1
+        },
+        "pesos_condicionais": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": {
+            "$ref": "#/$defs/weight_map"
+          }
+        }
+      }
+    }
+  }
+}

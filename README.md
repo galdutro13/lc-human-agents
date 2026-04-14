@@ -154,6 +154,21 @@ Once the bank chatbot service is running, you can simulate interactions with mul
 python ./tools/enxame_usuario/start_usuarios.py --prompts-file "<path_to_prompts_file>"
 ```
 
+The `--prompts-file` flag now accepts both schemas:
+- `personas_tf.json`: legacy flat schema (v1.0)
+- `config_v3.json`: sampled schema (v3.0) loaded through the unified loader
+
+To regenerate the versioned v3 artifact from the legacy source:
+
+```bash
+python -m source.scripts.migrate_personas_v1_to_v3 \
+  --input personas_tf.json \
+  --output config_v3.json \
+  --report-output migration_report.json \
+  --n 300 \
+  --seed 42
+```
+
 > **Note:** On first run, the RAG system will build the necessary vector stores. This may take time depending on data size and environment configuration.
 > Therefore, we recommend running the script `source/tests/integratio_test/rag_test.py` beforehand to ensure vector stores are ready and the system operates correctly.
 > Run it with:
@@ -190,4 +205,21 @@ python .\tools\touchpoints_extractor\touchpoint_classifier.py \
   --touchpoints_ai_json .\tools\touchpoints_extractor\Touchpoint_ai.json \
   --touchpoints_human_json .\tools\touchpoints_extractor\Touchpoint_human.json \
   --output_csv analises_todas.csv
+```
+
+### Running Tests
+
+Run the local unit and integration gates with:
+
+```bash
+coverage run -m unittest discover -s source/tests/unittest -p 'test*.py'
+coverage run -a -m unittest source.tests.integratio_test.persona_csv_integration
+coverage run -a -m unittest source.tests.integratio_test.test_v3_loader_pipeline_integration
+coverage report --include='source/simulation_config/sampling.py,source/simulation_config/loader.py,source/simulation_config/validation.py'
+```
+
+Run the live workflow integration test with OpenAI credentials configured:
+
+```bash
+python -m unittest source.tests.integratio_test.workflow_integration_test
 ```

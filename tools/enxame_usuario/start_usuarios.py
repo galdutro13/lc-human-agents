@@ -5,10 +5,10 @@ import threading
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dotenv import load_dotenv
 import requests
-import json
 import random
 from datetime import datetime, timedelta
 from source.tests.chatbot_test.usuario import UsuarioBot
+from source.simulation_config import carregar_simulacoes
 
 """
 Script para executar uma suíte de personas definidas em um arquivo JSON (``prompts-file``)
@@ -519,8 +519,7 @@ if __name__ == "__main__":
         exit(1)
 
     try:
-        with open(args.prompts_file, "r", encoding="utf-8") as fp:
-            prompts: dict = json.load(fp)
+        prompts = carregar_simulacoes(args.prompts_file)
     except Exception as exc:
         print(f"ERRO: não foi possível ler {args.prompts_file}: {exc}")
         exit(1)
