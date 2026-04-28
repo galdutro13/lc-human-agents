@@ -45,7 +45,12 @@ CSV_FIELDNAMES = [
 
 
 def get_ritmo_parameters(ritmo: str) -> dict[str, float]:
-    """Retorna os parâmetros de temporização baseados no ritmo da interação."""
+    """Resolve o envelope operacional associado ao ritmo da conversa.
+
+    A simulação abstrata guarda apenas `rapido`, `medio` ou `lento`. Esta
+    função traduz essa categoria em parâmetros executáveis para o `UsuarioBot`,
+    como velocidade de digitação e intervalo de reflexão.
+    """
     return RITMO_CONFIGS.get(ritmo, RITMO_CONFIGS["medio"])
 
 
@@ -56,7 +61,22 @@ def calculate_target_local_datetime(
     *,
     now: datetime | None = None,
 ) -> datetime | None:
-    """Calcula o datetime local alvo a partir do calendário sintético."""
+    """Projeta um `dia_relativo + offset` em um datetime local concreto.
+
+    A data base é ancorada na próxima segunda-feira relativa ao momento de
+    referência e, a partir daí, o `dia_indice` do calendário sintético é
+    transformado em uma data real. O `offset` define a faixa horária dentro
+    desse dia.
+
+    Args:
+        dia_relativo: Identificador sintético do dia, como `d01`.
+        offset_type: Faixa horária da simulação.
+        calendario: Calendário sintético do config.
+        now: Momento de referência para a projeção.
+
+    Returns:
+        O datetime local alvo, ou `None` se o dia ou o offset forem inválidos.
+    """
     if dia_relativo not in calendario or offset_type not in OFFSET_ANCHORS:
         return None
 
@@ -80,7 +100,12 @@ def calculate_temporal_offset(
     *,
     now: datetime | None = None,
 ) -> timedelta:
-    """Calcula o offset temporal determinístico a partir do calendário sintético."""
+    """Calcula o deslocamento temporal entre `now` e o instante projetado.
+
+    Esse deslocamento é o valor efetivamente injetado no `UsuarioBot` para que
+    a conversa seja interpretada como ocorrendo no ponto do calendário sintético
+    correspondente à instância da simulação.
+    """
     reference_now = now or datetime.now()
     target_local_datetime = calculate_target_local_datetime(
         dia_relativo,
@@ -114,7 +139,24 @@ def resolve_simulation_projection(
     now: datetime | None = None,
     prompt_preview_chars: int = 180,
 ) -> dict:
-    """Resolve prompt, envelopes temporais e colunas enriquecidas de uma simulação."""
+    """Transforma uma simulação abstrata em parâmetros operacionais concretos.
+
+    Esta função faz a ponte entre o registro estatístico gerado pelo sampler e
+    os consumidores operacionais do projeto, como o exportador CSV e o runner
+    que instancia `UsuarioBot`. Além das colunas de preview, ela resolve o
+    prompt final, o envelope de ritmo e o `temporal_offset`.
+
+    Args:
+        simulacao: Registro gerado pelo pipeline estatístico.
+        config: Configuração v4.2 completa.
+        now: Momento de referência usado nas projeções temporais.
+        prompt_preview_chars: Limite de caracteres para o campo
+            `prompt_preview`.
+
+    Returns:
+        Um dicionário enriquecido com metadados calendáricos, dados de missão,
+        preview textual e parâmetros operacionais reutilizáveis pelo runner.
+    """
     calendario = config["amostragem"]["variaveis"]["dia_relativo"]["calendario"]
     dia_metadata = calendario[simulacao["dia_relativo"]]
     persona = config["personas"][simulacao["persona_id"]]

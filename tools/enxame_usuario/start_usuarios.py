@@ -26,11 +26,21 @@ compartilhado com o exportador de prévia CSV.
 
 
 def parse_persona_config(simulacao: dict, config: dict, default_args):
-    """
-    Resolve prompt e parâmetros operacionais a partir de uma simulação v4.2.
+    """Converte uma instância simulada no pacote de execução do `UsuarioBot`.
+
+    A função delega o trabalho de projeção para `resolve_simulation_projection`
+    e extrai apenas o subconjunto de campos consumido pelo runner:
+    prompt final, velocidade de digitação, intervalo de reflexão e
+    deslocamento temporal.
+
+    Args:
+        simulacao: Registro estatístico já gerado pelo sampler.
+        config: Configuração v4.2 usada para resolver persona, missão e tempo.
+        default_args: Mantido apenas por compatibilidade com o fluxo atual do
+            runner; não participa mais da resolução dos parâmetros.
 
     Returns:
-        Tupla (prompt, typing_speed, thinking_range, temporal_offset)
+        Tupla `(prompt, typing_speed_wpm, thinking_time_range, temporal_offset)`.
     """
     del default_args
     projection = resolve_simulation_projection(simulacao, config)
@@ -56,7 +66,12 @@ def iniciar_usuario(
     simulate_delays: bool,
     temporal_offset: timedelta = timedelta(0),
 ) -> None:
-    """Instancia e executa um UsuarioBot para a persona fornecida."""
+    """Instancia e executa um `UsuarioBot` já parametrizado para a simulação.
+
+    O `temporal_offset` desloca a percepção temporal do bot para o instante
+    sintético projetado pela simulação. Os demais parâmetros controlam o ritmo
+    operacional e o comportamento de pausas durante a conversa.
+    """
     print(f"[INFO] Iniciando persona '{persona_id}'…")
 
     if temporal_offset != timedelta(0):
@@ -86,7 +101,12 @@ def iniciar_usuario(
 
 
 def check_server_availability(api_url: str) -> bool:
-    """Retorna True se `api_url/health` responder HTTP 200 em até 5 segundos."""
+    """Verifica se o serviço BancoBot está acessível antes da execução.
+
+    Returns:
+        `True` quando o endpoint `/health` responde HTTP 200 dentro do timeout;
+        `False` em qualquer erro de conexão ou resposta não saudável.
+    """
     try:
         response = requests.get(f"{api_url}/health", timeout=5)
         return response.status_code == 200

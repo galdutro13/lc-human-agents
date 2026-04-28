@@ -24,6 +24,27 @@ def alocar_maiores_restos(
     n: int,
     ordem: list[str] | None = None,
 ) -> dict[str, int]:
+    """Converte pesos positivos em cotas inteiras com soma exata `n`.
+
+    A função implementa o método dos maiores restos: calcula a quota ideal
+    de cada categoria, fixa a parte inteira via `floor` e distribui as vagas
+    restantes para as maiores partes fracionárias. Empates são resolvidos pela
+    ordem informada no schema, o que preserva determinismo entre execuções.
+
+    Args:
+        pesos: Mapa categoria -> peso positivo.
+        n: Total de instâncias a distribuir.
+        ordem: Ordem estável de desempate. Quando omitida, usa a ordem das
+            chaves de `pesos`.
+
+    Returns:
+        Um dicionário categoria -> cota inteira, sempre somando exatamente `n`.
+
+    Raises:
+        ConfigValidationError: Se `n` for inválido, se os pesos estiverem
+            vazios, se houver pesos não positivos ou se a soma final divergir
+            de `n`.
+    """
     if isinstance(n, bool) or n < 0:
         raise ConfigValidationError("'n' deve ser um inteiro não negativo para alocação de cotas.")
     if not pesos:
@@ -70,6 +91,25 @@ def alocar_maiores_restos(
 
 
 def obter_pesos_condicionados(spec: dict, instancia: dict) -> dict:
+    """Resolve a linha de pesos condicionais aplicável a uma instância parcial.
+
+    Suporta tanto dependência simples (`depende_de: "persona_id"`) quanto
+    dependência múltipla (`depende_de: ["persona_id", "weekend"]`). Os valores
+    da instância são normalizados para o formato usado nas CPTs aninhadas,
+    incluindo a conversão de booleanos para `"true"` e `"false"`.
+
+    Args:
+        spec: Especificação da variável no schema, contendo `depende_de` e
+            `pesos_condicionais`.
+        instancia: Valores já resolvidos das variáveis pai.
+
+    Returns:
+        O dicionário de pesos correspondente ao caminho condicional resolvido.
+
+    Raises:
+        ConfigValidationError: Se faltar alguma variável pai na instância ou se
+            o caminho condicional não existir na CPT.
+    """
     depende_de = spec.get("depende_de")
     if depende_de is None:
         raise ConfigValidationError("A variável não define depende_de para pesos condicionais.")
@@ -99,6 +139,12 @@ def obter_pesos_condicionados(spec: dict, instancia: dict) -> dict:
 
 
 def montar_prompt(persona: dict, missao: dict, template: str) -> str:
+    """Monta o prompt final unindo identidade da persona e texto da missão.
+
+    No schema v4.2 a missão não está mais embutida na persona. Esta função é o
+    ponto único que compõe os três placeholders esperados pelo template:
+    `identidade`, `como_agir` e `missao`.
+    """
     return template.format(
         identidade=persona["identidade"],
         como_agir=persona["como_agir"],
@@ -107,6 +153,12 @@ def montar_prompt(persona: dict, missao: dict, template: str) -> str:
 
 
 def derivar_weekend(calendario: dict[str, dict], dia_relativo: str) -> bool:
+    """Deriva deterministicamente o campo `weekend` a partir do calendário.
+
+    Diferentemente das versões antigas do pipeline, `weekend` não é amostrado.
+    Ele é sempre lido do calendário sintético associado ao `dia_relativo`
+    escolhido para o registro.
+    """
     try:
         return bool(calendario[dia_relativo]["weekend"])
     except KeyError as exc:
@@ -114,6 +166,13 @@ def derivar_weekend(calendario: dict[str, dict], dia_relativo: str) -> bool:
 
 
 def _sequencia_balanceada(cotas: dict[str, int], ordem: list[str] | None = None) -> list[str]:
+    """Expande cotas inteiras em uma sequência distribuída de forma balanceada.
+
+    Em vez de materializar cada categoria em blocos contíguos, a função faz um
+    round-robin sobre as categorias com saldo restante. Isso reduz padrões
+    artificiais antes do embaralhamento final e mantém o resultado
+    deterministicamente reproduzível.
+    """
     ordem_efetiva = [chave for chave in (ordem or list(cotas.keys())) if cotas.get(chave, 0) > 0]
     restantes = {chave: int(cotas[chave]) for chave in ordem_efetiva}
     total = sum(restantes.values())
@@ -137,6 +196,7 @@ def _sequencia_balanceada(cotas: dict[str, int], ordem: list[str] | None = None)
 
 
 def _ordenar_indices_por_dia(indices: list[int], simulacoes: list[dict], calendario: dict[str, dict]) -> list[int]:
+    """Ordena registros de uma persona pela posição temporal no calendário."""
     return sorted(
         indices,
         key=lambda indice: (
@@ -151,6 +211,12 @@ def _construir_registros_base(
     dia_cotas: dict[str, int],
     persona_cotas: dict[str, int],
 ) -> list[dict]:
+    """Cria a malha base de registros com dia, persona e weekend derivado.
+
+    Esta etapa materializa apenas as variáveis marginais `dia_relativo` e
+    `persona_id`. Em seguida, deriva `weekend` do calendário sintético, deixando
+    `offset`, `ritmo` e `missao_id` para as etapas condicionais posteriores.
+    """
     variaveis = config["amostragem"]["variaveis"]
     calendario = variaveis["dia_relativo"]["calendario"]
     dia_ordem = list(variaveis["dia_relativo"]["composicao_pesos"]["pesos"].keys())
@@ -170,10 +236,29 @@ def _construir_registros_base(
 
 
 def _contagem_completa(contagem: Counter | dict[str, int], dominio: list[str]) -> dict[str, int]:
+    """Completa contagens ausentes com zero para um domínio conhecido."""
     return {chave: int(contagem.get(chave, 0)) for chave in dominio}
 
 
 def calcular_plano_de_cotas(config: dict) -> dict:
+    """Calcula o plano determinístico completo de cotas para uma execução.
+
+    Esta é a fonte única de verdade do planejamento estatístico da simulação.
+    A função deriva, a partir dos pesos e do `n` configurado, as cotas
+    marginais de `dia_relativo` e `persona_id` e as cotas condicionais de
+    `offset`, `ritmo` e `missao_id`.
+
+    O resultado é reutilizado pelo gerador, pela validação e pela auditoria,
+    evitando duplicação de lógica e garantindo consistência entre planejamento,
+    execução e conferência.
+
+    Args:
+        config: Configuração v4.2 já validada.
+
+    Returns:
+        Um dicionário com o plano completo de cotas marginais e condicionais,
+        incluindo a decomposição por persona e por weekend.
+    """
     amostragem = config["amostragem"]
     variaveis = amostragem["variaveis"]
     total = amostragem["n"]
@@ -258,6 +343,12 @@ def calcular_plano_de_cotas(config: dict) -> dict:
 
 
 def _contagens_observadas(config: dict, simulacoes: list[dict]) -> dict:
+    """Resume simulações geradas em contagens comparáveis ao plano de cotas.
+
+    O formato retornado espelha a estrutura produzida por
+    `calcular_plano_de_cotas`, o que permite comparar diretamente planejado e
+    observado em auditorias e validações.
+    """
     variaveis = config["amostragem"]["variaveis"]
     dia_dominio = list(variaveis["dia_relativo"]["composicao_pesos"]["pesos"].keys())
     persona_dominio = list(variaveis["persona_id"]["composicao_pesos"]["peso_final"].keys())
@@ -313,6 +404,21 @@ def _contagens_observadas(config: dict, simulacoes: list[dict]) -> dict:
 
 
 def gerar_relatorio_auditoria(config: dict, simulacoes: list[dict] | None = None) -> dict:
+    """Gera um artefato estruturado de auditoria do plano de amostragem.
+
+    Quando recebe simulações observadas, o relatório inclui também contagens
+    efetivamente produzidas e checks booleanos de conformidade entre o plano e
+    a materialização final.
+
+    Args:
+        config: Configuração v4.2 já validada.
+        simulacoes: Lista opcional de simulações materializadas.
+
+    Returns:
+        Um dicionário pronto para serialização em JSON com metadados da
+        execução, cotas calculadas e, opcionalmente, comparações com o
+        observado.
+    """
     plano = calcular_plano_de_cotas(config)
     relatorio = {
         "versao_schema": config["versao"],
@@ -337,6 +443,21 @@ def gerar_relatorio_auditoria(config: dict, simulacoes: list[dict] | None = None
 
 
 def gerar_simulacoes(config: dict) -> list[dict]:
+    """Materializa as instâncias finais da simulação de personas.
+
+    O fluxo é totalmente determinístico para um mesmo `config`: primeiro
+    calcula-se o plano de cotas, depois constroem-se os registros base com
+    `dia_relativo`, `persona_id` e `weekend`, em seguida são preenchidas as
+    variáveis condicionais (`offset`, `ritmo`, `missao_id`) e, por fim, a lista
+    inteira é embaralhada com a `seed` configurada.
+
+    Args:
+        config: Configuração v4.2 já validada.
+
+    Returns:
+        Lista de registros contendo `id`, `dia_relativo`, `persona_id`,
+        `weekend`, `offset`, `ritmo` e `missao_id`.
+    """
     amostragem = config["amostragem"]
     variaveis = amostragem["variaveis"]
     calendario = variaveis["dia_relativo"]["calendario"]
