@@ -23,6 +23,5 @@ pyyaml~=6.0.2
 python-dotenv~=0.21.0
 ipython~=8.30.0
 numpy>=2,<3
-scipy>=1.14,<2
 jsonschema>=4,<5
 coverage>=7,<8

@@ -1,61 +1,64 @@
-import json
+import copy
 import unittest
 from pathlib import Path
 
-from source.simulation_config import validar_seed_config
-from source.simulation_config.validation import _dominio_da_variavel, _normalizar_pesos
+from source.simulation_config import (
+    calcular_plano_de_cotas,
+    carregar_config_v42,
+    gerar_simulacoes,
+    validar_simulacoes_geradas,
+)
+from source.simulation_config.errors import ConfigValidationError
 
 
 ROOT = Path(__file__).resolve().parents[3]
-V3_PATH = ROOT / "config_v3.json"
+V42_PATH = ROOT / "config_v4_2.json"
 
 
-class TestValidation(unittest.TestCase):
+class TestValidationV42(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        with V3_PATH.open("r", encoding="utf-8") as arquivo:
-            cls.config = json.load(arquivo)
-        cls.relatorio = validar_seed_config(cls.config)
+        cls.config = carregar_config_v42(V42_PATH)
+        cls.simulacoes = gerar_simulacoes(cls.config)
 
-    def test_chi2_marginal_persona_id(self):
-        resultado = next(
-            item for item in self.relatorio["resultados"] if item["variavel"] == "persona_id"
-        )
-        self.assertTrue(resultado["passou"])
-        self.assertGreater(resultado["p_valor"], 0.05)
+    def test_validar_simulacoes_geradas_passa(self):
+        validar_simulacoes_geradas(self.config, self.simulacoes)
 
-    def test_chi2_marginal_duracao_offset_weekend(self):
-        resultados = [
-            item for item in self.relatorio["resultados"] if item["variavel"] != "persona_id"
-        ]
-        self.assertEqual(len(resultados), 3)
-        for resultado in resultados:
-            self.assertTrue(resultado["passou"], resultado)
-            self.assertGreater(resultado["p_valor"], 0.05)
+    def test_cotas_derivadas_de_dia_e_persona_batem(self):
+        plano = calcular_plano_de_cotas(self.config)
+        contagem_dias = {chave: 0 for chave in plano["dia_relativo"].keys()}
+        contagem_personas = {chave: 0 for chave in plano["persona_id"].keys()}
 
-    def test_garantir_min_por_persona(self):
-        self.assertTrue(self.relatorio["min_por_persona_passou"])
-        for contagem in self.relatorio["contagem_por_persona"].values():
-            self.assertGreaterEqual(contagem, self.relatorio["min_por_persona"])
+        for simulacao in self.simulacoes:
+            contagem_dias[simulacao["dia_relativo"]] += 1
+            contagem_personas[simulacao["persona_id"]] += 1
 
-    def test_normalizar_pesos_rejeita_total_nao_positivo(self):
-        with self.assertRaises(ValueError):
-            _normalizar_pesos({"a": 0, "b": 0})
+        self.assertEqual(contagem_dias, plano["dia_relativo"])
+        self.assertEqual(contagem_personas, plano["persona_id"])
 
-    def test_dominio_da_variavel_considera_default(self):
-        self.assertEqual(
-            _dominio_da_variavel({"depende_de": None, "pesos": {"a": 1, "b": 1}}),
-            ["a", "b"],
-        )
-        self.assertEqual(
-            _dominio_da_variavel(
-                {
-                    "depende_de": "persona_id",
-                    "pesos_condicionais": {
-                        "ana": {"rapida": 1},
-                        "_default": {"media": 1, "lenta": 1},
-                    },
-                }
-            ),
-            ["rapida", "media", "lenta"],
-        )
+    def test_weekend_e_compatibilidade_sao_respeitados(self):
+        calendario = self.config["amostragem"]["variaveis"]["dia_relativo"]["calendario"]
+        elegiveis = self.config["amostragem"]["variaveis"]["missao_id"]["missoes_elegiveis_por_persona"]
+
+        for simulacao in self.simulacoes:
+            self.assertEqual(
+                simulacao["weekend"],
+                calendario[simulacao["dia_relativo"]]["weekend"],
+            )
+            permitidas = set(elegiveis[simulacao["persona_id"]]["H"]) | set(
+                elegiveis[simulacao["persona_id"]]["M"]
+            )
+            self.assertIn(simulacao["missao_id"], permitidas)
+
+    def test_validacao_rejeita_registro_invalido(self):
+        simulacoes = copy.deepcopy(self.simulacoes)
+        simulacoes[0]["missao_id"] = "m99_inexistente"
+
+        with self.assertRaisesRegex(ConfigValidationError, "missao_id inexistente"):
+            validar_simulacoes_geradas(self.config, simulacoes)
+
+    def test_validacao_funciona_com_n_pequeno(self):
+        config = copy.deepcopy(self.config)
+        config["amostragem"]["n"] = 7
+        simulacoes = gerar_simulacoes(config)
+        validar_simulacoes_geradas(config, simulacoes)

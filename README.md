@@ -4,7 +4,7 @@
 
 This project aims to simulate interactions between "human" agents and chatbots in a banking environment. It uses the LangChain library to construct complex conversation flows, allowing multiple agents to interact with a banking chatbot. The system is designed to be extensible, enabling the addition of new personas and interaction scenarios.
 
-As a proof of concept, we provide a set of 25 prompts defining 25 personas and their respective scenarios.
+As a proof of concept, we provide a canonical v4.2 configuration for synthetic dialogue generation in a banking credit-card context.
 
 **The documentation used for RAG as well as the generated dialogues are not provided, as they contain sensitive information from a financial institution. Technical details about these artifacts can be obtained via email contact with the project team.**
 
@@ -154,19 +154,18 @@ Once the bank chatbot service is running, you can simulate interactions with mul
 python ./tools/enxame_usuario/start_usuarios.py --prompts-file "<path_to_prompts_file>"
 ```
 
-The `--prompts-file` flag now accepts both schemas:
-- `personas_tf.json`: legacy flat schema (v1.0)
-- `config_v3.json`: sampled schema (v3.0) loaded through the unified loader
-
-To regenerate the versioned v3 artifact from the legacy source:
+The `--prompts-file` flag accepts only the versioned v4.2 configuration:
+- `config_v4_2.json`: canonical schema with personas, missions, synthetic calendar, and runtime quota allocation for the configured `n`
 
 ```bash
-python -m source.scripts.migrate_personas_v1_to_v3 \
-  --input personas_tf.json \
-  --output config_v3.json \
-  --report-output migration_report.json \
-  --n 300 \
-  --seed 42
+python ./tools/enxame_usuario/start_usuarios.py --prompts-file config_v4_2.json
+```
+
+You can also inspect the generated sampling plan without running any bots:
+
+```bash
+python ./tools/enxame_usuario/export_simulation_preview.py --config-file config_v4_2.json
+python ./tools/enxame_usuario/export_simulation_audit.py --config-file config_v4_2.json
 ```
 
 > **Note:** On first run, the RAG system will build the necessary vector stores. This may take time depending on data size and environment configuration.
@@ -214,8 +213,8 @@ Run the local unit and integration gates with:
 ```bash
 coverage run -m unittest discover -s source/tests/unittest -p 'test*.py'
 coverage run -a -m unittest source.tests.integratio_test.persona_csv_integration
-coverage run -a -m unittest source.tests.integratio_test.test_v3_loader_pipeline_integration
-coverage report --include='source/simulation_config/sampling.py,source/simulation_config/loader.py,source/simulation_config/validation.py'
+coverage run -a -m unittest source.tests.integratio_test.test_v42_loader_pipeline_integration
+coverage report --include='source/simulation_config/sampling.py,source/simulation_config/loader.py,source/simulation_config/validation.py,tools/enxame_usuario/start_usuarios.py'
 ```
 
 Run the live workflow integration test with OpenAI credentials configured:

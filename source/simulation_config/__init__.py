@@ -1,51 +1,31 @@
-from source.simulation_config.loader import (
-    ConfigValidationError,
-    carregar_simulacoes,
-    detectar_versao,
-    validar_config_v3,
-    validar_dag,
-)
-from source.simulation_config.migration import (
-    DEFAULT_TEMPLATE_PROMPT,
-    auditar_reconstrucao_prompts,
-    extract_personas_from_legacy,
-    find_first_passing_seed,
-    migrate_v1_to_v3,
-    parse_prompt_monolitico,
-    slugify_persona_name,
-)
+from source.simulation_config.errors import ConfigValidationError
+from source.simulation_config.loader import carregar_config_v42
 from source.simulation_config.sampling import (
-    amostrar_categorica,
-    exportar_formato_legado,
+    alocar_maiores_restos,
+    calcular_plano_de_cotas,
+    derivar_weekend,
+    gerar_relatorio_auditoria,
     gerar_simulacoes,
     montar_prompt,
-    obter_pesos,
+    obter_pesos_condicionados,
 )
 from source.simulation_config.validation import (
-    calcular_marginais_esperadas,
-    validar_marginal,
-    validar_seed_config,
+    validar_config_v42,
+    validar_dag,
+    validar_simulacoes_geradas,
 )
 
 __all__ = [
-    "DEFAULT_TEMPLATE_PROMPT",
     "ConfigValidationError",
-    "amostrar_categorica",
-    "auditar_reconstrucao_prompts",
-    "calcular_marginais_esperadas",
-    "carregar_simulacoes",
-    "detectar_versao",
-    "exportar_formato_legado",
-    "extract_personas_from_legacy",
-    "find_first_passing_seed",
+    "alocar_maiores_restos",
+    "calcular_plano_de_cotas",
+    "carregar_config_v42",
+    "derivar_weekend",
+    "gerar_relatorio_auditoria",
     "gerar_simulacoes",
-    "migrate_v1_to_v3",
     "montar_prompt",
-    "obter_pesos",
-    "parse_prompt_monolitico",
-    "slugify_persona_name",
-    "validar_config_v3",
+    "obter_pesos_condicionados",
+    "validar_config_v42",
     "validar_dag",
-    "validar_marginal",
-    "validar_seed_config",
+    "validar_simulacoes_geradas",
 ]

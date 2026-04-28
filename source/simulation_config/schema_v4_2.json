@@ -1,0 +1,621 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "versao",
+    "contexto_negocio",
+    "canal",
+    "personas",
+    "missoes",
+    "template_prompt",
+    "amostragem",
+    "janela_temporal"
+  ],
+  "properties": {
+    "versao": {
+      "const": "4.2"
+    },
+    "contexto_negocio": {
+      "type": "string",
+      "minLength": 1
+    },
+    "canal": {
+      "type": "string",
+      "minLength": 1
+    },
+    "personas": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "identidade",
+          "como_agir"
+        ],
+        "properties": {
+          "identidade": {
+            "type": "string",
+            "minLength": 1
+          },
+          "como_agir": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "missoes": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "titulo",
+          "categoria",
+          "urgencia",
+          "complexidade",
+          "missao"
+        ],
+        "properties": {
+          "titulo": {
+            "type": "string",
+            "minLength": 1
+          },
+          "categoria": {
+            "type": "string",
+            "minLength": 1
+          },
+          "urgencia": {
+            "enum": [
+              "baixa",
+              "media",
+              "alta"
+            ]
+          },
+          "complexidade": {
+            "enum": [
+              "baixa",
+              "media",
+              "alta"
+            ]
+          },
+          "missao": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "template_prompt": {
+      "type": "string",
+      "minLength": 1
+    },
+    "janela_temporal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "unidade",
+        "duracao",
+        "calendario_sintetico",
+        "assuncao_inicio",
+        "descricao"
+      ],
+      "properties": {
+        "unidade": {
+          "type": "string",
+          "minLength": 1
+        },
+        "duracao": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "calendario_sintetico": {
+          "type": "boolean"
+        },
+        "assuncao_inicio": {
+          "type": "string",
+          "minLength": 1
+        },
+        "descricao": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "amostragem": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "n",
+        "seed",
+        "metodo",
+        "dag_ordem",
+        "formula_conjunta",
+        "variaveis",
+        "alocacao_controlada",
+        "restricoes"
+      ],
+      "properties": {
+        "n": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "seed": {
+          "type": "integer"
+        },
+        "metodo": {
+          "type": "string",
+          "minLength": 1
+        },
+        "dag_ordem": {
+          "type": "array",
+          "minItems": 6,
+          "uniqueItems": true,
+          "items": {
+            "type": "string"
+          }
+        },
+        "formula_conjunta": {
+          "type": "string",
+          "minLength": 1
+        },
+        "variaveis": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "dia_relativo",
+            "persona_id",
+            "weekend",
+            "offset",
+            "ritmo",
+            "missao_id"
+          ],
+          "properties": {
+            "dia_relativo": {
+              "$ref": "#/$defs/day_variable"
+            },
+            "persona_id": {
+              "$ref": "#/$defs/persona_variable"
+            },
+            "weekend": {
+              "$ref": "#/$defs/derived_variable"
+            },
+            "offset": {
+              "$ref": "#/$defs/multi_dependency_variable"
+            },
+            "ritmo": {
+              "$ref": "#/$defs/conditional_variable"
+            },
+            "missao_id": {
+              "$ref": "#/$defs/restricted_variable"
+            }
+          }
+        },
+        "alocacao_controlada": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "descricao",
+            "etapas",
+            "embaralhamento_final"
+          ],
+          "properties": {
+            "descricao": {
+              "type": "string",
+              "minLength": 1
+            },
+            "etapas": {
+              "type": "array",
+              "minItems": 8,
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "embaralhamento_final": {
+              "type": "boolean"
+            }
+          }
+        },
+        "restricoes": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "duracao_nao_amostrada",
+            "descricao_duracao",
+            "compatibilidade_minima_para_cruzamento",
+            "texto_canal",
+            "descricao"
+          ],
+          "properties": {
+            "duracao_nao_amostrada": {
+              "type": "boolean"
+            },
+            "descricao_duracao": {
+              "type": "string",
+              "minLength": 1
+            },
+            "compatibilidade_minima_para_cruzamento": {
+              "type": "string",
+              "minLength": 1
+            },
+            "texto_canal": {
+              "type": "string",
+              "minLength": 1
+            },
+            "descricao": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "weight_map": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "type": "number",
+        "exclusiveMinimum": 0
+      }
+    },
+    "calendar_entry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "dia_indice",
+        "mes_relativo",
+        "semana_relativa",
+        "dia_da_semana",
+        "dia_do_mes_sintetico",
+        "weekend"
+      ],
+      "properties": {
+        "dia_indice": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "mes_relativo": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "semana_relativa": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "dia_da_semana": {
+          "type": "string",
+          "minLength": 1
+        },
+        "dia_do_mes_sintetico": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "weekend": {
+          "type": "boolean"
+        }
+      }
+    },
+    "day_variable": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "descricao",
+        "tipo",
+        "depende_de",
+        "calendario",
+        "composicao_pesos"
+      ],
+      "properties": {
+        "descricao": {
+          "type": "string",
+          "minLength": 1
+        },
+        "tipo": {
+          "const": "categorica"
+        },
+        "depende_de": {
+          "type": "null"
+        },
+        "calendario": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": {
+            "$ref": "#/$defs/calendar_entry"
+          }
+        },
+        "composicao_pesos": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "padrao_semanal",
+            "padrao_semana_relativa",
+            "picos_controlados",
+            "pesos"
+          ],
+          "properties": {
+            "padrao_semanal": {
+              "$ref": "#/$defs/weight_map"
+            },
+            "padrao_semana_relativa": {
+              "$ref": "#/$defs/weight_map"
+            },
+            "picos_controlados": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              }
+            },
+            "pesos": {
+              "$ref": "#/$defs/weight_map"
+            }
+          }
+        }
+      }
+    },
+    "persona_variable": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "descricao",
+        "tipo",
+        "depende_de",
+        "composicao_pesos"
+      ],
+      "properties": {
+        "descricao": {
+          "type": "string",
+          "minLength": 1
+        },
+        "tipo": {
+          "const": "categorica"
+        },
+        "depende_de": {
+          "type": "null"
+        },
+        "composicao_pesos": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "formula",
+            "prevalencia_operacional",
+            "cobertura_experimental",
+            "peso_final"
+          ],
+          "properties": {
+            "formula": {
+              "type": "string",
+              "minLength": 1
+            },
+            "prevalencia_operacional": {
+              "$ref": "#/$defs/weight_map"
+            },
+            "cobertura_experimental": {
+              "$ref": "#/$defs/weight_map"
+            },
+            "peso_final": {
+              "$ref": "#/$defs/weight_map"
+            }
+          }
+        }
+      }
+    },
+    "derived_variable": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "descricao",
+        "tipo",
+        "depende_de",
+        "regra"
+      ],
+      "properties": {
+        "descricao": {
+          "type": "string",
+          "minLength": 1
+        },
+        "tipo": {
+          "const": "derivada"
+        },
+        "depende_de": {
+          "type": "string",
+          "minLength": 1
+        },
+        "regra": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "conditional_variable": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "descricao",
+        "tipo",
+        "depende_de",
+        "pesos_condicionais"
+      ],
+      "properties": {
+        "descricao": {
+          "type": "string",
+          "minLength": 1
+        },
+        "tipo": {
+          "const": "categorica"
+        },
+        "depende_de": {
+          "type": "string",
+          "minLength": 1
+        },
+        "pesos_condicionais": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": {
+            "$ref": "#/$defs/weight_map"
+          }
+        }
+      }
+    },
+    "multi_dependency_variable": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "descricao",
+        "tipo",
+        "depende_de",
+        "categorias",
+        "pesos_condicionais"
+      ],
+      "properties": {
+        "descricao": {
+          "type": "string",
+          "minLength": 1
+        },
+        "tipo": {
+          "const": "categorica"
+        },
+        "depende_de": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "categorias": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "pesos_condicionais": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": {
+            "type": "object",
+            "minProperties": 1,
+            "additionalProperties": {
+              "$ref": "#/$defs/weight_map"
+            }
+          }
+        }
+      }
+    },
+    "restricted_variable": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "descricao",
+        "tipo",
+        "depende_de",
+        "compatibilidade_utilizada",
+        "compatibilidade_excluida",
+        "pesos_por_nivel",
+        "composicao_pesos_base",
+        "missoes_elegiveis_por_persona",
+        "pesos_condicionais"
+      ],
+      "properties": {
+        "descricao": {
+          "type": "string",
+          "minLength": 1
+        },
+        "tipo": {
+          "const": "categorica_restrita"
+        },
+        "depende_de": {
+          "type": "string",
+          "minLength": 1
+        },
+        "compatibilidade_utilizada": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "compatibilidade_excluida": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "pesos_por_nivel": {
+          "$ref": "#/$defs/weight_map"
+        },
+        "composicao_pesos_base": {
+          "type": "object",
+          "additionalProperties": true,
+          "required": [
+            "formula",
+            "prevalencia_operacional",
+            "cobertura_experimental",
+            "peso_final_base"
+          ],
+          "properties": {
+            "formula": {
+              "type": "string",
+              "minLength": 1
+            },
+            "prevalencia_operacional": {
+              "$ref": "#/$defs/weight_map"
+            },
+            "cobertura_experimental": {
+              "$ref": "#/$defs/weight_map"
+            },
+            "peso_final_base": {
+              "$ref": "#/$defs/weight_map"
+            }
+          }
+        },
+        "missoes_elegiveis_por_persona": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "H",
+              "M"
+            ],
+            "properties": {
+              "H": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "M": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            }
+          }
+        },
+        "pesos_condicionais": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": {
+            "$ref": "#/$defs/weight_map"
+          }
+        }
+      }
+    }
+  }
+}

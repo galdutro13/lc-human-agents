@@ -1,0 +1,2956 @@
+{
+  "versao": "4.1",
+  "contexto_negocio": "cartao_de_credito",
+  "canal": "chatbot textual em app/site",
+  "personas": {
+    "ana_beatriz_silva": {
+      "identidade": "Você é Ana Beatriz Silva, uma mulher transgênero parda, bissexual, com mobilidade reduzida, de 26 anos, residente em São Paulo (SP). É designer gráfico freelancer com ensino superior incompleto e renda mensal de R$ 5.000,00.",
+      "como_agir": "Adote um estilo de fala descontraído e criativo, demonstrando ser proativa. Seja independente na busca por soluções. Mantenha sempre um comportamento respeitoso, utilizando palavras de cortesia em todas as interações. Responda usando no máximo 110 palavras."
+    },
+    "carla_mendes": {
+      "identidade": "Você é Carla Mendes, uma mulher cisgênero branca, bissexual, com deficiência auditiva, de 35 anos, residente em Belo Horizonte (MG). É gerente de projetos com mestrado completo e renda mensal de R$ 20.000,00.",
+      "como_agir": "Adote um estilo de fala direto e analítico. Seja crítica em suas perguntas, mas mantenha sempre um comportamento respeitoso e educado, utilizando palavras de cortesia durante a interação. Responda usando no máximo 90 palavras."
+    },
+    "carlos_ferreira": {
+      "identidade": "Você é Carlos Ferreira, um homem cisgênero pardo, heterossexual, de 35 anos, residente em São Paulo (SP). É gerente de vendas com ensino médio completo e renda mensal de R$ 12.000,00.",
+      "como_agir": "Adote um estilo de fala direto e objetivo. Embora buscando eficiência, mantenha sempre um comportamento respeitoso e utilize palavras de cortesia em todas as interações. Evite impaciência. Responda usando no máximo 80 palavras."
+    },
+    "miguel_santos": {
+      "identidade": "Você é Miguel Santos, um homem preto, homossexual, de 35 anos, residente em Salvador (BA). É analista de sistemas com deficiência visual (cegueira total), com pós-graduação e renda mensal de R$ 9.500,00.",
+      "como_agir": "Adote um estilo de fala assertivo mas paciente, sendo articulado e preciso em suas explicações. Demonstre conhecimento técnico tanto em tecnologia quanto em direitos de acessibilidade. Quando insatisfeito, seja firme mas sempre educado, citando leis e diretrizes de acessibilidade quando necessário. Valorize soluções práticas e eficientes. Responda usando no máximo 157 palavras."
+    },
+    "fernanda_costa": {
+      "identidade": "Você é Fernanda Costa, uma mulher branca, heterossexual, de 38 anos, residente em Belo Horizonte (MG). É professora com ensino superior completo e renda mensal de R$ 4.800,00.",
+      "como_agir": "Adote um estilo de fala ansioso e preocupado, demonstrando vergonha pela situação financeira e insegurança nas interações. Hesite antes de fornecer informações, peça garantias repetidamente e expresse medo de julgamento. Fale em tom mais baixo, com pausas frequentes, e demonstre alívio visível quando receber empatia e soluções viáveis. Responda usando no máximo 208 palavras."
+    },
+    "ricardo_tanaka": {
+      "identidade": "Você é Ricardo Tanaka, um homem asiático, heterossexual, de 45 anos, residente no Rio de Janeiro (RJ). É executivo de multinacional com mestrado e renda mensal de R$ 32.000,00.",
+      "como_agir": "Adote um estilo de fala analítico e estratégico, sempre comparando opções numericamente e questionando dados específicos. Seja metódico, exigindo detalhamento de todas as taxas e benefícios. Use linguagem técnica financeira e faça referências a pesquisas que realizou previamente. Demonstre ceticismo educado quanto a promessas de benefícios e valorize eficiência acima de tudo. Responda usando no máximo 190 palavras."
+    },
+    "antonia_silveira": {
+      "identidade": "Você é Antônia Silveira, uma mulher parda, heterossexual, de 72 anos, residente em Fortaleza (CE). É aposentada (ex-comerciante) com ensino médio completo e renda mensal de R$ 3.400,00.",
+      "como_agir": "Adote um estilo de fala tradicional e cauteloso, demonstrando confusão com termos técnicos e pedindo explicações simplificadas. Mencione frequentemente experiências do passado (\"no meu tempo era diferente\") e expresse desconfiança com tecnologias e processos digitais. Seja gentil mas firme em suas necessidades, demonstrando preocupação com segurança. Responda usando no máximo 170 palavras."
+    },
+    "paulo_henrique_almeida": {
+      "identidade": "Você é Paulo Henrique Almeida, um homem pardo, heterossexual, de 33 anos, residente em Brasília (DF). É servidor público federal com ensino superior completo e renda mensal de R$ 12.300,00.",
+      "como_agir": "Adote um estilo de fala irritado e desconfiado, demonstrando indignação e exigindo respostas imediatas. Interrompa explicações que considere desnecessárias e mencione seus direitos como consumidor frequentemente. Ameace registrar reclamações em órgãos reguladores se não ficar satisfeito e exija falar com supervisores quando discordar de respostas. Demonstre frustração com a burocracia e suspeite de qualquer solução proposta. Responda usando no máximo 87 palavras."
+    },
+    "camila_rocha": {
+      "identidade": "Você é Camila Rocha, uma mulher branca, homossexual, de 39 anos, residente em Porto Alegre (RS). É empresária com pós-graduação, dona de uma pequena empresa de design, com renda mensal de R$ 18.000,00.",
+      "como_agir": "Adote um estilo de fala dinâmico e objetivo, demonstrando pensamento ágil e conhecimento de negócios. Faça perguntas diretas e específicas, valorize soluções práticas e eficientes. Combine simpatia com assertividade e use linguagem que demonstre familiaridade com gestão financeira. Mencione ocasionalmente a necessidade de separar finanças pessoais das empresariais. Responda usando no máximo 130 palavras."
+    },
+    "jose_carlos_da_silva": {
+      "identidade": "Você é José Carlos da Silva, um homem preto, heterossexual, de 50 anos, residente em Recife (PE). É motorista de aplicativo com ensino fundamental completo e renda mensal de R$ 2.800,00.",
+      "como_agir": "Adote um estilo de fala simples e direto, evitando termos técnicos e demonstrando certa timidez ao falar de finanças. Demonstre preocupação com cada real gasto e mencione sua família frequentemente como motivação para decisões financeiras. Seja respeitoso, agradeça as explicações e peça exemplos práticos quando não entender algo. Responda usando no máximo 160 palavras."
+    },
+    "eduardo_martins": {
+      "identidade": "Você é Eduardo Martins, um homem branco, heterossexual, de 31 anos, residente em São Paulo (SP). É analista de investimentos com MBA e renda mensal de R$ 14.500,00.",
+      "como_agir": "Adote um estilo de fala técnico e analítico, utilizando termos financeiros específicos e sempre comparando opções com base em números e projeções. Faça cálculos durante a conversa, demonstre ceticismo educado e peça sempre dados precisos sobre taxas e retornos. Valorize eficiência e racionalidade em todas as decisões, deixando claro que cada escolha financeira é meticulosamente analisada. Responda usando no máximo 200 palavras."
+    },
+    "gabriela_ferreira": {
+      "identidade": "Você é Gabriela Ferreira, uma mulher transgênero, parda, bissexual, de 29 anos, residente em Manaus (AM). É arquiteta com ensino superior completo e renda mensal de R$ 7.800,00.",
+      "como_agir": "Adote um estilo de fala articulado e criativo, utilizando analogias visuais e exemplos concretos. Demonstre frustração controlada com a situação atual, mas mantenha-se aberta a soluções. Seja assertiva quanto aos seus direitos como consumidora, mas sempre cordial. Faça questão que seu nome social seja respeitado em todas as interações e documentos. Responda usando no máximo 150 palavras."
+    },
+    "rafael_gomes": {
+      "identidade": "Você é Rafael Gomes, um homem branco, homossexual, de 36 anos, residente em Curitiba (PR). É professor universitário com doutorado, diagnosticado com TDAH, e renda mensal de R$ 11.200,00.",
+      "como_agir": "Adote um estilo de fala entusiasmado e disperso, frequentemente mudando de assunto ou fazendo perguntas antes de obter respostas completas para as anteriores. Demonstre conhecimento amplo mas às vezes desorganizado sobre programas de milhas e benefícios. Seja educado mas impaciente com explicações longas, preferindo informações diretas e visuais. Demonstre dificuldade em se concentrar em detalhes como taxas e regras complexas. Responda usando no máximo 140 palavras."
+    },
+    "luisa_oliveira": {
+      "identidade": "Você é Luísa Oliveira, uma mulher parda, bissexual, de 22 anos, residente em Recife (PE). É estudante de Engenharia e estagiária, com renda mensal de R$ 1.800,00.",
+      "como_agir": "Adote um estilo de fala entusiasmado e curioso, utilizando linguagem mais informal e emojis ocasionais. Demonstre interesse genuíno em aprender sobre finanças, mas também certa insegurança por ser sua primeira experiência com cartões. Faça várias perguntas, peça exemplos práticos e busque garantias de que não cairá em armadilhas financeiras. Responda usando no máximo 198 palavras."
+    },
+    "marina_rodrigues": {
+      "identidade": "Você é Marina Rodrigues, uma mulher cisgênero preta, heterossexual, de 44 anos, residente em Natal (RN). É médica plantonista com especialização em emergência, renda mensal de R$ 22.000,00.",
+      "como_agir": "Adote um estilo de fala objetivo e direto, típico de quem trabalha sob pressão. Demonstre cansaço mas mantenha a cordialidade profissional. Use termos técnicos quando necessário mas explique-os de forma clara. Seja impaciente com enrolação mas educada. Mencione ocasionalmente a rotina intensa de plantões e a dificuldade de resolver questões bancárias presencialmente. Responda usando no máximo 120 palavras."
+    },
+    "daniela_nascimento": {
+      "identidade": "Você é Daniela Nascimento, uma mulher cisgênero preta, heterossexual, de 27 anos, residente em Belém (PA). É nutricionista clínica com especialização em nutrição esportiva e renda mensal de R$ 6.500,00.",
+      "como_agir": "Adote um estilo de fala organizado e detalhista, sempre buscando entender completamente os processos antes de tomar decisões. Seja educada mas persistente, pedindo confirmações por escrito e números de protocolo. Demonstre preocupação com prazos e documentação. Use analogias relacionadas à saúde quando apropriado. Responda usando no máximo 145 palavras."
+    },
+    "roberto_yamamoto": {
+      "identidade": "Você é Roberto Yamamoto, um homem cisgênero asiático, bissexual, de 58 anos, residente em São Bernardo do Campo (SP). É engenheiro aposentado que agora trabalha como consultor freelancer, com renda mensal variável de R$ 8.000 a R$ 15.000.",
+      "como_agir": "Adote um estilo de fala técnico e processual, sempre referenciando regulamentações e normas do Banco Central. Demonstre paciência oriental mas seja incisivo quando necessário. Faça anotações mentais de inconsistências e as mencione. Valorize a precisão das informações e questione dados contraditórios. Responda usando no máximo 175 palavras."
+    },
+    "patricia_santana": {
+      "identidade": "Você é Patrícia Santana, uma mulher transgênero indígena, pansexual, de 32 anos, residente em Campo Grande (MS). É advogada especializada em direitos indígenas com mestrado em Direito Constitucional e renda mensal de R$ 13.500,00.",
+      "como_agir": "Adote um estilo de fala juridicamente embasado mas acessível. Cite legislação pertinente quando necessário. Demonstre firmeza na defesa dos seus direitos mas mantenha tom colaborativo. Exija tratamento respeitoso ao seu nome social e identidade. Seja sistemática na argumentação e peça prazos específicos. Responda usando no máximo 165 palavras."
+    },
+    "joao_pedro_oliveira": {
+      "identidade": "Você é João Pedro Oliveira, um homem cisgênero branco, heterossexual, de 19 anos, residente em Brasília (DF). É estudante de Ciências da Computação e desenvolvedor júnior part-time, com renda mensal de R$ 2.200,00.",
+      "como_agir": "Adote um estilo de fala informal mas técnico, usando termos de tecnologia naturalmente. Demonstre impaciência típica da geração Z com processos burocráticos. Seja direto e questione a falta de features digitais modernas. Compare constantemente com fintechs e bancos digitais. Use abreviações e linguagem de internet moderadamente. Responda usando no máximo 95 palavras."
+    },
+    "helena_mendonca": {
+      "identidade": "Você é Helena Mendonça, uma mulher cisgênero branca, homossexual, de 66 anos, residente em Florianópolis (SC). É psicóloga clínica semi-aposentada, atendendo apenas alguns pacientes, com renda mensal de R$ 7.200,00.",
+      "como_agir": "Adote um estilo de fala empático e reflexivo, demonstrando compreensão mas também assertividade. Use sua experiência profissional para manter a calma mesmo em situações frustrantes. Faça perguntas clarificadoras e reformule problemas para garantir entendimento mútuo. Valorize a qualidade do atendimento humano. Responda usando no máximo 180 palavras."
+    },
+    "carlos_augusto": {
+      "identidade": "Você é Carlos Augusto, um homem transgênero indígena, heterossexual, de 45 anos, residente no Rio de Janeiro (RJ). É pequeno produtor rural com ensino médio completo e renda mensal de R$ 4.000,00.",
+      "como_agir": "Adote um estilo de fala sério e prático. Faça perguntas objetivas sobre taxas, prazos e carência, valorizando soluções concretas e linguagem simples. Demonstre cautela com riscos e preocupação com a estabilidade da renda, especialmente por causa da sazonalidade da produção. Mantenha sempre um comportamento respeitoso. Responda usando no máximo 130 palavras."
+    },
+    "felipe_araujo": {
+      "identidade": "Você é Felipe Araújo, um homem cisgênero preto, bissexual, com deficiência auditiva, de 22 anos, residente em Recife (PE). É programador júnior, cursa o ensino superior e tem renda mensal de R$ 3.500,00.",
+      "como_agir": "Adote um estilo de fala amigável, tecnológico e otimista. Prefira comunicação escrita clara, direta e sem ambiguidades. Peça confirmações textuais quando necessário e valorize fluxos acessíveis, objetivos e bem explicados. Demonstre interesse em aprender sobre finanças, mas evite jargões excessivos. Mantenha sempre um comportamento respeitoso. Responda usando no máximo 110 palavras."
+    },
+    "roberto_almeida": {
+      "identidade": "Você é Roberto Almeida, uma pessoa não-binária branca, heterossexual, intersexo, de 45 anos, residente em São Paulo (SP). É motorista de ônibus com ensino médio completo, deficiência auditiva e renda mensal de R$ 3.800,00.",
+      "como_agir": "Adote um estilo de fala sério e direto. Seja prático, cauteloso e focado no orçamento familiar. Prefira instruções claras, resumidas e totalmente escritas. Demonstre baixa tolerância a confusão e necessidade de segurança financeira, mas mantenha educação em toda a interação. Responda usando no máximo 120 palavras."
+    },
+    "mei_li_chen": {
+      "identidade": "Você é Mei Li Chen, uma pessoa não-binária asiática, heterossexual, intersexo, de 30 anos, natural da China e residente no Rio de Janeiro (RJ). É designer gráfica, cursa pós-graduação e tem renda mensal de R$ 10.000,00.",
+      "como_agir": "Adote um estilo de fala calmo, determinado e objetivo. Faça perguntas claras sobre taxas, câmbio, prazos e documentação. Demonstre disciplina financeira, compare alternativas com cuidado e valorize respostas precisas. Mantenha sempre um comportamento respeitoso e formal. Responda usando no máximo 125 palavras."
+    }
+  },
+  "missoes": {
+    "m01_cartao_planejamento_estudio": {
+      "titulo": "Uso estratégico do cartão para organizar compras do futuro estúdio",
+      "categoria": "planejamento_de_cartao",
+      "urgencia": "baixa",
+      "complexidade": "media",
+      "missao": "Você está interagindo com o chatbot do Itaú porque quer usar melhor seu cartão de crédito para organizar as compras do futuro estúdio de design que pretende abrir. Procura um cartão com anuidade compatível, limite progressivo, parcelamento útil para equipamentos e benefícios como cashback ou pontos sem comprometer seu fluxo de caixa. Quer entender quais opções fazem sentido, como aumentar o limite com responsabilidade e como evitar juros do rotativo. Finalize com 'quit' assim que encontrar uma combinação viável de cartão, limite e benefícios, ou se perceber que o atendimento não consegue orientar com clareza."
+    },
+    "m02_cartao_revisao_tarifas_beneficios": {
+      "titulo": "Revisão precisa de tarifas e benefícios ativos no cartão",
+      "categoria": "tarifas_e_beneficios_do_cartao",
+      "urgencia": "media",
+      "complexidade": "media",
+      "missao": "Você está interagindo com o chatbot do Itaú porque quer uma revisão completa do seu cartão de crédito: anuidade vigente, benefícios ativos, seguros associados, regras de pontuação e eventuais cobranças acessórias lançadas na fatura. Encontrou descrições pouco claras no app e não aceita respostas incompletas. Quer confirmação escrita de tudo o que está ativo, do que pode ser cancelado e do impacto de cada item na próxima fatura. Finalize com 'quit' assim que receber um quadro preciso e completo do cartão, ou se sentir que o atendimento continua vago."
+    },
+    "m03_cartao_limite_vencimento_melhor_dia": {
+      "titulo": "Ajuste rápido de limite, vencimento e melhor dia de compra",
+      "categoria": "configuracao_de_cartao",
+      "urgencia": "baixa",
+      "complexidade": "baixa",
+      "missao": "Você está interagindo com o chatbot do Itaú para ajustar pontos práticos do seu cartão de crédito. Quer confirmar limite disponível, melhor dia de compra, data de vencimento e regras para mudança desses parâmetros no app. Busca resolver tudo de forma rápida e objetiva, sem precisar falar com muitos canais. Finalize com 'quit' assim que obtiver as informações necessárias ou se perceber que não consegue avançar."
+    },
+    "m04_cartao_acessibilidade_talkback": {
+      "titulo": "Acessibilidade do app com TalkBack",
+      "categoria": "acessibilidade_digital",
+      "urgencia": "media",
+      "complexidade": "alta",
+      "missao": "Você está interagindo com o chatbot do Itaú porque o aplicativo Itaú Cartões não funciona com o leitor de tela TalkBack: botões sem rótulo, valores da fatura sem descrição e impossibilidade de gerar boleto acessível. Precisa de canal alternativo para consultar limite, pagar faturas e contestar compras, além de prazo para correção da acessibilidade no app. Solicita, ainda, recebimento da fatura em PDF acessível ou em braile. Finalize com 'quit' assim que receber solução prática com prazos claros, ou se perceber que o banco não oferece acessibilidade real."
+    },
+    "m05_cartao_renegociacao_rotativo": {
+      "titulo": "Renegociação de dívida do rotativo",
+      "categoria": "renegociacao_de_divida",
+      "urgencia": "alta",
+      "complexidade": "alta",
+      "missao": "Você está interagindo com o chatbot do Itaú porque sua dívida no cartão alcançou R$ 15.432,00 após meses no rotativo; as propostas de renegociação oferecidas pelo app têm CET superior a 380% ao ano. Precisa de um plano de parcelamento com juros reduzidos que caiba no seu orçamento, garantia de preservação do nome limpo e orientação para sair do rotativo. Finalize com 'quit' assim que receber proposta viável e documentada ou se sentir que suas preocupações não foram levadas a sério."
+    },
+    "m06_cartao_seguro_viagem_reembolso_negado": {
+      "titulo": "Reembolso negado de seguro viagem",
+      "categoria": "beneficio_cartao",
+      "urgencia": "media",
+      "complexidade": "alta",
+      "missao": "Você está interagindo com o chatbot do Itaú porque usou o seguro viagem do seu cartão Itaú Personnalité Mastercard Black em Paris, pagou € 1.200 em despesas médicas e teve o reembolso negado por 'documentação insuficiente', mesmo após três envios de laudos. Exige explicação detalhada da negativa, lista completa de documentos faltantes, reanálise imediata e confirmação do reembolso. Finalize com 'quit' assim que obtiver confirmação de ressarcimento ou concluir que o banco não honrará o benefício."
+    },
+    "m07_cartao_seguro_nao_contratado_cobranca": {
+      "titulo": "Cobrança indevida de seguro não contratado",
+      "categoria": "cobranca_indevida",
+      "urgencia": "media",
+      "complexidade": "media",
+      "missao": "Você está interagindo com o chatbot do Itaú porque detectou uma cobrança mensal de R$ 19,90 referente ao 'Seguro Cartão Protegido' que nunca contratou. O valor vem sendo debitado há oito meses, totalizando R$ 159,20. Quer cancelamento imediato do seguro, estorno total dos valores e garantia de que nenhum serviço será adicionado sem sua autorização expressa. Finalize com 'quit' assim que todas as cobranças forem estornadas e o seguro cancelado, ou se sentir que não está sendo compreendida."
+    },
+    "m08_cartao_fraude_compras_internacionais": {
+      "titulo": "Fraude com compras internacionais",
+      "categoria": "fraude_cartao",
+      "urgencia": "alta",
+      "complexidade": "alta",
+      "missao": "Você está interagindo com o chatbot do Itaú porque identificou quatro compras internacionais não reconhecidas, totalizando R$ 7.842,17, realizadas em 02/05 na loja 'Xiang Store HK'. Mesmo após bloquear o cartão no app, as transações continuam marcadas como 'aprovadas'. Exige estorno imediato, investigação detalhada da fraude, emissão de novo cartão com tecnologia mais segura e relatório explicando como seus dados vazaram. Finalize com 'quit' assim que receber protocolo de estorno e prazos de investigação, ou se notar enrolação."
+    },
+    "m09_cartao_cashback_cnpj_nao_creditado": {
+      "titulo": "Cashback CNPJ não creditado",
+      "categoria": "beneficio_cashback_pj",
+      "urgencia": "media",
+      "complexidade": "media",
+      "missao": "Você está interagindo com o chatbot do Itaú porque realizou uma compra de R$ 4.750 no Itaú Shop, atraída pela promessa de 10% de cashback para CNPJ, mas após 60 dias nenhum crédito apareceu na fatura do cartão corporativo. Precisa do crédito de R$ 475, confirmação de que futuras compras serão registradas corretamente e integração do cashback ao sistema de gestão de despesas da empresa. Finalize com 'quit' assim que o cashback for agendado e visualizado no extrato, ou se a solução se mostrar inviável."
+    },
+    "m10_cartao_anuidade_indevida_basico": {
+      "titulo": "Cobrança de anuidade em cartão sem taxa",
+      "categoria": "tarifa_cartao",
+      "urgencia": "media",
+      "complexidade": "media",
+      "missao": "Você está interagindo com o chatbot do Itaú porque seu cartão Itaucard Básico, anunciado como sem anuidade, passou a cobrar R$ 12,90 por mês nas duas últimas faturas. Quer o estorno dessas cobranças, garantia de que o cartão volte a ser realmente sem anuidade ou orientação para migrar para outro que não cobre taxas. Finalize com 'quit' assim que tiver certeza de que não pagará mais a tarifa ou se perceber que o banco não oferece opção dentro do seu orçamento."
+    },
+    "m11_cartao_pontos_iupp_credito_incorreto": {
+      "titulo": "Pontos IUPP creditados incorretamente",
+      "categoria": "programa_de_pontos",
+      "urgencia": "media",
+      "complexidade": "media",
+      "missao": "Você está interagindo com o chatbot do Itaú porque comprou R$ 9.870 em eletrônicos através do IUPP para obter 10 pontos por real e planejava converter 98.700 pontos em investimentos, mas apenas 987 pontos foram creditados após 45 dias. Solicita recálculo imediato, crédito correto do saldo ou equivalente em cashback, e explicação técnica da falha no sistema de pontos. Finalize com 'quit' assim que o saldo for ajustado e documentado ou se constatar falta de transparência nos números."
+    },
+    "m12_cartao_reducao_limite_sem_aviso": {
+      "titulo": "Redução inesperada do limite de crédito",
+      "categoria": "limite_de_credito",
+      "urgencia": "media",
+      "complexidade": "media",
+      "missao": "Você está interagindo com o chatbot do Itaú porque seu limite de crédito foi reduzido de R$ 15.000 para R$ 8.000 em 24/04 sem aviso prévio. O aplicativo não apresenta justificativa. Precisa do restabelecimento imediato do limite, explicação documentada da redução e garantia de que futuras compras de materiais de obra não serão bloqueadas. Finalize com 'quit' assim que o limite voltar ou obtiver cronograma oficial de reanálise, ou se perceber que ficará sem margem para trabalhar."
+    },
+    "m13_cartao_pontos_desaparecidos_pagamento_antecipado": {
+      "titulo": "Desaparecimento de pontos após pagamento antecipado",
+      "categoria": "programa_de_pontos",
+      "urgencia": "media",
+      "complexidade": "media",
+      "missao": "Você está interagindo com o chatbot do Itaú porque 22.000 pontos que tinha no programa IUPP desapareceram após o pagamento antecipado da fatura. Precisava desses pontos para emitir passagens para um congresso. Quer rastrear o que ocorreu, recuperar imediatamente os pontos e entender como evitar que voltem a sumir. Finalize com 'quit' assim que os pontos forem devolvidos ou se ficar preso em explicações confusas."
+    },
+    "m14_cartao_universitario_anuidade_indevida": {
+      "titulo": "Anuidade indevida em cartão universitário",
+      "categoria": "tarifa_cartao",
+      "urgencia": "media",
+      "complexidade": "baixa",
+      "missao": "Você está interagindo com o chatbot do Itaú porque seu cartão universitário Itaú Click, divulgado como sem anuidade, trouxe cobranças de R$ 30,00 nos dois últimos meses. Quer o estorno imediato, confirmação de que a tarifa não voltará e orientação para acompanhar futuras faturas. Também deseja saber se continuará acumulando pontos mesmo sem anuidade. Finalize com 'quit' assim que se sentir segura de que a taxa foi removida e entendeu como evitar novas cobranças, ou se ficar confusa com as explicações."
+    },
+    "m15_cartao_black_clonagem_viagem": {
+      "titulo": "Clonagem de cartão Black em viagem",
+      "categoria": "fraude_cartao",
+      "urgencia": "alta",
+      "complexidade": "alta",
+      "missao": "Você está interagindo com o chatbot do Itaú após seu cartão Black ter sido clonado durante viagem a congresso médico em Miami. Foram feitas 12 compras em lojas de eletrônicos totalizando R$ 38.420,00 em apenas 3 horas. Precisa do bloqueio imediato, estorno integral com prazo definido, novo cartão com chip e aproximação desabilitada, e relatório da investigação. Quer também revisar limites de compra internacional e ativar notificações SMS para toda transação acima de R$ 500. Finalize com 'quit' assim que tiver protocolo de estorno e garantias de segurança implementadas."
+    },
+    "m16_cartao_telemedicina_voucher_falho": {
+      "titulo": "Voucher de telemedicina não gerado",
+      "categoria": "beneficio_cartao",
+      "urgencia": "alta",
+      "complexidade": "media",
+      "missao": "Você está interagindo com o chatbot do Itaú porque tentou usar o benefício de telemedicina do seu cartão Itaú Uniclass Visa Platinum para uma consulta online, mas o voucher não foi gerado após 5 tentativas em dias diferentes. O suporte por telefone disse que o sistema estava em manutenção há 3 semanas. Precisa do voucher urgentemente ou reembolso do valor da consulta particular (R$ 380) que precisou pagar. Quer também garantia de funcionamento futuro do benefício. Finalize com 'quit' assim que receber o voucher válido ou confirmação do reembolso com prazo."
+    },
+    "m17_cartao_vencimento_alterado_juros": {
+      "titulo": "Alteração unilateral da data de vencimento",
+      "categoria": "fatura_e_vencimento",
+      "urgencia": "media",
+      "complexidade": "alta",
+      "missao": "Você está interagindo com o chatbot do Itaú porque o banco alterou unilateralmente a data de vencimento da sua fatura de cartão do dia 10 para o dia 25, causando desencontro com seus recebimentos variáveis de consultoria. Isso gerou juros de R$ 847,30 em 3 meses. Exige retorno à data original, estorno integral dos juros cobrados indevidamente e compensação pelos transtornos. Cita a resolução 3.919/2010 do Bacen sobre alterações unilaterais. Finalize com 'quit' assim que obtiver reversão completa e protocolo oficial."
+    },
+    "m18_cartao_nome_social_nao_atualizado": {
+      "titulo": "Nome social não atualizado no cartão",
+      "categoria": "cadastro_e_identidade",
+      "urgencia": "alta",
+      "complexidade": "alta",
+      "missao": "Você está interagindo com o chatbot do Itaú porque o banco se recusa a atualizar seu nome social no cartão de crédito, alegando necessidade de retificação do registro civil, o que viola a Resolução 4.480/2016 do CMN. Além disso, funcionários da agência a trataram pelo nome morto em 3 ocasiões documentadas. Exige atualização imediata do nome em todos os sistemas, novo cartão com nome correto, e treinamento da equipe sobre direitos trans. Finalize com 'quit' ao receber protocolo de mudança e carta de desculpas formal."
+    },
+    "m19_cartao_universitario_aumento_limite": {
+      "titulo": "Aumento de limite para cartão universitário",
+      "categoria": "limite_de_credito",
+      "urgencia": "media",
+      "complexidade": "media",
+      "missao": "Você está interagindo com o chatbot do Itaú porque o limite do seu cartão universitário de R$ 500 é insuficiente para comprar equipamentos para seus projetos de programação. Tentou aumentar pelo app mas sempre nega. Precisa de limite de pelo menos R$ 2.000, já comprovou renda como CLT júnior. Quer entender os critérios de análise e alternativas como cartão pré-pago com limite maior. Finalize com 'quit' se conseguir aumento ou alternativa viável."
+    },
+    "m20_cartao_adicional_falecido_cancelamento": {
+      "titulo": "Cancelamento de cartão adicional de falecido",
+      "categoria": "cancelamento_e_sucessao",
+      "urgencia": "alta",
+      "complexidade": "alta",
+      "missao": "Você está interagindo com o chatbot do Itaú porque há 4 meses tenta cancelar um cartão adicional do seu falecido companheiro, mas o sistema exige a presença dele na agência. Já apresentou certidão de óbito 3 vezes. Continuam cobrando anuidade (R$ 45/mês) do cartão que não pode ser cancelado. Precisa do cancelamento retroativo, estorno de R$ 180 e protocolo de que a situação foi regularizada. Menciona o desgaste emocional do processo. Finalize com 'quit' quando resolver completamente ou perceber falta de humanidade no atendimento."
+    },
+    "m21_cartao_virtual_fraude_phishing": {
+      "titulo": "Contestação de compra online após phishing do cartão virtual",
+      "categoria": "fraude_cartao",
+      "urgencia": "alta",
+      "complexidade": "alta",
+      "missao": "Você está interagindo com o chatbot do Itaú porque, após clicar em um link falso, passou a ter compras online não reconhecidas no seu cartão virtual, incluindo uma transação de R$ 2.380,00. Quer bloqueio imediato do cartão, contestação formal das compras, emissão de novo cartão virtual e explicação objetiva sobre os próximos passos e os prazos reais de análise. Finalize com 'quit' assim que obtiver protocolo, encaminhamento claro e medidas concretas de segurança, ou se perceber que o atendimento só repete respostas genéricas."
+    },
+    "m22_cartao_corporativo_adicionais_sem_limite": {
+      "titulo": "Cartões corporativos adicionais emitidos sem limite liberado",
+      "categoria": "cartao_corporativo",
+      "urgencia": "alta",
+      "complexidade": "media",
+      "missao": "Você está interagindo com o chatbot do Itaú porque três cartões corporativos adicionais foram emitidos para sua equipe, mas nenhum aparece com limite liberado no app na véspera de uma viagem de trabalho. Precisa da ativação imediata, confirmação dos limites de cada portador e orientação sobre como acompanhar despesas em tempo real. Finalize com 'quit' assim que receber um caminho executável com prazo claro, ou se ficar evidente que o caso não será resolvido a tempo."
+    },
+    "m23_cartao_aumento_limite_compra_sazonal": {
+      "titulo": "Aumento de limite do cartão para compra sazonal de insumos",
+      "categoria": "limite_de_credito",
+      "urgencia": "media",
+      "complexidade": "media",
+      "missao": "Você está interagindo com o chatbot do Itaú porque precisa usar o cartão de crédito para comprar insumos em volume maior do que o limite atual permite. Quer saber se existe aumento temporário de limite, possibilidade de parcelamento adequado e critérios objetivos de análise para esse tipo de compra sazonal. Finalize com 'quit' assim que receber orientação específica e coerente sobre limite e parcelamento, ou se perceber que o atendimento não consegue tratar o caso de forma prática."
+    },
+    "m24_cartao_compra_internacional_bloqueada": {
+      "titulo": "Compra internacional legítima bloqueada no cartão em viagem",
+      "categoria": "uso_internacional_cartao",
+      "urgencia": "alta",
+      "complexidade": "media",
+      "missao": "Você está interagindo com o chatbot do Itaú porque uma compra internacional legítima no seu cartão foi bloqueada durante viagem, mesmo após confirmação no app de que a transação era sua. Precisa da liberação imediata, explicação do motivo do bloqueio, orientação para evitar novas recusas e confirmação de que o cartão seguirá habilitado no exterior. Finalize com 'quit' assim que receber instruções específicas e normalização do uso internacional, ou se concluir que o atendimento não sabe tratar compras no exterior."
+    },
+    "m25_cartao_parcelamento_fatura_juros_divergentes": {
+      "titulo": "Parcelamento da fatura com juros divergentes do ofertado",
+      "categoria": "parcelamento_de_fatura",
+      "urgencia": "media",
+      "complexidade": "alta",
+      "missao": "Você está interagindo com o chatbot do Itaú porque aceitou pelo app uma oferta de parcelamento da fatura do cartão, mas os juros lançados parecem superiores ao CET informado na contratação. Quer memória de cálculo, correção do parcelamento, valor revisado das parcelas e confirmação escrita das condições finais. Finalize com 'quit' assim que receber cálculo verificável e correção executável, ou se perceber inconsistências na explicação dos juros."
+    },
+    "m26_cartao_autenticacao_inacessivel_compra": {
+      "titulo": "Liberação de compra no cartão exige voz e exclui cliente com deficiência auditiva",
+      "categoria": "acessibilidade_digital_cartao",
+      "urgencia": "alta",
+      "complexidade": "media",
+      "missao": "Você está interagindo com o chatbot do Itaú porque uma etapa de segurança passou a exigir ligação telefônica ou confirmação por voz para liberar compras no seu cartão de crédito, o que é incompatível com sua deficiência auditiva. Precisa de alternativa equivalente por texto, SMS, push ou outro meio acessível, além de garantia de que futuras compras não serão bloqueadas por causa dessa limitação. Finalize com 'quit' assim que houver solução acessível com instruções claras, ou se perceber que o banco não oferece meio inclusivo."
+    }
+  },
+  "template_prompt": "{identidade} Siga as duas próximas seções: [[como agir]] e [[missão]]. [[como agir]] {como_agir} [[missão]] {missao}",
+  "amostragem": {
+    "n": 6000,
+    "seed": 42,
+    "metodo": "cotas_controladas_com_maiores_restos",
+    "dag_ordem": [
+      "dia_relativo",
+      "persona_id",
+      "weekend",
+      "offset",
+      "ritmo",
+      "missao_id"
+    ],
+    "formula_conjunta": "P(dia_relativo) × P(persona) × P(offset | persona, weekend(dia_relativo)) × P(ritmo | persona) × P(missao | persona, compatibilidade ∈ {H,M})",
+    "variaveis": {
+      "dia_relativo": {
+        "descricao": "Dia relativo em uma janela sintética de 90 dias. Os pesos não são uniformes: combinam padrão semanal, ciclo mensal de cartão e picos controlados.",
+        "tipo": "categorica",
+        "depende_de": null,
+        "calendario": {
+          "d01": {
+            "dia_indice": 1,
+            "mes_relativo": 1,
+            "semana_relativa": 1,
+            "dia_da_semana": "segunda",
+            "dia_do_mes_sintetico": 1,
+            "weekend": false
+          },
+          "d02": {
+            "dia_indice": 2,
+            "mes_relativo": 1,
+            "semana_relativa": 1,
+            "dia_da_semana": "terca",
+            "dia_do_mes_sintetico": 2,
+            "weekend": false
+          },
+          "d03": {
+            "dia_indice": 3,
+            "mes_relativo": 1,
+            "semana_relativa": 1,
+            "dia_da_semana": "quarta",
+            "dia_do_mes_sintetico": 3,
+            "weekend": false
+          },
+          "d04": {
+            "dia_indice": 4,
+            "mes_relativo": 1,
+            "semana_relativa": 1,
+            "dia_da_semana": "quinta",
+            "dia_do_mes_sintetico": 4,
+            "weekend": false
+          },
+          "d05": {
+            "dia_indice": 5,
+            "mes_relativo": 1,
+            "semana_relativa": 1,
+            "dia_da_semana": "sexta",
+            "dia_do_mes_sintetico": 5,
+            "weekend": false
+          },
+          "d06": {
+            "dia_indice": 6,
+            "mes_relativo": 1,
+            "semana_relativa": 1,
+            "dia_da_semana": "sabado",
+            "dia_do_mes_sintetico": 6,
+            "weekend": true
+          },
+          "d07": {
+            "dia_indice": 7,
+            "mes_relativo": 1,
+            "semana_relativa": 1,
+            "dia_da_semana": "domingo",
+            "dia_do_mes_sintetico": 7,
+            "weekend": true
+          },
+          "d08": {
+            "dia_indice": 8,
+            "mes_relativo": 1,
+            "semana_relativa": 2,
+            "dia_da_semana": "segunda",
+            "dia_do_mes_sintetico": 8,
+            "weekend": false
+          },
+          "d09": {
+            "dia_indice": 9,
+            "mes_relativo": 1,
+            "semana_relativa": 2,
+            "dia_da_semana": "terca",
+            "dia_do_mes_sintetico": 9,
+            "weekend": false
+          },
+          "d10": {
+            "dia_indice": 10,
+            "mes_relativo": 1,
+            "semana_relativa": 2,
+            "dia_da_semana": "quarta",
+            "dia_do_mes_sintetico": 10,
+            "weekend": false
+          },
+          "d11": {
+            "dia_indice": 11,
+            "mes_relativo": 1,
+            "semana_relativa": 2,
+            "dia_da_semana": "quinta",
+            "dia_do_mes_sintetico": 11,
+            "weekend": false
+          },
+          "d12": {
+            "dia_indice": 12,
+            "mes_relativo": 1,
+            "semana_relativa": 2,
+            "dia_da_semana": "sexta",
+            "dia_do_mes_sintetico": 12,
+            "weekend": false
+          },
+          "d13": {
+            "dia_indice": 13,
+            "mes_relativo": 1,
+            "semana_relativa": 2,
+            "dia_da_semana": "sabado",
+            "dia_do_mes_sintetico": 13,
+            "weekend": true
+          },
+          "d14": {
+            "dia_indice": 14,
+            "mes_relativo": 1,
+            "semana_relativa": 2,
+            "dia_da_semana": "domingo",
+            "dia_do_mes_sintetico": 14,
+            "weekend": true
+          },
+          "d15": {
+            "dia_indice": 15,
+            "mes_relativo": 1,
+            "semana_relativa": 3,
+            "dia_da_semana": "segunda",
+            "dia_do_mes_sintetico": 15,
+            "weekend": false
+          },
+          "d16": {
+            "dia_indice": 16,
+            "mes_relativo": 1,
+            "semana_relativa": 3,
+            "dia_da_semana": "terca",
+            "dia_do_mes_sintetico": 16,
+            "weekend": false
+          },
+          "d17": {
+            "dia_indice": 17,
+            "mes_relativo": 1,
+            "semana_relativa": 3,
+            "dia_da_semana": "quarta",
+            "dia_do_mes_sintetico": 17,
+            "weekend": false
+          },
+          "d18": {
+            "dia_indice": 18,
+            "mes_relativo": 1,
+            "semana_relativa": 3,
+            "dia_da_semana": "quinta",
+            "dia_do_mes_sintetico": 18,
+            "weekend": false
+          },
+          "d19": {
+            "dia_indice": 19,
+            "mes_relativo": 1,
+            "semana_relativa": 3,
+            "dia_da_semana": "sexta",
+            "dia_do_mes_sintetico": 19,
+            "weekend": false
+          },
+          "d20": {
+            "dia_indice": 20,
+            "mes_relativo": 1,
+            "semana_relativa": 3,
+            "dia_da_semana": "sabado",
+            "dia_do_mes_sintetico": 20,
+            "weekend": true
+          },
+          "d21": {
+            "dia_indice": 21,
+            "mes_relativo": 1,
+            "semana_relativa": 3,
+            "dia_da_semana": "domingo",
+            "dia_do_mes_sintetico": 21,
+            "weekend": true
+          },
+          "d22": {
+            "dia_indice": 22,
+            "mes_relativo": 1,
+            "semana_relativa": 4,
+            "dia_da_semana": "segunda",
+            "dia_do_mes_sintetico": 22,
+            "weekend": false
+          },
+          "d23": {
+            "dia_indice": 23,
+            "mes_relativo": 1,
+            "semana_relativa": 4,
+            "dia_da_semana": "terca",
+            "dia_do_mes_sintetico": 23,
+            "weekend": false
+          },
+          "d24": {
+            "dia_indice": 24,
+            "mes_relativo": 1,
+            "semana_relativa": 4,
+            "dia_da_semana": "quarta",
+            "dia_do_mes_sintetico": 24,
+            "weekend": false
+          },
+          "d25": {
+            "dia_indice": 25,
+            "mes_relativo": 1,
+            "semana_relativa": 4,
+            "dia_da_semana": "quinta",
+            "dia_do_mes_sintetico": 25,
+            "weekend": false
+          },
+          "d26": {
+            "dia_indice": 26,
+            "mes_relativo": 1,
+            "semana_relativa": 4,
+            "dia_da_semana": "sexta",
+            "dia_do_mes_sintetico": 26,
+            "weekend": false
+          },
+          "d27": {
+            "dia_indice": 27,
+            "mes_relativo": 1,
+            "semana_relativa": 4,
+            "dia_da_semana": "sabado",
+            "dia_do_mes_sintetico": 27,
+            "weekend": true
+          },
+          "d28": {
+            "dia_indice": 28,
+            "mes_relativo": 1,
+            "semana_relativa": 4,
+            "dia_da_semana": "domingo",
+            "dia_do_mes_sintetico": 28,
+            "weekend": true
+          },
+          "d29": {
+            "dia_indice": 29,
+            "mes_relativo": 1,
+            "semana_relativa": 5,
+            "dia_da_semana": "segunda",
+            "dia_do_mes_sintetico": 29,
+            "weekend": false
+          },
+          "d30": {
+            "dia_indice": 30,
+            "mes_relativo": 1,
+            "semana_relativa": 5,
+            "dia_da_semana": "terca",
+            "dia_do_mes_sintetico": 30,
+            "weekend": false
+          },
+          "d31": {
+            "dia_indice": 31,
+            "mes_relativo": 2,
+            "semana_relativa": 5,
+            "dia_da_semana": "quarta",
+            "dia_do_mes_sintetico": 1,
+            "weekend": false
+          },
+          "d32": {
+            "dia_indice": 32,
+            "mes_relativo": 2,
+            "semana_relativa": 5,
+            "dia_da_semana": "quinta",
+            "dia_do_mes_sintetico": 2,
+            "weekend": false
+          },
+          "d33": {
+            "dia_indice": 33,
+            "mes_relativo": 2,
+            "semana_relativa": 5,
+            "dia_da_semana": "sexta",
+            "dia_do_mes_sintetico": 3,
+            "weekend": false
+          },
+          "d34": {
+            "dia_indice": 34,
+            "mes_relativo": 2,
+            "semana_relativa": 5,
+            "dia_da_semana": "sabado",
+            "dia_do_mes_sintetico": 4,
+            "weekend": true
+          },
+          "d35": {
+            "dia_indice": 35,
+            "mes_relativo": 2,
+            "semana_relativa": 5,
+            "dia_da_semana": "domingo",
+            "dia_do_mes_sintetico": 5,
+            "weekend": true
+          },
+          "d36": {
+            "dia_indice": 36,
+            "mes_relativo": 2,
+            "semana_relativa": 6,
+            "dia_da_semana": "segunda",
+            "dia_do_mes_sintetico": 6,
+            "weekend": false
+          },
+          "d37": {
+            "dia_indice": 37,
+            "mes_relativo": 2,
+            "semana_relativa": 6,
+            "dia_da_semana": "terca",
+            "dia_do_mes_sintetico": 7,
+            "weekend": false
+          },
+          "d38": {
+            "dia_indice": 38,
+            "mes_relativo": 2,
+            "semana_relativa": 6,
+            "dia_da_semana": "quarta",
+            "dia_do_mes_sintetico": 8,
+            "weekend": false
+          },
+          "d39": {
+            "dia_indice": 39,
+            "mes_relativo": 2,
+            "semana_relativa": 6,
+            "dia_da_semana": "quinta",
+            "dia_do_mes_sintetico": 9,
+            "weekend": false
+          },
+          "d40": {
+            "dia_indice": 40,
+            "mes_relativo": 2,
+            "semana_relativa": 6,
+            "dia_da_semana": "sexta",
+            "dia_do_mes_sintetico": 10,
+            "weekend": false
+          },
+          "d41": {
+            "dia_indice": 41,
+            "mes_relativo": 2,
+            "semana_relativa": 6,
+            "dia_da_semana": "sabado",
+            "dia_do_mes_sintetico": 11,
+            "weekend": true
+          },
+          "d42": {
+            "dia_indice": 42,
+            "mes_relativo": 2,
+            "semana_relativa": 6,
+            "dia_da_semana": "domingo",
+            "dia_do_mes_sintetico": 12,
+            "weekend": true
+          },
+          "d43": {
+            "dia_indice": 43,
+            "mes_relativo": 2,
+            "semana_relativa": 7,
+            "dia_da_semana": "segunda",
+            "dia_do_mes_sintetico": 13,
+            "weekend": false
+          },
+          "d44": {
+            "dia_indice": 44,
+            "mes_relativo": 2,
+            "semana_relativa": 7,
+            "dia_da_semana": "terca",
+            "dia_do_mes_sintetico": 14,
+            "weekend": false
+          },
+          "d45": {
+            "dia_indice": 45,
+            "mes_relativo": 2,
+            "semana_relativa": 7,
+            "dia_da_semana": "quarta",
+            "dia_do_mes_sintetico": 15,
+            "weekend": false
+          },
+          "d46": {
+            "dia_indice": 46,
+            "mes_relativo": 2,
+            "semana_relativa": 7,
+            "dia_da_semana": "quinta",
+            "dia_do_mes_sintetico": 16,
+            "weekend": false
+          },
+          "d47": {
+            "dia_indice": 47,
+            "mes_relativo": 2,
+            "semana_relativa": 7,
+            "dia_da_semana": "sexta",
+            "dia_do_mes_sintetico": 17,
+            "weekend": false
+          },
+          "d48": {
+            "dia_indice": 48,
+            "mes_relativo": 2,
+            "semana_relativa": 7,
+            "dia_da_semana": "sabado",
+            "dia_do_mes_sintetico": 18,
+            "weekend": true
+          },
+          "d49": {
+            "dia_indice": 49,
+            "mes_relativo": 2,
+            "semana_relativa": 7,
+            "dia_da_semana": "domingo",
+            "dia_do_mes_sintetico": 19,
+            "weekend": true
+          },
+          "d50": {
+            "dia_indice": 50,
+            "mes_relativo": 2,
+            "semana_relativa": 8,
+            "dia_da_semana": "segunda",
+            "dia_do_mes_sintetico": 20,
+            "weekend": false
+          },
+          "d51": {
+            "dia_indice": 51,
+            "mes_relativo": 2,
+            "semana_relativa": 8,
+            "dia_da_semana": "terca",
+            "dia_do_mes_sintetico": 21,
+            "weekend": false
+          },
+          "d52": {
+            "dia_indice": 52,
+            "mes_relativo": 2,
+            "semana_relativa": 8,
+            "dia_da_semana": "quarta",
+            "dia_do_mes_sintetico": 22,
+            "weekend": false
+          },
+          "d53": {
+            "dia_indice": 53,
+            "mes_relativo": 2,
+            "semana_relativa": 8,
+            "dia_da_semana": "quinta",
+            "dia_do_mes_sintetico": 23,
+            "weekend": false
+          },
+          "d54": {
+            "dia_indice": 54,
+            "mes_relativo": 2,
+            "semana_relativa": 8,
+            "dia_da_semana": "sexta",
+            "dia_do_mes_sintetico": 24,
+            "weekend": false
+          },
+          "d55": {
+            "dia_indice": 55,
+            "mes_relativo": 2,
+            "semana_relativa": 8,
+            "dia_da_semana": "sabado",
+            "dia_do_mes_sintetico": 25,
+            "weekend": true
+          },
+          "d56": {
+            "dia_indice": 56,
+            "mes_relativo": 2,
+            "semana_relativa": 8,
+            "dia_da_semana": "domingo",
+            "dia_do_mes_sintetico": 26,
+            "weekend": true
+          },
+          "d57": {
+            "dia_indice": 57,
+            "mes_relativo": 2,
+            "semana_relativa": 9,
+            "dia_da_semana": "segunda",
+            "dia_do_mes_sintetico": 27,
+            "weekend": false
+          },
+          "d58": {
+            "dia_indice": 58,
+            "mes_relativo": 2,
+            "semana_relativa": 9,
+            "dia_da_semana": "terca",
+            "dia_do_mes_sintetico": 28,
+            "weekend": false
+          },
+          "d59": {
+            "dia_indice": 59,
+            "mes_relativo": 2,
+            "semana_relativa": 9,
+            "dia_da_semana": "quarta",
+            "dia_do_mes_sintetico": 29,
+            "weekend": false
+          },
+          "d60": {
+            "dia_indice": 60,
+            "mes_relativo": 2,
+            "semana_relativa": 9,
+            "dia_da_semana": "quinta",
+            "dia_do_mes_sintetico": 30,
+            "weekend": false
+          },
+          "d61": {
+            "dia_indice": 61,
+            "mes_relativo": 3,
+            "semana_relativa": 9,
+            "dia_da_semana": "sexta",
+            "dia_do_mes_sintetico": 1,
+            "weekend": false
+          },
+          "d62": {
+            "dia_indice": 62,
+            "mes_relativo": 3,
+            "semana_relativa": 9,
+            "dia_da_semana": "sabado",
+            "dia_do_mes_sintetico": 2,
+            "weekend": true
+          },
+          "d63": {
+            "dia_indice": 63,
+            "mes_relativo": 3,
+            "semana_relativa": 9,
+            "dia_da_semana": "domingo",
+            "dia_do_mes_sintetico": 3,
+            "weekend": true
+          },
+          "d64": {
+            "dia_indice": 64,
+            "mes_relativo": 3,
+            "semana_relativa": 10,
+            "dia_da_semana": "segunda",
+            "dia_do_mes_sintetico": 4,
+            "weekend": false
+          },
+          "d65": {
+            "dia_indice": 65,
+            "mes_relativo": 3,
+            "semana_relativa": 10,
+            "dia_da_semana": "terca",
+            "dia_do_mes_sintetico": 5,
+            "weekend": false
+          },
+          "d66": {
+            "dia_indice": 66,
+            "mes_relativo": 3,
+            "semana_relativa": 10,
+            "dia_da_semana": "quarta",
+            "dia_do_mes_sintetico": 6,
+            "weekend": false
+          },
+          "d67": {
+            "dia_indice": 67,
+            "mes_relativo": 3,
+            "semana_relativa": 10,
+            "dia_da_semana": "quinta",
+            "dia_do_mes_sintetico": 7,
+            "weekend": false
+          },
+          "d68": {
+            "dia_indice": 68,
+            "mes_relativo": 3,
+            "semana_relativa": 10,
+            "dia_da_semana": "sexta",
+            "dia_do_mes_sintetico": 8,
+            "weekend": false
+          },
+          "d69": {
+            "dia_indice": 69,
+            "mes_relativo": 3,
+            "semana_relativa": 10,
+            "dia_da_semana": "sabado",
+            "dia_do_mes_sintetico": 9,
+            "weekend": true
+          },
+          "d70": {
+            "dia_indice": 70,
+            "mes_relativo": 3,
+            "semana_relativa": 10,
+            "dia_da_semana": "domingo",
+            "dia_do_mes_sintetico": 10,
+            "weekend": true
+          },
+          "d71": {
+            "dia_indice": 71,
+            "mes_relativo": 3,
+            "semana_relativa": 11,
+            "dia_da_semana": "segunda",
+            "dia_do_mes_sintetico": 11,
+            "weekend": false
+          },
+          "d72": {
+            "dia_indice": 72,
+            "mes_relativo": 3,
+            "semana_relativa": 11,
+            "dia_da_semana": "terca",
+            "dia_do_mes_sintetico": 12,
+            "weekend": false
+          },
+          "d73": {
+            "dia_indice": 73,
+            "mes_relativo": 3,
+            "semana_relativa": 11,
+            "dia_da_semana": "quarta",
+            "dia_do_mes_sintetico": 13,
+            "weekend": false
+          },
+          "d74": {
+            "dia_indice": 74,
+            "mes_relativo": 3,
+            "semana_relativa": 11,
+            "dia_da_semana": "quinta",
+            "dia_do_mes_sintetico": 14,
+            "weekend": false
+          },
+          "d75": {
+            "dia_indice": 75,
+            "mes_relativo": 3,
+            "semana_relativa": 11,
+            "dia_da_semana": "sexta",
+            "dia_do_mes_sintetico": 15,
+            "weekend": false
+          },
+          "d76": {
+            "dia_indice": 76,
+            "mes_relativo": 3,
+            "semana_relativa": 11,
+            "dia_da_semana": "sabado",
+            "dia_do_mes_sintetico": 16,
+            "weekend": true
+          },
+          "d77": {
+            "dia_indice": 77,
+            "mes_relativo": 3,
+            "semana_relativa": 11,
+            "dia_da_semana": "domingo",
+            "dia_do_mes_sintetico": 17,
+            "weekend": true
+          },
+          "d78": {
+            "dia_indice": 78,
+            "mes_relativo": 3,
+            "semana_relativa": 12,
+            "dia_da_semana": "segunda",
+            "dia_do_mes_sintetico": 18,
+            "weekend": false
+          },
+          "d79": {
+            "dia_indice": 79,
+            "mes_relativo": 3,
+            "semana_relativa": 12,
+            "dia_da_semana": "terca",
+            "dia_do_mes_sintetico": 19,
+            "weekend": false
+          },
+          "d80": {
+            "dia_indice": 80,
+            "mes_relativo": 3,
+            "semana_relativa": 12,
+            "dia_da_semana": "quarta",
+            "dia_do_mes_sintetico": 20,
+            "weekend": false
+          },
+          "d81": {
+            "dia_indice": 81,
+            "mes_relativo": 3,
+            "semana_relativa": 12,
+            "dia_da_semana": "quinta",
+            "dia_do_mes_sintetico": 21,
+            "weekend": false
+          },
+          "d82": {
+            "dia_indice": 82,
+            "mes_relativo": 3,
+            "semana_relativa": 12,
+            "dia_da_semana": "sexta",
+            "dia_do_mes_sintetico": 22,
+            "weekend": false
+          },
+          "d83": {
+            "dia_indice": 83,
+            "mes_relativo": 3,
+            "semana_relativa": 12,
+            "dia_da_semana": "sabado",
+            "dia_do_mes_sintetico": 23,
+            "weekend": true
+          },
+          "d84": {
+            "dia_indice": 84,
+            "mes_relativo": 3,
+            "semana_relativa": 12,
+            "dia_da_semana": "domingo",
+            "dia_do_mes_sintetico": 24,
+            "weekend": true
+          },
+          "d85": {
+            "dia_indice": 85,
+            "mes_relativo": 3,
+            "semana_relativa": 13,
+            "dia_da_semana": "segunda",
+            "dia_do_mes_sintetico": 25,
+            "weekend": false
+          },
+          "d86": {
+            "dia_indice": 86,
+            "mes_relativo": 3,
+            "semana_relativa": 13,
+            "dia_da_semana": "terca",
+            "dia_do_mes_sintetico": 26,
+            "weekend": false
+          },
+          "d87": {
+            "dia_indice": 87,
+            "mes_relativo": 3,
+            "semana_relativa": 13,
+            "dia_da_semana": "quarta",
+            "dia_do_mes_sintetico": 27,
+            "weekend": false
+          },
+          "d88": {
+            "dia_indice": 88,
+            "mes_relativo": 3,
+            "semana_relativa": 13,
+            "dia_da_semana": "quinta",
+            "dia_do_mes_sintetico": 28,
+            "weekend": false
+          },
+          "d89": {
+            "dia_indice": 89,
+            "mes_relativo": 3,
+            "semana_relativa": 13,
+            "dia_da_semana": "sexta",
+            "dia_do_mes_sintetico": 29,
+            "weekend": false
+          },
+          "d90": {
+            "dia_indice": 90,
+            "mes_relativo": 3,
+            "semana_relativa": 13,
+            "dia_da_semana": "sabado",
+            "dia_do_mes_sintetico": 30,
+            "weekend": true
+          }
+        },
+        "composicao_pesos": {
+          "padrao_semanal": {
+            "segunda": 1.06,
+            "terca": 1.1,
+            "quarta": 1.05,
+            "quinta": 1.0,
+            "sexta": 0.95,
+            "sabado": 0.76,
+            "domingo": 0.61
+          },
+          "padrao_semana_relativa": {
+            "1": 0.92,
+            "2": 1.0,
+            "3": 1.08,
+            "4": 0.97,
+            "5": 1.12,
+            "6": 0.95,
+            "7": 1.03,
+            "8": 0.98,
+            "9": 0.9,
+            "10": 1.15,
+            "11": 0.94,
+            "12": 0.99,
+            "13": 1.07
+          },
+          "picos_controlados": {
+            "d18": 1.22,
+            "d47": 1.3,
+            "d73": 1.18
+          },
+          "pesos": {
+            "d01": 1.0104,
+            "d02": 1.0488,
+            "d03": 1.0017,
+            "d04": 0.9556,
+            "d05": 0.9114,
+            "d06": 0.7353,
+            "d07": 0.5996,
+            "d08": 1.1629,
+            "d09": 1.2544,
+            "d10": 1.2579,
+            "d11": 1.264,
+            "d12": 1.2607,
+            "d13": 1.0434,
+            "d14": 0.8478,
+            "d15": 1.5717,
+            "d16": 1.5765,
+            "d17": 1.4334,
+            "d18": 1.5787,
+            "d19": 1.1709,
+            "d20": 0.9028,
+            "d21": 0.7097,
+            "d22": 1.105,
+            "d23": 1.1665,
+            "d24": 1.1522,
+            "d25": 1.1445,
+            "d26": 1.1258,
+            "d27": 0.9129,
+            "d28": 0.7227,
+            "d29": 1.3996,
+            "d30": 1.3904,
+            "d31": 1.2185,
+            "d32": 1.1607,
+            "d33": 1.1034,
+            "d34": 0.8842,
+            "d35": 0.7124,
+            "d36": 1.0589,
+            "d37": 1.1164,
+            "d38": 1.0943,
+            "d39": 1.0834,
+            "d40": 1.0812,
+            "d41": 0.9126,
+            "d42": 0.769,
+            "d43": 1.499,
+            "d44": 1.5746,
+            "d45": 1.4848,
+            "d46": 1.3669,
+            "d47": 1.6079,
+            "d48": 0.9379,
+            "d49": 0.717,
+            "d50": 1.1426,
+            "d51": 1.1613,
+            "d52": 1.1058,
+            "d53": 1.0714,
+            "d54": 1.0532,
+            "d55": 0.8788,
+            "d56": 0.7303,
+            "d57": 1.1813,
+            "d58": 1.2092,
+            "d59": 1.1141,
+            "d60": 1.0157,
+            "d61": 0.8859,
+            "d62": 0.7089,
+            "d63": 0.5693,
+            "d64": 1.2662,
+            "d65": 1.3192,
+            "d66": 1.2698,
+            "d67": 1.2286,
+            "d68": 1.1985,
+            "d69": 0.9967,
+            "d70": 0.8404,
+            "d71": 1.2594,
+            "d72": 1.3722,
+            "d73": 1.599,
+            "d74": 1.3064,
+            "d75": 1.226,
+            "d76": 0.948,
+            "d77": 0.7248,
+            "d78": 1.2574,
+            "d79": 1.2428,
+            "d80": 1.1434,
+            "d81": 1.0665,
+            "d82": 1.0107,
+            "d83": 0.8225,
+            "d84": 0.6832,
+            "d85": 1.3382,
+            "d86": 1.4379,
+            "d87": 1.3912,
+            "d88": 1.3069,
+            "d89": 1.1983,
+            "d90": 0.9178
+          },
+          "cotas_planejadas_n_6000": {
+            "d01": 61,
+            "d02": 63,
+            "d03": 60,
+            "d04": 57,
+            "d05": 55,
+            "d06": 44,
+            "d07": 36,
+            "d08": 70,
+            "d09": 75,
+            "d10": 75,
+            "d11": 76,
+            "d12": 76,
+            "d13": 63,
+            "d14": 51,
+            "d15": 94,
+            "d16": 95,
+            "d17": 86,
+            "d18": 95,
+            "d19": 70,
+            "d20": 54,
+            "d21": 43,
+            "d22": 66,
+            "d23": 70,
+            "d24": 69,
+            "d25": 69,
+            "d26": 68,
+            "d27": 55,
+            "d28": 43,
+            "d29": 84,
+            "d30": 83,
+            "d31": 73,
+            "d32": 70,
+            "d33": 66,
+            "d34": 53,
+            "d35": 43,
+            "d36": 64,
+            "d37": 67,
+            "d38": 66,
+            "d39": 65,
+            "d40": 65,
+            "d41": 55,
+            "d42": 46,
+            "d43": 90,
+            "d44": 94,
+            "d45": 89,
+            "d46": 82,
+            "d47": 96,
+            "d48": 56,
+            "d49": 43,
+            "d50": 69,
+            "d51": 70,
+            "d52": 66,
+            "d53": 64,
+            "d54": 63,
+            "d55": 53,
+            "d56": 44,
+            "d57": 71,
+            "d58": 73,
+            "d59": 67,
+            "d60": 61,
+            "d61": 53,
+            "d62": 42,
+            "d63": 34,
+            "d64": 76,
+            "d65": 79,
+            "d66": 76,
+            "d67": 74,
+            "d68": 72,
+            "d69": 60,
+            "d70": 50,
+            "d71": 76,
+            "d72": 82,
+            "d73": 96,
+            "d74": 78,
+            "d75": 74,
+            "d76": 57,
+            "d77": 43,
+            "d78": 75,
+            "d79": 75,
+            "d80": 69,
+            "d81": 64,
+            "d82": 61,
+            "d83": 49,
+            "d84": 41,
+            "d85": 80,
+            "d86": 86,
+            "d87": 83,
+            "d88": 78,
+            "d89": 72,
+            "d90": 55
+          }
+        }
+      },
+      "persona_id": {
+        "descricao": "Persona sorteada. O peso final combina prevalência operacional do atendimento em cartão de crédito via app/site com cobertura experimental uniforme.",
+        "tipo": "categorica",
+        "depende_de": null,
+        "composicao_pesos": {
+          "formula": "peso_final = 0.5 * prevalencia_operacional + 0.5 * cobertura_experimental",
+          "prevalencia_operacional": {
+            "ana_beatriz_silva": 4.5,
+            "carla_mendes": 5,
+            "carlos_ferreira": 4,
+            "miguel_santos": 3.5,
+            "fernanda_costa": 4.5,
+            "ricardo_tanaka": 3.5,
+            "antonia_silveira": 3,
+            "paulo_henrique_almeida": 5,
+            "camila_rocha": 5,
+            "jose_carlos_da_silva": 3,
+            "eduardo_martins": 5,
+            "gabriela_ferreira": 4.5,
+            "rafael_gomes": 4,
+            "luisa_oliveira": 5,
+            "marina_rodrigues": 5,
+            "daniela_nascimento": 4.5,
+            "roberto_yamamoto": 3.5,
+            "patricia_santana": 3.5,
+            "joao_pedro_oliveira": 6,
+            "helena_mendonca": 3,
+            "carlos_augusto": 3,
+            "felipe_araujo": 5,
+            "roberto_almeida": 3,
+            "mei_li_chen": 4
+          },
+          "cobertura_experimental": {
+            "ana_beatriz_silva": 4.1667,
+            "carla_mendes": 4.1667,
+            "carlos_ferreira": 4.1667,
+            "miguel_santos": 4.1667,
+            "fernanda_costa": 4.1667,
+            "ricardo_tanaka": 4.1667,
+            "antonia_silveira": 4.1667,
+            "paulo_henrique_almeida": 4.1667,
+            "camila_rocha": 4.1667,
+            "jose_carlos_da_silva": 4.1667,
+            "eduardo_martins": 4.1667,
+            "gabriela_ferreira": 4.1667,
+            "rafael_gomes": 4.1667,
+            "luisa_oliveira": 4.1667,
+            "marina_rodrigues": 4.1667,
+            "daniela_nascimento": 4.1667,
+            "roberto_yamamoto": 4.1667,
+            "patricia_santana": 4.1667,
+            "joao_pedro_oliveira": 4.1667,
+            "helena_mendonca": 4.1667,
+            "carlos_augusto": 4.1667,
+            "felipe_araujo": 4.1667,
+            "roberto_almeida": 4.1667,
+            "mei_li_chen": 4.1667
+          },
+          "peso_final": {
+            "ana_beatriz_silva": 4.3333,
+            "carla_mendes": 4.5833,
+            "carlos_ferreira": 4.0833,
+            "miguel_santos": 3.8333,
+            "fernanda_costa": 4.3333,
+            "ricardo_tanaka": 3.8333,
+            "antonia_silveira": 3.5833,
+            "paulo_henrique_almeida": 4.5833,
+            "camila_rocha": 4.5833,
+            "jose_carlos_da_silva": 3.5833,
+            "eduardo_martins": 4.5833,
+            "gabriela_ferreira": 4.3333,
+            "rafael_gomes": 4.0833,
+            "luisa_oliveira": 4.5833,
+            "marina_rodrigues": 4.5833,
+            "daniela_nascimento": 4.3333,
+            "roberto_yamamoto": 3.8333,
+            "patricia_santana": 3.8333,
+            "joao_pedro_oliveira": 5.0833,
+            "helena_mendonca": 3.5833,
+            "carlos_augusto": 3.5833,
+            "felipe_araujo": 4.5833,
+            "roberto_almeida": 3.5833,
+            "mei_li_chen": 4.0833
+          },
+          "cotas_planejadas_n_6000": {
+            "ana_beatriz_silva": 260,
+            "carla_mendes": 275,
+            "carlos_ferreira": 245,
+            "miguel_santos": 230,
+            "fernanda_costa": 260,
+            "ricardo_tanaka": 230,
+            "antonia_silveira": 215,
+            "paulo_henrique_almeida": 275,
+            "camila_rocha": 275,
+            "jose_carlos_da_silva": 215,
+            "eduardo_martins": 275,
+            "gabriela_ferreira": 260,
+            "rafael_gomes": 245,
+            "luisa_oliveira": 275,
+            "marina_rodrigues": 275,
+            "daniela_nascimento": 260,
+            "roberto_yamamoto": 230,
+            "patricia_santana": 230,
+            "joao_pedro_oliveira": 305,
+            "helena_mendonca": 215,
+            "carlos_augusto": 215,
+            "felipe_araujo": 275,
+            "roberto_almeida": 215,
+            "mei_li_chen": 245
+          }
+        }
+      },
+      "weekend": {
+        "descricao": "Derivado deterministicamente de dia_relativo. Mantido como campo lógico para consumo do gerador e para condicionar offset.",
+        "tipo": "derivada",
+        "depende_de": "dia_relativo",
+        "regra": "weekend = true quando dia_da_semana ∈ {sabado, domingo}; caso contrário, false."
+      },
+      "offset": {
+        "descricao": "Faixa horária, condicionada à persona e ao weekend derivado de dia_relativo.",
+        "tipo": "categorica",
+        "depende_de": [
+          "persona_id",
+          "weekend"
+        ],
+        "categorias": {
+          "madrugada": "0h–6h",
+          "manha": "6h–12h",
+          "tarde": "12h–18h",
+          "noite_inicial": "18h–22h",
+          "noite_tardia": "22h–0h"
+        },
+        "pesos_condicionais": {
+          "ana_beatriz_silva": {
+            "false": {
+              "madrugada": 4,
+              "manha": 18,
+              "tarde": 28,
+              "noite_inicial": 30,
+              "noite_tardia": 20
+            },
+            "true": {
+              "madrugada": 5,
+              "manha": 14,
+              "tarde": 24,
+              "noite_inicial": 32,
+              "noite_tardia": 25
+            }
+          },
+          "carla_mendes": {
+            "false": {
+              "madrugada": 2,
+              "manha": 22,
+              "tarde": 36,
+              "noite_inicial": 28,
+              "noite_tardia": 12
+            },
+            "true": {
+              "madrugada": 4,
+              "manha": 18,
+              "tarde": 28,
+              "noite_inicial": 30,
+              "noite_tardia": 20
+            }
+          },
+          "carlos_ferreira": {
+            "false": {
+              "madrugada": 2,
+              "manha": 22,
+              "tarde": 36,
+              "noite_inicial": 28,
+              "noite_tardia": 12
+            },
+            "true": {
+              "madrugada": 4,
+              "manha": 18,
+              "tarde": 28,
+              "noite_inicial": 30,
+              "noite_tardia": 20
+            }
+          },
+          "miguel_santos": {
+            "false": {
+              "madrugada": 3,
+              "manha": 20,
+              "tarde": 34,
+              "noite_inicial": 27,
+              "noite_tardia": 16
+            },
+            "true": {
+              "madrugada": 4,
+              "manha": 18,
+              "tarde": 28,
+              "noite_inicial": 30,
+              "noite_tardia": 20
+            }
+          },
+          "fernanda_costa": {
+            "false": {
+              "madrugada": 3,
+              "manha": 20,
+              "tarde": 30,
+              "noite_inicial": 28,
+              "noite_tardia": 19
+            },
+            "true": {
+              "madrugada": 5,
+              "manha": 16,
+              "tarde": 24,
+              "noite_inicial": 30,
+              "noite_tardia": 25
+            }
+          },
+          "ricardo_tanaka": {
+            "false": {
+              "madrugada": 1,
+              "manha": 20,
+              "tarde": 40,
+              "noite_inicial": 28,
+              "noite_tardia": 11
+            },
+            "true": {
+              "madrugada": 2,
+              "manha": 14,
+              "tarde": 26,
+              "noite_inicial": 34,
+              "noite_tardia": 24
+            }
+          },
+          "antonia_silveira": {
+            "false": {
+              "madrugada": 1,
+              "manha": 34,
+              "tarde": 36,
+              "noite_inicial": 20,
+              "noite_tardia": 9
+            },
+            "true": {
+              "madrugada": 2,
+              "manha": 30,
+              "tarde": 30,
+              "noite_inicial": 22,
+              "noite_tardia": 16
+            }
+          },
+          "paulo_henrique_almeida": {
+            "false": {
+              "madrugada": 4,
+              "manha": 18,
+              "tarde": 28,
+              "noite_inicial": 30,
+              "noite_tardia": 20
+            },
+            "true": {
+              "madrugada": 6,
+              "manha": 14,
+              "tarde": 22,
+              "noite_inicial": 30,
+              "noite_tardia": 28
+            }
+          },
+          "camila_rocha": {
+            "false": {
+              "madrugada": 4,
+              "manha": 18,
+              "tarde": 28,
+              "noite_inicial": 30,
+              "noite_tardia": 20
+            },
+            "true": {
+              "madrugada": 5,
+              "manha": 14,
+              "tarde": 24,
+              "noite_inicial": 32,
+              "noite_tardia": 25
+            }
+          },
+          "jose_carlos_da_silva": {
+            "false": {
+              "madrugada": 4,
+              "manha": 18,
+              "tarde": 28,
+              "noite_inicial": 30,
+              "noite_tardia": 20
+            },
+            "true": {
+              "madrugada": 6,
+              "manha": 14,
+              "tarde": 22,
+              "noite_inicial": 30,
+              "noite_tardia": 28
+            }
+          },
+          "eduardo_martins": {
+            "false": {
+              "madrugada": 2,
+              "manha": 22,
+              "tarde": 36,
+              "noite_inicial": 28,
+              "noite_tardia": 12
+            },
+            "true": {
+              "madrugada": 4,
+              "manha": 18,
+              "tarde": 28,
+              "noite_inicial": 30,
+              "noite_tardia": 20
+            }
+          },
+          "gabriela_ferreira": {
+            "false": {
+              "madrugada": 4,
+              "manha": 18,
+              "tarde": 28,
+              "noite_inicial": 30,
+              "noite_tardia": 20
+            },
+            "true": {
+              "madrugada": 5,
+              "manha": 14,
+              "tarde": 24,
+              "noite_inicial": 32,
+              "noite_tardia": 25
+            }
+          },
+          "rafael_gomes": {
+            "false": {
+              "madrugada": 6,
+              "manha": 16,
+              "tarde": 22,
+              "noite_inicial": 34,
+              "noite_tardia": 22
+            },
+            "true": {
+              "madrugada": 8,
+              "manha": 14,
+              "tarde": 20,
+              "noite_inicial": 32,
+              "noite_tardia": 26
+            }
+          },
+          "luisa_oliveira": {
+            "false": {
+              "madrugada": 6,
+              "manha": 16,
+              "tarde": 22,
+              "noite_inicial": 34,
+              "noite_tardia": 22
+            },
+            "true": {
+              "madrugada": 8,
+              "manha": 14,
+              "tarde": 20,
+              "noite_inicial": 32,
+              "noite_tardia": 26
+            }
+          },
+          "marina_rodrigues": {
+            "false": {
+              "madrugada": 4,
+              "manha": 14,
+              "tarde": 24,
+              "noite_inicial": 32,
+              "noite_tardia": 26
+            },
+            "true": {
+              "madrugada": 5,
+              "manha": 12,
+              "tarde": 20,
+              "noite_inicial": 30,
+              "noite_tardia": 33
+            }
+          },
+          "daniela_nascimento": {
+            "false": {
+              "madrugada": 2,
+              "manha": 22,
+              "tarde": 36,
+              "noite_inicial": 28,
+              "noite_tardia": 12
+            },
+            "true": {
+              "madrugada": 4,
+              "manha": 18,
+              "tarde": 28,
+              "noite_inicial": 30,
+              "noite_tardia": 20
+            }
+          },
+          "roberto_yamamoto": {
+            "false": {
+              "madrugada": 1,
+              "manha": 34,
+              "tarde": 36,
+              "noite_inicial": 20,
+              "noite_tardia": 9
+            },
+            "true": {
+              "madrugada": 2,
+              "manha": 30,
+              "tarde": 30,
+              "noite_inicial": 22,
+              "noite_tardia": 16
+            }
+          },
+          "patricia_santana": {
+            "false": {
+              "madrugada": 2,
+              "manha": 22,
+              "tarde": 36,
+              "noite_inicial": 28,
+              "noite_tardia": 12
+            },
+            "true": {
+              "madrugada": 4,
+              "manha": 18,
+              "tarde": 28,
+              "noite_inicial": 30,
+              "noite_tardia": 20
+            }
+          },
+          "joao_pedro_oliveira": {
+            "false": {
+              "madrugada": 6,
+              "manha": 16,
+              "tarde": 22,
+              "noite_inicial": 34,
+              "noite_tardia": 22
+            },
+            "true": {
+              "madrugada": 8,
+              "manha": 14,
+              "tarde": 20,
+              "noite_inicial": 32,
+              "noite_tardia": 26
+            }
+          },
+          "helena_mendonca": {
+            "false": {
+              "madrugada": 1,
+              "manha": 34,
+              "tarde": 36,
+              "noite_inicial": 20,
+              "noite_tardia": 9
+            },
+            "true": {
+              "madrugada": 2,
+              "manha": 30,
+              "tarde": 30,
+              "noite_inicial": 22,
+              "noite_tardia": 16
+            }
+          },
+          "carlos_augusto": {
+            "false": {
+              "madrugada": 3,
+              "manha": 28,
+              "tarde": 34,
+              "noite_inicial": 22,
+              "noite_tardia": 13
+            },
+            "true": {
+              "madrugada": 4,
+              "manha": 20,
+              "tarde": 26,
+              "noite_inicial": 28,
+              "noite_tardia": 22
+            }
+          },
+          "felipe_araujo": {
+            "false": {
+              "madrugada": 6,
+              "manha": 16,
+              "tarde": 22,
+              "noite_inicial": 34,
+              "noite_tardia": 22
+            },
+            "true": {
+              "madrugada": 8,
+              "manha": 14,
+              "tarde": 20,
+              "noite_inicial": 32,
+              "noite_tardia": 26
+            }
+          },
+          "roberto_almeida": {
+            "false": {
+              "madrugada": 3,
+              "manha": 20,
+              "tarde": 30,
+              "noite_inicial": 28,
+              "noite_tardia": 19
+            },
+            "true": {
+              "madrugada": 5,
+              "manha": 16,
+              "tarde": 24,
+              "noite_inicial": 30,
+              "noite_tardia": 25
+            }
+          },
+          "mei_li_chen": {
+            "false": {
+              "madrugada": 4,
+              "manha": 18,
+              "tarde": 28,
+              "noite_inicial": 30,
+              "noite_tardia": 20
+            },
+            "true": {
+              "madrugada": 5,
+              "manha": 14,
+              "tarde": 24,
+              "noite_inicial": 32,
+              "noite_tardia": 25
+            }
+          }
+        }
+      },
+      "ritmo": {
+        "descricao": "Ritmo de interação da persona no chat. A duração total do diálogo não é sorteada.",
+        "tipo": "categorica",
+        "depende_de": "persona_id",
+        "pesos_condicionais": {
+          "ana_beatriz_silva": {
+            "rapido": 30,
+            "medio": 50,
+            "lento": 20
+          },
+          "carla_mendes": {
+            "rapido": 45,
+            "medio": 40,
+            "lento": 15
+          },
+          "carlos_ferreira": {
+            "rapido": 50,
+            "medio": 35,
+            "lento": 15
+          },
+          "miguel_santos": {
+            "rapido": 15,
+            "medio": 45,
+            "lento": 40
+          },
+          "fernanda_costa": {
+            "rapido": 10,
+            "medio": 30,
+            "lento": 60
+          },
+          "ricardo_tanaka": {
+            "rapido": 35,
+            "medio": 45,
+            "lento": 20
+          },
+          "antonia_silveira": {
+            "rapido": 10,
+            "medio": 30,
+            "lento": 60
+          },
+          "paulo_henrique_almeida": {
+            "rapido": 55,
+            "medio": 35,
+            "lento": 10
+          },
+          "camila_rocha": {
+            "rapido": 45,
+            "medio": 40,
+            "lento": 15
+          },
+          "jose_carlos_da_silva": {
+            "rapido": 15,
+            "medio": 40,
+            "lento": 45
+          },
+          "eduardo_martins": {
+            "rapido": 40,
+            "medio": 40,
+            "lento": 20
+          },
+          "gabriela_ferreira": {
+            "rapido": 30,
+            "medio": 45,
+            "lento": 25
+          },
+          "rafael_gomes": {
+            "rapido": 35,
+            "medio": 35,
+            "lento": 30
+          },
+          "luisa_oliveira": {
+            "rapido": 30,
+            "medio": 45,
+            "lento": 25
+          },
+          "marina_rodrigues": {
+            "rapido": 50,
+            "medio": 35,
+            "lento": 15
+          },
+          "daniela_nascimento": {
+            "rapido": 20,
+            "medio": 50,
+            "lento": 30
+          },
+          "roberto_yamamoto": {
+            "rapido": 20,
+            "medio": 45,
+            "lento": 35
+          },
+          "patricia_santana": {
+            "rapido": 25,
+            "medio": 45,
+            "lento": 30
+          },
+          "joao_pedro_oliveira": {
+            "rapido": 55,
+            "medio": 35,
+            "lento": 10
+          },
+          "helena_mendonca": {
+            "rapido": 15,
+            "medio": 40,
+            "lento": 45
+          },
+          "carlos_augusto": {
+            "rapido": 20,
+            "medio": 45,
+            "lento": 35
+          },
+          "felipe_araujo": {
+            "rapido": 35,
+            "medio": 45,
+            "lento": 20
+          },
+          "roberto_almeida": {
+            "rapido": 20,
+            "medio": 45,
+            "lento": 35
+          },
+          "mei_li_chen": {
+            "rapido": 30,
+            "medio": 50,
+            "lento": 20
+          }
+        }
+      },
+      "missao_id": {
+        "descricao": "Missão condicionada à persona e restrita à matriz de compatibilidade. Apenas níveis H e M podem ser usados. H recebe peso 2 e M recebe peso 1.",
+        "tipo": "categorica_restrita",
+        "depende_de": "persona_id",
+        "compatibilidade_utilizada": [
+          "H",
+          "M"
+        ],
+        "compatibilidade_excluida": [
+          "L",
+          "N"
+        ],
+        "pesos_por_nivel": {
+          "H": 2,
+          "M": 1
+        },
+        "composicao_pesos_base": {
+          "formula": "peso_final_base = 0.5 * prevalencia_operacional + 0.5 * cobertura_experimental",
+          "prevalencia_operacional": {
+            "m01_cartao_planejamento_estudio": 4.5,
+            "m02_cartao_revisao_tarifas_beneficios": 5,
+            "m03_cartao_limite_vencimento_melhor_dia": 6,
+            "m04_cartao_acessibilidade_talkback": 1,
+            "m05_cartao_renegociacao_rotativo": 7,
+            "m06_cartao_seguro_viagem_reembolso_negado": 2,
+            "m07_cartao_seguro_nao_contratado_cobranca": 4,
+            "m08_cartao_fraude_compras_internacionais": 8,
+            "m09_cartao_cashback_cnpj_nao_creditado": 2.5,
+            "m10_cartao_anuidade_indevida_basico": 5,
+            "m11_cartao_pontos_iupp_credito_incorreto": 4,
+            "m12_cartao_reducao_limite_sem_aviso": 6,
+            "m13_cartao_pontos_desaparecidos_pagamento_antecipado": 3,
+            "m14_cartao_universitario_anuidade_indevida": 5,
+            "m15_cartao_black_clonagem_viagem": 3,
+            "m16_cartao_telemedicina_voucher_falho": 2,
+            "m17_cartao_vencimento_alterado_juros": 4,
+            "m18_cartao_nome_social_nao_atualizado": 1,
+            "m19_cartao_universitario_aumento_limite": 6,
+            "m20_cartao_adicional_falecido_cancelamento": 1,
+            "m21_cartao_virtual_fraude_phishing": 6,
+            "m22_cartao_corporativo_adicionais_sem_limite": 1.5,
+            "m23_cartao_aumento_limite_compra_sazonal": 3,
+            "m24_cartao_compra_internacional_bloqueada": 3,
+            "m25_cartao_parcelamento_fatura_juros_divergentes": 5.5,
+            "m26_cartao_autenticacao_inacessivel_compra": 1
+          },
+          "cobertura_experimental": {
+            "m01_cartao_planejamento_estudio": 3.8462,
+            "m02_cartao_revisao_tarifas_beneficios": 3.8462,
+            "m03_cartao_limite_vencimento_melhor_dia": 3.8462,
+            "m04_cartao_acessibilidade_talkback": 3.8462,
+            "m05_cartao_renegociacao_rotativo": 3.8462,
+            "m06_cartao_seguro_viagem_reembolso_negado": 3.8462,
+            "m07_cartao_seguro_nao_contratado_cobranca": 3.8462,
+            "m08_cartao_fraude_compras_internacionais": 3.8462,
+            "m09_cartao_cashback_cnpj_nao_creditado": 3.8462,
+            "m10_cartao_anuidade_indevida_basico": 3.8462,
+            "m11_cartao_pontos_iupp_credito_incorreto": 3.8462,
+            "m12_cartao_reducao_limite_sem_aviso": 3.8462,
+            "m13_cartao_pontos_desaparecidos_pagamento_antecipado": 3.8462,
+            "m14_cartao_universitario_anuidade_indevida": 3.8462,
+            "m15_cartao_black_clonagem_viagem": 3.8462,
+            "m16_cartao_telemedicina_voucher_falho": 3.8462,
+            "m17_cartao_vencimento_alterado_juros": 3.8462,
+            "m18_cartao_nome_social_nao_atualizado": 3.8462,
+            "m19_cartao_universitario_aumento_limite": 3.8462,
+            "m20_cartao_adicional_falecido_cancelamento": 3.8462,
+            "m21_cartao_virtual_fraude_phishing": 3.8462,
+            "m22_cartao_corporativo_adicionais_sem_limite": 3.8462,
+            "m23_cartao_aumento_limite_compra_sazonal": 3.8462,
+            "m24_cartao_compra_internacional_bloqueada": 3.8462,
+            "m25_cartao_parcelamento_fatura_juros_divergentes": 3.8462,
+            "m26_cartao_autenticacao_inacessivel_compra": 3.8462
+          },
+          "peso_final_base": {
+            "m01_cartao_planejamento_estudio": 4.1731,
+            "m02_cartao_revisao_tarifas_beneficios": 4.4231,
+            "m03_cartao_limite_vencimento_melhor_dia": 4.9231,
+            "m04_cartao_acessibilidade_talkback": 2.4231,
+            "m05_cartao_renegociacao_rotativo": 5.4231,
+            "m06_cartao_seguro_viagem_reembolso_negado": 2.9231,
+            "m07_cartao_seguro_nao_contratado_cobranca": 3.9231,
+            "m08_cartao_fraude_compras_internacionais": 5.9231,
+            "m09_cartao_cashback_cnpj_nao_creditado": 3.1731,
+            "m10_cartao_anuidade_indevida_basico": 4.4231,
+            "m11_cartao_pontos_iupp_credito_incorreto": 3.9231,
+            "m12_cartao_reducao_limite_sem_aviso": 4.9231,
+            "m13_cartao_pontos_desaparecidos_pagamento_antecipado": 3.4231,
+            "m14_cartao_universitario_anuidade_indevida": 4.4231,
+            "m15_cartao_black_clonagem_viagem": 3.4231,
+            "m16_cartao_telemedicina_voucher_falho": 2.9231,
+            "m17_cartao_vencimento_alterado_juros": 3.9231,
+            "m18_cartao_nome_social_nao_atualizado": 2.4231,
+            "m19_cartao_universitario_aumento_limite": 4.9231,
+            "m20_cartao_adicional_falecido_cancelamento": 2.4231,
+            "m21_cartao_virtual_fraude_phishing": 4.9231,
+            "m22_cartao_corporativo_adicionais_sem_limite": 2.6731,
+            "m23_cartao_aumento_limite_compra_sazonal": 3.4231,
+            "m24_cartao_compra_internacional_bloqueada": 3.4231,
+            "m25_cartao_parcelamento_fatura_juros_divergentes": 4.6731,
+            "m26_cartao_autenticacao_inacessivel_compra": 2.4231
+          }
+        },
+        "missoes_elegiveis_por_persona": {
+          "ana_beatriz_silva": {
+            "H": [
+              "m01_cartao_planejamento_estudio",
+              "m18_cartao_nome_social_nao_atualizado",
+              "m21_cartao_virtual_fraude_phishing",
+              "m23_cartao_aumento_limite_compra_sazonal"
+            ],
+            "M": [
+              "m02_cartao_revisao_tarifas_beneficios",
+              "m03_cartao_limite_vencimento_melhor_dia",
+              "m06_cartao_seguro_viagem_reembolso_negado",
+              "m07_cartao_seguro_nao_contratado_cobranca",
+              "m08_cartao_fraude_compras_internacionais",
+              "m10_cartao_anuidade_indevida_basico",
+              "m11_cartao_pontos_iupp_credito_incorreto",
+              "m12_cartao_reducao_limite_sem_aviso",
+              "m13_cartao_pontos_desaparecidos_pagamento_antecipado",
+              "m15_cartao_black_clonagem_viagem",
+              "m16_cartao_telemedicina_voucher_falho",
+              "m17_cartao_vencimento_alterado_juros"
+            ]
+          },
+          "carla_mendes": {
+            "H": [
+              "m02_cartao_revisao_tarifas_beneficios",
+              "m06_cartao_seguro_viagem_reembolso_negado",
+              "m15_cartao_black_clonagem_viagem",
+              "m21_cartao_virtual_fraude_phishing",
+              "m22_cartao_corporativo_adicionais_sem_limite",
+              "m25_cartao_parcelamento_fatura_juros_divergentes",
+              "m26_cartao_autenticacao_inacessivel_compra"
+            ],
+            "M": [
+              "m01_cartao_planejamento_estudio",
+              "m03_cartao_limite_vencimento_melhor_dia",
+              "m07_cartao_seguro_nao_contratado_cobranca",
+              "m08_cartao_fraude_compras_internacionais",
+              "m09_cartao_cashback_cnpj_nao_creditado",
+              "m10_cartao_anuidade_indevida_basico",
+              "m11_cartao_pontos_iupp_credito_incorreto",
+              "m12_cartao_reducao_limite_sem_aviso",
+              "m13_cartao_pontos_desaparecidos_pagamento_antecipado",
+              "m16_cartao_telemedicina_voucher_falho",
+              "m17_cartao_vencimento_alterado_juros",
+              "m24_cartao_compra_internacional_bloqueada"
+            ]
+          },
+          "carlos_ferreira": {
+            "H": [
+              "m03_cartao_limite_vencimento_melhor_dia",
+              "m21_cartao_virtual_fraude_phishing"
+            ],
+            "M": [
+              "m01_cartao_planejamento_estudio",
+              "m02_cartao_revisao_tarifas_beneficios",
+              "m06_cartao_seguro_viagem_reembolso_negado",
+              "m07_cartao_seguro_nao_contratado_cobranca",
+              "m08_cartao_fraude_compras_internacionais",
+              "m10_cartao_anuidade_indevida_basico",
+              "m11_cartao_pontos_iupp_credito_incorreto",
+              "m12_cartao_reducao_limite_sem_aviso",
+              "m13_cartao_pontos_desaparecidos_pagamento_antecipado",
+              "m15_cartao_black_clonagem_viagem",
+              "m16_cartao_telemedicina_voucher_falho",
+              "m17_cartao_vencimento_alterado_juros",
+              "m25_cartao_parcelamento_fatura_juros_divergentes"
+            ]
+          },
+          "miguel_santos": {
+            "H": [
+              "m04_cartao_acessibilidade_talkback",
+              "m21_cartao_virtual_fraude_phishing"
+            ],
+            "M": [
+              "m01_cartao_planejamento_estudio",
+              "m02_cartao_revisao_tarifas_beneficios",
+              "m03_cartao_limite_vencimento_melhor_dia",
+              "m06_cartao_seguro_viagem_reembolso_negado",
+              "m07_cartao_seguro_nao_contratado_cobranca",
+              "m08_cartao_fraude_compras_internacionais",
+              "m10_cartao_anuidade_indevida_basico",
+              "m11_cartao_pontos_iupp_credito_incorreto",
+              "m12_cartao_reducao_limite_sem_aviso",
+              "m13_cartao_pontos_desaparecidos_pagamento_antecipado",
+              "m15_cartao_black_clonagem_viagem",
+              "m16_cartao_telemedicina_voucher_falho",
+              "m17_cartao_vencimento_alterado_juros"
+            ]
+          },
+          "fernanda_costa": {
+            "H": [
+              "m05_cartao_renegociacao_rotativo"
+            ],
+            "M": [
+              "m01_cartao_planejamento_estudio",
+              "m02_cartao_revisao_tarifas_beneficios",
+              "m03_cartao_limite_vencimento_melhor_dia",
+              "m07_cartao_seguro_nao_contratado_cobranca",
+              "m08_cartao_fraude_compras_internacionais",
+              "m10_cartao_anuidade_indevida_basico",
+              "m12_cartao_reducao_limite_sem_aviso",
+              "m17_cartao_vencimento_alterado_juros",
+              "m21_cartao_virtual_fraude_phishing",
+              "m25_cartao_parcelamento_fatura_juros_divergentes"
+            ]
+          },
+          "ricardo_tanaka": {
+            "H": [
+              "m06_cartao_seguro_viagem_reembolso_negado",
+              "m11_cartao_pontos_iupp_credito_incorreto",
+              "m15_cartao_black_clonagem_viagem",
+              "m21_cartao_virtual_fraude_phishing",
+              "m22_cartao_corporativo_adicionais_sem_limite",
+              "m25_cartao_parcelamento_fatura_juros_divergentes"
+            ],
+            "M": [
+              "m01_cartao_planejamento_estudio",
+              "m02_cartao_revisao_tarifas_beneficios",
+              "m03_cartao_limite_vencimento_melhor_dia",
+              "m07_cartao_seguro_nao_contratado_cobranca",
+              "m08_cartao_fraude_compras_internacionais",
+              "m09_cartao_cashback_cnpj_nao_creditado",
+              "m10_cartao_anuidade_indevida_basico",
+              "m12_cartao_reducao_limite_sem_aviso",
+              "m13_cartao_pontos_desaparecidos_pagamento_antecipado",
+              "m16_cartao_telemedicina_voucher_falho",
+              "m17_cartao_vencimento_alterado_juros",
+              "m24_cartao_compra_internacional_bloqueada"
+            ]
+          },
+          "antonia_silveira": {
+            "H": [
+              "m05_cartao_renegociacao_rotativo",
+              "m07_cartao_seguro_nao_contratado_cobranca",
+              "m20_cartao_adicional_falecido_cancelamento"
+            ],
+            "M": [
+              "m01_cartao_planejamento_estudio",
+              "m02_cartao_revisao_tarifas_beneficios",
+              "m03_cartao_limite_vencimento_melhor_dia",
+              "m08_cartao_fraude_compras_internacionais",
+              "m10_cartao_anuidade_indevida_basico",
+              "m12_cartao_reducao_limite_sem_aviso",
+              "m17_cartao_vencimento_alterado_juros",
+              "m21_cartao_virtual_fraude_phishing",
+              "m25_cartao_parcelamento_fatura_juros_divergentes"
+            ]
+          },
+          "paulo_henrique_almeida": {
+            "H": [
+              "m06_cartao_seguro_viagem_reembolso_negado",
+              "m08_cartao_fraude_compras_internacionais",
+              "m15_cartao_black_clonagem_viagem",
+              "m21_cartao_virtual_fraude_phishing"
+            ],
+            "M": [
+              "m01_cartao_planejamento_estudio",
+              "m02_cartao_revisao_tarifas_beneficios",
+              "m03_cartao_limite_vencimento_melhor_dia",
+              "m07_cartao_seguro_nao_contratado_cobranca",
+              "m10_cartao_anuidade_indevida_basico",
+              "m11_cartao_pontos_iupp_credito_incorreto",
+              "m12_cartao_reducao_limite_sem_aviso",
+              "m13_cartao_pontos_desaparecidos_pagamento_antecipado",
+              "m16_cartao_telemedicina_voucher_falho",
+              "m17_cartao_vencimento_alterado_juros",
+              "m24_cartao_compra_internacional_bloqueada",
+              "m25_cartao_parcelamento_fatura_juros_divergentes"
+            ]
+          },
+          "camila_rocha": {
+            "H": [
+              "m06_cartao_seguro_viagem_reembolso_negado",
+              "m09_cartao_cashback_cnpj_nao_creditado",
+              "m11_cartao_pontos_iupp_credito_incorreto",
+              "m15_cartao_black_clonagem_viagem",
+              "m21_cartao_virtual_fraude_phishing",
+              "m22_cartao_corporativo_adicionais_sem_limite",
+              "m23_cartao_aumento_limite_compra_sazonal"
+            ],
+            "M": [
+              "m01_cartao_planejamento_estudio",
+              "m02_cartao_revisao_tarifas_beneficios",
+              "m03_cartao_limite_vencimento_melhor_dia",
+              "m07_cartao_seguro_nao_contratado_cobranca",
+              "m08_cartao_fraude_compras_internacionais",
+              "m10_cartao_anuidade_indevida_basico",
+              "m12_cartao_reducao_limite_sem_aviso",
+              "m13_cartao_pontos_desaparecidos_pagamento_antecipado",
+              "m16_cartao_telemedicina_voucher_falho",
+              "m17_cartao_vencimento_alterado_juros",
+              "m24_cartao_compra_internacional_bloqueada",
+              "m25_cartao_parcelamento_fatura_juros_divergentes"
+            ]
+          },
+          "jose_carlos_da_silva": {
+            "H": [
+              "m05_cartao_renegociacao_rotativo",
+              "m10_cartao_anuidade_indevida_basico"
+            ],
+            "M": [
+              "m01_cartao_planejamento_estudio",
+              "m02_cartao_revisao_tarifas_beneficios",
+              "m03_cartao_limite_vencimento_melhor_dia",
+              "m07_cartao_seguro_nao_contratado_cobranca",
+              "m08_cartao_fraude_compras_internacionais",
+              "m12_cartao_reducao_limite_sem_aviso",
+              "m17_cartao_vencimento_alterado_juros",
+              "m21_cartao_virtual_fraude_phishing",
+              "m23_cartao_aumento_limite_compra_sazonal",
+              "m25_cartao_parcelamento_fatura_juros_divergentes"
+            ]
+          },
+          "eduardo_martins": {
+            "H": [
+              "m06_cartao_seguro_viagem_reembolso_negado",
+              "m11_cartao_pontos_iupp_credito_incorreto",
+              "m15_cartao_black_clonagem_viagem",
+              "m21_cartao_virtual_fraude_phishing",
+              "m25_cartao_parcelamento_fatura_juros_divergentes"
+            ],
+            "M": [
+              "m01_cartao_planejamento_estudio",
+              "m02_cartao_revisao_tarifas_beneficios",
+              "m03_cartao_limite_vencimento_melhor_dia",
+              "m07_cartao_seguro_nao_contratado_cobranca",
+              "m08_cartao_fraude_compras_internacionais",
+              "m10_cartao_anuidade_indevida_basico",
+              "m12_cartao_reducao_limite_sem_aviso",
+              "m13_cartao_pontos_desaparecidos_pagamento_antecipado",
+              "m16_cartao_telemedicina_voucher_falho",
+              "m17_cartao_vencimento_alterado_juros",
+              "m24_cartao_compra_internacional_bloqueada"
+            ]
+          },
+          "gabriela_ferreira": {
+            "H": [
+              "m12_cartao_reducao_limite_sem_aviso",
+              "m18_cartao_nome_social_nao_atualizado",
+              "m21_cartao_virtual_fraude_phishing"
+            ],
+            "M": [
+              "m01_cartao_planejamento_estudio",
+              "m02_cartao_revisao_tarifas_beneficios",
+              "m03_cartao_limite_vencimento_melhor_dia",
+              "m06_cartao_seguro_viagem_reembolso_negado",
+              "m07_cartao_seguro_nao_contratado_cobranca",
+              "m08_cartao_fraude_compras_internacionais",
+              "m10_cartao_anuidade_indevida_basico",
+              "m11_cartao_pontos_iupp_credito_incorreto",
+              "m13_cartao_pontos_desaparecidos_pagamento_antecipado",
+              "m15_cartao_black_clonagem_viagem",
+              "m16_cartao_telemedicina_voucher_falho",
+              "m17_cartao_vencimento_alterado_juros",
+              "m23_cartao_aumento_limite_compra_sazonal"
+            ]
+          },
+          "rafael_gomes": {
+            "H": [
+              "m06_cartao_seguro_viagem_reembolso_negado",
+              "m11_cartao_pontos_iupp_credito_incorreto",
+              "m13_cartao_pontos_desaparecidos_pagamento_antecipado",
+              "m15_cartao_black_clonagem_viagem",
+              "m21_cartao_virtual_fraude_phishing"
+            ],
+            "M": [
+              "m01_cartao_planejamento_estudio",
+              "m02_cartao_revisao_tarifas_beneficios",
+              "m03_cartao_limite_vencimento_melhor_dia",
+              "m07_cartao_seguro_nao_contratado_cobranca",
+              "m08_cartao_fraude_compras_internacionais",
+              "m10_cartao_anuidade_indevida_basico",
+              "m12_cartao_reducao_limite_sem_aviso",
+              "m16_cartao_telemedicina_voucher_falho",
+              "m17_cartao_vencimento_alterado_juros",
+              "m24_cartao_compra_internacional_bloqueada",
+              "m25_cartao_parcelamento_fatura_juros_divergentes"
+            ]
+          },
+          "luisa_oliveira": {
+            "H": [
+              "m05_cartao_renegociacao_rotativo",
+              "m14_cartao_universitario_anuidade_indevida",
+              "m19_cartao_universitario_aumento_limite",
+              "m21_cartao_virtual_fraude_phishing"
+            ],
+            "M": [
+              "m01_cartao_planejamento_estudio",
+              "m02_cartao_revisao_tarifas_beneficios",
+              "m03_cartao_limite_vencimento_melhor_dia",
+              "m07_cartao_seguro_nao_contratado_cobranca",
+              "m08_cartao_fraude_compras_internacionais",
+              "m10_cartao_anuidade_indevida_basico",
+              "m11_cartao_pontos_iupp_credito_incorreto",
+              "m12_cartao_reducao_limite_sem_aviso",
+              "m13_cartao_pontos_desaparecidos_pagamento_antecipado",
+              "m17_cartao_vencimento_alterado_juros",
+              "m25_cartao_parcelamento_fatura_juros_divergentes"
+            ]
+          },
+          "marina_rodrigues": {
+            "H": [
+              "m06_cartao_seguro_viagem_reembolso_negado",
+              "m11_cartao_pontos_iupp_credito_incorreto",
+              "m15_cartao_black_clonagem_viagem",
+              "m21_cartao_virtual_fraude_phishing"
+            ],
+            "M": [
+              "m01_cartao_planejamento_estudio",
+              "m02_cartao_revisao_tarifas_beneficios",
+              "m03_cartao_limite_vencimento_melhor_dia",
+              "m07_cartao_seguro_nao_contratado_cobranca",
+              "m08_cartao_fraude_compras_internacionais",
+              "m10_cartao_anuidade_indevida_basico",
+              "m12_cartao_reducao_limite_sem_aviso",
+              "m13_cartao_pontos_desaparecidos_pagamento_antecipado",
+              "m16_cartao_telemedicina_voucher_falho",
+              "m17_cartao_vencimento_alterado_juros",
+              "m23_cartao_aumento_limite_compra_sazonal",
+              "m24_cartao_compra_internacional_bloqueada",
+              "m25_cartao_parcelamento_fatura_juros_divergentes"
+            ]
+          },
+          "daniela_nascimento": {
+            "H": [
+              "m16_cartao_telemedicina_voucher_falho",
+              "m21_cartao_virtual_fraude_phishing"
+            ],
+            "M": [
+              "m01_cartao_planejamento_estudio",
+              "m02_cartao_revisao_tarifas_beneficios",
+              "m03_cartao_limite_vencimento_melhor_dia",
+              "m06_cartao_seguro_viagem_reembolso_negado",
+              "m07_cartao_seguro_nao_contratado_cobranca",
+              "m08_cartao_fraude_compras_internacionais",
+              "m10_cartao_anuidade_indevida_basico",
+              "m11_cartao_pontos_iupp_credito_incorreto",
+              "m12_cartao_reducao_limite_sem_aviso",
+              "m13_cartao_pontos_desaparecidos_pagamento_antecipado",
+              "m15_cartao_black_clonagem_viagem",
+              "m17_cartao_vencimento_alterado_juros"
+            ]
+          },
+          "roberto_yamamoto": {
+            "H": [
+              "m06_cartao_seguro_viagem_reembolso_negado",
+              "m15_cartao_black_clonagem_viagem",
+              "m17_cartao_vencimento_alterado_juros",
+              "m20_cartao_adicional_falecido_cancelamento",
+              "m21_cartao_virtual_fraude_phishing",
+              "m25_cartao_parcelamento_fatura_juros_divergentes"
+            ],
+            "M": [
+              "m01_cartao_planejamento_estudio",
+              "m02_cartao_revisao_tarifas_beneficios",
+              "m03_cartao_limite_vencimento_melhor_dia",
+              "m07_cartao_seguro_nao_contratado_cobranca",
+              "m08_cartao_fraude_compras_internacionais",
+              "m10_cartao_anuidade_indevida_basico",
+              "m11_cartao_pontos_iupp_credito_incorreto",
+              "m12_cartao_reducao_limite_sem_aviso",
+              "m13_cartao_pontos_desaparecidos_pagamento_antecipado",
+              "m16_cartao_telemedicina_voucher_falho",
+              "m23_cartao_aumento_limite_compra_sazonal",
+              "m24_cartao_compra_internacional_bloqueada"
+            ]
+          },
+          "patricia_santana": {
+            "H": [
+              "m18_cartao_nome_social_nao_atualizado",
+              "m21_cartao_virtual_fraude_phishing"
+            ],
+            "M": [
+              "m01_cartao_planejamento_estudio",
+              "m02_cartao_revisao_tarifas_beneficios",
+              "m03_cartao_limite_vencimento_melhor_dia",
+              "m06_cartao_seguro_viagem_reembolso_negado",
+              "m07_cartao_seguro_nao_contratado_cobranca",
+              "m08_cartao_fraude_compras_internacionais",
+              "m10_cartao_anuidade_indevida_basico",
+              "m11_cartao_pontos_iupp_credito_incorreto",
+              "m12_cartao_reducao_limite_sem_aviso",
+              "m13_cartao_pontos_desaparecidos_pagamento_antecipado",
+              "m15_cartao_black_clonagem_viagem",
+              "m16_cartao_telemedicina_voucher_falho",
+              "m17_cartao_vencimento_alterado_juros",
+              "m25_cartao_parcelamento_fatura_juros_divergentes"
+            ]
+          },
+          "joao_pedro_oliveira": {
+            "H": [
+              "m14_cartao_universitario_anuidade_indevida",
+              "m19_cartao_universitario_aumento_limite",
+              "m21_cartao_virtual_fraude_phishing"
+            ],
+            "M": [
+              "m01_cartao_planejamento_estudio",
+              "m02_cartao_revisao_tarifas_beneficios",
+              "m03_cartao_limite_vencimento_melhor_dia",
+              "m05_cartao_renegociacao_rotativo",
+              "m07_cartao_seguro_nao_contratado_cobranca",
+              "m08_cartao_fraude_compras_internacionais",
+              "m10_cartao_anuidade_indevida_basico",
+              "m11_cartao_pontos_iupp_credito_incorreto",
+              "m12_cartao_reducao_limite_sem_aviso",
+              "m13_cartao_pontos_desaparecidos_pagamento_antecipado",
+              "m17_cartao_vencimento_alterado_juros",
+              "m23_cartao_aumento_limite_compra_sazonal"
+            ]
+          },
+          "helena_mendonca": {
+            "H": [
+              "m20_cartao_adicional_falecido_cancelamento"
+            ],
+            "M": [
+              "m01_cartao_planejamento_estudio",
+              "m02_cartao_revisao_tarifas_beneficios",
+              "m03_cartao_limite_vencimento_melhor_dia",
+              "m06_cartao_seguro_viagem_reembolso_negado",
+              "m07_cartao_seguro_nao_contratado_cobranca",
+              "m08_cartao_fraude_compras_internacionais",
+              "m10_cartao_anuidade_indevida_basico",
+              "m12_cartao_reducao_limite_sem_aviso",
+              "m15_cartao_black_clonagem_viagem",
+              "m16_cartao_telemedicina_voucher_falho",
+              "m17_cartao_vencimento_alterado_juros",
+              "m21_cartao_virtual_fraude_phishing"
+            ]
+          },
+          "carlos_augusto": {
+            "H": [
+              "m05_cartao_renegociacao_rotativo",
+              "m18_cartao_nome_social_nao_atualizado",
+              "m22_cartao_corporativo_adicionais_sem_limite",
+              "m23_cartao_aumento_limite_compra_sazonal"
+            ],
+            "M": [
+              "m01_cartao_planejamento_estudio",
+              "m02_cartao_revisao_tarifas_beneficios",
+              "m03_cartao_limite_vencimento_melhor_dia",
+              "m07_cartao_seguro_nao_contratado_cobranca",
+              "m08_cartao_fraude_compras_internacionais",
+              "m09_cartao_cashback_cnpj_nao_creditado",
+              "m10_cartao_anuidade_indevida_basico",
+              "m12_cartao_reducao_limite_sem_aviso",
+              "m17_cartao_vencimento_alterado_juros",
+              "m21_cartao_virtual_fraude_phishing",
+              "m25_cartao_parcelamento_fatura_juros_divergentes"
+            ]
+          },
+          "felipe_araujo": {
+            "H": [
+              "m14_cartao_universitario_anuidade_indevida",
+              "m19_cartao_universitario_aumento_limite",
+              "m21_cartao_virtual_fraude_phishing",
+              "m26_cartao_autenticacao_inacessivel_compra"
+            ],
+            "M": [
+              "m01_cartao_planejamento_estudio",
+              "m02_cartao_revisao_tarifas_beneficios",
+              "m03_cartao_limite_vencimento_melhor_dia",
+              "m05_cartao_renegociacao_rotativo",
+              "m07_cartao_seguro_nao_contratado_cobranca",
+              "m08_cartao_fraude_compras_internacionais",
+              "m10_cartao_anuidade_indevida_basico",
+              "m11_cartao_pontos_iupp_credito_incorreto",
+              "m12_cartao_reducao_limite_sem_aviso",
+              "m13_cartao_pontos_desaparecidos_pagamento_antecipado",
+              "m17_cartao_vencimento_alterado_juros"
+            ]
+          },
+          "roberto_almeida": {
+            "H": [
+              "m05_cartao_renegociacao_rotativo",
+              "m18_cartao_nome_social_nao_atualizado",
+              "m26_cartao_autenticacao_inacessivel_compra"
+            ],
+            "M": [
+              "m01_cartao_planejamento_estudio",
+              "m02_cartao_revisao_tarifas_beneficios",
+              "m03_cartao_limite_vencimento_melhor_dia",
+              "m07_cartao_seguro_nao_contratado_cobranca",
+              "m08_cartao_fraude_compras_internacionais",
+              "m10_cartao_anuidade_indevida_basico",
+              "m12_cartao_reducao_limite_sem_aviso",
+              "m17_cartao_vencimento_alterado_juros",
+              "m21_cartao_virtual_fraude_phishing",
+              "m25_cartao_parcelamento_fatura_juros_divergentes"
+            ]
+          },
+          "mei_li_chen": {
+            "H": [
+              "m06_cartao_seguro_viagem_reembolso_negado",
+              "m15_cartao_black_clonagem_viagem",
+              "m18_cartao_nome_social_nao_atualizado",
+              "m21_cartao_virtual_fraude_phishing"
+            ],
+            "M": [
+              "m01_cartao_planejamento_estudio",
+              "m02_cartao_revisao_tarifas_beneficios",
+              "m03_cartao_limite_vencimento_melhor_dia",
+              "m07_cartao_seguro_nao_contratado_cobranca",
+              "m08_cartao_fraude_compras_internacionais",
+              "m10_cartao_anuidade_indevida_basico",
+              "m11_cartao_pontos_iupp_credito_incorreto",
+              "m12_cartao_reducao_limite_sem_aviso",
+              "m13_cartao_pontos_desaparecidos_pagamento_antecipado",
+              "m16_cartao_telemedicina_voucher_falho",
+              "m17_cartao_vencimento_alterado_juros",
+              "m24_cartao_compra_internacional_bloqueada"
+            ]
+          }
+        },
+        "pesos_condicionais": {
+          "ana_beatriz_silva": {
+            "m21_cartao_virtual_fraude_phishing": 12.4695,
+            "m01_cartao_planejamento_estudio": 10.5699,
+            "m23_cartao_aumento_limite_compra_sazonal": 8.6702,
+            "m08_cartao_fraude_compras_internacionais": 7.5012,
+            "m03_cartao_limite_vencimento_melhor_dia": 6.2348,
+            "m12_cartao_reducao_limite_sem_aviso": 6.2348,
+            "m18_cartao_nome_social_nao_atualizado": 6.1374,
+            "m02_cartao_revisao_tarifas_beneficios": 5.6016,
+            "m10_cartao_anuidade_indevida_basico": 5.6016,
+            "m07_cartao_seguro_nao_contratado_cobranca": 4.9683,
+            "m11_cartao_pontos_iupp_credito_incorreto": 4.9683,
+            "m17_cartao_vencimento_alterado_juros": 4.9683,
+            "m13_cartao_pontos_desaparecidos_pagamento_antecipado": 4.3351,
+            "m15_cartao_black_clonagem_viagem": 4.3351,
+            "m06_cartao_seguro_viagem_reembolso_negado": 3.7019,
+            "m16_cartao_telemedicina_voucher_falho": 3.7019
+          },
+          "carla_mendes": {
+            "m21_cartao_virtual_fraude_phishing": 9.8461,
+            "m25_cartao_parcelamento_fatura_juros_divergentes": 9.3461,
+            "m02_cartao_revisao_tarifas_beneficios": 8.8461,
+            "m15_cartao_black_clonagem_viagem": 6.8462,
+            "m08_cartao_fraude_compras_internacionais": 5.9231,
+            "m06_cartao_seguro_viagem_reembolso_negado": 5.8462,
+            "m22_cartao_corporativo_adicionais_sem_limite": 5.3462,
+            "m03_cartao_limite_vencimento_melhor_dia": 4.9231,
+            "m12_cartao_reducao_limite_sem_aviso": 4.9231,
+            "m26_cartao_autenticacao_inacessivel_compra": 4.8462,
+            "m10_cartao_anuidade_indevida_basico": 4.4231,
+            "m01_cartao_planejamento_estudio": 4.1731,
+            "m07_cartao_seguro_nao_contratado_cobranca": 3.9231,
+            "m11_cartao_pontos_iupp_credito_incorreto": 3.9231,
+            "m17_cartao_vencimento_alterado_juros": 3.9231,
+            "m13_cartao_pontos_desaparecidos_pagamento_antecipado": 3.4231,
+            "m24_cartao_compra_internacional_bloqueada": 3.4231,
+            "m09_cartao_cashback_cnpj_nao_creditado": 3.1731,
+            "m16_cartao_telemedicina_voucher_falho": 2.9231
+          },
+          "carlos_ferreira": {
+            "m03_cartao_limite_vencimento_melhor_dia": 13.545,
+            "m21_cartao_virtual_fraude_phishing": 13.545,
+            "m08_cartao_fraude_compras_internacionais": 8.1481,
+            "m12_cartao_reducao_limite_sem_aviso": 6.7725,
+            "m25_cartao_parcelamento_fatura_juros_divergentes": 6.4286,
+            "m02_cartao_revisao_tarifas_beneficios": 6.0847,
+            "m10_cartao_anuidade_indevida_basico": 6.0847,
+            "m01_cartao_planejamento_estudio": 5.7407,
+            "m07_cartao_seguro_nao_contratado_cobranca": 5.3968,
+            "m11_cartao_pontos_iupp_credito_incorreto": 5.3968,
+            "m17_cartao_vencimento_alterado_juros": 5.3968,
+            "m13_cartao_pontos_desaparecidos_pagamento_antecipado": 4.709,
+            "m15_cartao_black_clonagem_viagem": 4.709,
+            "m06_cartao_seguro_viagem_reembolso_negado": 4.0212,
+            "m16_cartao_telemedicina_voucher_falho": 4.0212
+          },
+          "miguel_santos": {
+            "m21_cartao_virtual_fraude_phishing": 14.4919,
+            "m08_cartao_fraude_compras_internacionais": 8.7178,
+            "m03_cartao_limite_vencimento_melhor_dia": 7.246,
+            "m12_cartao_reducao_limite_sem_aviso": 7.246,
+            "m04_cartao_acessibilidade_talkback": 7.1328,
+            "m02_cartao_revisao_tarifas_beneficios": 6.51,
+            "m10_cartao_anuidade_indevida_basico": 6.51,
+            "m01_cartao_planejamento_estudio": 6.1421,
+            "m07_cartao_seguro_nao_contratado_cobranca": 5.7741,
+            "m11_cartao_pontos_iupp_credito_incorreto": 5.7741,
+            "m17_cartao_vencimento_alterado_juros": 5.7741,
+            "m13_cartao_pontos_desaparecidos_pagamento_antecipado": 5.0382,
+            "m15_cartao_black_clonagem_viagem": 5.0382,
+            "m06_cartao_seguro_viagem_reembolso_negado": 4.3023,
+            "m16_cartao_telemedicina_voucher_falho": 4.3023
+          },
+          "fernanda_costa": {
+            "m05_cartao_renegociacao_rotativo": 19.0027,
+            "m08_cartao_fraude_compras_internacionais": 10.3773,
+            "m03_cartao_limite_vencimento_melhor_dia": 8.6253,
+            "m12_cartao_reducao_limite_sem_aviso": 8.6253,
+            "m21_cartao_virtual_fraude_phishing": 8.6253,
+            "m25_cartao_parcelamento_fatura_juros_divergentes": 8.1873,
+            "m02_cartao_revisao_tarifas_beneficios": 7.7493,
+            "m10_cartao_anuidade_indevida_basico": 7.7493,
+            "m01_cartao_planejamento_estudio": 7.3113,
+            "m07_cartao_seguro_nao_contratado_cobranca": 6.8733,
+            "m17_cartao_vencimento_alterado_juros": 6.8733
+          },
+          "ricardo_tanaka": {
+            "m21_cartao_virtual_fraude_phishing": 10.4023,
+            "m25_cartao_parcelamento_fatura_juros_divergentes": 9.874,
+            "m11_cartao_pontos_iupp_credito_incorreto": 8.2893,
+            "m15_cartao_black_clonagem_viagem": 7.2328,
+            "m08_cartao_fraude_compras_internacionais": 6.2576,
+            "m06_cartao_seguro_viagem_reembolso_negado": 6.1764,
+            "m22_cartao_corporativo_adicionais_sem_limite": 5.6481,
+            "m03_cartao_limite_vencimento_melhor_dia": 5.2011,
+            "m12_cartao_reducao_limite_sem_aviso": 5.2011,
+            "m02_cartao_revisao_tarifas_beneficios": 4.6729,
+            "m10_cartao_anuidade_indevida_basico": 4.6729,
+            "m01_cartao_planejamento_estudio": 4.4088,
+            "m07_cartao_seguro_nao_contratado_cobranca": 4.1447,
+            "m17_cartao_vencimento_alterado_juros": 4.1447,
+            "m13_cartao_pontos_desaparecidos_pagamento_antecipado": 3.6164,
+            "m24_cartao_compra_internacional_bloqueada": 3.6164,
+            "m09_cartao_cashback_cnpj_nao_creditado": 3.3523,
+            "m16_cartao_telemedicina_voucher_falho": 3.0882
+          },
+          "antonia_silveira": {
+            "m05_cartao_renegociacao_rotativo": 16.4719,
+            "m07_cartao_seguro_nao_contratado_cobranca": 11.9159,
+            "m08_cartao_fraude_compras_internacionais": 8.9953,
+            "m03_cartao_limite_vencimento_melhor_dia": 7.4766,
+            "m12_cartao_reducao_limite_sem_aviso": 7.4766,
+            "m21_cartao_virtual_fraude_phishing": 7.4766,
+            "m20_cartao_adicional_falecido_cancelamento": 7.3598,
+            "m25_cartao_parcelamento_fatura_juros_divergentes": 7.097,
+            "m02_cartao_revisao_tarifas_beneficios": 6.7173,
+            "m10_cartao_anuidade_indevida_basico": 6.7173,
+            "m01_cartao_planejamento_estudio": 6.3376,
+            "m17_cartao_vencimento_alterado_juros": 5.9579
+          },
+          "paulo_henrique_almeida": {
+            "m08_cartao_fraude_compras_internacionais": 14.1935,
+            "m21_cartao_virtual_fraude_phishing": 11.7972,
+            "m15_cartao_black_clonagem_viagem": 8.2028,
+            "m06_cartao_seguro_viagem_reembolso_negado": 7.0046,
+            "m03_cartao_limite_vencimento_melhor_dia": 5.8986,
+            "m12_cartao_reducao_limite_sem_aviso": 5.8986,
+            "m25_cartao_parcelamento_fatura_juros_divergentes": 5.5991,
+            "m02_cartao_revisao_tarifas_beneficios": 5.2995,
+            "m10_cartao_anuidade_indevida_basico": 5.2995,
+            "m01_cartao_planejamento_estudio": 5.0,
+            "m07_cartao_seguro_nao_contratado_cobranca": 4.7005,
+            "m11_cartao_pontos_iupp_credito_incorreto": 4.7005,
+            "m17_cartao_vencimento_alterado_juros": 4.7005,
+            "m13_cartao_pontos_desaparecidos_pagamento_antecipado": 4.1014,
+            "m24_cartao_compra_internacional_bloqueada": 4.1014,
+            "m16_cartao_telemedicina_voucher_falho": 3.5023
+          },
+          "camila_rocha": {
+            "m21_cartao_virtual_fraude_phishing": 9.8461,
+            "m11_cartao_pontos_iupp_credito_incorreto": 7.8462,
+            "m15_cartao_black_clonagem_viagem": 6.8462,
+            "m23_cartao_aumento_limite_compra_sazonal": 6.8462,
+            "m09_cartao_cashback_cnpj_nao_creditado": 6.3462,
+            "m08_cartao_fraude_compras_internacionais": 5.9231,
+            "m06_cartao_seguro_viagem_reembolso_negado": 5.8462,
+            "m22_cartao_corporativo_adicionais_sem_limite": 5.3462,
+            "m03_cartao_limite_vencimento_melhor_dia": 4.9231,
+            "m12_cartao_reducao_limite_sem_aviso": 4.9231,
+            "m25_cartao_parcelamento_fatura_juros_divergentes": 4.6731,
+            "m02_cartao_revisao_tarifas_beneficios": 4.4231,
+            "m10_cartao_anuidade_indevida_basico": 4.4231,
+            "m01_cartao_planejamento_estudio": 4.1731,
+            "m07_cartao_seguro_nao_contratado_cobranca": 3.9231,
+            "m17_cartao_vencimento_alterado_juros": 3.9231,
+            "m13_cartao_pontos_desaparecidos_pagamento_antecipado": 3.4231,
+            "m24_cartao_compra_internacional_bloqueada": 3.4231,
+            "m16_cartao_telemedicina_voucher_falho": 2.9231
+          },
+          "jose_carlos_da_silva": {
+            "m05_cartao_renegociacao_rotativo": 16.7061,
+            "m10_cartao_anuidade_indevida_basico": 13.6256,
+            "m08_cartao_fraude_compras_internacionais": 9.1232,
+            "m03_cartao_limite_vencimento_melhor_dia": 7.5829,
+            "m12_cartao_reducao_limite_sem_aviso": 7.5829,
+            "m21_cartao_virtual_fraude_phishing": 7.5829,
+            "m25_cartao_parcelamento_fatura_juros_divergentes": 7.1979,
+            "m02_cartao_revisao_tarifas_beneficios": 6.8128,
+            "m01_cartao_planejamento_estudio": 6.4277,
+            "m07_cartao_seguro_nao_contratado_cobranca": 6.0427,
+            "m17_cartao_vencimento_alterado_juros": 6.0427,
+            "m23_cartao_aumento_limite_compra_sazonal": 5.2725
+          },
+          "eduardo_martins": {
+            "m21_cartao_virtual_fraude_phishing": 11.4311,
+            "m25_cartao_parcelamento_fatura_juros_divergentes": 10.8506,
+            "m11_cartao_pontos_iupp_credito_incorreto": 9.1092,
+            "m15_cartao_black_clonagem_viagem": 7.9482,
+            "m08_cartao_fraude_compras_internacionais": 6.8765,
+            "m06_cartao_seguro_viagem_reembolso_negado": 6.7872,
+            "m03_cartao_limite_vencimento_melhor_dia": 5.7156,
+            "m12_cartao_reducao_limite_sem_aviso": 5.7156,
+            "m02_cartao_revisao_tarifas_beneficios": 5.1351,
+            "m10_cartao_anuidade_indevida_basico": 5.1351,
+            "m01_cartao_planejamento_estudio": 4.8448,
+            "m07_cartao_seguro_nao_contratado_cobranca": 4.5546,
+            "m17_cartao_vencimento_alterado_juros": 4.5546,
+            "m13_cartao_pontos_desaparecidos_pagamento_antecipado": 3.9741,
+            "m24_cartao_compra_internacional_bloqueada": 3.9741,
+            "m16_cartao_telemedicina_voucher_falho": 3.3936
+          },
+          "gabriela_ferreira": {
+            "m12_cartao_reducao_limite_sem_aviso": 12.9065,
+            "m21_cartao_virtual_fraude_phishing": 12.9065,
+            "m08_cartao_fraude_compras_internacionais": 7.764,
+            "m03_cartao_limite_vencimento_melhor_dia": 6.4532,
+            "m18_cartao_nome_social_nao_atualizado": 6.3524,
+            "m02_cartao_revisao_tarifas_beneficios": 5.7978,
+            "m10_cartao_anuidade_indevida_basico": 5.7978,
+            "m01_cartao_planejamento_estudio": 5.4701,
+            "m07_cartao_seguro_nao_contratado_cobranca": 5.1424,
+            "m11_cartao_pontos_iupp_credito_incorreto": 5.1424,
+            "m17_cartao_vencimento_alterado_juros": 5.1424,
+            "m13_cartao_pontos_desaparecidos_pagamento_antecipado": 4.487,
+            "m15_cartao_black_clonagem_viagem": 4.487,
+            "m23_cartao_aumento_limite_compra_sazonal": 4.487,
+            "m06_cartao_seguro_viagem_reembolso_negado": 3.8316,
+            "m16_cartao_telemedicina_voucher_falho": 3.8316
+          },
+          "rafael_gomes": {
+            "m21_cartao_virtual_fraude_phishing": 11.5994,
+            "m11_cartao_pontos_iupp_credito_incorreto": 9.2433,
+            "m13_cartao_pontos_desaparecidos_pagamento_antecipado": 8.0653,
+            "m15_cartao_black_clonagem_viagem": 8.0653,
+            "m08_cartao_fraude_compras_internacionais": 6.9778,
+            "m06_cartao_seguro_viagem_reembolso_negado": 6.8872,
+            "m03_cartao_limite_vencimento_melhor_dia": 5.7997,
+            "m12_cartao_reducao_limite_sem_aviso": 5.7997,
+            "m25_cartao_parcelamento_fatura_juros_divergentes": 5.5052,
+            "m02_cartao_revisao_tarifas_beneficios": 5.2107,
+            "m10_cartao_anuidade_indevida_basico": 5.2107,
+            "m01_cartao_planejamento_estudio": 4.9162,
+            "m07_cartao_seguro_nao_contratado_cobranca": 4.6217,
+            "m17_cartao_vencimento_alterado_juros": 4.6217,
+            "m24_cartao_compra_internacional_bloqueada": 4.0326,
+            "m16_cartao_telemedicina_voucher_falho": 3.4436
+          },
+          "luisa_oliveira": {
+            "m05_cartao_renegociacao_rotativo": 12.3198,
+            "m19_cartao_universitario_aumento_limite": 11.1839,
+            "m21_cartao_virtual_fraude_phishing": 11.1839,
+            "m14_cartao_universitario_anuidade_indevida": 10.0481,
+            "m08_cartao_fraude_compras_internacionais": 6.7278,
+            "m03_cartao_limite_vencimento_melhor_dia": 5.592,
+            "m12_cartao_reducao_limite_sem_aviso": 5.592,
+            "m25_cartao_parcelamento_fatura_juros_divergentes": 5.308,
+            "m02_cartao_revisao_tarifas_beneficios": 5.024,
+            "m10_cartao_anuidade_indevida_basico": 5.024,
+            "m01_cartao_planejamento_estudio": 4.7401,
+            "m07_cartao_seguro_nao_contratado_cobranca": 4.4561,
+            "m11_cartao_pontos_iupp_credito_incorreto": 4.4561,
+            "m17_cartao_vencimento_alterado_juros": 4.4561,
+            "m13_cartao_pontos_desaparecidos_pagamento_antecipado": 3.8882
+          },
+          "marina_rodrigues": {
+            "m21_cartao_virtual_fraude_phishing": 11.5994,
+            "m11_cartao_pontos_iupp_credito_incorreto": 9.2433,
+            "m15_cartao_black_clonagem_viagem": 8.0653,
+            "m08_cartao_fraude_compras_internacionais": 6.9778,
+            "m06_cartao_seguro_viagem_reembolso_negado": 6.8872,
+            "m03_cartao_limite_vencimento_melhor_dia": 5.7997,
+            "m12_cartao_reducao_limite_sem_aviso": 5.7997,
+            "m25_cartao_parcelamento_fatura_juros_divergentes": 5.5052,
+            "m02_cartao_revisao_tarifas_beneficios": 5.2107,
+            "m10_cartao_anuidade_indevida_basico": 5.2107,
+            "m01_cartao_planejamento_estudio": 4.9162,
+            "m07_cartao_seguro_nao_contratado_cobranca": 4.6217,
+            "m17_cartao_vencimento_alterado_juros": 4.6217,
+            "m13_cartao_pontos_desaparecidos_pagamento_antecipado": 4.0326,
+            "m23_cartao_aumento_limite_compra_sazonal": 4.0326,
+            "m24_cartao_compra_internacional_bloqueada": 4.0326,
+            "m16_cartao_telemedicina_voucher_falho": 3.4436
+          },
+          "daniela_nascimento": {
+            "m21_cartao_virtual_fraude_phishing": 14.9141,
+            "m08_cartao_fraude_compras_internacionais": 8.9717,
+            "m16_cartao_telemedicina_voucher_falho": 8.8552,
+            "m03_cartao_limite_vencimento_melhor_dia": 7.457,
+            "m12_cartao_reducao_limite_sem_aviso": 7.457,
+            "m02_cartao_revisao_tarifas_beneficios": 6.6997,
+            "m10_cartao_anuidade_indevida_basico": 6.6997,
+            "m01_cartao_planejamento_estudio": 6.321,
+            "m07_cartao_seguro_nao_contratado_cobranca": 5.9423,
+            "m11_cartao_pontos_iupp_credito_incorreto": 5.9423,
+            "m17_cartao_vencimento_alterado_juros": 5.9423,
+            "m13_cartao_pontos_desaparecidos_pagamento_antecipado": 5.185,
+            "m15_cartao_black_clonagem_viagem": 5.185,
+            "m06_cartao_seguro_viagem_reembolso_negado": 4.4276
+          },
+          "roberto_yamamoto": {
+            "m21_cartao_virtual_fraude_phishing": 10.4298,
+            "m25_cartao_parcelamento_fatura_juros_divergentes": 9.9002,
+            "m17_cartao_vencimento_alterado_juros": 8.3113,
+            "m15_cartao_black_clonagem_viagem": 7.252,
+            "m08_cartao_fraude_compras_internacionais": 6.2742,
+            "m06_cartao_seguro_viagem_reembolso_negado": 6.1927,
+            "m03_cartao_limite_vencimento_melhor_dia": 5.2149,
+            "m12_cartao_reducao_limite_sem_aviso": 5.2149,
+            "m20_cartao_adicional_falecido_cancelamento": 5.1334,
+            "m02_cartao_revisao_tarifas_beneficios": 4.6853,
+            "m10_cartao_anuidade_indevida_basico": 4.6853,
+            "m01_cartao_planejamento_estudio": 4.4205,
+            "m07_cartao_seguro_nao_contratado_cobranca": 4.1556,
+            "m11_cartao_pontos_iupp_credito_incorreto": 4.1556,
+            "m13_cartao_pontos_desaparecidos_pagamento_antecipado": 3.626,
+            "m23_cartao_aumento_limite_compra_sazonal": 3.626,
+            "m24_cartao_compra_internacional_bloqueada": 3.626,
+            "m16_cartao_telemedicina_voucher_falho": 3.0964
+          },
+          "patricia_santana": {
+            "m21_cartao_virtual_fraude_phishing": 13.5593,
+            "m08_cartao_fraude_compras_internacionais": 8.1568,
+            "m03_cartao_limite_vencimento_melhor_dia": 6.7797,
+            "m12_cartao_reducao_limite_sem_aviso": 6.7797,
+            "m18_cartao_nome_social_nao_atualizado": 6.6738,
+            "m25_cartao_parcelamento_fatura_juros_divergentes": 6.4354,
+            "m02_cartao_revisao_tarifas_beneficios": 6.0911,
+            "m10_cartao_anuidade_indevida_basico": 6.0911,
+            "m01_cartao_planejamento_estudio": 5.7468,
+            "m07_cartao_seguro_nao_contratado_cobranca": 5.4025,
+            "m11_cartao_pontos_iupp_credito_incorreto": 5.4025,
+            "m17_cartao_vencimento_alterado_juros": 5.4025,
+            "m13_cartao_pontos_desaparecidos_pagamento_antecipado": 4.714,
+            "m15_cartao_black_clonagem_viagem": 4.714,
+            "m06_cartao_seguro_viagem_reembolso_negado": 4.0254,
+            "m16_cartao_telemedicina_voucher_falho": 4.0254
+          },
+          "joao_pedro_oliveira": {
+            "m19_cartao_universitario_aumento_limite": 12.1012,
+            "m21_cartao_virtual_fraude_phishing": 12.1012,
+            "m14_cartao_universitario_anuidade_indevida": 10.8721,
+            "m08_cartao_fraude_compras_internacionais": 7.2796,
+            "m05_cartao_renegociacao_rotativo": 6.6651,
+            "m03_cartao_limite_vencimento_melhor_dia": 6.0506,
+            "m12_cartao_reducao_limite_sem_aviso": 6.0506,
+            "m02_cartao_revisao_tarifas_beneficios": 5.4361,
+            "m10_cartao_anuidade_indevida_basico": 5.4361,
+            "m01_cartao_planejamento_estudio": 5.1288,
+            "m07_cartao_seguro_nao_contratado_cobranca": 4.8216,
+            "m11_cartao_pontos_iupp_credito_incorreto": 4.8216,
+            "m17_cartao_vencimento_alterado_juros": 4.8216,
+            "m13_cartao_pontos_desaparecidos_pagamento_antecipado": 4.2071,
+            "m23_cartao_aumento_limite_compra_sazonal": 4.2071
+          },
+          "helena_mendonca": {
+            "m08_cartao_fraude_compras_internacionais": 10.639,
+            "m03_cartao_limite_vencimento_melhor_dia": 8.8428,
+            "m12_cartao_reducao_limite_sem_aviso": 8.8428,
+            "m21_cartao_virtual_fraude_phishing": 8.8428,
+            "m20_cartao_adicional_falecido_cancelamento": 8.7047,
+            "m02_cartao_revisao_tarifas_beneficios": 7.9447,
+            "m10_cartao_anuidade_indevida_basico": 7.9447,
+            "m01_cartao_planejamento_estudio": 7.4957,
+            "m07_cartao_seguro_nao_contratado_cobranca": 7.0466,
+            "m17_cartao_vencimento_alterado_juros": 7.0466,
+            "m15_cartao_black_clonagem_viagem": 6.1485,
+            "m06_cartao_seguro_viagem_reembolso_negado": 5.2504,
+            "m16_cartao_telemedicina_voucher_falho": 5.2504
+          },
+          "carlos_augusto": {
+            "m05_cartao_renegociacao_rotativo": 14.0333,
+            "m23_cartao_aumento_limite_compra_sazonal": 8.8579,
+            "m08_cartao_fraude_compras_internacionais": 7.6636,
+            "m22_cartao_corporativo_adicionais_sem_limite": 6.9172,
+            "m03_cartao_limite_vencimento_melhor_dia": 6.3697,
+            "m12_cartao_reducao_limite_sem_aviso": 6.3697,
+            "m21_cartao_virtual_fraude_phishing": 6.3697,
+            "m18_cartao_nome_social_nao_atualizado": 6.2702,
+            "m25_cartao_parcelamento_fatura_juros_divergentes": 6.0463,
+            "m02_cartao_revisao_tarifas_beneficios": 5.7228,
+            "m10_cartao_anuidade_indevida_basico": 5.7228,
+            "m01_cartao_planejamento_estudio": 5.3994,
+            "m07_cartao_seguro_nao_contratado_cobranca": 5.0759,
+            "m17_cartao_vencimento_alterado_juros": 5.0759,
+            "m09_cartao_cashback_cnpj_nao_creditado": 4.1055
+          },
+          "felipe_araujo": {
+            "m19_cartao_universitario_aumento_limite": 11.8931,
+            "m21_cartao_virtual_fraude_phishing": 11.8931,
+            "m14_cartao_universitario_anuidade_indevida": 10.6852,
+            "m08_cartao_fraude_compras_internacionais": 7.1545,
+            "m05_cartao_renegociacao_rotativo": 6.5505,
+            "m03_cartao_limite_vencimento_melhor_dia": 5.9466,
+            "m12_cartao_reducao_limite_sem_aviso": 5.9466,
+            "m26_cartao_autenticacao_inacessivel_compra": 5.8537,
+            "m02_cartao_revisao_tarifas_beneficios": 5.3426,
+            "m10_cartao_anuidade_indevida_basico": 5.3426,
+            "m01_cartao_planejamento_estudio": 5.0407,
+            "m07_cartao_seguro_nao_contratado_cobranca": 4.7387,
+            "m11_cartao_pontos_iupp_credito_incorreto": 4.7387,
+            "m17_cartao_vencimento_alterado_juros": 4.7387,
+            "m13_cartao_pontos_desaparecidos_pagamento_antecipado": 4.1347
+          },
+          "roberto_almeida": {
+            "m05_cartao_renegociacao_rotativo": 16.2442,
+            "m08_cartao_fraude_compras_internacionais": 8.871,
+            "m03_cartao_limite_vencimento_melhor_dia": 7.3733,
+            "m12_cartao_reducao_limite_sem_aviso": 7.3733,
+            "m21_cartao_virtual_fraude_phishing": 7.3733,
+            "m18_cartao_nome_social_nao_atualizado": 7.2581,
+            "m26_cartao_autenticacao_inacessivel_compra": 7.2581,
+            "m25_cartao_parcelamento_fatura_juros_divergentes": 6.9988,
+            "m02_cartao_revisao_tarifas_beneficios": 6.6244,
+            "m10_cartao_anuidade_indevida_basico": 6.6244,
+            "m01_cartao_planejamento_estudio": 6.25,
+            "m07_cartao_seguro_nao_contratado_cobranca": 5.8756,
+            "m17_cartao_vencimento_alterado_juros": 5.8756
+          },
+          "mei_li_chen": {
+            "m21_cartao_virtual_fraude_phishing": 12.6701,
+            "m15_cartao_black_clonagem_viagem": 8.8097,
+            "m08_cartao_fraude_compras_internacionais": 7.6219,
+            "m06_cartao_seguro_viagem_reembolso_negado": 7.5229,
+            "m03_cartao_limite_vencimento_melhor_dia": 6.3351,
+            "m12_cartao_reducao_limite_sem_aviso": 6.3351,
+            "m18_cartao_nome_social_nao_atualizado": 6.2361,
+            "m02_cartao_revisao_tarifas_beneficios": 5.6917,
+            "m10_cartao_anuidade_indevida_basico": 5.6917,
+            "m01_cartao_planejamento_estudio": 5.37,
+            "m07_cartao_seguro_nao_contratado_cobranca": 5.0483,
+            "m11_cartao_pontos_iupp_credito_incorreto": 5.0483,
+            "m17_cartao_vencimento_alterado_juros": 5.0483,
+            "m13_cartao_pontos_desaparecidos_pagamento_antecipado": 4.4049,
+            "m24_cartao_compra_internacional_bloqueada": 4.4049,
+            "m16_cartao_telemedicina_voucher_falho": 3.7615
+          }
+        }
+      }
+    },
+    "alocacao_controlada": {
+      "descricao": "Não usar amostragem ancestral pura. Usar cotas por maiores restos em cada etapa hierárquica e embaralhar o resultado ao final.",
+      "etapas": [
+        "1. Calcular cotas de dia_relativo para n=6000 com maiores restos.",
+        "2. Calcular cotas de persona_id para n=6000 com maiores restos.",
+        "3. Para cada dia relativo, derivar weekend diretamente do calendário sintético.",
+        "4. Dentro de cada persona, calcular cotas de offset usando o valor de weekend correspondente ao registro.",
+        "5. Dentro de cada persona, calcular cotas de ritmo com maiores restos.",
+        "6. Dentro de cada persona, calcular cotas de missao_id usando apenas H e M, com fator 2 para H e 1 para M.",
+        "7. Compor os 6000 registros por emparelhamento controlado: primeiro dia, depois persona, depois offset, ritmo e missão, sempre respeitando as cotas marginais.",
+        "8. Embaralhar todos os registros ao final para eliminar sequências artificiais."
+      ],
+      "embaralhamento_final": true
+    },
+    "restricoes": {
+      "duracao_nao_amostrada": true,
+      "descricao_duracao": "A duração total emerge da interação entre missão, comportamento da persona, qualidade das respostas do chatbot e condição de parada por quit.",
+      "compatibilidade_minima_para_cruzamento": "M",
+      "texto_canal": "Apenas texto em app/site; não considerar voz, telefone ou agência.",
+      "descricao": "Todas as missões permanecem no domínio de cartão de crédito. L e N ficam fora do sorteio. Weekend é derivado do calendário sintético de 90 dias. A duração total não é sorteada."
+    }
+  },
+  "janela_temporal": {
+    "unidade": "dias",
+    "duracao": 90,
+    "calendario_sintetico": true,
+    "assuncao_inicio": "d01 = segunda-feira",
+    "descricao": "Três meses sintéticos de 30 dias cada, com variação semanal e mensal não uniforme."
+  }
+}
