@@ -4,7 +4,7 @@ from datetime import timedelta
 from pathlib import Path
 
 from source.simulation_config import (
-    carregar_config_v42,
+    carregar_config_v43,
     gerar_simulacoes,
     validar_simulacoes_geradas,
 )
@@ -13,11 +13,12 @@ from tools.enxame_usuario.start_usuarios import parse_persona_config
 
 
 ROOT = Path(__file__).resolve().parents[3]
-V42_PATH = ROOT / "config_v4_2.json"
+V43_PATH = ROOT / "config_v4_3.json"
 LEGACY_V3_PATH = ROOT / "source/tests/fixtures/legacy/config_v3.json"
+LEGACY_V42_PATH = ROOT / "source/tests/fixtures/legacy/config_v4_2.json"
 
 
-class TestV42LoaderPipelineIntegration(unittest.TestCase):
+class TestV43LoaderPipelineIntegration(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.default_args = Namespace(
@@ -27,7 +28,7 @@ class TestV42LoaderPipelineIntegration(unittest.TestCase):
         )
 
     def test_pipeline_loader_gerador_e_parser(self):
-        config = carregar_config_v42(V42_PATH)
+        config = carregar_config_v43(V43_PATH)
         simulacoes = gerar_simulacoes(config)
         validar_simulacoes_geradas(config, simulacoes)
 
@@ -46,5 +47,9 @@ class TestV42LoaderPipelineIntegration(unittest.TestCase):
         self.assertGreater(temporal_offset, timedelta(0))
 
     def test_loader_rejeita_v3(self):
-        with self.assertRaisesRegex(ConfigValidationError, "Esperado '4.2'"):
-            carregar_config_v42(LEGACY_V3_PATH)
+        with self.assertRaisesRegex(ConfigValidationError, "Esperado '4.3'"):
+            carregar_config_v43(LEGACY_V3_PATH)
+
+    def test_loader_rejeita_v42(self):
+        with self.assertRaisesRegex(ConfigValidationError, "Esperado '4.3'"):
+            carregar_config_v43(LEGACY_V42_PATH)

@@ -1,4 +1,4 @@
-"""Validação estrutural e semântica do schema v4.2."""
+"""Validação estrutural e semântica do schema v4.3."""
 
 from __future__ import annotations
 
@@ -13,12 +13,13 @@ from jsonschema import Draft202012Validator
 from source.simulation_config.errors import ConfigValidationError
 from source.simulation_config.sampling import (
     calcular_plano_de_cotas,
+    calcular_pesos_brutos_dia_relativo,
     derivar_weekend,
     normalizar_valor_condicional,
     obter_pesos_condicionados,
 )
 
-EXPECTED_VERSION = "4.2"
+EXPECTED_VERSION = "4.3"
 EXPECTED_CONTEXT = "cartao_de_credito"
 EXPECTED_CHANNEL = "chatbot textual em app/site"
 EXPECTED_METHOD = "cotas_controladas_com_maiores_restos"
@@ -43,6 +44,47 @@ EXPECTED_OFFSET_CATEGORIES = [
 EXPECTED_RHYTHM_CATEGORIES = ["rapido", "medio", "lento"]
 EXPECTED_DAY_SEQUENCE = ["segunda", "terca", "quarta", "quinta", "sexta", "sabado", "domingo"]
 WEIGHT_FORMULA_TOLERANCE = Decimal("0.0001")
+EXPECTED_DAY_COMPOSITION_TYPE = "fatores_temporais_parametricos_90d"
+EXPECTED_DAY_WEIGHT_FORMULA = (
+    "peso_bruto = fator_dia_semana * fator_semana_relativa * "
+    "ciclo_mensal_sintetico * multiplicador_pico"
+)
+EXPECTED_DAY_FACTORS = {
+    "segunda": 1.06,
+    "terca": 1.10,
+    "quarta": 1.05,
+    "quinta": 1.00,
+    "sexta": 0.95,
+    "sabado": 0.76,
+    "domingo": 0.61,
+}
+EXPECTED_WEEK_FACTORS = {
+    "1": 0.92,
+    "2": 1.00,
+    "3": 1.08,
+    "4": 0.97,
+    "5": 1.12,
+    "6": 0.95,
+    "7": 1.03,
+    "8": 0.98,
+    "9": 0.90,
+    "10": 1.15,
+    "11": 0.94,
+    "12": 0.99,
+    "13": 1.07,
+}
+EXPECTED_MONTHLY_CYCLE = {
+    "base": 0.82,
+    "picos_gaussianos": [
+        {"centro_dia_mes": 14, "amplitude": 0.28, "sigma": 3.2},
+        {"centro_dia_mes": 27, "amplitude": 0.16, "sigma": 2.4},
+    ],
+}
+EXPECTED_PEAK_MULTIPLIERS = {
+    "d18": 1.22,
+    "d47": 1.30,
+    "d73": 1.18,
+}
 EXPECTED_WEEKEND_BY_DAY = {
     "segunda": False,
     "terca": False,
@@ -55,7 +97,7 @@ EXPECTED_WEEKEND_BY_DAY = {
 
 
 def _load_schema() -> dict:
-    schema_path = Path(__file__).with_name("schema_v4_2.json")
+    schema_path = Path(__file__).with_name("schema_v4_3.json")
     with schema_path.open("r", encoding="utf-8") as arquivo:
         return json.load(arquivo)
 
@@ -92,7 +134,7 @@ def _decimal(valor: object) -> Decimal:
 def _validar_sem_default(node: object, caminho: str = "$") -> None:
     if isinstance(node, dict):
         if "_default" in node:
-            raise ConfigValidationError(f"O schema v4.2 não permite _default em {caminho}.")
+            raise ConfigValidationError(f"O schema v4.3 não permite _default em {caminho}.")
         for chave, valor in node.items():
             _validar_sem_default(valor, f"{caminho}.{chave}")
     elif isinstance(node, list):
@@ -130,12 +172,22 @@ def validar_dag(config: dict) -> None:
 
 def _validar_calendario(spec_dia: dict) -> None:
     calendario = spec_dia["calendario"]
-    pesos = spec_dia["composicao_pesos"]["pesos"]
+    composicao = spec_dia["composicao_pesos"]
 
-    if set(calendario.keys()) != set(pesos.keys()):
-        raise ConfigValidationError(
-            "Calendário e pesos de dia_relativo precisam ter o mesmo domínio."
-        )
+    if "pesos" in composicao:
+        raise ConfigValidationError("dia_relativo.composicao_pesos não permite pesos explícitos no v4.3.")
+    if composicao["tipo"] != EXPECTED_DAY_COMPOSITION_TYPE:
+        raise ConfigValidationError("dia_relativo.composicao_pesos.tipo divergente do contrato v4.3.")
+    if composicao["formula"] != EXPECTED_DAY_WEIGHT_FORMULA:
+        raise ConfigValidationError("dia_relativo.composicao_pesos.formula divergente do contrato v4.3.")
+    if composicao["fatores_dia_semana"] != EXPECTED_DAY_FACTORS:
+        raise ConfigValidationError("fatores_dia_semana divergem do processo gerador original.")
+    if composicao["fatores_semana_relativa"] != EXPECTED_WEEK_FACTORS:
+        raise ConfigValidationError("fatores_semana_relativa divergem do processo gerador original.")
+    if composicao["ciclo_mensal_sintetico"] != EXPECTED_MONTHLY_CYCLE:
+        raise ConfigValidationError("ciclo_mensal_sintetico diverge do processo gerador original.")
+    if composicao["multiplicadores_pico"] != EXPECTED_PEAK_MULTIPLIERS:
+        raise ConfigValidationError("multiplicadores_pico divergem do processo gerador original.")
 
     if len(calendario) != 90:
         raise ConfigValidationError("O calendário sintético precisa conter exatamente 90 dias.")
@@ -148,6 +200,30 @@ def _validar_calendario(spec_dia: dict) -> None:
 
     for dia_relativo, metadados in calendario.items():
         dia_indice = metadados["dia_indice"]
+        dia_relativo_esperado = f"d{dia_indice:02d}"
+        if dia_relativo != dia_relativo_esperado:
+            raise ConfigValidationError(
+                f"Calendário com dia_relativo inconsistente para '{dia_relativo}'."
+            )
+
+        mes_relativo_esperado = ((dia_indice - 1) // 30) + 1
+        if metadados["mes_relativo"] != mes_relativo_esperado:
+            raise ConfigValidationError(
+                f"Calendário com mes_relativo inconsistente para '{dia_relativo}'."
+            )
+
+        semana_relativa_esperada = ((dia_indice - 1) // 7) + 1
+        if metadados["semana_relativa"] != semana_relativa_esperada:
+            raise ConfigValidationError(
+                f"Calendário com semana_relativa inconsistente para '{dia_relativo}'."
+            )
+
+        dia_do_mes_esperado = ((dia_indice - 1) % 30) + 1
+        if metadados["dia_do_mes_sintetico"] != dia_do_mes_esperado:
+            raise ConfigValidationError(
+                f"Calendário com dia_do_mes_sintetico inconsistente para '{dia_relativo}'."
+            )
+
         dia_da_semana = metadados["dia_da_semana"]
         dia_esperado = EXPECTED_DAY_SEQUENCE[(dia_indice - 1) % len(EXPECTED_DAY_SEQUENCE)]
         if dia_da_semana != dia_esperado:
@@ -165,7 +241,8 @@ def _validar_calendario(spec_dia: dict) -> None:
                 f"Calendário com weekend inconsistente para '{dia_relativo}'."
             )
 
-    _validar_linha_pesos("dia_relativo.composicao_pesos.pesos", pesos)
+    pesos_brutos = calcular_pesos_brutos_dia_relativo({"amostragem": {"variaveis": {"dia_relativo": spec_dia}}})
+    _validar_linha_pesos("dia_relativo.composicao_pesos.pesos_brutos_calculados", pesos_brutos)
 
 
 def _validar_persona_id(personas: dict, spec_persona: dict) -> None:
@@ -198,7 +275,7 @@ def _validar_offset(personas: dict, spec_offset: dict) -> None:
 
     categorias = list(spec_offset["categorias"].keys())
     if categorias != EXPECTED_OFFSET_CATEGORIES:
-        raise ConfigValidationError("As categorias de offset não correspondem ao contrato v4.2.")
+        raise ConfigValidationError("As categorias de offset não correspondem ao contrato v4.3.")
 
     pesos_condicionais = spec_offset["pesos_condicionais"]
     if set(pesos_condicionais.keys()) != set(personas.keys()):
@@ -307,7 +384,7 @@ def _validar_missoes(personas: dict, missoes: dict, spec_missao: dict) -> None:
         )
 
 
-def validar_config_v42(config: dict) -> None:
+def validar_config_v43(config: dict) -> None:
     if not isinstance(config, dict):
         raise ConfigValidationError("A configuração deve ser um objeto JSON.")
 
@@ -323,16 +400,16 @@ def validar_config_v42(config: dict) -> None:
     if erros:
         erro = erros[0]
         caminho = ".".join(str(parte) for parte in erro.path) or "$"
-        raise ConfigValidationError(f"Configuração v4.2 inválida em {caminho}: {erro.message}")
+        raise ConfigValidationError(f"Configuração v4.3 inválida em {caminho}: {erro.message}")
 
     _validar_sem_default(config)
     _validar_template_prompt(config["template_prompt"])
     validar_dag(config)
 
     if config["contexto_negocio"] != EXPECTED_CONTEXT:
-        raise ConfigValidationError("contexto_negocio inválido para o contrato v4.2.")
+        raise ConfigValidationError("contexto_negocio inválido para o contrato v4.3.")
     if config["canal"] != EXPECTED_CHANNEL:
-        raise ConfigValidationError("canal inválido para o contrato v4.2.")
+        raise ConfigValidationError("canal inválido para o contrato v4.3.")
 
     janela_temporal = config["janela_temporal"]
     if janela_temporal["unidade"] != "dias" or janela_temporal["duracao"] != 90:
@@ -347,7 +424,7 @@ def validar_config_v42(config: dict) -> None:
         raise ConfigValidationError("'seed' deve ser um inteiro válido.")
     if amostragem["metodo"] != EXPECTED_METHOD:
         raise ConfigValidationError(
-            "O único método suportado no schema v4.2 é 'cotas_controladas_com_maiores_restos'."
+            "O único método suportado no schema v4.3 é 'cotas_controladas_com_maiores_restos'."
         )
     if amostragem["formula_conjunta"] != EXPECTED_FORMULA_CONJUNTA:
         raise ConfigValidationError("formula_conjunta divergente do contrato esperado.")
@@ -379,7 +456,7 @@ def validar_config_v42(config: dict) -> None:
     if weekend_spec["tipo"] != "derivada" or weekend_spec["depende_de"] != "dia_relativo":
         raise ConfigValidationError("weekend deve ser uma variável derivada de dia_relativo.")
     if weekend_spec["regra"] != EXPECTED_WEEKEND_RULE:
-        raise ConfigValidationError("A regra declarada para weekend não corresponde ao contrato v4.2.")
+        raise ConfigValidationError("A regra declarada para weekend não corresponde ao contrato v4.3.")
 
     _validar_offset(pessoas, variaveis["offset"])
     _validar_ritmo(pessoas, variaveis["ritmo"])
@@ -416,7 +493,7 @@ def validar_simulacoes_geradas(config: dict, simulacoes: list[dict]) -> None:
 
     for indice, simulacao in enumerate(simulacoes, start=1):
         if set(simulacao.keys()) != campos_esperados:
-            raise ConfigValidationError("Cada simulação deve conter exatamente os campos esperados do v4.2.")
+            raise ConfigValidationError("Cada simulação deve conter exatamente os campos esperados do v4.3.")
         if simulacao["id"] != indice:
             raise ConfigValidationError("Os ids das simulações devem ser sequenciais após o embaralhamento.")
 

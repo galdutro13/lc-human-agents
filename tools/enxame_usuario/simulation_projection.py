@@ -148,7 +148,7 @@ def resolve_simulation_projection(
 
     Args:
         simulacao: Registro gerado pelo pipeline estatístico.
-        config: Configuração v4.2 completa.
+        config: Configuração v4.3 completa.
         now: Momento de referência usado nas projeções temporais.
         prompt_preview_chars: Limite de caracteres para o campo
             `prompt_preview`.

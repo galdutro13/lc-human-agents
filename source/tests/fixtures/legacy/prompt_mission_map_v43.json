@@ -1,0 +1,22 @@
+{
+  "ana_beatriz_silva": "m01_cartao_planejamento_estudio",
+  "carla_mendes": "m02_cartao_revisao_tarifas_beneficios",
+  "carlos_ferreira": "m03_cartao_limite_vencimento_melhor_dia",
+  "miguel_santos": "m04_cartao_acessibilidade_talkback",
+  "fernanda_costa": "m05_cartao_renegociacao_rotativo",
+  "ricardo_tanaka": "m06_cartao_seguro_viagem_reembolso_negado",
+  "antonia_silveira": "m07_cartao_seguro_nao_contratado_cobranca",
+  "paulo_henrique_almeida": "m08_cartao_fraude_compras_internacionais",
+  "camila_rocha": "m09_cartao_cashback_cnpj_nao_creditado",
+  "jose_carlos_da_silva": "m10_cartao_anuidade_indevida_basico",
+  "eduardo_martins": "m11_cartao_pontos_iupp_credito_incorreto",
+  "gabriela_ferreira": "m12_cartao_reducao_limite_sem_aviso",
+  "rafael_gomes": "m13_cartao_pontos_desaparecidos_pagamento_antecipado",
+  "luisa_oliveira": "m14_cartao_universitario_anuidade_indevida",
+  "marina_rodrigues": "m15_cartao_black_clonagem_viagem",
+  "daniela_nascimento": "m16_cartao_telemedicina_voucher_falho",
+  "roberto_yamamoto": "m17_cartao_vencimento_alterado_juros",
+  "patricia_santana": "m18_cartao_nome_social_nao_atualizado",
+  "joao_pedro_oliveira": "m19_cartao_universitario_aumento_limite",
+  "helena_mendonca": "m20_cartao_adicional_falecido_cancelamento"
+}

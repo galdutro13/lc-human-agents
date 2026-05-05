@@ -2,7 +2,7 @@ import unittest
 from datetime import datetime
 from pathlib import Path
 
-from source.simulation_config import carregar_config_v42, gerar_simulacoes
+from source.simulation_config import carregar_config_v43, gerar_simulacoes
 from tools.enxame_usuario.simulation_projection import (
     CSV_FIELDNAMES,
     calculate_target_local_datetime,
@@ -14,13 +14,13 @@ from tools.enxame_usuario.simulation_projection import (
 
 
 ROOT = Path(__file__).resolve().parents[3]
-V42_PATH = ROOT / "config_v4_2.json"
+V43_PATH = ROOT / "config_v4_3.json"
 
 
 class TestSimulationProjection(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.config = carregar_config_v42(V42_PATH)
+        cls.config = carregar_config_v43(V43_PATH)
         cls.simulacao = gerar_simulacoes(cls.config)[0]
         cls.now = datetime(2026, 4, 20, 8, 0, 0)
 

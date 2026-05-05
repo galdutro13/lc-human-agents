@@ -14,7 +14,7 @@
   ],
   "properties": {
     "versao": {
-      "const": "4.2"
+      "const": "4.3"
     },
     "contexto_negocio": {
       "type": "string",
@@ -333,27 +333,186 @@
           "type": "object",
           "additionalProperties": false,
           "required": [
-            "padrao_semanal",
-            "padrao_semana_relativa",
-            "picos_controlados",
-            "pesos"
+            "tipo",
+            "formula",
+            "fatores_dia_semana",
+            "fatores_semana_relativa",
+            "ciclo_mensal_sintetico",
+            "multiplicadores_pico"
           ],
           "properties": {
-            "padrao_semanal": {
-              "$ref": "#/$defs/weight_map"
+            "tipo": {
+              "const": "fatores_temporais_parametricos_90d"
             },
-            "padrao_semana_relativa": {
-              "$ref": "#/$defs/weight_map"
+            "formula": {
+              "type": "string",
+              "minLength": 1
             },
-            "picos_controlados": {
+            "fatores_dia_semana": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "segunda",
+                "terca",
+                "quarta",
+                "quinta",
+                "sexta",
+                "sabado",
+                "domingo"
+              ],
+              "properties": {
+                "segunda": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "terca": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "quarta": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "quinta": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "sexta": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "sabado": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "domingo": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                }
+              }
+            },
+            "fatores_semana_relativa": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "1",
+                "2",
+                "3",
+                "4",
+                "5",
+                "6",
+                "7",
+                "8",
+                "9",
+                "10",
+                "11",
+                "12",
+                "13"
+              ],
+              "properties": {
+                "1": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "2": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "3": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "4": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "5": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "6": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "7": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "8": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "9": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "10": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "11": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "12": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "13": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                }
+              }
+            },
+            "ciclo_mensal_sintetico": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "base",
+                "picos_gaussianos"
+              ],
+              "properties": {
+                "base": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "picos_gaussianos": {
+                  "type": "array",
+                  "minItems": 2,
+                  "maxItems": 2,
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "centro_dia_mes",
+                      "amplitude",
+                      "sigma"
+                    ],
+                    "properties": {
+                      "centro_dia_mes": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 30
+                      },
+                      "amplitude": {
+                        "type": "number",
+                        "exclusiveMinimum": 0
+                      },
+                      "sigma": {
+                        "type": "number",
+                        "exclusiveMinimum": 0
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "multiplicadores_pico": {
               "type": "object",
               "additionalProperties": {
                 "type": "number",
                 "exclusiveMinimum": 0
               }
-            },
-            "pesos": {
-              "$ref": "#/$defs/weight_map"
             }
           }
         }

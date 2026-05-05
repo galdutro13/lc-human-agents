@@ -4,7 +4,7 @@ from pathlib import Path
 
 from source.simulation_config import (
     calcular_plano_de_cotas,
-    carregar_config_v42,
+    carregar_config_v43,
     gerar_simulacoes,
     validar_simulacoes_geradas,
 )
@@ -12,13 +12,13 @@ from source.simulation_config.errors import ConfigValidationError
 
 
 ROOT = Path(__file__).resolve().parents[3]
-V42_PATH = ROOT / "config_v4_2.json"
+V43_PATH = ROOT / "config_v4_3.json"
 
 
-class TestValidationV42(unittest.TestCase):
+class TestValidationV43(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.config = carregar_config_v42(V42_PATH)
+        cls.config = carregar_config_v43(V43_PATH)
         cls.simulacoes = gerar_simulacoes(cls.config)
 
     def test_validar_simulacoes_geradas_passa(self):

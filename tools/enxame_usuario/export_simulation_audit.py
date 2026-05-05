@@ -10,7 +10,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from source.simulation_config import (
-    carregar_config_v42,
+    carregar_config_v43,
     gerar_relatorio_auditoria,
     gerar_simulacoes,
     validar_simulacoes_geradas,
@@ -19,9 +19,9 @@ from source.simulation_config import (
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        description="Exporta um JSON de auditoria das cotas calculadas para simulações v4.2."
+        description="Exporta um JSON de auditoria das cotas calculadas para simulações v4.3."
     )
-    parser.add_argument("--config-file", required=True, help="Arquivo JSON v4.2")
+    parser.add_argument("--config-file", required=True, help="Arquivo JSON v4.3")
     parser.add_argument(
         "--output-json",
         help="Arquivo JSON de saída. Padrão: <stem_do_config>_audit.json",
@@ -59,7 +59,7 @@ def main() -> None:
         raise SystemExit(1)
 
     try:
-        config = carregar_config_v42(args.config_file)
+        config = carregar_config_v43(args.config_file)
         simulacoes = gerar_simulacoes(config)
         validar_simulacoes_geradas(config, simulacoes)
         relatorio = gerar_relatorio_auditoria(config, simulacoes)

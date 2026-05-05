@@ -1,9 +1,10 @@
-"""Geração determinística de simulações compatíveis com o schema v4.2."""
+"""Geração determinística de simulações compatíveis com o schema v4.3."""
 
 from __future__ import annotations
 
 from collections import Counter, defaultdict
 from decimal import Decimal, ROUND_FLOOR
+import math
 import random
 
 from source.simulation_config.errors import ConfigValidationError
@@ -90,6 +91,67 @@ def alocar_maiores_restos(
     return cotas
 
 
+def alocar_maiores_restos_float_legado(
+    pesos: dict[str, float],
+    n: int,
+    ordem: list[str] | None = None,
+) -> dict[str, int]:
+    """Replica a alocação por maiores restos usada pelo gerador temporal original.
+
+    Esta variante é usada apenas para `dia_relativo`, onde a fidelidade ao
+    processo histórico importa mais que a normalização com `Decimal`. Ela segue
+    o script original: quotas em `float`, `math.floor` e ordenação decrescente
+    por `(resto, chave)`.
+    """
+    if isinstance(n, bool) or n < 0:
+        raise ConfigValidationError("'n' deve ser um inteiro não negativo para alocação de cotas.")
+    if not pesos:
+        raise ConfigValidationError("Os pesos para alocação de cotas não podem ser vazios.")
+
+    ordem_efetiva = list(ordem or pesos.keys())
+    faltantes = [chave for chave in ordem_efetiva if chave not in pesos]
+    if faltantes:
+        raise ConfigValidationError(
+            f"Ordem de alocação referencia chaves ausentes nos pesos: {faltantes}."
+        )
+
+    itens = [(chave, float(pesos[chave])) for chave in ordem_efetiva]
+    for chave, peso in itens:
+        if peso <= 0:
+            raise ConfigValidationError(f"Todos os pesos devem ser positivos em '{chave}'.")
+
+    if n == 0:
+        return {chave: 0 for chave in ordem_efetiva}
+
+    soma_pesos = sum(valor for _, valor in itens)
+    if soma_pesos <= 0:
+        raise ConfigValidationError("A soma dos pesos deve ser positiva.")
+
+    cotas_fracionarias = [
+        (chave, n * valor / soma_pesos)
+        for chave, valor in itens
+    ]
+    cotas = {
+        chave: int(math.floor(cota))
+        for chave, cota in cotas_fracionarias
+    }
+    unidades_restantes = n - sum(cotas.values())
+    restos = sorted(
+        (
+            (cota - math.floor(cota), chave)
+            for chave, cota in cotas_fracionarias
+        ),
+        reverse=True,
+    )
+    for _, chave in restos[:unidades_restantes]:
+        cotas[chave] += 1
+
+    if sum(cotas.values()) != n:
+        raise ConfigValidationError("Soma de cotas divergente após aplicar maiores restos.")
+
+    return cotas
+
+
 def obter_pesos_condicionados(spec: dict, instancia: dict) -> dict:
     """Resolve a linha de pesos condicionais aplicável a uma instância parcial.
 
@@ -141,7 +203,7 @@ def obter_pesos_condicionados(spec: dict, instancia: dict) -> dict:
 def montar_prompt(persona: dict, missao: dict, template: str) -> str:
     """Monta o prompt final unindo identidade da persona e texto da missão.
 
-    No schema v4.2 a missão não está mais embutida na persona. Esta função é o
+    No schema v4.3 a missão não está mais embutida na persona. Esta função é o
     ponto único que compõe os três placeholders esperados pelo template:
     `identidade`, `como_agir` e `missao`.
     """
@@ -219,7 +281,7 @@ def _construir_registros_base(
     """
     variaveis = config["amostragem"]["variaveis"]
     calendario = variaveis["dia_relativo"]["calendario"]
-    dia_ordem = list(variaveis["dia_relativo"]["composicao_pesos"]["pesos"].keys())
+    dia_ordem = _ordem_dia_relativo(calendario)
     persona_ordem = list(variaveis["persona_id"]["composicao_pesos"]["peso_final"].keys())
 
     dia_sequencia = _sequencia_balanceada(dia_cotas, dia_ordem)
@@ -240,6 +302,69 @@ def _contagem_completa(contagem: Counter | dict[str, int], dominio: list[str]) -
     return {chave: int(contagem.get(chave, 0)) for chave in dominio}
 
 
+def _ordem_dia_relativo(calendario: dict[str, dict]) -> list[str]:
+    """Retorna os dias sintéticos em ordem de `dia_indice`."""
+    return [
+        dia_relativo
+        for dia_relativo, _ in sorted(
+            calendario.items(),
+            key=lambda item: item[1]["dia_indice"],
+        )
+    ]
+
+
+def calcular_pesos_brutos_dia_relativo(config: dict) -> dict[str, float]:
+    """Calcula os pesos brutos temporais declarados de forma paramétrica.
+
+    A fórmula replica o script original `gerar_cotas_dia_relativo_90d.txt`.
+    Os pesos retornados não são percentuais arredondados; eles são a entrada
+    direta para maiores restos na distribuição de `dia_relativo`.
+    """
+    spec_dia = config["amostragem"]["variaveis"]["dia_relativo"]
+    calendario = spec_dia["calendario"]
+    composicao = spec_dia["composicao_pesos"]
+    fatores_dia_semana = composicao["fatores_dia_semana"]
+    fatores_semana_relativa = composicao["fatores_semana_relativa"]
+    ciclo_spec = composicao["ciclo_mensal_sintetico"]
+    multiplicadores_pico = composicao["multiplicadores_pico"]
+
+    pesos_brutos = {}
+    for dia_relativo in _ordem_dia_relativo(calendario):
+        metadados = calendario[dia_relativo]
+        dia_da_semana = metadados["dia_da_semana"]
+        semana_relativa = str(metadados["semana_relativa"])
+        dia_do_mes = metadados["dia_do_mes_sintetico"]
+
+        ciclo_mensal = float(ciclo_spec["base"])
+        for pico in ciclo_spec["picos_gaussianos"]:
+            centro = float(pico["centro_dia_mes"])
+            amplitude = float(pico["amplitude"])
+            sigma = float(pico["sigma"])
+            ciclo_mensal += amplitude * math.exp(
+                -((dia_do_mes - centro) ** 2) / (2 * sigma**2)
+            )
+
+        peso = (
+            float(fatores_dia_semana[dia_da_semana])
+            * float(fatores_semana_relativa[semana_relativa])
+            * ciclo_mensal
+            * float(multiplicadores_pico.get(dia_relativo, 1.0))
+        )
+        pesos_brutos[dia_relativo] = peso
+
+    return pesos_brutos
+
+
+def calcular_pesos_percentuais_dia_relativo(config: dict) -> dict[str, float]:
+    """Deriva percentuais de dia apenas para auditoria humana."""
+    pesos = calcular_pesos_brutos_dia_relativo(config)
+    soma = sum(pesos.values())
+    return {
+        dia_relativo: round(peso / soma * 100, 4)
+        for dia_relativo, peso in pesos.items()
+    }
+
+
 def calcular_plano_de_cotas(config: dict) -> dict:
     """Calcula o plano determinístico completo de cotas para uma execução.
 
@@ -253,7 +378,7 @@ def calcular_plano_de_cotas(config: dict) -> dict:
     execução e conferência.
 
     Args:
-        config: Configuração v4.2 já validada.
+        config: Configuração v4.3 já validada.
 
     Returns:
         Um dicionário com o plano completo de cotas marginais e condicionais,
@@ -263,9 +388,9 @@ def calcular_plano_de_cotas(config: dict) -> dict:
     variaveis = amostragem["variaveis"]
     total = amostragem["n"]
 
-    dia_pesos = variaveis["dia_relativo"]["composicao_pesos"]["pesos"]
+    dia_pesos = calcular_pesos_brutos_dia_relativo(config)
     dia_ordem = list(dia_pesos.keys())
-    dia_cotas = alocar_maiores_restos(dia_pesos, total, dia_ordem)
+    dia_cotas = alocar_maiores_restos_float_legado(dia_pesos, total, dia_ordem)
 
     persona_pesos = variaveis["persona_id"]["composicao_pesos"]["peso_final"]
     persona_ordem = list(persona_pesos.keys())
@@ -350,7 +475,7 @@ def _contagens_observadas(config: dict, simulacoes: list[dict]) -> dict:
     observado em auditorias e validações.
     """
     variaveis = config["amostragem"]["variaveis"]
-    dia_dominio = list(variaveis["dia_relativo"]["composicao_pesos"]["pesos"].keys())
+    dia_dominio = _ordem_dia_relativo(variaveis["dia_relativo"]["calendario"])
     persona_dominio = list(variaveis["persona_id"]["composicao_pesos"]["peso_final"].keys())
     offset_dominio = list(variaveis["offset"]["categorias"].keys())
 
@@ -411,7 +536,7 @@ def gerar_relatorio_auditoria(config: dict, simulacoes: list[dict] | None = None
     a materialização final.
 
     Args:
-        config: Configuração v4.2 já validada.
+        config: Configuração v4.3 já validada.
         simulacoes: Lista opcional de simulações materializadas.
 
     Returns:
@@ -424,6 +549,8 @@ def gerar_relatorio_auditoria(config: dict, simulacoes: list[dict] | None = None
         "versao_schema": config["versao"],
         "n": config["amostragem"]["n"],
         "seed": config["amostragem"]["seed"],
+        "pesos_brutos_dia_relativo": calcular_pesos_brutos_dia_relativo(config),
+        "pesos_percentuais_dia_relativo_derivados": calcular_pesos_percentuais_dia_relativo(config),
         "cotas_calculadas": plano,
     }
 
@@ -452,7 +579,7 @@ def gerar_simulacoes(config: dict) -> list[dict]:
     inteira é embaralhada com a `seed` configurada.
 
     Args:
-        config: Configuração v4.2 já validada.
+        config: Configuração v4.3 já validada.
 
     Returns:
         Lista de registros contendo `id`, `dia_relativo`, `persona_id`,
