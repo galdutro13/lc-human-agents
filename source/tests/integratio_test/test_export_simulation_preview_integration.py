@@ -10,11 +10,12 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[3]
-V43_PATH = ROOT / "config_v4_3.json"
+V44_PATH = ROOT / "config_v4_4.json"
 LEGACY_V4_PATH = ROOT / "source/tests/fixtures/legacy/config_v4_1.json"
 LEGACY_V42_PATH = ROOT / "source/tests/fixtures/legacy/config_v4_2.json"
+LEGACY_V43_PATH = ROOT / "source/tests/fixtures/legacy/config_v4_3.json"
 SCRIPT_PATH = ROOT / "tools/enxame_usuario/export_simulation_preview.py"
-EXPECTED_N = json.loads(V43_PATH.read_text(encoding="utf-8"))["amostragem"]["n"]
+EXPECTED_N = json.loads(V44_PATH.read_text(encoding="utf-8"))["amostragem"]["n"]
 
 
 class TestExportSimulationPreviewIntegration(unittest.TestCase):
@@ -35,7 +36,7 @@ class TestExportSimulationPreviewIntegration(unittest.TestCase):
             output_path = Path(tmpdir) / "preview.csv"
             result = self._run_script(
                 "--config-file",
-                str(V43_PATH),
+                str(V44_PATH),
                 "--output-csv",
                 str(output_path),
             )
@@ -67,7 +68,7 @@ class TestExportSimulationPreviewIntegration(unittest.TestCase):
             )
 
             self.assertNotEqual(result.returncode, 0)
-            self.assertIn("Esperado '4.3'", result.stdout + result.stderr)
+            self.assertIn("Esperado '4.4'", result.stdout + result.stderr)
 
     def test_export_script_rejeita_v42_legado(self):
         with tempfile.TemporaryDirectory() as tmpdir:
@@ -80,7 +81,20 @@ class TestExportSimulationPreviewIntegration(unittest.TestCase):
             )
 
             self.assertNotEqual(result.returncode, 0)
-            self.assertIn("Esperado '4.3'", result.stdout + result.stderr)
+            self.assertIn("Esperado '4.4'", result.stdout + result.stderr)
+
+    def test_export_script_rejeita_v43_legado(self):
+        with tempfile.TemporaryDirectory() as tmpdir:
+            output_path = Path(tmpdir) / "preview.csv"
+            result = self._run_script(
+                "--config-file",
+                str(LEGACY_V43_PATH),
+                "--output-csv",
+                str(output_path),
+            )
+
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn("Esperado '4.4'", result.stdout + result.stderr)
 
     def test_export_script_respeita_overwrite(self):
         with tempfile.TemporaryDirectory() as tmpdir:
@@ -89,7 +103,7 @@ class TestExportSimulationPreviewIntegration(unittest.TestCase):
 
             result = self._run_script(
                 "--config-file",
-                str(V43_PATH),
+                str(V44_PATH),
                 "--output-csv",
                 str(output_path),
             )
@@ -98,7 +112,7 @@ class TestExportSimulationPreviewIntegration(unittest.TestCase):
 
             overwrite_result = self._run_script(
                 "--config-file",
-                str(V43_PATH),
+                str(V44_PATH),
                 "--output-csv",
                 str(output_path),
                 "--overwrite",

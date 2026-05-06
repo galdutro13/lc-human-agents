@@ -11,7 +11,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from source.simulation_config import (
-    carregar_config_v43,
+    carregar_config_v44,
     gerar_simulacoes,
     validar_simulacoes_geradas,
 )
@@ -23,9 +23,9 @@ from tools.enxame_usuario.simulation_projection import (
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        description="Exporta um CSV de prévia das simulações v4.3 sem executar o BancoBot."
+        description="Exporta um CSV de prévia das simulações v4.4 sem executar o BancoBot."
     )
-    parser.add_argument("--config-file", required=True, help="Arquivo JSON v4.3")
+    parser.add_argument("--config-file", required=True, help="Arquivo JSON v4.4")
     parser.add_argument(
         "--output-csv",
         help="Arquivo CSV de saída. Padrão: <stem_do_config>_preview.csv",
@@ -74,7 +74,7 @@ def main() -> None:
         raise SystemExit(1)
 
     try:
-        config = carregar_config_v43(args.config_file)
+        config = carregar_config_v44(args.config_file)
         simulacoes = gerar_simulacoes(config)
         validar_simulacoes_geradas(config, simulacoes)
     except Exception as exc:

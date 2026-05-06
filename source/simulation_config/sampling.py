@@ -1,4 +1,4 @@
-"""Geração determinística de simulações compatíveis com o schema v4.3."""
+"""Geração determinística de simulações compatíveis com o schema v4.4."""
 
 from __future__ import annotations
 
@@ -8,6 +8,9 @@ import math
 import random
 
 from source.simulation_config.errors import ConfigValidationError
+
+EXPECTED_DAY_SEQUENCE = ["segunda", "terca", "quarta", "quinta", "sexta", "sabado", "domingo"]
+WEEKEND_DAYS = {"sabado", "domingo"}
 
 
 def _to_decimal(valor: object) -> Decimal:
@@ -203,7 +206,7 @@ def obter_pesos_condicionados(spec: dict, instancia: dict) -> dict:
 def montar_prompt(persona: dict, missao: dict, template: str) -> str:
     """Monta o prompt final unindo identidade da persona e texto da missão.
 
-    No schema v4.3 a missão não está mais embutida na persona. Esta função é o
+    No schema v4.4 a missão não está mais embutida na persona. Esta função é o
     ponto único que compõe os três placeholders esperados pelo template:
     `identidade`, `como_agir` e `missao`.
     """
@@ -214,13 +217,48 @@ def montar_prompt(persona: dict, missao: dict, template: str) -> str:
     )
 
 
-def derivar_weekend(calendario: dict[str, dict], dia_relativo: str) -> bool:
+def gerar_calendario_sintetico(config: dict) -> dict[str, dict]:
+    """Gera em memória o calendário sintético declarado por parâmetros.
+
+    No schema v4.4, o JSON não materializa os 90 dias. Esta função reconstrói
+    deterministicamente o calendário usado pelo sampler, pela validação e pela
+    projeção operacional a partir de `janela_temporal`.
+    """
+    janela = config["janela_temporal"]
+    duracao = int(janela["duracao"])
+    dias_por_mes = int(janela["dias_por_mes_sintetico"])
+    dia_inicio = janela["dia_inicio"]
+
+    try:
+        indice_inicio = EXPECTED_DAY_SEQUENCE.index(dia_inicio)
+    except ValueError as exc:
+        raise ConfigValidationError(f"dia_inicio inválido para calendário sintético: '{dia_inicio}'.") from exc
+
+    calendario = {}
+    for dia_indice in range(1, duracao + 1):
+        dia_da_semana = EXPECTED_DAY_SEQUENCE[
+            (indice_inicio + dia_indice - 1) % len(EXPECTED_DAY_SEQUENCE)
+        ]
+        dia_relativo = f"d{dia_indice:02d}"
+        calendario[dia_relativo] = {
+            "dia_indice": dia_indice,
+            "mes_relativo": ((dia_indice - 1) // dias_por_mes) + 1,
+            "semana_relativa": ((dia_indice - 1) // 7) + 1,
+            "dia_da_semana": dia_da_semana,
+            "dia_do_mes_sintetico": ((dia_indice - 1) % dias_por_mes) + 1,
+            "weekend": dia_da_semana in WEEKEND_DAYS,
+        }
+
+    return calendario
+
+
+def derivar_weekend(config: dict, dia_relativo: str, calendario: dict[str, dict] | None = None) -> bool:
     """Deriva deterministicamente o campo `weekend` a partir do calendário.
 
     Diferentemente das versões antigas do pipeline, `weekend` não é amostrado.
-    Ele é sempre lido do calendário sintético associado ao `dia_relativo`
-    escolhido para o registro.
+    Ele é sempre calculado a partir do calendário sintético gerado em runtime.
     """
+    calendario = calendario or gerar_calendario_sintetico(config)
     try:
         return bool(calendario[dia_relativo]["weekend"])
     except KeyError as exc:
@@ -280,7 +318,7 @@ def _construir_registros_base(
     `offset`, `ritmo` e `missao_id` para as etapas condicionais posteriores.
     """
     variaveis = config["amostragem"]["variaveis"]
-    calendario = variaveis["dia_relativo"]["calendario"]
+    calendario = gerar_calendario_sintetico(config)
     dia_ordem = _ordem_dia_relativo(calendario)
     persona_ordem = list(variaveis["persona_id"]["composicao_pesos"]["peso_final"].keys())
 
@@ -291,7 +329,7 @@ def _construir_registros_base(
         {
             "dia_relativo": dia_relativo,
             "persona_id": persona_id,
-            "weekend": derivar_weekend(calendario, dia_relativo),
+            "weekend": derivar_weekend(config, dia_relativo, calendario),
         }
         for dia_relativo, persona_id in zip(dia_sequencia, persona_sequencia, strict=True)
     ]
@@ -321,7 +359,7 @@ def calcular_pesos_brutos_dia_relativo(config: dict) -> dict[str, float]:
     direta para maiores restos na distribuição de `dia_relativo`.
     """
     spec_dia = config["amostragem"]["variaveis"]["dia_relativo"]
-    calendario = spec_dia["calendario"]
+    calendario = gerar_calendario_sintetico(config)
     composicao = spec_dia["composicao_pesos"]
     fatores_dia_semana = composicao["fatores_dia_semana"]
     fatores_semana_relativa = composicao["fatores_semana_relativa"]
@@ -378,7 +416,7 @@ def calcular_plano_de_cotas(config: dict) -> dict:
     execução e conferência.
 
     Args:
-        config: Configuração v4.3 já validada.
+        config: Configuração v4.4 já validada.
 
     Returns:
         Um dicionário com o plano completo de cotas marginais e condicionais,
@@ -397,7 +435,7 @@ def calcular_plano_de_cotas(config: dict) -> dict:
     persona_cotas = alocar_maiores_restos(persona_pesos, total, persona_ordem)
 
     registros_base = _construir_registros_base(config, dia_cotas, persona_cotas)
-    calendario = variaveis["dia_relativo"]["calendario"]
+    calendario = gerar_calendario_sintetico(config)
     offset_spec = variaveis["offset"]
     offset_ordem = list(offset_spec["categorias"].keys())
     ritmo_spec = variaveis["ritmo"]
@@ -475,7 +513,8 @@ def _contagens_observadas(config: dict, simulacoes: list[dict]) -> dict:
     observado em auditorias e validações.
     """
     variaveis = config["amostragem"]["variaveis"]
-    dia_dominio = _ordem_dia_relativo(variaveis["dia_relativo"]["calendario"])
+    calendario = gerar_calendario_sintetico(config)
+    dia_dominio = _ordem_dia_relativo(calendario)
     persona_dominio = list(variaveis["persona_id"]["composicao_pesos"]["peso_final"].keys())
     offset_dominio = list(variaveis["offset"]["categorias"].keys())
 
@@ -536,7 +575,7 @@ def gerar_relatorio_auditoria(config: dict, simulacoes: list[dict] | None = None
     a materialização final.
 
     Args:
-        config: Configuração v4.3 já validada.
+        config: Configuração v4.4 já validada.
         simulacoes: Lista opcional de simulações materializadas.
 
     Returns:
@@ -549,6 +588,8 @@ def gerar_relatorio_auditoria(config: dict, simulacoes: list[dict] | None = None
         "versao_schema": config["versao"],
         "n": config["amostragem"]["n"],
         "seed": config["amostragem"]["seed"],
+        "parametros_calendario": config["janela_temporal"],
+        "calendario_sintetico_gerado": gerar_calendario_sintetico(config),
         "pesos_brutos_dia_relativo": calcular_pesos_brutos_dia_relativo(config),
         "pesos_percentuais_dia_relativo_derivados": calcular_pesos_percentuais_dia_relativo(config),
         "cotas_calculadas": plano,
@@ -579,7 +620,7 @@ def gerar_simulacoes(config: dict) -> list[dict]:
     inteira é embaralhada com a `seed` configurada.
 
     Args:
-        config: Configuração v4.3 já validada.
+        config: Configuração v4.4 já validada.
 
     Returns:
         Lista de registros contendo `id`, `dia_relativo`, `persona_id`,
@@ -587,7 +628,7 @@ def gerar_simulacoes(config: dict) -> list[dict]:
     """
     amostragem = config["amostragem"]
     variaveis = amostragem["variaveis"]
-    calendario = variaveis["dia_relativo"]["calendario"]
+    calendario = gerar_calendario_sintetico(config)
     plano = calcular_plano_de_cotas(config)
 
     simulacoes = _construir_registros_base(config, plano["dia_relativo"], plano["persona_id"])

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from datetime import datetime, time as clock_time, timedelta
 
-from source.simulation_config import montar_prompt
+from source.simulation_config import gerar_calendario_sintetico, montar_prompt
 
 OFFSET_ANCHORS = {
     "madrugada": clock_time(hour=3, minute=0),
@@ -71,7 +71,7 @@ def calculate_target_local_datetime(
     Args:
         dia_relativo: Identificador sintético do dia, como `d01`.
         offset_type: Faixa horária da simulação.
-        calendario: Calendário sintético do config.
+        calendario: Calendário sintético gerado em runtime.
         now: Momento de referência para a projeção.
 
     Returns:
@@ -148,7 +148,7 @@ def resolve_simulation_projection(
 
     Args:
         simulacao: Registro gerado pelo pipeline estatístico.
-        config: Configuração v4.3 completa.
+        config: Configuração v4.4 completa.
         now: Momento de referência usado nas projeções temporais.
         prompt_preview_chars: Limite de caracteres para o campo
             `prompt_preview`.
@@ -157,7 +157,7 @@ def resolve_simulation_projection(
         Um dicionário enriquecido com metadados calendáricos, dados de missão,
         preview textual e parâmetros operacionais reutilizáveis pelo runner.
     """
-    calendario = config["amostragem"]["variaveis"]["dia_relativo"]["calendario"]
+    calendario = gerar_calendario_sintetico(config)
     dia_metadata = calendario[simulacao["dia_relativo"]]
     persona = config["personas"][simulacao["persona_id"]]
     missao = config["missoes"][simulacao["missao_id"]]

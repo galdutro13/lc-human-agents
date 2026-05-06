@@ -2,7 +2,7 @@ import unittest
 from datetime import datetime
 from pathlib import Path
 
-from source.simulation_config import carregar_config_v43, gerar_simulacoes
+from source.simulation_config import carregar_config_v44, gerar_calendario_sintetico, gerar_simulacoes
 from tools.enxame_usuario.simulation_projection import (
     CSV_FIELDNAMES,
     calculate_target_local_datetime,
@@ -14,13 +14,13 @@ from tools.enxame_usuario.simulation_projection import (
 
 
 ROOT = Path(__file__).resolve().parents[3]
-V43_PATH = ROOT / "config_v4_3.json"
+V44_PATH = ROOT / "config_v4_4.json"
 
 
 class TestSimulationProjection(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.config = carregar_config_v43(V43_PATH)
+        cls.config = carregar_config_v44(V44_PATH)
         cls.simulacao = gerar_simulacoes(cls.config)[0]
         cls.now = datetime(2026, 4, 20, 8, 0, 0)
 
@@ -49,7 +49,7 @@ class TestSimulationProjection(unittest.TestCase):
         )
 
     def test_calculate_target_local_datetime_consistente_com_calendario(self):
-        calendario = self.config["amostragem"]["variaveis"]["dia_relativo"]["calendario"]
+        calendario = gerar_calendario_sintetico(self.config)
         target = calculate_target_local_datetime(
             "d01",
             "manha",

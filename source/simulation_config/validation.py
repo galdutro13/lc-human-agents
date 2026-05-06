@@ -1,4 +1,4 @@
-"""Validação estrutural e semântica do schema v4.3."""
+"""Validação estrutural e semântica do schema v4.4."""
 
 from __future__ import annotations
 
@@ -15,11 +15,12 @@ from source.simulation_config.sampling import (
     calcular_plano_de_cotas,
     calcular_pesos_brutos_dia_relativo,
     derivar_weekend,
+    gerar_calendario_sintetico,
     normalizar_valor_condicional,
     obter_pesos_condicionados,
 )
 
-EXPECTED_VERSION = "4.3"
+EXPECTED_VERSION = "4.4"
 EXPECTED_CONTEXT = "cartao_de_credito"
 EXPECTED_CHANNEL = "chatbot textual em app/site"
 EXPECTED_METHOD = "cotas_controladas_com_maiores_restos"
@@ -97,7 +98,7 @@ EXPECTED_WEEKEND_BY_DAY = {
 
 
 def _load_schema() -> dict:
-    schema_path = Path(__file__).with_name("schema_v4_3.json")
+    schema_path = Path(__file__).with_name("schema_v4_4.json")
     with schema_path.open("r", encoding="utf-8") as arquivo:
         return json.load(arquivo)
 
@@ -134,7 +135,7 @@ def _decimal(valor: object) -> Decimal:
 def _validar_sem_default(node: object, caminho: str = "$") -> None:
     if isinstance(node, dict):
         if "_default" in node:
-            raise ConfigValidationError(f"O schema v4.3 não permite _default em {caminho}.")
+            raise ConfigValidationError(f"O schema v4.4 não permite _default em {caminho}.")
         for chave, valor in node.items():
             _validar_sem_default(valor, f"{caminho}.{chave}")
     elif isinstance(node, list):
@@ -170,16 +171,20 @@ def validar_dag(config: dict) -> None:
                 )
 
 
-def _validar_calendario(spec_dia: dict) -> None:
-    calendario = spec_dia["calendario"]
+def _validar_calendario(config: dict) -> None:
+    spec_dia = config["amostragem"]["variaveis"]["dia_relativo"]
     composicao = spec_dia["composicao_pesos"]
+    calendario = gerar_calendario_sintetico(config)
+
+    if "calendario" in spec_dia:
+        raise ConfigValidationError("dia_relativo.calendario não é permitido no schema v4.4.")
 
     if "pesos" in composicao:
-        raise ConfigValidationError("dia_relativo.composicao_pesos não permite pesos explícitos no v4.3.")
+        raise ConfigValidationError("dia_relativo.composicao_pesos não permite pesos explícitos no v4.4.")
     if composicao["tipo"] != EXPECTED_DAY_COMPOSITION_TYPE:
-        raise ConfigValidationError("dia_relativo.composicao_pesos.tipo divergente do contrato v4.3.")
+        raise ConfigValidationError("dia_relativo.composicao_pesos.tipo divergente do contrato v4.4.")
     if composicao["formula"] != EXPECTED_DAY_WEIGHT_FORMULA:
-        raise ConfigValidationError("dia_relativo.composicao_pesos.formula divergente do contrato v4.3.")
+        raise ConfigValidationError("dia_relativo.composicao_pesos.formula divergente do contrato v4.4.")
     if composicao["fatores_dia_semana"] != EXPECTED_DAY_FACTORS:
         raise ConfigValidationError("fatores_dia_semana divergem do processo gerador original.")
     if composicao["fatores_semana_relativa"] != EXPECTED_WEEK_FACTORS:
@@ -241,7 +246,7 @@ def _validar_calendario(spec_dia: dict) -> None:
                 f"Calendário com weekend inconsistente para '{dia_relativo}'."
             )
 
-    pesos_brutos = calcular_pesos_brutos_dia_relativo({"amostragem": {"variaveis": {"dia_relativo": spec_dia}}})
+    pesos_brutos = calcular_pesos_brutos_dia_relativo(config)
     _validar_linha_pesos("dia_relativo.composicao_pesos.pesos_brutos_calculados", pesos_brutos)
 
 
@@ -275,7 +280,7 @@ def _validar_offset(personas: dict, spec_offset: dict) -> None:
 
     categorias = list(spec_offset["categorias"].keys())
     if categorias != EXPECTED_OFFSET_CATEGORIES:
-        raise ConfigValidationError("As categorias de offset não correspondem ao contrato v4.3.")
+        raise ConfigValidationError("As categorias de offset não correspondem ao contrato v4.4.")
 
     pesos_condicionais = spec_offset["pesos_condicionais"]
     if set(pesos_condicionais.keys()) != set(personas.keys()):
@@ -384,7 +389,7 @@ def _validar_missoes(personas: dict, missoes: dict, spec_missao: dict) -> None:
         )
 
 
-def validar_config_v43(config: dict) -> None:
+def validar_config_v44(config: dict) -> None:
     if not isinstance(config, dict):
         raise ConfigValidationError("A configuração deve ser um objeto JSON.")
 
@@ -400,22 +405,26 @@ def validar_config_v43(config: dict) -> None:
     if erros:
         erro = erros[0]
         caminho = ".".join(str(parte) for parte in erro.path) or "$"
-        raise ConfigValidationError(f"Configuração v4.3 inválida em {caminho}: {erro.message}")
+        raise ConfigValidationError(f"Configuração v4.4 inválida em {caminho}: {erro.message}")
 
     _validar_sem_default(config)
     _validar_template_prompt(config["template_prompt"])
     validar_dag(config)
 
     if config["contexto_negocio"] != EXPECTED_CONTEXT:
-        raise ConfigValidationError("contexto_negocio inválido para o contrato v4.3.")
+        raise ConfigValidationError("contexto_negocio inválido para o contrato v4.4.")
     if config["canal"] != EXPECTED_CHANNEL:
-        raise ConfigValidationError("canal inválido para o contrato v4.3.")
+        raise ConfigValidationError("canal inválido para o contrato v4.4.")
 
     janela_temporal = config["janela_temporal"]
     if janela_temporal["unidade"] != "dias" or janela_temporal["duracao"] != 90:
         raise ConfigValidationError("janela_temporal deve declarar 90 dias sintéticos.")
     if not janela_temporal["calendario_sintetico"]:
         raise ConfigValidationError("janela_temporal.calendario_sintetico deve ser true.")
+    if janela_temporal["dia_inicio"] not in EXPECTED_DAY_SEQUENCE:
+        raise ConfigValidationError("janela_temporal.dia_inicio deve declarar um dia da semana válido.")
+    if janela_temporal["dias_por_mes_sintetico"] != 30:
+        raise ConfigValidationError("janela_temporal.dias_por_mes_sintetico deve ser 30.")
 
     amostragem = config["amostragem"]
     if isinstance(amostragem["n"], bool) or amostragem["n"] <= 0:
@@ -424,7 +433,7 @@ def validar_config_v43(config: dict) -> None:
         raise ConfigValidationError("'seed' deve ser um inteiro válido.")
     if amostragem["metodo"] != EXPECTED_METHOD:
         raise ConfigValidationError(
-            "O único método suportado no schema v4.3 é 'cotas_controladas_com_maiores_restos'."
+            "O único método suportado no schema v4.4 é 'cotas_controladas_com_maiores_restos'."
         )
     if amostragem["formula_conjunta"] != EXPECTED_FORMULA_CONJUNTA:
         raise ConfigValidationError("formula_conjunta divergente do contrato esperado.")
@@ -449,14 +458,14 @@ def validar_config_v43(config: dict) -> None:
     missoes = config["missoes"]
     variaveis = amostragem["variaveis"]
 
-    _validar_calendario(variaveis["dia_relativo"])
+    _validar_calendario(config)
     _validar_persona_id(pessoas, variaveis["persona_id"])
 
     weekend_spec = variaveis["weekend"]
     if weekend_spec["tipo"] != "derivada" or weekend_spec["depende_de"] != "dia_relativo":
         raise ConfigValidationError("weekend deve ser uma variável derivada de dia_relativo.")
     if weekend_spec["regra"] != EXPECTED_WEEKEND_RULE:
-        raise ConfigValidationError("A regra declarada para weekend não corresponde ao contrato v4.3.")
+        raise ConfigValidationError("A regra declarada para weekend não corresponde ao contrato v4.4.")
 
     _validar_offset(pessoas, variaveis["offset"])
     _validar_ritmo(pessoas, variaveis["ritmo"])
@@ -478,7 +487,7 @@ def validar_simulacoes_geradas(config: dict, simulacoes: list[dict]) -> None:
 
     campos_esperados = {"id", "dia_relativo", "persona_id", "weekend", "offset", "ritmo", "missao_id"}
     variaveis = config["amostragem"]["variaveis"]
-    calendario = variaveis["dia_relativo"]["calendario"]
+    calendario = gerar_calendario_sintetico(config)
     missoes_elegiveis = variaveis["missao_id"]["missoes_elegiveis_por_persona"]
     plano = calcular_plano_de_cotas(config)
 
@@ -493,7 +502,7 @@ def validar_simulacoes_geradas(config: dict, simulacoes: list[dict]) -> None:
 
     for indice, simulacao in enumerate(simulacoes, start=1):
         if set(simulacao.keys()) != campos_esperados:
-            raise ConfigValidationError("Cada simulação deve conter exatamente os campos esperados do v4.3.")
+            raise ConfigValidationError("Cada simulação deve conter exatamente os campos esperados do v4.4.")
         if simulacao["id"] != indice:
             raise ConfigValidationError("Os ids das simulações devem ser sequenciais após o embaralhamento.")
 
@@ -508,7 +517,7 @@ def validar_simulacoes_geradas(config: dict, simulacoes: list[dict]) -> None:
         if missao_id not in config["missoes"]:
             raise ConfigValidationError(f"missao_id inexistente em missoes: '{missao_id}'.")
 
-        weekend_derivado = derivar_weekend(calendario, dia_relativo)
+        weekend_derivado = derivar_weekend(config, dia_relativo, calendario)
         if bool(simulacao["weekend"]) != weekend_derivado:
             raise ConfigValidationError(
                 f"Registro com weekend inconsistente para dia_relativo '{dia_relativo}'."

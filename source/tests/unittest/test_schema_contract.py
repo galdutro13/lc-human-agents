@@ -2,34 +2,34 @@ import copy
 import unittest
 from pathlib import Path
 
-from source.simulation_config import ConfigValidationError, carregar_config_v43, validar_config_v43
+from source.simulation_config import ConfigValidationError, carregar_config_v44, validar_config_v44
 
 
 ROOT = Path(__file__).resolve().parents[3]
-V43_PATH = ROOT / "config_v4_3.json"
+V44_PATH = ROOT / "config_v4_4.json"
 
 
-class TestSchemaContractV43(unittest.TestCase):
+class TestSchemaContractV44(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.base_config = carregar_config_v43(V43_PATH)
+        cls.base_config = carregar_config_v44(V44_PATH)
 
-    def test_config_v43_valido(self):
-        validar_config_v43(self.base_config)
+    def test_config_v44_valido(self):
+        validar_config_v44(self.base_config)
 
     def test_rejeita_default(self):
         config = copy.deepcopy(self.base_config)
         config["amostragem"]["variaveis"]["ritmo"]["pesos_condicionais"]["ana_beatriz_silva"]["_default"] = 1
 
         with self.assertRaisesRegex(ConfigValidationError, "_default"):
-            validar_config_v43(config)
+            validar_config_v44(config)
 
     def test_rejeita_dependencia_inexistente(self):
         config = copy.deepcopy(self.base_config)
         config["amostragem"]["variaveis"]["offset"]["depende_de"] = ["persona_id", "variavel_fantasma"]
 
         with self.assertRaisesRegex(ConfigValidationError, "não está em dag_ordem"):
-            validar_config_v43(config)
+            validar_config_v44(config)
 
     def test_rejeita_missao_inexistente_na_matriz(self):
         config = copy.deepcopy(self.base_config)
@@ -38,14 +38,23 @@ class TestSchemaContractV43(unittest.TestCase):
         )
 
         with self.assertRaisesRegex(ConfigValidationError, "missões inexistentes"):
-            validar_config_v43(config)
+            validar_config_v44(config)
 
-    def test_rejeita_calendario_inconsistente(self):
+    def test_rejeita_calendario_materializado(self):
         config = copy.deepcopy(self.base_config)
-        config["amostragem"]["variaveis"]["dia_relativo"]["calendario"]["d01"]["weekend"] = True
+        config["amostragem"]["variaveis"]["dia_relativo"]["calendario"] = {
+            "d01": {
+                "dia_indice": 1,
+                "mes_relativo": 1,
+                "semana_relativa": 1,
+                "dia_da_semana": "segunda",
+                "dia_do_mes_sintetico": 1,
+                "weekend": False,
+            }
+        }
 
-        with self.assertRaisesRegex(ConfigValidationError, "Calendário com weekend inconsistente"):
-            validar_config_v43(config)
+        with self.assertRaisesRegex(ConfigValidationError, "Configuração v4.4 inválida"):
+            validar_config_v44(config)
 
     def test_rejeita_peso_final_divergente_da_formula(self):
         config = copy.deepcopy(self.base_config)
@@ -53,52 +62,35 @@ class TestSchemaContractV43(unittest.TestCase):
         composicao["peso_final"]["ana_beatriz_silva"] = 999
 
         with self.assertRaisesRegex(ConfigValidationError, "peso_final.*ana_beatriz_silva"):
-            validar_config_v43(config)
+            validar_config_v44(config)
 
-    def test_rejeita_dia_da_semana_inconsistente_com_indice(self):
+    def test_rejeita_duracao_temporal_diferente_de_90(self):
         config = copy.deepcopy(self.base_config)
-        calendario = config["amostragem"]["variaveis"]["dia_relativo"]["calendario"]
-        calendario["d01"]["dia_da_semana"] = "domingo"
-        calendario["d01"]["weekend"] = True
+        config["janela_temporal"]["duracao"] = 91
 
-        with self.assertRaisesRegex(ConfigValidationError, "dia_indice/dia_da_semana"):
-            validar_config_v43(config)
+        with self.assertRaisesRegex(ConfigValidationError, "Configuração v4.4 inválida|90 dias"):
+            validar_config_v44(config)
 
-    def test_rejeita_semana_relativa_inconsistente_com_indice(self):
+    def test_rejeita_dia_inicio_invalido(self):
         config = copy.deepcopy(self.base_config)
-        config["amostragem"]["variaveis"]["dia_relativo"]["calendario"]["d18"]["semana_relativa"] = 10
+        config["janela_temporal"]["dia_inicio"] = "feriado"
 
-        with self.assertRaisesRegex(ConfigValidationError, "semana_relativa"):
-            validar_config_v43(config)
+        with self.assertRaisesRegex(ConfigValidationError, "Configuração v4.4 inválida|dia_inicio"):
+            validar_config_v44(config)
 
-    def test_rejeita_dia_do_mes_sintetico_inconsistente_com_indice(self):
+    def test_rejeita_dias_por_mes_sintetico_diferente_de_30(self):
         config = copy.deepcopy(self.base_config)
-        config["amostragem"]["variaveis"]["dia_relativo"]["calendario"]["d18"]["dia_do_mes_sintetico"] = 1
+        config["janela_temporal"]["dias_por_mes_sintetico"] = 31
 
-        with self.assertRaisesRegex(ConfigValidationError, "dia_do_mes_sintetico"):
-            validar_config_v43(config)
+        with self.assertRaisesRegex(ConfigValidationError, "Configuração v4.4 inválida|dias_por_mes_sintetico"):
+            validar_config_v44(config)
 
-    def test_rejeita_mes_relativo_inconsistente_com_indice(self):
+    def test_rejeita_calendario_sintetico_false(self):
         config = copy.deepcopy(self.base_config)
-        config["amostragem"]["variaveis"]["dia_relativo"]["calendario"]["d31"]["mes_relativo"] = 1
+        config["janela_temporal"]["calendario_sintetico"] = False
 
-        with self.assertRaisesRegex(ConfigValidationError, "mes_relativo"):
-            validar_config_v43(config)
-
-    def test_rejeita_chave_dia_relativo_inconsistente_com_indice(self):
-        config = copy.deepcopy(self.base_config)
-        calendario = config["amostragem"]["variaveis"]["dia_relativo"]["calendario"]
-        calendario["d91"] = calendario.pop("d90")
-
-        with self.assertRaisesRegex(ConfigValidationError, "dia_relativo"):
-            validar_config_v43(config)
-
-    def test_rejeita_dia_indice_duplicado_ou_faltante(self):
-        config = copy.deepcopy(self.base_config)
-        config["amostragem"]["variaveis"]["dia_relativo"]["calendario"]["d02"]["dia_indice"] = 1
-
-        with self.assertRaisesRegex(ConfigValidationError, "dia_indice inconsistente"):
-            validar_config_v43(config)
+        with self.assertRaisesRegex(ConfigValidationError, "Configuração v4.4 inválida|calendario_sintetico"):
+            validar_config_v44(config)
 
     def test_rejeita_snapshot_fixo_de_cotas(self):
         config = copy.deepcopy(self.base_config)
@@ -106,8 +98,8 @@ class TestSchemaContractV43(unittest.TestCase):
             "ana_beatriz_silva": 1
         }
 
-        with self.assertRaisesRegex(ConfigValidationError, "Configuração v4.3 inválida"):
-            validar_config_v43(config)
+        with self.assertRaisesRegex(ConfigValidationError, "Configuração v4.4 inválida"):
+            validar_config_v44(config)
 
     def test_rejeita_pesos_explicitos_de_dia_relativo(self):
         config = copy.deepcopy(self.base_config)
@@ -115,12 +107,12 @@ class TestSchemaContractV43(unittest.TestCase):
             "d01": 1
         }
 
-        with self.assertRaisesRegex(ConfigValidationError, "Configuração v4.3 inválida"):
-            validar_config_v43(config)
+        with self.assertRaisesRegex(ConfigValidationError, "Configuração v4.4 inválida"):
+            validar_config_v44(config)
 
     def test_rejeita_fator_temporal_alterado(self):
         config = copy.deepcopy(self.base_config)
         config["amostragem"]["variaveis"]["dia_relativo"]["composicao_pesos"]["fatores_dia_semana"]["segunda"] = 1.07
 
         with self.assertRaisesRegex(ConfigValidationError, "fatores_dia_semana"):
-            validar_config_v43(config)
+            validar_config_v44(config)

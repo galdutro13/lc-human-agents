@@ -6,14 +6,14 @@ from datetime import timedelta
 import requests
 from dotenv import load_dotenv
 
-from source.simulation_config import carregar_config_v43, gerar_simulacoes
+from source.simulation_config import carregar_config_v44, gerar_simulacoes
 from source.tests.chatbot_test.usuario import UsuarioBot
 from tools.enxame_usuario.simulation_projection import resolve_simulation_projection
 
 """
-Script para executar uma suíte de simulações v4.3 contra o BancoBot.
+Script para executar uma suíte de simulações v4.4 contra o BancoBot.
 
-Cada registro do schema v4.3 informa:
+Cada registro do schema v4.4 informa:
 - persona_id
 - missao_id
 - dia_relativo
@@ -35,7 +35,7 @@ def parse_persona_config(simulacao: dict, config: dict, default_args):
 
     Args:
         simulacao: Registro estatístico já gerado pelo sampler.
-        config: Configuração v4.3 usada para resolver persona, missão e tempo.
+        config: Configuração v4.4 usada para resolver persona, missão e tempo.
         default_args: Mantido apenas por compatibilidade com o fluxo atual do
             runner; não participa mais da resolução dos parâmetros.
 
@@ -122,10 +122,10 @@ if __name__ == "__main__":
         raise SystemExit(1)
 
     parser = argparse.ArgumentParser(
-        description="Executa simulações v4.3 definidas em JSON contra o BancoBot"
+        description="Executa simulações v4.4 definidas em JSON contra o BancoBot"
     )
 
-    parser.add_argument("--prompts-file", required=True, type=str, help="Arquivo JSON v4.3")
+    parser.add_argument("--prompts-file", required=True, type=str, help="Arquivo JSON v4.4")
     parser.add_argument(
         "--api-url",
         type=str,
@@ -181,7 +181,7 @@ if __name__ == "__main__":
         raise SystemExit(1)
 
     try:
-        config = carregar_config_v43(args.prompts_file)
+        config = carregar_config_v44(args.prompts_file)
         simulacoes = gerar_simulacoes(config)
     except Exception as exc:
         print(f"ERRO: não foi possível ler {args.prompts_file}: {exc}")

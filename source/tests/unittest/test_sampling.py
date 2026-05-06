@@ -8,7 +8,8 @@ from source.simulation_config import (
     alocar_maiores_restos,
     calcular_plano_de_cotas,
     calcular_pesos_brutos_dia_relativo,
-    carregar_config_v43,
+    carregar_config_v44,
+    gerar_calendario_sintetico,
     gerar_relatorio_auditoria,
     gerar_simulacoes,
     montar_prompt,
@@ -17,15 +18,15 @@ from source.simulation_config import (
 
 
 ROOT = Path(__file__).resolve().parents[3]
-V43_PATH = ROOT / "config_v4_3.json"
+V44_PATH = ROOT / "config_v4_4.json"
 LEGACY_V41_PATH = ROOT / "source/tests/fixtures/legacy/config_v4_1.json"
 ORIGINAL_SCRIPT_PATH = ROOT / "source/tests/fixtures/legacy/gerar_cotas_dia_relativo_90d.py"
 
 
-class TestSamplingV43(unittest.TestCase):
+class TestSamplingV44(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.config = carregar_config_v43(V43_PATH)
+        cls.config = carregar_config_v44(V44_PATH)
 
     def test_alocar_maiores_restos_soma_n_e_respeita_desempate(self):
         cotas = alocar_maiores_restos({"b": 1, "a": 1, "c": 1}, 2, ["b", "a", "c"])
@@ -63,6 +64,30 @@ class TestSamplingV43(unittest.TestCase):
             "{identidade} :: {como_agir} :: {missao}",
         )
         self.assertEqual(prompt, "ID :: AGIR :: MISSAO")
+
+    def test_gerar_calendario_sintetico_reproduz_metadados_esperados(self):
+        calendario = gerar_calendario_sintetico(self.config)
+
+        self.assertEqual(len(calendario), 90)
+        self.assertEqual(list(calendario.keys())[0], "d01")
+        self.assertEqual(list(calendario.keys())[-1], "d90")
+        self.assertEqual(calendario["d01"]["dia_da_semana"], "segunda")
+        self.assertEqual(calendario["d30"]["dia_da_semana"], "terca")
+        self.assertEqual(calendario["d31"]["dia_da_semana"], "quarta")
+        self.assertEqual(calendario["d36"]["dia_da_semana"], "segunda")
+        self.assertEqual(calendario["d62"]["dia_da_semana"], "sabado")
+        self.assertEqual(calendario["d90"]["dia_da_semana"], "sabado")
+        self.assertEqual(calendario["d31"]["mes_relativo"], 2)
+        self.assertEqual(calendario["d62"]["dia_do_mes_sintetico"], 2)
+
+    def test_gerar_calendario_sintetico_deriva_weekend(self):
+        calendario = gerar_calendario_sintetico(self.config)
+
+        for metadados in calendario.values():
+            self.assertEqual(
+                metadados["weekend"],
+                metadados["dia_da_semana"] in {"sabado", "domingo"},
+            )
 
     def test_calcular_plano_de_cotas_e_deterministico_para_multiplos_ns(self):
         for n in (1, 7, 90, 6000, 6001):
@@ -114,8 +139,10 @@ class TestSamplingV43(unittest.TestCase):
         simulacoes = gerar_simulacoes(config)
         relatorio = gerar_relatorio_auditoria(config, simulacoes)
 
-        self.assertEqual(relatorio["versao_schema"], "4.3")
+        self.assertEqual(relatorio["versao_schema"], "4.4")
         self.assertEqual(relatorio["n"], 7)
+        self.assertIn("parametros_calendario", relatorio)
+        self.assertIn("calendario_sintetico_gerado", relatorio)
         self.assertIn("pesos_brutos_dia_relativo", relatorio)
         self.assertIn("pesos_percentuais_dia_relativo_derivados", relatorio)
         self.assertEqual(relatorio["cotas_calculadas"]["dia_relativo"], relatorio["contagens_observadas"]["dia_relativo"])

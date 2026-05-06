@@ -14,7 +14,7 @@
   ],
   "properties": {
     "versao": {
-      "const": "4.3"
+      "const": "4.4"
     },
     "contexto_negocio": {
       "type": "string",
@@ -100,24 +100,33 @@
         "unidade",
         "duracao",
         "calendario_sintetico",
-        "assuncao_inicio",
+        "dia_inicio",
+        "dias_por_mes_sintetico",
         "descricao"
       ],
       "properties": {
         "unidade": {
-          "type": "string",
-          "minLength": 1
+          "const": "dias"
         },
         "duracao": {
-          "type": "integer",
-          "minimum": 1
+          "const": 90
         },
         "calendario_sintetico": {
-          "type": "boolean"
+          "const": true
         },
-        "assuncao_inicio": {
-          "type": "string",
-          "minLength": 1
+        "dia_inicio": {
+          "enum": [
+            "segunda",
+            "terca",
+            "quarta",
+            "quinta",
+            "sexta",
+            "sabado",
+            "domingo"
+          ]
+        },
+        "dias_por_mes_sintetico": {
+          "const": 30
         },
         "descricao": {
           "type": "string",
@@ -308,7 +317,6 @@
         "descricao",
         "tipo",
         "depende_de",
-        "calendario",
         "composicao_pesos"
       ],
       "properties": {
@@ -321,13 +329,6 @@
         },
         "depende_de": {
           "type": "null"
-        },
-        "calendario": {
-          "type": "object",
-          "minProperties": 1,
-          "additionalProperties": {
-            "$ref": "#/$defs/calendar_entry"
-          }
         },
         "composicao_pesos": {
           "type": "object",

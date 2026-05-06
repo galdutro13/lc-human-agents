@@ -4,7 +4,8 @@ from pathlib import Path
 
 from source.simulation_config import (
     calcular_plano_de_cotas,
-    carregar_config_v43,
+    carregar_config_v44,
+    gerar_calendario_sintetico,
     gerar_simulacoes,
     validar_simulacoes_geradas,
 )
@@ -12,13 +13,13 @@ from source.simulation_config.errors import ConfigValidationError
 
 
 ROOT = Path(__file__).resolve().parents[3]
-V43_PATH = ROOT / "config_v4_3.json"
+V44_PATH = ROOT / "config_v4_4.json"
 
 
-class TestValidationV43(unittest.TestCase):
+class TestValidationV44(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.config = carregar_config_v43(V43_PATH)
+        cls.config = carregar_config_v44(V44_PATH)
         cls.simulacoes = gerar_simulacoes(cls.config)
 
     def test_validar_simulacoes_geradas_passa(self):
@@ -37,7 +38,7 @@ class TestValidationV43(unittest.TestCase):
         self.assertEqual(contagem_personas, plano["persona_id"])
 
     def test_weekend_e_compatibilidade_sao_respeitados(self):
-        calendario = self.config["amostragem"]["variaveis"]["dia_relativo"]["calendario"]
+        calendario = gerar_calendario_sintetico(self.config)
         elegiveis = self.config["amostragem"]["variaveis"]["missao_id"]["missoes_elegiveis_por_persona"]
 
         for simulacao in self.simulacoes:
