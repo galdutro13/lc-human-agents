@@ -238,9 +238,18 @@ class TestStartUsuariosResume(unittest.TestCase):
         self.assertEqual(rows[1]["status"], resume_state.STATUS_PENDING)
         self.assertEqual([row["instance_key"] for row in pending], ["pass-0001:simulation-000002"])
 
-    def test_http_429_e_quota_sao_classificados_como_abort(self):
+    def test_http_429_auth_e_quota_sao_classificados_como_abort(self):
         self.assertTrue(is_queue_abort_error(self._http_error(429)))
+        self.assertTrue(is_queue_abort_error(self._http_error(401, '{"error":{"code":"invalid_api_key"}}')))
         self.assertTrue(is_queue_abort_error(self._http_error(500, '{"error":"insufficient_quota"}')))
+        self.assertTrue(
+            is_queue_abort_error(
+                RuntimeError(
+                    "Error code: 401 - {'error': {'message': 'Incorrect API key provided', "
+                    "'code': 'invalid_api_key'}, 'status': 401}"
+                )
+            )
+        )
         self.assertFalse(is_queue_abort_error(RuntimeError("quota local configurada incorretamente")))
 
     def test_parallel_aborta_sem_submeter_novos_itens(self):

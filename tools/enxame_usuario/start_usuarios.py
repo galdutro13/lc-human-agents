@@ -18,12 +18,15 @@ QUEUE_ABORT_CLASS_NAMES = {
     "APIConnectionError",
     "APIStatusError",
     "APITimeoutError",
+    "AuthenticationError",
     "RateLimitError",
 }
 
-QUEUE_ABORT_STATUS_CODES = {429, 502, 503, 504}
+QUEUE_ABORT_STATUS_CODES = {401, 429, 502, 503, 504}
 
 QUEUE_ABORT_TEXT_MARKERS = (
+    "incorrect api key",
+    "invalid_api_key",
     "insufficient_quota",
     "rate limit",
     "quota",
@@ -77,6 +80,11 @@ def is_queue_abort_error(exc: BaseException) -> bool:
 
         response_text = _response_text(response).lower()
         if response_text and any(marker in response_text for marker in QUEUE_ABORT_TEXT_MARKERS):
+            return True
+
+        exception_text = str(current).lower()
+        invalid_key_error = "invalid_api_key" in exception_text or "incorrect api key" in exception_text
+        if invalid_key_error and ("401" in exception_text or class_name == "AuthenticationError"):
             return True
 
     return False
