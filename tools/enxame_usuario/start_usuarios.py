@@ -14,6 +14,90 @@ from source.tests.chatbot_test.usuario import UsuarioBot
 from tools.enxame_usuario import resume_state
 from tools.enxame_usuario.simulation_projection import resolve_simulation_projection
 
+QUEUE_ABORT_CLASS_NAMES = {
+    "APIConnectionError",
+    "APIStatusError",
+    "APITimeoutError",
+    "RateLimitError",
+}
+
+QUEUE_ABORT_STATUS_CODES = {429, 502, 503, 504}
+
+QUEUE_ABORT_TEXT_MARKERS = (
+    "insufficient_quota",
+    "rate limit",
+    "quota",
+    "billing",
+    "429",
+)
+
+
+class QueueAbortError(RuntimeError):
+    """Sinaliza uma falha sistemica que deve interromper a fila."""
+
+    def __init__(self, original: BaseException):
+        self.original = original
+        super().__init__(str(original))
+
+
+def _iter_exception_chain(exc: BaseException):
+    seen = set()
+    current = exc
+    while current is not None and id(current) not in seen:
+        seen.add(id(current))
+        yield current
+        current = current.__cause__ or current.__context__
+
+
+def _response_text(response) -> str:
+    if response is None:
+        return ""
+    try:
+        return response.text or ""
+    except Exception:
+        return ""
+
+
+def is_queue_abort_error(exc: BaseException) -> bool:
+    """Classifica falhas que indicam indisponibilidade sistemica da fila."""
+    for current in _iter_exception_chain(exc):
+        if isinstance(current, (requests.ConnectionError, requests.Timeout)):
+            return True
+
+        class_name = type(current).__name__
+        if class_name in QUEUE_ABORT_CLASS_NAMES:
+            return True
+
+        response = getattr(current, "response", None)
+        status_code = getattr(response, "status_code", None)
+        status_code = status_code or getattr(current, "status_code", None)
+
+        if isinstance(current, requests.HTTPError) and status_code in QUEUE_ABORT_STATUS_CODES:
+            return True
+
+        response_text = _response_text(response).lower()
+        if response_text and any(marker in response_text for marker in QUEUE_ABORT_TEXT_MARKERS):
+            return True
+
+    return False
+
+
+def _queue_abort_message(exc: QueueAbortError | BaseException) -> str:
+    original = getattr(exc, "original", exc)
+    return str(original) or type(original).__name__
+
+
+def print_queue_abort_resume_hint(args, pending_count: int, exc: QueueAbortError) -> None:
+    prompts_file = getattr(args, "prompts_file", "<mesmo arquivo de prompts>")
+    passes = getattr(args, "passes", "<mesmo valor de passes>")
+    print(f"[ERRO] Falha sistemica detectada; fila interrompida: {_queue_abort_message(exc)}")
+    print(f"[INFO] {pending_count} instancia(s) ainda pendente(s) foram preservadas para retomada.")
+    print(
+        "[INFO] Retome quando a situacao normalizar com: "
+        f"python tools/enxame_usuario/start_usuarios.py --prompts-file {prompts_file} "
+        f"--passes {passes} --resume"
+    )
+
 """
 Script para executar uma suíte de simulações v4.4 contra o BancoBot.
 
@@ -116,14 +200,18 @@ def iniciar_usuario(
         print(f"[INFO] Persona '{persona_id}' concluiu a conversa.")
         return True
     except Exception as exc:
+        abort_queue = is_queue_abort_error(exc)
+        error = f"QUEUE_ABORT: {exc}" if abort_queue else str(exc)
         with closing(resume_state.connect(db_path)) as conn:
             resume_state.mark_instance_not_finished(
                 conn,
                 run_id=run_id,
                 instance_key=instance_key,
-                error=str(exc),
+                error=error,
             )
         print(f"[ERRO] Falha na execução da persona '{persona_id}': {exc}")
+        if abort_queue:
+            raise QueueAbortError(exc) from exc
         return False
 
 
@@ -204,6 +292,25 @@ def submit_usuario(executor, item: dict, *, args, run_id: str, db_path: str, bre
     )
 
 
+def run_sequential(run_queue: list[dict], *, args, run_id: str, db_path: str, break_range, use_thinking: bool) -> None:
+    for item in run_queue:
+        iniciar_usuario(
+            item["persona_id"],
+            use_thinking,
+            item["prompt"],
+            api_url=args.api_url,
+            typing_speed_wpm=item["typing_speed_wpm"],
+            thinking_time_range=item["thinking_time_range"],
+            break_probability=args.break_probability,
+            break_time_range=break_range,
+            simulate_delays=not args.no_simulate_delays,
+            temporal_offset=item["temporal_offset"],
+            run_id=run_id,
+            instance_key=item["instance_key"],
+            db_path=db_path,
+        )
+
+
 def run_parallel_bounded(run_queue: list[dict], *, args, run_id: str, db_path: str, break_range, use_thinking: bool) -> None:
     max_parallel = max(1, args.window_size)
     print(f"[INFO] Executando em paralelo com até {max_parallel} threads…")
@@ -254,8 +361,25 @@ def run_parallel_bounded(run_queue: list[dict], *, args, run_id: str, db_path: s
             changed = resume_state.interrupt_run(conn, run_id)
         print(f"\n[INFO] Interrupção recebida; {changed} instância(s) marcadas como não finalizadas.")
         raise SystemExit(130)
+    except QueueAbortError:
+        for future in active:
+            future.cancel()
+        executor.shutdown(wait=True, cancel_futures=True)
+        raise
     else:
         executor.shutdown(wait=True)
+
+
+def finalize_run_after_invocation(db_path: str, run_id: str, *, run_interrupted: bool) -> bool | None:
+    if run_interrupted:
+        print("[INFO] Run interrompida preservada para possível retomada.")
+        return None
+
+    with closing(resume_state.connect(db_path)) as conn:
+        completed = resume_state.finalize_run_if_no_pending(conn, run_id)
+    if not completed:
+        print("[INFO] Run ainda possui instâncias pendentes para possível retomada.")
+    return completed
 
 
 if __name__ == "__main__":
@@ -403,26 +527,19 @@ if __name__ == "__main__":
 
     break_range = (args.break_min, args.break_max)
     use_thinking = bool(args.use_thinking)
+    run_interrupted = False
 
     try:
         if args.sequencial:
             print("[INFO] Modo sequencial ativado…")
-            for item in run_queue:
-                iniciar_usuario(
-                    item["persona_id"],
-                    use_thinking,
-                    item["prompt"],
-                    api_url=args.api_url,
-                    typing_speed_wpm=item["typing_speed_wpm"],
-                    thinking_time_range=item["thinking_time_range"],
-                    break_probability=args.break_probability,
-                    break_time_range=break_range,
-                    simulate_delays=not args.no_simulate_delays,
-                    temporal_offset=item["temporal_offset"],
-                    run_id=run_id,
-                    instance_key=item["instance_key"],
-                    db_path=db_path,
-                )
+            run_sequential(
+                run_queue,
+                args=args,
+                run_id=run_id,
+                db_path=db_path,
+                break_range=break_range,
+                use_thinking=use_thinking,
+            )
         else:
             run_parallel_bounded(
                 run_queue,
@@ -433,14 +550,19 @@ if __name__ == "__main__":
                 use_thinking=use_thinking,
             )
     except KeyboardInterrupt:
+        run_interrupted = True
         with closing(resume_state.connect(db_path)) as conn:
             changed = resume_state.interrupt_run(conn, run_id)
         print(f"\n[INFO] Interrupção recebida; {changed} instância(s) marcadas como não finalizadas.")
         raise SystemExit(130)
-    finally:
+    except QueueAbortError as exc:
+        run_interrupted = True
         with closing(resume_state.connect(db_path)) as conn:
-            completed = resume_state.finalize_run_if_no_pending(conn, run_id)
-        if not completed:
-            print("[INFO] Run ainda possui instâncias pendentes para possível retomada.")
+            resume_state.interrupt_run(conn, run_id)
+            pending_count = len(resume_state.get_pending_instances(conn, run_id))
+        print_queue_abort_resume_hint(args, pending_count, exc)
+        raise SystemExit(75)
+    finally:
+        finalize_run_after_invocation(db_path, run_id, run_interrupted=run_interrupted)
 
     print("[INFO] Todas as execuções concluídas.")

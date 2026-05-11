@@ -172,6 +172,12 @@ class UsuarioBot(ChatBotBase):
         return random.uniform(self.break_time_range[0], self.break_time_range[1])
 
     def run(self, initial_query, max_iterations=15):
+        try:
+            self._run_conversation(initial_query, max_iterations)
+        finally:
+            self._finish_bancobot_session()
+
+    def _run_conversation(self, initial_query, max_iterations=15):
         """
         Executa a conversa com o BancoBot através da API com simulação de comportamento temporal.
 
@@ -298,7 +304,6 @@ class UsuarioBot(ChatBotBase):
         print(f"Último tempo de pausa: {self.last_break_time:.2f} segundos")
         print(f"Timestamp final simulado: {self.simulated_timestamp.strftime('%Y-%m-%d %H:%M:%S')}")
         print(f"Offset temporal aplicado: {self.temporal_offset}")
-        self._finish_bancobot_session()
 
     def _send_to_bancobot(self, message: str) -> str:
         """
@@ -326,7 +331,7 @@ class UsuarioBot(ChatBotBase):
                 payload["session_id"] = self.session_id
 
             # Enviar a requisição para o serviço
-            response = requests.post(f"{self.api_url}/api/message", json=payload)
+            response = requests.post(f"{self.api_url}/api/message", json=payload, timeout=30)
 
             # Verificar se a requisição foi bem-sucedida
             response.raise_for_status()
@@ -338,7 +343,7 @@ class UsuarioBot(ChatBotBase):
             return data.get("response", "")
         except requests.RequestException as e:
             print(f"Erro ao comunicar com o serviço BancoBot: {e}")
-            return "Houve um erro na comunicação com o banco. Por favor, tente novamente mais tarde."
+            raise
 
     def _finish_bancobot_session(self):
         """
