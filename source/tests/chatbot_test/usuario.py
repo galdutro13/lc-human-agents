@@ -31,7 +31,8 @@ class UsuarioBot(ChatBotBase):
                  break_probability: float = 0.05,
                  break_time_range: tuple = (60, 3600),
                  simulate_delays: bool = True,
-                 temporal_offset: timedelta = timedelta(0)):
+                 temporal_offset: timedelta = timedelta(0),
+                 thread_id: str | None = None):
         if not system_message:
             system_message = (
                 """Você é Alberto Vasconcelos, de 60 anos, residente em João Pessoa (PB). É presidente de uma incorporadora de imóveis de luxo, do segmento Clientes Private Bank. Siga as duas próximas seções: [[como agir]] e [[missão]].
@@ -44,7 +45,8 @@ class UsuarioBot(ChatBotBase):
         self.persona_id = persona_id
         super().__init__(think_exp=think_exp,
                          system_message=system_message,
-                         use_sqlitesaver=True)
+                         use_sqlitesaver=True,
+                         thread_id=thread_id)
 
         self.api_url = api_url
         self.session_id = None  # Será definido na primeira interação com o servidor

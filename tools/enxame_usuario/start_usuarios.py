@@ -1,13 +1,17 @@
 import argparse
 import os
-from concurrent.futures import ThreadPoolExecutor, as_completed
+import secrets
+from contextlib import closing
+from concurrent.futures import FIRST_COMPLETED, ThreadPoolExecutor, wait
 from datetime import timedelta
+from pathlib import Path
 
 import requests
 from dotenv import load_dotenv
 
 from source.simulation_config import carregar_config_v44, gerar_simulacoes
 from source.tests.chatbot_test.usuario import UsuarioBot
+from tools.enxame_usuario import resume_state
 from tools.enxame_usuario.simulation_projection import resolve_simulation_projection
 
 """
@@ -64,8 +68,11 @@ def iniciar_usuario(
     break_probability: float,
     break_time_range: tuple[float, float],
     simulate_delays: bool,
+    run_id: str,
+    instance_key: str,
+    db_path: str,
     temporal_offset: timedelta = timedelta(0),
-) -> None:
+) -> bool:
     """Instancia e executa um `UsuarioBot` já parametrizado para a simulação.
 
     O `temporal_offset` desloca a percepção temporal do bot para o instante
@@ -77,27 +84,47 @@ def iniciar_usuario(
     if temporal_offset != timedelta(0):
         print(f"[INFO] Persona '{persona_id}' aplicando offset temporal de {temporal_offset}")
 
-    usuario_bot = UsuarioBot(
-        think_exp=think_exp,
-        persona_id=f"persona_{persona_id}",
-        system_message=prompt_personalizado,
-        api_url=api_url,
-        typing_speed_wpm=typing_speed_wpm,
-        thinking_time_range=thinking_time_range,
-        break_probability=break_probability,
-        break_time_range=break_time_range,
-        simulate_delays=simulate_delays,
-        temporal_offset=temporal_offset,
-    )
+    thread_id = secrets.token_hex(8)
+    with closing(resume_state.connect(db_path)) as conn:
+        resume_state.mark_instance_running(
+            conn,
+            run_id=run_id,
+            instance_key=instance_key,
+            thread_id=thread_id,
+        )
 
     try:
+        usuario_bot = UsuarioBot(
+            think_exp=think_exp,
+            persona_id=f"persona_{persona_id}",
+            system_message=prompt_personalizado,
+            api_url=api_url,
+            typing_speed_wpm=typing_speed_wpm,
+            thinking_time_range=thinking_time_range,
+            break_probability=break_probability,
+            break_time_range=break_time_range,
+            simulate_delays=simulate_delays,
+            temporal_offset=temporal_offset,
+            thread_id=thread_id,
+        )
         usuario_bot.run(
             initial_query="Olá cliente Itaú, como posso lhe ajudar?",
             max_iterations=15,
         )
+        with closing(resume_state.connect(db_path)) as conn:
+            resume_state.mark_instance_completed(conn, run_id=run_id, instance_key=instance_key)
         print(f"[INFO] Persona '{persona_id}' concluiu a conversa.")
+        return True
     except Exception as exc:
+        with closing(resume_state.connect(db_path)) as conn:
+            resume_state.mark_instance_not_finished(
+                conn,
+                run_id=run_id,
+                instance_key=instance_key,
+                error=str(exc),
+            )
         print(f"[ERRO] Falha na execução da persona '{persona_id}': {exc}")
+        return False
 
 
 def check_server_availability(api_url: str) -> bool:
@@ -114,6 +141,123 @@ def check_server_availability(api_url: str) -> bool:
         return False
 
 
+def build_run_queue(simulacoes: list[dict], config: dict, args) -> list[dict]:
+    """Materializa a fila determinística de instâncias executáveis."""
+    run_queue = []
+    queue_index = 0
+    for pass_index in range(1, args.passes + 1):
+        for simulacao in simulacoes:
+            prompt, typing_speed, thinking_range, temporal_offset = parse_persona_config(
+                simulacao,
+                config,
+                args,
+            )
+            queue_index += 1
+            run_queue.append(
+                {
+                    "instance_key": f"pass-{pass_index:04d}:simulation-{int(simulacao['id']):06d}",
+                    "simulation_id": int(simulacao["id"]),
+                    "pass_index": pass_index,
+                    "queue_index": queue_index,
+                    "persona_id": simulacao["persona_id"],
+                    "prompt": prompt,
+                    "typing_speed_wpm": typing_speed,
+                    "thinking_time_range": thinking_range,
+                    "temporal_offset": temporal_offset,
+                }
+            )
+    return run_queue
+
+
+def execution_args_snapshot(args) -> dict:
+    """Registra a linha de comando operacional sem incluir dados sensíveis."""
+    return {
+        "prompts_file": str(Path(args.prompts_file).resolve()),
+        "passes": args.passes,
+        "sequencial": bool(args.sequencial),
+        "window_size": args.window_size,
+        "api_url": args.api_url,
+        "use_thinking": bool(args.use_thinking),
+        "break_probability": args.break_probability,
+        "break_min": args.break_min,
+        "break_max": args.break_max,
+        "no_simulate_delays": bool(args.no_simulate_delays),
+    }
+
+
+def submit_usuario(executor, item: dict, *, args, run_id: str, db_path: str, break_range, use_thinking: bool):
+    return executor.submit(
+        iniciar_usuario,
+        item["persona_id"],
+        use_thinking,
+        item["prompt"],
+        api_url=args.api_url,
+        typing_speed_wpm=item["typing_speed_wpm"],
+        thinking_time_range=item["thinking_time_range"],
+        break_probability=args.break_probability,
+        break_time_range=break_range,
+        simulate_delays=not args.no_simulate_delays,
+        temporal_offset=item["temporal_offset"],
+        run_id=run_id,
+        instance_key=item["instance_key"],
+        db_path=db_path,
+    )
+
+
+def run_parallel_bounded(run_queue: list[dict], *, args, run_id: str, db_path: str, break_range, use_thinking: bool) -> None:
+    max_parallel = max(1, args.window_size)
+    print(f"[INFO] Executando em paralelo com até {max_parallel} threads…")
+
+    pending_iter = iter(run_queue)
+    active = {}
+
+    executor = ThreadPoolExecutor(max_workers=max_parallel)
+    try:
+        while len(active) < max_parallel:
+            try:
+                item = next(pending_iter)
+            except StopIteration:
+                break
+            active[submit_usuario(
+                executor,
+                item,
+                args=args,
+                run_id=run_id,
+                db_path=db_path,
+                break_range=break_range,
+                use_thinking=use_thinking,
+            )] = item
+
+        while active:
+            done, _ = wait(active, return_when=FIRST_COMPLETED)
+            for future in done:
+                active.pop(future)
+                future.result()
+                try:
+                    item = next(pending_iter)
+                except StopIteration:
+                    continue
+                active[submit_usuario(
+                    executor,
+                    item,
+                    args=args,
+                    run_id=run_id,
+                    db_path=db_path,
+                    break_range=break_range,
+                    use_thinking=use_thinking,
+                )] = item
+    except KeyboardInterrupt:
+        for future in active:
+            future.cancel()
+        executor.shutdown(wait=False, cancel_futures=True)
+        with closing(resume_state.connect(db_path)) as conn:
+            changed = resume_state.interrupt_run(conn, run_id)
+        print(f"\n[INFO] Interrupção recebida; {changed} instância(s) marcadas como não finalizadas.")
+        raise SystemExit(130)
+    else:
+        executor.shutdown(wait=True)
+
+
 if __name__ == "__main__":
     load_dotenv()
 
@@ -126,6 +270,11 @@ if __name__ == "__main__":
     )
 
     parser.add_argument("--prompts-file", required=True, type=str, help="Arquivo JSON v4.4")
+    parser.add_argument(
+        "--resume",
+        action="store_true",
+        help="Retoma a run incompleta compatível mais recente",
+    )
     parser.add_argument(
         "--api-url",
         type=str,
@@ -191,70 +340,107 @@ if __name__ == "__main__":
         print("ERRO: arquivo de prompts vazio.")
         raise SystemExit(1)
 
+    prompts_file_hash = resume_state.calculate_file_hash(args.prompts_file)
+    full_run_queue = build_run_queue(simulacoes, config, args)
+    queue_by_key = {item["instance_key"]: item for item in full_run_queue}
+    total_runs = len(full_run_queue)
+
     print(f"[INFO] {len(simulacoes)} simulações carregadas de {args.prompts_file}.")
-
-    parsed_personas = []
-    for simulacao in simulacoes:
-        prompt, typing_speed, thinking_range, temporal_offset = parse_persona_config(
-            simulacao,
-            config,
-            args,
-        )
-        parsed_personas.append(
-            (
-                simulacao["persona_id"],
-                prompt,
-                typing_speed,
-                thinking_range,
-                temporal_offset,
-            )
-        )
-
-    run_queue = parsed_personas * args.passes
-    total_runs = len(run_queue)
-
     print(f"[INFO] Total de execuções planejadas: {total_runs} (passes = {args.passes}).")
 
-    max_parallel = max(1, args.window_size)
+    db_path = resume_state.DATABASE_PATH
+    prompts_file_path = str(Path(args.prompts_file).resolve())
+
+    with closing(resume_state.connect(db_path)) as conn:
+        resume_state.ensure_schema(conn)
+        if args.resume:
+            run = resume_state.find_resume_run(
+                conn,
+                prompts_file_hash=prompts_file_hash,
+                passes=args.passes,
+            )
+            if run is None:
+                print("ERRO: nenhuma run incompleta compatível encontrada para retomar.")
+                raise SystemExit(1)
+            run_id = run["run_id"]
+            stale_count = resume_state.mark_stale_running_instances_not_finished(conn, run_id)
+            if stale_count:
+                print(f"[INFO] {stale_count} instância(s) em execução antiga marcadas como não finalizadas.")
+            pending_rows = resume_state.get_pending_instances(conn, run_id)
+            run_queue = [queue_by_key[row["instance_key"]] for row in pending_rows]
+            print(f"[INFO] Retomando run {run_id}; {len(run_queue)} instância(s) ainda não iniciada(s).")
+        else:
+            active_count = resume_state.count_active_compatible_runs(
+                conn,
+                prompts_file_hash=prompts_file_hash,
+                passes=args.passes,
+            )
+            if active_count:
+                print(
+                    "ERRO: já existe run incompleta compatível. "
+                    "Use --resume para continuar ou finalize/remova o estado anterior."
+                )
+                raise SystemExit(1)
+            run_id = resume_state.create_run(
+                conn,
+                prompts_file_hash=prompts_file_hash,
+                prompts_file_path=prompts_file_path,
+                passes=args.passes,
+                instances=full_run_queue,
+                args=execution_args_snapshot(args),
+            )
+            run_queue = full_run_queue
+            print(f"[INFO] Nova run criada: {run_id}.")
+
+    if not run_queue:
+        with closing(resume_state.connect(db_path)) as conn:
+            resume_state.finalize_run_if_no_pending(conn, run_id)
+        print("[INFO] Não há instâncias pendentes para executar.")
+        raise SystemExit(0)
+
+    total_runs = len(run_queue)
+    print(f"[INFO] Execuções desta invocação: {total_runs}.")
+
     break_range = (args.break_min, args.break_max)
     use_thinking = bool(args.use_thinking)
 
-    if args.sequencial:
-        print("[INFO] Modo sequencial ativado…")
-        for persona_id, persona_prompt, typing_speed, thinking_range, temporal_offset in run_queue:
-            iniciar_usuario(
-                persona_id,
-                use_thinking,
-                persona_prompt,
-                api_url=args.api_url,
-                typing_speed_wpm=typing_speed,
-                thinking_time_range=thinking_range,
-                break_probability=args.break_probability,
-                break_time_range=break_range,
-                simulate_delays=not args.no_simulate_delays,
-                temporal_offset=temporal_offset,
-            )
-    else:
-        print(f"[INFO] Executando em paralelo com até {max_parallel} threads…")
-        with ThreadPoolExecutor(max_workers=max_parallel) as executor:
-            futures = [
-                executor.submit(
-                    iniciar_usuario,
-                    persona_id,
+    try:
+        if args.sequencial:
+            print("[INFO] Modo sequencial ativado…")
+            for item in run_queue:
+                iniciar_usuario(
+                    item["persona_id"],
                     use_thinking,
-                    persona_prompt,
+                    item["prompt"],
                     api_url=args.api_url,
-                    typing_speed_wpm=typing_speed,
-                    thinking_time_range=thinking_range,
+                    typing_speed_wpm=item["typing_speed_wpm"],
+                    thinking_time_range=item["thinking_time_range"],
                     break_probability=args.break_probability,
                     break_time_range=break_range,
                     simulate_delays=not args.no_simulate_delays,
-                    temporal_offset=temporal_offset,
+                    temporal_offset=item["temporal_offset"],
+                    run_id=run_id,
+                    instance_key=item["instance_key"],
+                    db_path=db_path,
                 )
-                for persona_id, persona_prompt, typing_speed, thinking_range, temporal_offset in run_queue
-            ]
-
-            for _ in as_completed(futures):
-                pass
+        else:
+            run_parallel_bounded(
+                run_queue,
+                args=args,
+                run_id=run_id,
+                db_path=db_path,
+                break_range=break_range,
+                use_thinking=use_thinking,
+            )
+    except KeyboardInterrupt:
+        with closing(resume_state.connect(db_path)) as conn:
+            changed = resume_state.interrupt_run(conn, run_id)
+        print(f"\n[INFO] Interrupção recebida; {changed} instância(s) marcadas como não finalizadas.")
+        raise SystemExit(130)
+    finally:
+        with closing(resume_state.connect(db_path)) as conn:
+            completed = resume_state.finalize_run_if_no_pending(conn, run_id)
+        if not completed:
+            print("[INFO] Run ainda possui instâncias pendentes para possível retomada.")
 
     print("[INFO] Todas as execuções concluídas.")

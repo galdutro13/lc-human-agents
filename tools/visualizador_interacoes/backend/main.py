@@ -18,6 +18,7 @@ from langchain.schema import HumanMessage, AIMessage
 
 # Import UsuarioBot directly from the decoupled structure
 from source.tests.chatbot_test.usuario import UsuarioBot
+from tools.enxame_usuario import resume_state
 
 
 class InteractionRequest(BaseModel):
@@ -64,6 +65,83 @@ def get_db_connection() -> sqlite3.Connection:
     conn = sqlite3.connect(DATABASE_PATH, check_same_thread=False)
     conn.row_factory = sqlite3.Row
     return conn
+
+
+def get_execution_metadata_by_thread_id(conn: sqlite3.Connection, thread_id: str) -> sqlite3.Row | None:
+    resume_state.ensure_schema(conn)
+    cursor = conn.execute(
+        """
+        SELECT run_id, instance_key, simulation_id, pass_index, queue_index, persona_id, thread_id, status
+        FROM simulation_instances
+        WHERE thread_id = ?
+        LIMIT 1
+        """,
+        (thread_id,),
+    )
+    return cursor.fetchone()
+
+
+def get_execution_metadata_map(conn: sqlite3.Connection) -> dict[str, sqlite3.Row]:
+    resume_state.ensure_schema(conn)
+    cursor = conn.execute(
+        """
+        SELECT run_id, instance_key, simulation_id, pass_index, queue_index, persona_id, thread_id, status
+        FROM simulation_instances
+        WHERE thread_id IS NOT NULL
+        """
+    )
+    return {row["thread_id"]: row for row in cursor.fetchall()}
+
+
+def get_not_finished_without_checkpoints(conn: sqlite3.Connection) -> list[sqlite3.Row]:
+    resume_state.ensure_schema(conn)
+    cursor = conn.execute(
+        """
+        SELECT run_id, instance_key, simulation_id, pass_index, queue_index, persona_id, thread_id, status
+        FROM simulation_instances AS si
+        WHERE si.status = ?
+          AND (
+              si.thread_id IS NULL
+              OR NOT EXISTS (
+                  SELECT 1
+                  FROM checkpoints AS c
+                  WHERE c.thread_id = si.thread_id
+                    AND c.checkpoint IS NOT NULL
+              )
+          )
+        ORDER BY si.run_id, si.queue_index
+        """,
+        (resume_state.STATUS_NOT_FINISHED,),
+    )
+    return list(cursor.fetchall())
+
+
+def apply_execution_metadata(payload: dict, execution_row: sqlite3.Row | None) -> dict:
+    payload.update(resume_state.execution_status_fields(execution_row))
+    return payload
+
+
+def build_placeholder_conversation(execution_row: sqlite3.Row) -> tuple[str, dict]:
+    persona_id = execution_row["persona_id"] or "unknown"
+    export_thread_id = execution_row["thread_id"] or (
+        f"sem_checkpoint_{execution_row['run_id']}_{execution_row['instance_key']}"
+    )
+    filename = f"conversa_{persona_id}_{export_thread_id}.json"
+    conversation_data = apply_execution_metadata(
+        {
+            "thread_id": export_thread_id,
+            "persona_id": persona_id,
+            "conversation_timestamp": None,
+            "total_messages": 0,
+            "messages": [],
+            "metadata": {
+                "export_timestamp": datetime.now().isoformat(),
+                "export_version": "2.1",
+            },
+        },
+        execution_row,
+    )
+    return filename, conversation_data
 
 
 def find_rag_log_by_persona(persona_id: str, thread_id: str) -> str:
@@ -768,10 +846,12 @@ def export_all_interactions_json_zip():
     """
     conn = get_db_connection()
     try:
+        resume_state.ensure_schema(conn)
         # Busca todos os thread_ids distintos
         cursor = conn.execute("SELECT DISTINCT thread_id FROM checkpoints;")
         rows = cursor.fetchall()
         thread_ids = [row["thread_id"] for row in rows]
+        execution_metadata_by_thread = get_execution_metadata_map(conn)
 
         # Cria um ZIP em memória
         zip_buffer = io.BytesIO()
@@ -797,6 +877,7 @@ def export_all_interactions_json_zip():
                 conversation = JsonPlusSerializer().loads_typed((record_type, checkpoint_data))
                 messages = conversation.get("channel_values", {}).get("messages", [])
                 persona_id = conversation.get("channel_values", {}).get("persona_id", "unknown")
+                execution_metadata = execution_metadata_by_thread.get(tid)
 
                 # Extrai timestamp da conversa
                 conversation_ts = conversation.get("ts", None)
@@ -869,34 +950,60 @@ def export_all_interactions_json_zip():
                     messages_data.append(message_obj)
 
                 # Cria estrutura completa da conversa
-                conversation_data = {
-                    "thread_id": tid,
-                    "persona_id": persona_id,
-                    "conversation_timestamp": conversation_ts,
-                    "total_messages": len(messages_data),
-                    "messages": messages_data,
-                    "metadata": {
-                        "export_timestamp": datetime.now().isoformat(),
-                        "export_version": "2.0"  # Updated version to indicate RAG datasources support
-                    }
-                }
+                conversation_data = apply_execution_metadata(
+                    {
+                        "thread_id": tid,
+                        "persona_id": persona_id,
+                        "conversation_timestamp": conversation_ts,
+                        "total_messages": len(messages_data),
+                        "messages": messages_data,
+                        "metadata": {
+                            "export_timestamp": datetime.now().isoformat(),
+                            "export_version": "2.1"
+                        },
+                    },
+                    execution_metadata,
+                )
+
+                filename = f"conversa_{persona_id}_{tid}.json"
 
                 # Adiciona informações resumidas ao índice geral
-                all_conversations_index.append({
-                    "thread_id": tid,
-                    "persona_id": persona_id,
-                    "conversation_timestamp": conversation_ts,
-                    "total_messages": len(messages_data),
-                    "filename": f"conversa_{persona_id}_{tid}.json"
-                })
+                all_conversations_index.append(
+                    apply_execution_metadata(
+                        {
+                            "thread_id": tid,
+                            "persona_id": persona_id,
+                            "conversation_timestamp": conversation_ts,
+                            "total_messages": len(messages_data),
+                            "filename": filename,
+                        },
+                        execution_metadata,
+                    )
+                )
 
                 # Converte para JSON com formatação legível
                 json_content = json.dumps(conversation_data, indent=2, ensure_ascii=False)
                 json_bytes = json_content.encode("utf-8")
 
                 # Nome do arquivo JSON
-                filename = f"conversa_{persona_id}_{tid}.json"
                 zip_file.writestr(filename, json_bytes)
+
+            for execution_row in get_not_finished_without_checkpoints(conn):
+                filename, conversation_data = build_placeholder_conversation(execution_row)
+                all_conversations_index.append(
+                    apply_execution_metadata(
+                        {
+                            "thread_id": conversation_data["thread_id"],
+                            "persona_id": conversation_data["persona_id"],
+                            "conversation_timestamp": None,
+                            "total_messages": 0,
+                            "filename": filename,
+                        },
+                        execution_row,
+                    )
+                )
+                json_content = json.dumps(conversation_data, indent=2, ensure_ascii=False)
+                zip_file.writestr(filename, json_content.encode("utf-8"))
 
             # Adiciona arquivo de índice ao ZIP
             if all_conversations_index:
@@ -904,7 +1011,7 @@ def export_all_interactions_json_zip():
                     "export_metadata": {
                         "export_timestamp": datetime.now().isoformat(),
                         "total_conversations": len(all_conversations_index),
-                        "export_version": "2.0"  # Updated version
+                        "export_version": "2.1"
                     },
                     "conversations": all_conversations_index
                 }
@@ -926,6 +1033,7 @@ def export_interaction_json(thread_id: str):
     """
     conn = get_db_connection()
     try:
+        resume_state.ensure_schema(conn)
         # Pega o último checkpoint do thread_id
         cursor = conn.execute("""
                               SELECT checkpoint, type
@@ -947,6 +1055,7 @@ def export_interaction_json(thread_id: str):
         messages = conversation.get("channel_values", {}).get("messages", [])
         persona_id = conversation.get("channel_values", {}).get("persona_id", None)
         conversation_ts = conversation.get("ts", None)
+        execution_metadata = get_execution_metadata_by_thread_id(conn, thread_id)
 
         # Monta estrutura completa das mensagens
         messages_data = []
@@ -1016,17 +1125,20 @@ def export_interaction_json(thread_id: str):
             messages_data.append(message_obj)
 
         # Estrutura completa para exportação
-        export_data = {
-            "thread_id": thread_id,
-            "persona_id": persona_id,
-            "conversation_timestamp": conversation_ts,
-            "total_messages": len(messages_data),
-            "messages": messages_data,
-            "metadata": {
-                "export_timestamp": datetime.now().isoformat(),
-                "export_version": "2.0"  # Updated version to indicate RAG datasources support
-            }
-        }
+        export_data = apply_execution_metadata(
+            {
+                "thread_id": thread_id,
+                "persona_id": persona_id,
+                "conversation_timestamp": conversation_ts,
+                "total_messages": len(messages_data),
+                "messages": messages_data,
+                "metadata": {
+                    "export_timestamp": datetime.now().isoformat(),
+                    "export_version": "2.1",
+                },
+            },
+            execution_metadata,
+        )
 
         # Gera o JSON
         json_content = json.dumps(export_data, indent=2, ensure_ascii=False)

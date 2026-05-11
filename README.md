@@ -161,6 +161,18 @@ The `--prompts-file` flag accepts only the versioned v4.4 configuration:
 python ./tools/enxame_usuario/start_usuarios.py --prompts-file config_v4_4.json
 ```
 
+If a simulation run is interrupted, resume the same prompt file and `--passes`
+with:
+
+```bash
+python ./tools/enxame_usuario/start_usuarios.py --prompts-file config_v4_4.json --resume
+```
+
+Resume state is stored in `checkpoints.db`. The runner continues only instances
+that were never started, keeps previously incomplete instances marked as
+`not_finished`, and blocks a new non-resume run when a compatible incomplete run
+already exists.
+
 You can also inspect the generated sampling plan without running any bots:
 
 ```bash
@@ -192,6 +204,13 @@ Then run the following command to start the interaction visualizer:
 ```bash
 python .\launch_simulador.py
 ```
+
+JSON exports from the visualizer include execution status metadata for resumed
+runs. The ZIP route `/interactions/export/all_json_zip` and the single
+conversation route `/interactions/{thread_id}/json` expose fields such as
+`run_id`, `simulation_id`, `pass_index`, `execution_status`, `finished`, and
+`not_finished`. For old conversations without run metadata, these fields are
+reported as `unknown`/`null`.
 
 ### Running the Touchpoint Extractor
 
