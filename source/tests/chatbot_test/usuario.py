@@ -331,7 +331,7 @@ class UsuarioBot(ChatBotBase):
                 payload["session_id"] = self.session_id
 
             # Enviar a requisição para o serviço
-            response = requests.post(f"{self.api_url}/api/message", json=payload, timeout=30)
+            response = requests.post(f"{self.api_url}/api/message", json=payload, timeout=60)
 
             # Verificar se a requisição foi bem-sucedida
             response.raise_for_status()

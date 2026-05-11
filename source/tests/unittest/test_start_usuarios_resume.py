@@ -293,7 +293,7 @@ class TestStartUsuariosResume(unittest.TestCase):
             with self.assertRaises(requests.ConnectionError):
                 bot._send_to_bancobot("ola")
 
-        self.assertEqual(post.call_args.kwargs["timeout"], 30)
+        self.assertEqual(post.call_args.kwargs["timeout"], 60)
 
     def test_run_fecha_sessao_quando_send_falha(self):
         message = SimpleNamespace(
