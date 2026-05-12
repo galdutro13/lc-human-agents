@@ -10,6 +10,9 @@ from source.rag.config.models import RAGConfig
 from source.rag.state.rag_state import RAGState
 from source.rag.logging.rag_logger import RAGLogger, rag_function_logger
 
+MAX_REWRITTEN_QUERIES = 3
+
+
 class RewriteQueryFunction(ChatFunction):
     """
     Rewrites the original query into multiple improved versions.
@@ -72,6 +75,8 @@ class RewriteQueryFunction(ChatFunction):
                 if not rewritten_queries:
                     # If parsing fails, use the raw output (might not be in expected format)
                     rewritten_queries = [rewrite_result.content.strip()]
+
+                rewritten_queries = rewritten_queries[:MAX_REWRITTEN_QUERIES]
 
                 print(f"Original query: '{question}'")
                 print(f"Rewrote into {len(rewritten_queries)} queries:")

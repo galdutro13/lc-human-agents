@@ -286,7 +286,7 @@
   },
   "template_prompt": "{identidade} Siga as duas próximas seções: [[como agir]] e [[missão]]. [[como agir]] {como_agir} [[missão]] {missao}",
   "amostragem": {
-    "n": 6000,
+    "n": 4000,
     "seed": 42,
     "metodo": "cotas_controladas_com_maiores_restos",
     "dag_ordem": [
